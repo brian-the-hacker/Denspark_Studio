@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments | Denspark Studio Admin</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="admin-body">
+    {% include 'components/admin_sidebar.html' %}
+    
+    <!-- Main Content -->
+    <main class="admin-main" id="adminMain">
+        <!-- Top Bar -->
+        <header class="admin-topbar">
+            <div class="topbar-left">
+                <button class="mobile-sidebar-toggle" id="mobileSidebarToggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12h18M3 6h18M3 18h18"/>
+                    </svg>
+                </button>
+                <div class="page-title">
+                    <h1>Payments</h1>
+                    <p>Track payments and invoices</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="btn btn-secondary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Export
+                </button>
+                <button class="btn btn-primary" id="createInvoiceBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    Create Invoice
+                </button>
+            </div>
+        </header>
+        
+        <!-- Payments Content -->
+        <div class="admin-content">
+            <!-- Revenue Stats -->
+            <div class="revenue-stats" data-animate>
+                <div class="revenue-card main">
+                    <div class="revenue-header">
+                        <span class="revenue-label">Total Revenue</span>
+                        <select class="period-select">
+                            <option value="month">This Month</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                    <div class="revenue-amount">KES {{ stats.total_revenue if stats else '285,000' }}</div>
+                    <div class="revenue-trend up">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                            <polyline points="17 6 23 6 23 12"/>
+                        </svg>
+                        <span>+18% from last month</span>
+                    </div>
+                </div>
+                
+                <div class="revenue-card">
+                    <div class="revenue-icon received">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        </svg>
+                    </div>
+                    <div class="revenue-info">
+                        <span class="revenue-label">Received</span>
+                        <span class="revenue-value">KES {{ stats.received if stats else '225,000' }}</span>
+                    </div>
+                </div>
+                
+                <div class="revenue-card">
+                    <div class="revenue-icon pending">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div class="revenue-info">
+                        <span class="revenue-label">Pending</span>
+                        <span class="revenue-value">KES {{ stats.pending if stats else '45,000' }}</span>
+                    </div>
+                </div>
+                
+                <div class="revenue-card">
+                    <div class="revenue-icon overdue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                    </div>
+                    <div class="revenue-info">
+                        <span class="revenue-label">Overdue</span>
+                        <span class="revenue-value">KES {{ stats.overdue if stats else '15,000' }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filters -->
+            <div class="filters-bar" data-animate>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">All</button>
+                    <button class="filter-tab" data-filter="paid">Paid</button>
+                    <button class="filter-tab" data-filter="pending">Pending</button>
+                    <button class="filter-tab" data-filter="overdue">Overdue</button>
+                </div>
+                <div class="filter-actions">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <input type="text" placeholder="Search payments..." id="paymentSearch">
+                    </div>
+                    <input type="month" class="date-filter" id="monthFilter">
+                </div>
+            </div>
+            
+            <!-- Payments Table -->
+            <div class="data-card full-width" data-animate>
+                <div class="table-wrapper">
+                    <table class="data-table payments-table">
+                        <thead>
+                            <tr>
+                                <th>Invoice</th>
+                                <th>Client</th>
+                                <th>Service</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if payments %}
+                                {% for payment in payments %}
+                                <tr data-status="{{ payment.status }}">
+                                    <td><span class="invoice-id">#{{ payment.invoice_id }}</span></td>
+                                    <td>
+                                        <div class="client-info">
+                                            <div class="client-avatar">{{ payment.client_name[0] }}</div>
+                                            <span class="client-name">{{ payment.client_name }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ payment.service }}</td>
+                                    <td>{{ payment.date }}</td>
+                                    <td><span class="amount">KES {{ payment.amount }}</span></td>
+                                    <td><span class="payment-method">{{ payment.method }}</span></td>
+                                    <td><span class="status-badge {{ payment.status }}">{{ payment.status }}</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" title="View" data-action="view">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                                    <circle cx="12" cy="12" r="3"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="Download" data-action="download">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                                    <polyline points="7 10 12 15 17 10"/>
+                                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <!-- Sample Data -->
+                                <tr data-status="paid">
+                                    <td><span class="invoice-id">#INV-001</span></td>
+                                    <td>
+                                        <div class="client-info">
+                                            <div class="client-avatar">S</div>
+                                            <span class="client-name">Sarah Njeri</span>
+                                        </div>
+                                    </td>
+                                    <td>Family Portrait</td>
+                                    <td>Apr 20, 2024</td>
+                                    <td><span class="amount">KES 8,000</span></td>
+                                    <td><span class="payment-method mpesa">M-Pesa</span></td>
+                                    <td><span class="status-badge paid">Paid</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" title="View">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                                    <circle cx="12" cy="12" r="3"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="Download">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                                    <polyline points="7 10 12 15 17 10"/>
+                                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr data-status="paid">
+                                    <td><span class="invoice-id">#INV-002</span></td>
+                                    <td>
+                                        <div class="client-info">
+                                            <div class="client-avatar">P</div>
+                                            <span class="client-name">Peter Ochieng</span>
+                                        </div>
+                                    </td>
+                                    <td>Product Shoot</td>
+                                    <td>Apr 18, 2024</td>
+                                    <td><span class="amount">KES 15,000</span></td>
+                                    <td><span class="payment-method bank">Bank Transfer</span></td>
+                                    <td><span class="status-badge paid">Paid</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" title="View">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                                    <circle cx="12" cy="12" r="3"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="Download">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                                    <polyline points="7 10 12 15 17 10"/>
+                                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr data-status="pending">
+                                    <td><span class="invoice-id">#INV-003</span></td>
+                                    <td>
+                                        <div class="client-info">
+                                            <div class="client-avatar">M</div>
+                                            <span class="client-name">Mary Wanjiku</span>
+                                        </div>
+                                    </td>
+                                    <td>Wedding Coverage</td>
+                                    <td>Apr 28, 2024</td>
+                                    <td><span class="amount">KES 45,000</span></td>
+                                    <td><span class="payment-method">-</span></td>
+                                    <td><span class="status-badge pending">Pending</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" title="View">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                                    <circle cx="12" cy="12" r="3"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="Send Reminder">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                                    <polyline points="22,6 12,13 2,6"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr data-status="overdue">
+                                    <td><span class="invoice-id">#INV-004</span></td>
+                                    <td>
+                                        <div class="client-info">
+                                            <div class="client-avatar">J</div>
+                                            <span class="client-name">James Otieno</span>
+                                        </div>
+                                    </td>
+                                    <td>Event Coverage</td>
+                                    <td>Apr 10, 2024</td>
+                                    <td><span class="amount">KES 15,000</span></td>
+                                    <td><span class="payment-method">-</span></td>
+                                    <td><span class="status-badge overdue">Overdue</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" title="View">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                                    <circle cx="12" cy="12" r="3"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="Send Reminder">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                                    <polyline points="22,6 12,13 2,6"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="table-pagination">
+                    <span class="pagination-info">Showing 1-4 of {{ total_payments if total_payments else '12' }} payments</span>
+                    <div class="pagination-controls">
+                        <button class="pagination-btn" disabled>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"/>
+                            </svg>
+                        </button>
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn">2</button>
+                        <button class="pagination-btn">3</button>
+                        <button class="pagination-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

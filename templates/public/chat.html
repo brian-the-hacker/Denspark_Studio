@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Live Chat | DenSpark Studio{% endblock %}
+
+{% block content %}
+<section class="container" style="padding: 60px 0; max-width: 800px;">
+    <h1>Live Chat</h1>
+    <p>Talk to us directly. We usually reply within a few minutes during business hours.</p>
+
+    <div class="chat-container">
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button id="send-btn" class="btn btn-primary">Send</button>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+<script>
+    const chat = new ChatClient(null, false);
+</script>
+{% endblock %}

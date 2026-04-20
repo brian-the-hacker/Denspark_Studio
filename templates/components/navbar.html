@@ -1,0 +1,44 @@
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+    <div class="container">
+        <a href="{{ url_for('public.index') }}" class="logo">
+            <span class="logo-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 2v2m0 16v2M2 12h2m16 0h2"/>
+                    <path d="m4.93 4.93 1.41 1.41m11.32 11.32 1.41 1.41m-1.41-14.14 1.41 1.41M4.93 19.07l1.41-1.41"/>
+                </svg>
+            </span>
+            <span class="logo-text">Denspark<span class="accent">Studio</span></span>
+        </a>
+        
+        <ul class="nav-links" id="navLinks">
+            <li><a href="{{ url_for('public.index') }}" class="{{ 'active' if request.endpoint == 'public.index' else '' }}">Home</a></li>
+            <li><a href="{{ url_for('public.portfolio') }}" class="{{ 'active' if request.endpoint == 'public.portfolio' else '' }}">Portfolio</a></li>
+            <li><a href="{{ url_for('public.services') }}" class="{{ 'active' if request.endpoint == 'public.services' else '' }}">Services</a></li>
+            <li><a href="{{ url_for('public.about') }}" class="{{ 'active' if request.endpoint == 'public.about' else '' }}">About</a></li>
+            <li><a href="{{ url_for('public.contact') }}" class="{{ 'active' if request.endpoint == 'public.contact' else '' }}">Contact</a></li>
+        </ul>
+        
+        <div class="nav-actions">
+            <a href="{{ url_for('public.contact') }}#booking" class="btn btn-primary">Book Session</a>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-content">
+        <a href="{{ url_for('public.index') }}">Home</a>
+        <a href="{{ url_for('public.portfolio') }}">Portfolio</a>
+        <a href="{{ url_for('public.services') }}">Services</a>
+        <a href="{{ url_for('public.about') }}">About</a>
+        <a href="{{ url_for('public.contact') }}">Contact</a>
+        <a href="{{ url_for('public.contact') }}#booking" class="btn btn-primary">Book Session</a>
+    </div>
+</div>
