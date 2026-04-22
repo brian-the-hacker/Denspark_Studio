@@ -7,198 +7,256 @@
   <meta name="keywords" content="photography, studio, Machakos, Kenya, portraits, events, media production, creative">
   <title>Denspark Studio | Photography & Creative Media</title>
   
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   
-  <!-- Styles -->
-  <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="stylesheet" href="static/css/slider.css">
 </head>
 <body>
+
   <!-- Preloader -->
-  <div class="preloader">
-    <div class="preloader-content">
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
       <div class="preloader-logo">DENSPARK</div>
-      <div class="preloader-bar"></div>
+      <div class="preloader-line"><span></span></div>
     </div>
   </div>
 
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
   <!-- Navigation -->
-  <nav class="navbar">
-    <div class="container">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
       <a href="/" class="logo">
-        DENS<span>PARK</span>
+        <span class="logo-text">DENSPARK</span>
+        <span class="logo-sub">STUDIO</span>
       </a>
       
-      <ul class="nav-links">
-        <li><a href="/" class="active">Home</a></li>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="nav-link active">Home</a></li>
+        <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
+        <li><a href="/services" class="nav-link">Services</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <a href="/contact" class="btn-book">Book Now</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul class="mobile-nav-links">
+        <li><a href="/">Home</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
         <li><a href="/services">Services</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
-        <li><a href="/contact" class="nav-cta">Book Now</a></li>
       </ul>
-      
-      <div class="menu-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
+      <a href="/contact" class="btn-book-mobile">Book a Session</a>
+      <div class="mobile-info">
+        <span>Machakos, Kenya</span>
+        <span>+254 700 000 000</span>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-bg">
-      <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=1920&q=80" alt="Studio Photography">
+  <!-- Hero Slider -->
+  <section class="hero" id="hero">
+    <div class="hero-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      Machakos, Kenya
     </div>
-    <div class="hero-overlay"></div>
-    
-    <div class="hero-content">
-      <div class="hero-badge">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-          <circle cx="12" cy="13" r="4"/>
-        </svg>
-        Machakos, Kenya
+
+    <div class="slider-track" id="sliderTrack">
+      <div class="slide active" data-category="Wedding">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=85')"></div>
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <span class="slide-tag">Wedding</span>
+          <h1 class="slide-title">Elegant<br><em>Wedding Moments</em></h1>
+          <p class="slide-desc">We capture the magic of your special day with artistry, emotion, and timeless beauty.</p>
+          <div class="slide-buttons">
+            <a href="/portfolio" class="btn-primary">View Our Work</a>
+            <a href="/contact" class="btn-ghost">Book a Session</a>
+          </div>
+        </div>
       </div>
-      
-      <h1 class="hero-title">
-        Capturing <span>Moments</span> That Last Forever
-      </h1>
-      
-      <p class="hero-subtitle">
-        Professional photography and creative media services. We transform your precious moments into timeless visual stories.
-      </p>
-      
-      <div class="hero-buttons">
-        <a href="/portfolio" class="btn btn-primary">
-          View Our Work
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-        <a href="/contact" class="btn btn-outline">Book a Session</a>
+
+      <div class="slide" data-category="Portraits">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1920&q=85')"></div>
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <span class="slide-tag">Portraits</span>
+          <h1 class="slide-title">Professional<br><em>Portraits</em></h1>
+          <p class="slide-desc">Express your personality through stunning portraits that showcase your authentic self.</p>
+          <div class="slide-buttons">
+            <a href="/services" class="btn-primary">Book Session</a>
+            <a href="/portfolio" class="btn-ghost">View Portfolio</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide" data-category="Events">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1920&q=85')"></div>
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <span class="slide-tag">Events</span>
+          <h1 class="slide-title">Corporate &<br><em>Private Events</em></h1>
+          <p class="slide-desc">From conferences to celebrations, we document every important detail with precision.</p>
+          <div class="slide-buttons">
+            <a href="/portfolio" class="btn-primary">See Events</a>
+            <a href="/contact" class="btn-ghost">Get Quote</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide" data-category="Wedding">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1920&q=85')"></div>
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <span class="slide-tag">Wedding</span>
+          <h1 class="slide-title">Sacred<br><em>Ceremonies</em></h1>
+          <p class="slide-desc">Every vow, every tear, every smile — preserved in cinematic quality for generations.</p>
+          <div class="slide-buttons">
+            <a href="/contact" class="btn-primary">Book Your Date</a>
+            <a href="/portfolio" class="btn-ghost">View Gallery</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide" data-category="Fashion">
+        <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=1920&q=85')"></div>
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <span class="slide-tag">Fashion</span>
+          <h1 class="slide-title">Fashion &<br><em>Editorial</em></h1>
+          <p class="slide-desc">High-end photography that makes brands and models stand out with bold, creative vision.</p>
+          <div class="slide-buttons">
+            <a href="/services" class="btn-primary">Learn More</a>
+            <a href="/contact" class="btn-ghost">Contact Us</a>
+          </div>
+        </div>
       </div>
     </div>
-    
-    <div class="hero-scroll">
+
+    <!-- Slider Controls -->
+    <button class="slider-btn slider-prev" id="prevBtn" aria-label="Previous">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="slider-btn slider-next" id="nextBtn" aria-label="Next">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+
+    <div class="slider-dots" id="sliderDots"></div>
+
+    <div class="slide-counter" id="slideCounter">
+      <span class="current">01</span>
+      <span class="sep">/</span>
+      <span class="total">05</span>
+    </div>
+
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
       <span>Scroll</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 5v14M5 12l7 7 7-7"/>
-      </svg>
     </div>
   </section>
 
   <!-- Marquee -->
-  <div class="marquee">
-    <div class="marquee-content">
-      <span>Portraits</span>
-      <span>Events</span>
-      <span>Weddings</span>
-      <span>Corporate</span>
-      <span>Product</span>
-      <span>Fashion</span>
-      <span>Video Production</span>
-      <span>Photo Editing</span>
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span>Portraits</span><span class="dot">·</span>
+        <span>Events</span><span class="dot">·</span>
+        <span>Weddings</span><span class="dot">·</span>
+        <span>Corporate</span><span class="dot">·</span>
+        <span>Product Shoots</span><span class="dot">·</span>
+        <span>Fashion</span><span class="dot">·</span>
+        <span>Video Production</span><span class="dot">·</span>
+        <span>Photo Editing</span><span class="dot">·</span>
+        <span>Portraits</span><span class="dot">·</span>
+        <span>Events</span><span class="dot">·</span>
+        <span>Weddings</span><span class="dot">·</span>
+        <span>Corporate</span><span class="dot">·</span>
+        <span>Product Shoots</span><span class="dot">·</span>
+        <span>Fashion</span><span class="dot">·</span>
+        <span>Video Production</span><span class="dot">·</span>
+        <span>Photo Editing</span><span class="dot">·</span>
+      </div>
     </div>
   </div>
 
   <!-- Services Section -->
-  <section class="section services" id="services">
+  <section class="section services-section" id="services">
     <div class="container">
-      <div class="section-header animate-on-scroll">
-        <span class="section-badge">What We Offer</span>
-        <h2 class="section-title">Our Services</h2>
-        <p class="section-subtitle">From stunning portraits to complete event coverage, we bring your vision to life with creativity and precision.</p>
+      <div class="section-header reveal">
+        <span class="eyebrow">What We Offer</span>
+        <h2 class="section-title">Our <em>Services</em></h2>
+        <p class="section-sub">From stunning portraits to complete event coverage, we bring your vision to life with creativity and precision.</p>
       </div>
       
       <div class="services-grid">
-        <div class="service-card animate-on-scroll delay-1">
+        <div class="service-card reveal" style="--delay: 0s">
+          <div class="service-num">01</div>
           <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="8" r="5"/>
-              <path d="M20 21a8 8 0 0 0-16 0"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
           </div>
-          <h3 class="service-title">Portrait Photography</h3>
-          <p class="service-description">Professional studio and outdoor portraits that capture your unique personality and style. Perfect for individuals, families, and professionals.</p>
-          <a href="/services" class="service-link">
-            Learn More
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
+          <h3>Portrait Photography</h3>
+          <p>Professional studio and outdoor portraits that capture your unique personality and style. Perfect for individuals, families, and professionals.</p>
+          <a href="/services" class="service-link">Learn More <span>→</span></a>
         </div>
         
-        <div class="service-card animate-on-scroll delay-2">
+        <div class="service-card reveal" style="--delay: 0.1s">
+          <div class="service-num">02</div>
           <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-              <line x1="16" y1="2" x2="16" y2="6"/>
-              <line x1="8" y1="2" x2="8" y2="6"/>
-              <line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </div>
-          <h3 class="service-title">Event Coverage</h3>
-          <p class="service-description">Comprehensive photo and video coverage for weddings, corporate events, parties, and special occasions. Every moment documented beautifully.</p>
-          <a href="/services" class="service-link">
-            Learn More
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
+          <h3>Event Coverage</h3>
+          <p>Comprehensive photo and video coverage for weddings, corporate events, parties, and special occasions. Every moment documented beautifully.</p>
+          <a href="/services" class="service-link">Learn More <span>→</span></a>
         </div>
         
-        <div class="service-card animate-on-scroll delay-3">
+        <div class="service-card reveal" style="--delay: 0.2s">
+          <div class="service-num">03</div>
           <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="23 7 16 12 23 17 23 7"/>
-              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
           </div>
-          <h3 class="service-title">Video Production</h3>
-          <p class="service-description">High-quality video production services including commercials, documentaries, music videos, and promotional content.</p>
-          <a href="/services" class="service-link">
-            Learn More
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
+          <h3>Video Production</h3>
+          <p>High-quality video production including commercials, documentaries, music videos, and promotional content that tells your story.</p>
+          <a href="/services" class="service-link">Learn More <span>→</span></a>
         </div>
         
-        <div class="service-card animate-on-scroll delay-4">
+        <div class="service-card reveal" style="--delay: 0.3s">
+          <div class="service-num">04</div>
           <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21 15 16 10 5 21"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           </div>
-          <h3 class="service-title">Photo Editing</h3>
-          <p class="service-description">Professional retouching, color correction, and creative editing services to enhance your images to perfection.</p>
-          <a href="/services" class="service-link">
-            Learn More
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
+          <h3>Photo Editing</h3>
+          <p>Professional retouching, color correction, and creative editing services to enhance your images to absolute perfection.</p>
+          <a href="/services" class="service-link">Learn More <span>→</span></a>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Portfolio Section -->
-  <section class="section portfolio" id="portfolio">
+  <section class="section portfolio-section" id="portfolio">
     <div class="container">
-      <div class="section-header animate-on-scroll">
-        <span class="section-badge">Our Work</span>
-        <h2 class="section-title">Featured Portfolio</h2>
-        <p class="section-subtitle">A glimpse into our creative journey. Every image tells a unique story.</p>
+      <div class="section-header reveal">
+        <span class="eyebrow">Our Work</span>
+        <h2 class="section-title">Featured <em>Portfolio</em></h2>
+        <p class="section-sub">A glimpse into our creative journey. Every image tells a unique story.</p>
       </div>
       
-      <div class="portfolio-filters animate-on-scroll">
+      <div class="portfolio-filters reveal">
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="portraits">Portraits</button>
         <button class="filter-btn" data-filter="events">Events</button>
@@ -207,189 +265,190 @@
       </div>
       
       <div class="portfolio-grid">
-        <div class="portfolio-item animate-on-scroll" data-category="portraits">
-          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80" alt="Portrait Photography">
+        <div class="portfolio-item reveal" data-category="portraits">
+          <div class="portfolio-img-wrap">
+            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80" alt="Portrait Photography" loading="lazy">
+          </div>
           <div class="portfolio-overlay">
-            <span class="portfolio-category">Portrait</span>
-            <h4 class="portfolio-title">Creative Portrait Session</h4>
+            <span class="portfolio-cat">Portrait</span>
+            <h4>Creative Portrait Session</h4>
+            <a href="/portfolio" class="portfolio-view">View</a>
           </div>
         </div>
         
-        <div class="portfolio-item animate-on-scroll" data-category="weddings">
-          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" alt="Wedding Photography">
+        <div class="portfolio-item reveal" data-category="weddings">
+          <div class="portfolio-img-wrap">
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" alt="Wedding Photography" loading="lazy">
+          </div>
           <div class="portfolio-overlay">
-            <span class="portfolio-category">Wedding</span>
-            <h4 class="portfolio-title">Beautiful Wedding Day</h4>
+            <span class="portfolio-cat">Wedding</span>
+            <h4>Beautiful Wedding Day</h4>
+            <a href="/portfolio" class="portfolio-view">View</a>
           </div>
         </div>
         
-        <div class="portfolio-item animate-on-scroll" data-category="events">
-          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" alt="Event Photography">
+        <div class="portfolio-item reveal portfolio-tall" data-category="events">
+          <div class="portfolio-img-wrap">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" alt="Event Photography" loading="lazy">
+          </div>
           <div class="portfolio-overlay">
-            <span class="portfolio-category">Event</span>
-            <h4 class="portfolio-title">Corporate Conference</h4>
+            <span class="portfolio-cat">Event</span>
+            <h4>Corporate Conference</h4>
+            <a href="/portfolio" class="portfolio-view">View</a>
           </div>
         </div>
         
-        <div class="portfolio-item animate-on-scroll" data-category="portraits">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" alt="Fashion Portrait">
+        <div class="portfolio-item reveal" data-category="portraits">
+          <div class="portfolio-img-wrap">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" alt="Fashion Portrait" loading="lazy">
+          </div>
           <div class="portfolio-overlay">
-            <span class="portfolio-category">Portrait</span>
-            <h4 class="portfolio-title">Fashion Editorial</h4>
+            <span class="portfolio-cat">Portrait</span>
+            <h4>Fashion Editorial</h4>
+            <a href="/portfolio" class="portfolio-view">View</a>
           </div>
         </div>
         
-        <div class="portfolio-item animate-on-scroll" data-category="commercial">
-          <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" alt="Product Photography">
+        <div class="portfolio-item reveal" data-category="commercial">
+          <div class="portfolio-img-wrap">
+            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" alt="Product Photography" loading="lazy">
+          </div>
           <div class="portfolio-overlay">
-            <span class="portfolio-category">Commercial</span>
-            <h4 class="portfolio-title">Product Showcase</h4>
+            <span class="portfolio-cat">Commercial</span>
+            <h4>Product Showcase</h4>
+            <a href="/portfolio" class="portfolio-view">View</a>
           </div>
         </div>
         
-        <div class="portfolio-item animate-on-scroll" data-category="weddings">
-          <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80" alt="Wedding Reception">
+        <div class="portfolio-item reveal portfolio-wide" data-category="weddings">
+          <div class="portfolio-img-wrap">
+            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80" alt="Wedding Reception" loading="lazy">
+          </div>
           <div class="portfolio-overlay">
-            <span class="portfolio-category">Wedding</span>
-            <h4 class="portfolio-title">Reception Moments</h4>
+            <span class="portfolio-cat">Wedding</span>
+            <h4>Reception Moments</h4>
+            <a href="/portfolio" class="portfolio-view">View</a>
           </div>
         </div>
       </div>
       
-      <div style="text-align: center; margin-top: 3rem;" class="animate-on-scroll">
-        <a href="/portfolio" class="btn btn-dark">
-          View All Work
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
+      <div class="section-cta reveal">
+        <a href="/portfolio" class="btn-primary btn-dark">View All Work →</a>
       </div>
     </div>
   </section>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat reveal">
+          <span class="stat-num" data-target="10">0</span><span class="stat-plus">+</span>
+          <span class="stat-label">Years Experience</span>
+        </div>
+        <div class="stat reveal">
+          <span class="stat-num" data-target="500">0</span><span class="stat-plus">+</span>
+          <span class="stat-label">Happy Clients</span>
+        </div>
+        <div class="stat reveal">
+          <span class="stat-num" data-target="1200">0</span><span class="stat-plus">+</span>
+          <span class="stat-label">Projects Done</span>
+        </div>
+        <div class="stat reveal">
+          <span class="stat-num" data-target="50">0</span><span class="stat-plus">+</span>
+          <span class="stat-label">Awards Won</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- About Section -->
-  <section class="section about" id="about">
+  <section class="section about-section" id="about">
     <div class="container">
       <div class="about-grid">
-        <div class="about-images animate-on-scroll">
-          <div class="about-img">
-            <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80" alt="Photography Studio">
+        <div class="about-images reveal">
+          <div class="about-img-main">
+            <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80" alt="Photography Studio" loading="lazy">
           </div>
-          <div class="about-img">
-            <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" alt="Camera Equipment">
-          </div>
-          <div class="about-img">
-            <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=400&q=80" alt="Photo Session">
-          </div>
-          <div class="about-floating-card">
-            <div class="number counter" data-target="10">0</div>
-            <div class="label">Years Experience</div>
+          <div class="about-img-grid">
+            <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" alt="Camera Equipment" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=400&q=80" alt="Photo Session" loading="lazy">
           </div>
         </div>
         
-        <div class="about-content animate-on-scroll">
-          <span class="section-badge">About Us</span>
-          <h2 class="section-title">Creativity Meets Excellence</h2>
-          <p class="about-text">
-            Denspark Studio is Machakos's premier photography and creative media studio. We're passionate about capturing life's precious moments and transforming them into visual masterpieces that you'll treasure forever.
-          </p>
-          <p class="about-text">
-            With state-of-the-art equipment and a team of skilled professionals, we deliver exceptional quality in every project, from intimate portraits to grand events.
-          </p>
+        <div class="about-content reveal">
+          <span class="eyebrow">About Us</span>
+          <h2 class="section-title">Creativity Meets <em>Excellence</em></h2>
+          <p>Denspark Studio is Machakos's premier photography and creative media studio. We're passionate about capturing life's precious moments and transforming them into visual masterpieces.</p>
+          <p>With state-of-the-art equipment and a team of skilled professionals, we deliver exceptional quality in every project — from intimate portraits to grand events.</p>
           
           <div class="about-features">
-            <div class="about-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              <span>Professional Equipment</span>
-            </div>
-            <div class="about-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              <span>Skilled Photographers</span>
-            </div>
-            <div class="about-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              <span>Fast Turnaround</span>
-            </div>
-            <div class="about-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              <span>Affordable Pricing</span>
-            </div>
+            <div class="about-feat"><span class="feat-icon">✓</span><span>Professional Equipment</span></div>
+            <div class="about-feat"><span class="feat-icon">✓</span><span>Skilled Photographers</span></div>
+            <div class="about-feat"><span class="feat-icon">✓</span><span>Fast Turnaround</span></div>
+            <div class="about-feat"><span class="feat-icon">✓</span><span>Affordable Pricing</span></div>
           </div>
           
-          <a href="/about" class="btn btn-primary">
-            Learn More About Us
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
+          <a href="/about" class="btn-primary">Learn More About Us →</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Testimonials Section -->
-  <section class="section testimonials">
+  <!-- Testimonials -->
+  <section class="section testimonials-section">
     <div class="container">
-      <div class="section-header animate-on-scroll">
-        <span class="section-badge">Testimonials</span>
-        <h2 class="section-title">What Our Clients Say</h2>
-        <p class="section-subtitle">Don't just take our word for it. Here's what our amazing clients have to say about working with us.</p>
+      <div class="section-header reveal">
+        <span class="eyebrow">Testimonials</span>
+        <h2 class="section-title">What Our <em>Clients Say</em></h2>
       </div>
       
-      <div class="testimonials-slider animate-on-scroll">
-        <div class="testimonials-track">
+      <div class="testimonials-slider reveal">
+        <div class="testimonials-track" id="testimonialsTrack">
           <div class="testimonial-card">
-            <p class="testimonial-quote">Denspark Studio captured our wedding beautifully! Every photo tells a story and we couldn't be happier with the results. Highly recommended for anyone looking for quality photography.</p>
+            <div class="quote-mark">"</div>
+            <p>Denspark Studio captured our wedding beautifully! Every photo tells a story and we couldn't be happier with the results. Highly recommended for anyone looking for quality photography.</p>
             <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Client" class="testimonial-avatar">
-              <div class="testimonial-info">
-                <h4>Sarah Muthoni</h4>
-                <p>Wedding Client</p>
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Sarah Muthoni">
+              <div>
+                <strong>Sarah Muthoni</strong>
+                <span>Wedding Client</span>
               </div>
             </div>
           </div>
           
           <div class="testimonial-card">
-            <p class="testimonial-quote">Professional, creative, and punctual! They covered our corporate event flawlessly. The team understood exactly what we needed and delivered beyond expectations.</p>
+            <div class="quote-mark">"</div>
+            <p>Professional, creative, and punctual! They covered our corporate event flawlessly. The team understood exactly what we needed and delivered beyond expectations.</p>
             <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="Client" class="testimonial-avatar">
-              <div class="testimonial-info">
-                <h4>James Odhiambo</h4>
-                <p>Corporate Client</p>
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="James Odhiambo">
+              <div>
+                <strong>James Odhiambo</strong>
+                <span>Corporate Client</span>
               </div>
             </div>
           </div>
           
           <div class="testimonial-card">
-            <p class="testimonial-quote">The portrait session was amazing! They made me feel comfortable and the photos turned out stunning. Perfect for my professional profile and personal memories.</p>
+            <div class="quote-mark">"</div>
+            <p>The portrait session was amazing! They made me feel comfortable and the photos turned out stunning. Perfect for my professional profile and personal memories.</p>
             <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Client" class="testimonial-avatar">
-              <div class="testimonial-info">
-                <h4>Grace Wanjiku</h4>
-                <p>Portrait Client</p>
+              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Grace Wanjiku">
+              <div>
+                <strong>Grace Wanjiku</strong>
+                <span>Portrait Client</span>
               </div>
             </div>
           </div>
         </div>
         
-        <div class="testimonials-nav">
-          <button class="prev">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
-            </svg>
+        <div class="testimonials-controls">
+          <button class="t-btn t-prev" id="tPrev">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           </button>
-          <button class="next">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
+          <div class="t-dots" id="tDots"></div>
+          <button class="t-btn t-next" id="tNext">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
         </div>
       </div>
@@ -397,149 +456,105 @@
   </section>
 
   <!-- Hours Section -->
-  <section class="section hours" id="hours">
+  <section class="section hours-section" id="hours">
     <div class="container">
       <div class="hours-grid">
-        <div class="hours-content animate-on-scroll">
-          <span class="section-badge">Visit Us</span>
-          <h2 class="section-title">Business Hours</h2>
+        <div class="hours-content reveal">
+          <span class="eyebrow">Visit Us</span>
+          <h2 class="section-title">Business <em>Hours</em></h2>
           <p>We're open seven days a week to serve you. Walk-ins are welcome, but we recommend booking an appointment for studio sessions.</p>
           
           <div class="hours-list">
-            <div class="hours-item">
-              <span class="day">Monday</span>
-              <span class="time">8:30 AM – 8:00 PM</span>
-            </div>
-            <div class="hours-item">
-              <span class="day">Tuesday</span>
-              <span class="time">8:30 AM – 8:00 PM</span>
-            </div>
-            <div class="hours-item">
-              <span class="day">Wednesday</span>
-              <span class="time">8:30 AM – 8:00 PM</span>
-            </div>
-            <div class="hours-item">
-              <span class="day">Thursday</span>
-              <span class="time">8:30 AM – 8:00 PM</span>
-            </div>
-            <div class="hours-item">
-              <span class="day">Friday</span>
-              <span class="time">9:00 AM – 8:00 PM</span>
-            </div>
-            <div class="hours-item">
-              <span class="day">Saturday</span>
-              <span class="time">8:30 AM – 8:00 PM</span>
-            </div>
-            <div class="hours-item">
-              <span class="day">Sunday</span>
-              <span class="time">8:00 AM – 8:00 PM</span>
-            </div>
+            <div class="hours-item"><span>Monday – Thursday</span><span>8:30 AM – 8:00 PM</span></div>
+            <div class="hours-item"><span>Friday</span><span>9:00 AM – 8:00 PM</span></div>
+            <div class="hours-item"><span>Saturday</span><span>8:30 AM – 8:00 PM</span></div>
+            <div class="hours-item"><span>Sunday</span><span>8:00 AM – 8:00 PM</span></div>
           </div>
           
-          <div class="hours-status">Open Now</div>
+          <div class="open-badge">
+            <span class="open-dot"></span>
+            Open Today
+          </div>
         </div>
         
-        <div class="hours-image animate-on-scroll">
-          <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80" alt="Denspark Studio">
+        <div class="hours-image reveal">
+          <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80" alt="Denspark Studio" loading="lazy">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA Section -->
-  <section class="cta">
+  <!-- CTA Banner -->
+  <section class="cta-banner">
     <div class="container">
-      <div class="cta-content animate-on-scroll">
-        <div class="cta-text">
+      <div class="cta-inner reveal">
+        <div>
           <h2>Ready to Capture Your Story?</h2>
           <p>Let's create something beautiful together. Book your session today!</p>
         </div>
-        <a href="/contact" class="btn btn-dark">
-          Get in Touch
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
+        <a href="/contact" class="btn-primary btn-white">Get in Touch →</a>
       </div>
     </div>
   </section>
 
   <!-- Contact Section -->
-  <section class="section contact" id="contact">
+  <section class="section contact-section" id="contact">
     <div class="container">
+      <div class="section-header reveal">
+        <span class="eyebrow">Contact</span>
+        <h2 class="section-title">Let's <em>Connect</em></h2>
+      </div>
       <div class="contact-grid">
-        <div class="contact-info animate-on-scroll">
-          <h3>Get in Touch</h3>
-          <p>Have questions or ready to book? Reach out to us through any of these channels. We'd love to hear from you!</p>
+        <div class="contact-info reveal">
+          <p>Have questions or ready to book? Reach out to us through any of these channels.</p>
           
           <div class="contact-details">
             <div class="contact-item">
-              <div class="contact-item-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                  <circle cx="12" cy="10" r="3"/>
-                </svg>
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               </div>
-              <div class="contact-item-content">
-                <h4>Location</h4>
+              <div>
+                <strong>Location</strong>
                 <p>Machakos Town, Kenya</p>
               </div>
             </div>
             
             <div class="contact-item">
-              <div class="contact-item-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                </svg>
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               </div>
-              <div class="contact-item-content">
-                <h4>Phone</h4>
+              <div>
+                <strong>Phone</strong>
                 <a href="tel:+254700000000">+254 700 000 000</a>
               </div>
             </div>
             
             <div class="contact-item">
-              <div class="contact-item-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                  <polyline points="22,6 12,13 2,6"/>
-                </svg>
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
               </div>
-              <div class="contact-item-content">
-                <h4>Email</h4>
+              <div>
+                <strong>Email</strong>
                 <a href="mailto:info@densparkstudio.co.ke">info@densparkstudio.co.ke</a>
               </div>
             </div>
           </div>
-          
-          <div class="contact-social">
+
+          <div class="social-links">
             <a href="#" class="social-link" aria-label="Facebook">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-              </svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
             </a>
             <a href="#" class="social-link" aria-label="Instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-              </svg>
-            </a>
-            <a href="#" class="social-link" aria-label="Twitter">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             </a>
             <a href="#" class="social-link" aria-label="WhatsApp">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-              </svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             </a>
           </div>
         </div>
         
-        <div class="contact-form-wrapper animate-on-scroll">
-          <form class="contact-form" action="/api/contact" method="POST">
+        <div class="contact-form-wrap reveal">
+          <form class="contact-form" id="contactForm" action="/api/contact" method="POST">
             <div class="form-row">
               <div class="form-group">
                 <label for="name">Full Name</label>
@@ -553,7 +568,7 @@
             
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" placeholder="Your email" required>
+              <input type="email" id="email" name="email" placeholder="Your email address" required>
             </div>
             
             <div class="form-group">
@@ -564,21 +579,19 @@
                 <option value="wedding">Wedding Coverage</option>
                 <option value="event">Event Photography</option>
                 <option value="video">Video Production</option>
+                <option value="editing">Photo Editing</option>
                 <option value="other">Other</option>
               </select>
             </div>
             
             <div class="form-group">
               <label for="message">Message</label>
-              <textarea id="message" name="message" placeholder="Tell us about your project or inquiry..." required></textarea>
+              <textarea id="message" name="message" rows="5" placeholder="Tell us about your project or inquiry..." required></textarea>
             </div>
             
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn-submit">
               Send Message
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="22" y1="2" x2="11" y2="13"/>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-              </svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </button>
           </form>
         </div>
@@ -589,34 +602,26 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
+      <div class="footer-top">
         <div class="footer-brand">
-          <a href="/" class="logo">DENS<span>PARK</span></a>
+          <div class="footer-logo">DENSPARK <span>STUDIO</span></div>
           <p>Professional photography and creative media services in Machakos, Kenya. Capturing moments that last forever.</p>
-          <div class="contact-social">
-            <a href="#" class="social-link" aria-label="Facebook">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-              </svg>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
             </a>
-            <a href="#" class="social-link" aria-label="Instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-              </svg>
+            <a href="#" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             </a>
-            <a href="#" class="social-link" aria-label="Twitter">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
+            <a href="#" aria-label="Twitter/X">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             </a>
           </div>
         </div>
         
-        <div class="footer-column">
-          <h4>Quick Links</h4>
-          <ul class="footer-links">
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/portfolio">Portfolio</a></li>
             <li><a href="/services">Services</a></li>
@@ -625,9 +630,9 @@
           </ul>
         </div>
         
-        <div class="footer-column">
+        <div class="footer-col">
           <h4>Services</h4>
-          <ul class="footer-links">
+          <ul>
             <li><a href="/services">Portrait Photography</a></li>
             <li><a href="/services">Event Coverage</a></li>
             <li><a href="/services">Wedding Photography</a></li>
@@ -636,9 +641,9 @@
           </ul>
         </div>
         
-        <div class="footer-column">
+        <div class="footer-col">
           <h4>Contact</h4>
-          <ul class="footer-links">
+          <ul>
             <li>Machakos Town, Kenya</li>
             <li><a href="tel:+254700000000">+254 700 000 000</a></li>
             <li><a href="mailto:info@densparkstudio.co.ke">info@densparkstudio.co.ke</a></li>
@@ -647,7 +652,7 @@
       </div>
       
       <div class="footer-bottom">
-        <p>&copy; 2024 Denspark Studio. All rights reserved.</p>
+        <p>&copy; 2025 Denspark Studio. All rights reserved.</p>
         <div class="footer-legal">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
@@ -657,112 +662,50 @@
   </footer>
 
   <!-- Lightbox -->
-  <div class="lightbox">
-    <button class="lightbox-close">&times;</button>
-    <div class="lightbox-content">
-      <img src="" alt="Gallery Image">
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">×</button>
+    <div class="lightbox-img-wrap">
+      <img src="" alt="" id="lightboxImg">
     </div>
-    <button class="lightbox-nav lightbox-prev">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
-      </svg>
+    <button class="lightbox-nav lb-prev" id="lbPrev">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
-    <button class="lightbox-nav lightbox-next">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M5 12h14M12 5l7 7-7 7"/>
-      </svg>
+    <button class="lightbox-nav lb-next" id="lbNext">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </button>
   </div>
 
   <!-- Chat Widget -->
-  <div class="chat-widget">
-    <div class="chat-window">
+  <div class="chat-widget" id="chatWidget">
+    <div class="chat-window" id="chatWindow">
       <div class="chat-header">
-        <h4>Chat with us</h4>
-        <button class="chat-close">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
+        <div class="chat-header-info">
+          <div class="chat-avatar">DS</div>
+          <div>
+            <h4>Denspark Studio</h4>
+            <span class="chat-status"><span class="online-dot"></span>Online</span>
+          </div>
+        </div>
+        <button class="chat-close-btn" id="chatClose">×</button>
       </div>
-      <div class="chat-messages">
-        <div class="chat-message received">
-          Hi! 👋 Welcome to Denspark Studio. How can we help you today?
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg received">
+          Hi there! 👋 Welcome to Denspark Studio. How can we help you today?
         </div>
       </div>
-      <div class="chat-input">
-        <input type="text" placeholder="Type a message...">
-        <button>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="22" y1="2" x2="11" y2="13"/>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-          </svg>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Type a message...">
+        <button id="chatSend">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </button>
       </div>
     </div>
-    <button class="chat-toggle">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-      </svg>
+    <button class="chat-toggle-btn" id="chatToggle" aria-label="Chat with us">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="chat-badge">1</span>
     </button>
   </div>
 
-  <!-- Scripts -->
-  <script src="/static/js/main.js"></script>
-  
-  <!-- Preloader Styles -->
-  <style>
-    .preloader {
-      position: fixed;
-      inset: 0;
-      background: var(--color-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 99999;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
-    }
-    
-    .preloader.loaded {
-      opacity: 0;
-      visibility: hidden;
-    }
-    
-    .preloader-content {
-      text-align: center;
-    }
-    
-    .preloader-logo {
-      font-family: var(--font-heading);
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--color-white);
-      letter-spacing: 0.2em;
-      margin-bottom: 1.5rem;
-    }
-    
-    .preloader-bar {
-      width: 200px;
-      height: 3px;
-      background: var(--color-gray-700);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    
-    .preloader-bar::after {
-      content: '';
-      display: block;
-      width: 50%;
-      height: 100%;
-      background: var(--color-accent);
-      animation: preload 1.5s ease-in-out infinite;
-    }
-    
-    @keyframes preload {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(300%); }
-    }
-  </style>
+  <script src="static/js/slider.js"></script>
 </body>
 </html>

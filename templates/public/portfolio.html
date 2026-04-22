@@ -8,169 +8,375 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static/css/public/portfolio.css">
 </head>
 <body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-logo">DENSPARK</div>
+      <div class="preloader-line"><span></span></div>
+    </div>
+  </div>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
   <!-- Navigation -->
-  <nav class="navbar scrolled">
-    <div class="container">
-      <a href="/" class="logo">DENS<span>PARK</span></a>
-      <ul class="nav-links">
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <span class="logo-text">DENSPARK</span>
+        <span class="logo-sub">STUDIO</span>
+      </a>
+      
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/portfolio" class="nav-link active">Portfolio</a></li>
+        <li><a href="/services" class="nav-link">Services</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <a href="/contact" class="btn-book">Book Now</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
-        <li><a href="/portfolio" class="active">Portfolio</a></li>
+        <li><a href="/portfolio">Portfolio</a></li>
         <li><a href="/services">Services</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
-        <li><a href="/contact" class="nav-cta">Book Now</a></li>
       </ul>
-      <div class="menu-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
+      <a href="/contact" class="btn-book-mobile">Book a Session</a>
+      <div class="mobile-info">
+        <span>Machakos, Kenya</span>
+        <span>+254 700 000 000</span>
       </div>
     </div>
   </nav>
 
-  <!-- Page Header -->
-  <header class="page-header">
-    <div class="container">
-      <h1>Our Portfolio</h1>
-      <p>Explore our collection of visual stories</p>
+  <!-- Page Hero -->
+  <header class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=85')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
       <div class="breadcrumb">
         <a href="/">Home</a>
-        <span>/</span>
-        <span class="current">Portfolio</span>
+        <span class="bc-sep">→</span>
+        <span>Portfolio</span>
       </div>
+      <h1 class="page-hero-title">Our <em>Portfolio</em></h1>
+      <p class="page-hero-sub">Explore our collection of visual stories — from weddings and portraits to corporate events and fashion.</p>
+    </div>
+    <div class="page-hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
     </div>
   </header>
 
   <!-- Portfolio Section -->
-  <section class="section portfolio">
+  <section class="portfolio-page-section">
     <div class="container">
-      <div class="portfolio-filters animate-on-scroll">
-        <button class="filter-btn active" data-filter="all">All Work</button>
-        <button class="filter-btn" data-filter="portraits">Portraits</button>
-        <button class="filter-btn" data-filter="weddings">Weddings</button>
-        <button class="filter-btn" data-filter="events">Events</button>
-        <button class="filter-btn" data-filter="commercial">Commercial</button>
-        <button class="filter-btn" data-filter="fashion">Fashion</button>
-      </div>
-      
-      <div class="portfolio-grid">
-        <div class="portfolio-item animate-on-scroll" data-category="portraits">
-          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80" alt="Portrait Photography">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Portrait</span>
-            <h4 class="portfolio-title">Creative Portrait Session</h4>
-          </div>
+
+      <!-- Filter Bar -->
+      <div class="pf-filter-bar reveal">
+        <div class="pf-filters">
+          <button class="pf-filter active" data-filter="all">
+            <span class="pf-filter-label">All Work</span>
+            <span class="pf-filter-count" id="count-all">12</span>
+          </button>
+          <button class="pf-filter" data-filter="portraits">
+            <span class="pf-filter-label">Portraits</span>
+            <span class="pf-filter-count" id="count-portraits">3</span>
+          </button>
+          <button class="pf-filter" data-filter="weddings">
+            <span class="pf-filter-label">Weddings</span>
+            <span class="pf-filter-count" id="count-weddings">3</span>
+          </button>
+          <button class="pf-filter" data-filter="events">
+            <span class="pf-filter-label">Events</span>
+            <span class="pf-filter-count" id="count-events">2</span>
+          </button>
+          <button class="pf-filter" data-filter="commercial">
+            <span class="pf-filter-label">Commercial</span>
+            <span class="pf-filter-count" id="count-commercial">2</span>
+          </button>
+          <button class="pf-filter" data-filter="fashion">
+            <span class="pf-filter-label">Fashion</span>
+            <span class="pf-filter-count" id="count-fashion">2</span>
+          </button>
         </div>
-        
-        <div class="portfolio-item animate-on-scroll" data-category="weddings">
-          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" alt="Wedding Photography">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Wedding</span>
-            <h4 class="portfolio-title">Beautiful Wedding Day</h4>
-          </div>
-        </div>
-        
-        <div class="portfolio-item animate-on-scroll" data-category="events">
-          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" alt="Event Photography">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Event</span>
-            <h4 class="portfolio-title">Corporate Conference</h4>
-          </div>
-        </div>
-        
-        <div class="portfolio-item animate-on-scroll" data-category="fashion">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" alt="Fashion Portrait">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Fashion</span>
-            <h4 class="portfolio-title">Fashion Editorial</h4>
-          </div>
-        </div>
-        
-        <div class="portfolio-item animate-on-scroll" data-category="commercial">
-          <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" alt="Product Photography">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Commercial</span>
-            <h4 class="portfolio-title">Product Showcase</h4>
-          </div>
-        </div>
-        
-        <div class="portfolio-item animate-on-scroll" data-category="weddings">
-          <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80" alt="Wedding Reception">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Wedding</span>
-            <h4 class="portfolio-title">Reception Moments</h4>
-          </div>
-        </div>
-        
-        <div class="portfolio-item animate-on-scroll" data-category="portraits">
-          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80" alt="Studio Portrait">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Portrait</span>
-            <h4 class="portfolio-title">Studio Portrait</h4>
-          </div>
-        </div>
-        
-        <div class="portfolio-item animate-on-scroll" data-category="events">
-          <img src="https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800&q=80" alt="Birthday Party">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Event</span>
-            <h4 class="portfolio-title">Birthday Celebration</h4>
-          </div>
-        </div>
-        
-        <div class="portfolio-item animate-on-scroll" data-category="fashion">
-          <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80" alt="Fashion Shoot">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Fashion</span>
-            <h4 class="portfolio-title">Fashion Photoshoot</h4>
-          </div>
-        </div>
-        
-        <div class="portfolio-item animate-on-scroll" data-category="commercial">
-          <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80" alt="Commercial Photography">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Commercial</span>
-            <h4 class="portfolio-title">Brand Photography</h4>
-          </div>
-        </div>
-        
-        <div class="portfolio-item animate-on-scroll" data-category="weddings">
-          <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80" alt="Wedding Ceremony">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Wedding</span>
-            <h4 class="portfolio-title">Wedding Ceremony</h4>
-          </div>
-        </div>
-        
-        <div class="portfolio-item animate-on-scroll" data-category="portraits">
-          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80" alt="Professional Headshot">
-          <div class="portfolio-overlay">
-            <span class="portfolio-category">Portrait</span>
-            <h4 class="portfolio-title">Professional Headshot</h4>
-          </div>
+
+        <div class="pf-view-toggle">
+          <button class="pf-view-btn active" id="viewGrid" aria-label="Grid view">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          </button>
+          <button class="pf-view-btn" id="viewMasonry" aria-label="Masonry view">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="10" rx="1"/><rect x="14" y="3" width="7" height="6" rx="1"/><rect x="14" y="13" width="7" height="8" rx="1"/><rect x="3" y="17" width="7" height="4" rx="1"/></svg>
+          </button>
+          <button class="pf-view-btn" id="viewList" aria-label="List view">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>
+          </button>
         </div>
       </div>
+
+      <!-- Results Count -->
+      <div class="pf-meta reveal">
+        <span id="pfResultText">Showing 12 works</span>
+      </div>
+
+      <!-- Portfolio Grid -->
+      <div class="pf-grid pf-grid--masonry" id="pfGrid">
+
+        <!-- Item 1 -->
+        <div class="pf-item" data-category="portraits" data-title="Creative Portrait Session" data-img="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80" alt="Creative Portrait Session" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Portrait</span>
+            <h3 class="pf-title">Creative Portrait Session</h3>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="pf-item pf-tall" data-category="weddings" data-title="Beautiful Wedding Day" data-img="https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" alt="Beautiful Wedding Day" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Wedding</span>
+            <h3 class="pf-title">Beautiful Wedding Day</h3>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="pf-item" data-category="events" data-title="Corporate Conference" data-img="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" alt="Corporate Conference" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Event</span>
+            <h3 class="pf-title">Corporate Conference</h3>
+          </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="pf-item" data-category="fashion" data-title="Fashion Editorial" data-img="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" alt="Fashion Editorial" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Fashion</span>
+            <h3 class="pf-title">Fashion Editorial</h3>
+          </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="pf-item pf-wide" data-category="commercial" data-title="Product Showcase" data-img="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" alt="Product Showcase" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Commercial</span>
+            <h3 class="pf-title">Product Showcase</h3>
+          </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="pf-item" data-category="weddings" data-title="Reception Moments" data-img="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80" alt="Reception Moments" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Wedding</span>
+            <h3 class="pf-title">Reception Moments</h3>
+          </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="pf-item" data-category="portraits" data-title="Studio Portrait" data-img="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80" alt="Studio Portrait" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Portrait</span>
+            <h3 class="pf-title">Studio Portrait</h3>
+          </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="pf-item pf-tall" data-category="events" data-title="Birthday Celebration" data-img="https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=800&q=80" alt="Birthday Celebration" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Event</span>
+            <h3 class="pf-title">Birthday Celebration</h3>
+          </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="pf-item" data-category="fashion" data-title="Fashion Photoshoot" data-img="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80" alt="Fashion Photoshoot" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Fashion</span>
+            <h3 class="pf-title">Fashion Photoshoot</h3>
+          </div>
+        </div>
+
+        <!-- Item 10 -->
+        <div class="pf-item" data-category="commercial" data-title="Brand Photography" data-img="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80" alt="Brand Photography" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Commercial</span>
+            <h3 class="pf-title">Brand Photography</h3>
+          </div>
+        </div>
+
+        <!-- Item 11 -->
+        <div class="pf-item pf-wide" data-category="weddings" data-title="Wedding Ceremony" data-img="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80" alt="Wedding Ceremony" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Wedding</span>
+            <h3 class="pf-title">Wedding Ceremony</h3>
+          </div>
+        </div>
+
+        <!-- Item 12 -->
+        <div class="pf-item" data-category="portraits" data-title="Professional Headshot" data-img="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1200&q=85">
+          <div class="pf-img-wrap">
+            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80" alt="Professional Headshot" loading="lazy">
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">Portrait</span>
+            <h3 class="pf-title">Professional Headshot</h3>
+          </div>
+        </div>
+
+      </div><!-- /pf-grid -->
+
+      <!-- Empty State -->
+      <div class="pf-empty" id="pfEmpty" style="display:none">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <p>No works found in this category.</p>
+      </div>
+
     </div>
   </section>
 
-  <!-- CTA Section -->
-  <section class="cta">
+  <!-- Marquee -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span>Portraits</span><span class="dot">·</span>
+        <span>Events</span><span class="dot">·</span>
+        <span>Weddings</span><span class="dot">·</span>
+        <span>Corporate</span><span class="dot">·</span>
+        <span>Product Shoots</span><span class="dot">·</span>
+        <span>Fashion</span><span class="dot">·</span>
+        <span>Video Production</span><span class="dot">·</span>
+        <span>Photo Editing</span><span class="dot">·</span>
+        <span>Portraits</span><span class="dot">·</span>
+        <span>Events</span><span class="dot">·</span>
+        <span>Weddings</span><span class="dot">·</span>
+        <span>Corporate</span><span class="dot">·</span>
+        <span>Product Shoots</span><span class="dot">·</span>
+        <span>Fashion</span><span class="dot">·</span>
+        <span>Video Production</span><span class="dot">·</span>
+        <span>Photo Editing</span><span class="dot">·</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Banner -->
+  <section class="cta-banner">
     <div class="container">
-      <div class="cta-content animate-on-scroll">
-        <div class="cta-text">
+      <div class="cta-inner reveal">
+        <div>
           <h2>Like What You See?</h2>
           <p>Let's create stunning visuals for you too. Book your session today!</p>
         </div>
-        <a href="/contact" class="btn btn-dark">
-          Book a Session
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
+        <a href="/contact" class="btn-primary btn-white">Book a Session →</a>
       </div>
     </div>
   </section>
@@ -178,14 +384,25 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
+      <div class="footer-top">
         <div class="footer-brand">
-          <a href="/" class="logo">DENS<span>PARK</span></a>
-          <p>Professional photography and creative media services in Machakos, Kenya.</p>
+          <div class="footer-logo">DENSPARK <span>STUDIO</span></div>
+          <p>Professional photography and creative media services in Machakos, Kenya. Capturing moments that last forever.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="Twitter/X">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          </div>
         </div>
-        <div class="footer-column">
-          <h4>Quick Links</h4>
-          <ul class="footer-links">
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/portfolio">Portfolio</a></li>
             <li><a href="/services">Services</a></li>
@@ -193,18 +410,19 @@
             <li><a href="/contact">Contact</a></li>
           </ul>
         </div>
-        <div class="footer-column">
+        <div class="footer-col">
           <h4>Services</h4>
-          <ul class="footer-links">
+          <ul>
             <li><a href="/services">Portrait Photography</a></li>
             <li><a href="/services">Event Coverage</a></li>
             <li><a href="/services">Wedding Photography</a></li>
             <li><a href="/services">Video Production</a></li>
+            <li><a href="/services">Photo Editing</a></li>
           </ul>
         </div>
-        <div class="footer-column">
+        <div class="footer-col">
           <h4>Contact</h4>
-          <ul class="footer-links">
+          <ul>
             <li>Machakos Town, Kenya</li>
             <li><a href="tel:+254700000000">+254 700 000 000</a></li>
             <li><a href="mailto:info@densparkstudio.co.ke">info@densparkstudio.co.ke</a></li>
@@ -212,7 +430,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2024 Denspark Studio. All rights reserved.</p>
+        <p>&copy; 2025 Denspark Studio. All rights reserved.</p>
         <div class="footer-legal">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
@@ -222,23 +440,51 @@
   </footer>
 
   <!-- Lightbox -->
-  <div class="lightbox">
-    <button class="lightbox-close">&times;</button>
-    <div class="lightbox-content">
-      <img src="" alt="Gallery Image">
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+    <button class="lightbox-close" id="lightboxClose">×</button>
+    <div class="lightbox-img-wrap">
+      <img src="" alt="" id="lightboxImg">
     </div>
-    <button class="lightbox-nav lightbox-prev">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
-      </svg>
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+    <button class="lightbox-nav lb-prev" id="lbPrev">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     </button>
-    <button class="lightbox-nav lightbox-next">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M5 12h14M12 5l7 7-7 7"/>
-      </svg>
+    <button class="lightbox-nav lb-next" id="lbNext">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <div class="lightbox-counter" id="lightboxCounter"></div>
+  </div>
+
+  <!-- Chat Widget -->
+  <div class="chat-widget" id="chatWidget">
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="chat-avatar">DS</div>
+          <div>
+            <h4>Denspark Studio</h4>
+            <span class="chat-status"><span class="online-dot"></span>Online</span>
+          </div>
+        </div>
+        <button class="chat-close-btn" id="chatClose">×</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg received">Hi there! 👋 Interested in any of our photography services? We'd love to help!</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Type a message...">
+        <button id="chatSend">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+    <button class="chat-toggle-btn" id="chatToggle" aria-label="Chat with us">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="chat-badge">1</span>
     </button>
   </div>
 
-  <script src="/static/js/main.js"></script>
+  <script src="static/js/public/portfolio.js"></script>
 </body>
 </html>

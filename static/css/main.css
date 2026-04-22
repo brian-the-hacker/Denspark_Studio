@@ -1,30 +1,37 @@
 /* ============================================
    DENSPARK STUDIO - Main Stylesheet
    Modern Photography Studio Theme
+   UPDATED COLOR SCHEME: White BG | Black/Blue Nav/Footer | Blue Buttons
    ============================================ */
 
 /* CSS Variables - Design Tokens */
 :root {
-  /* Primary Colors */
-  --color-primary: #1a1a1a;
+  /* Primary Colors - Updated for Blue theme */
+  --color-primary: #1a1a1a; /* Keeping dark for contrast, but primary actions are blue */
   --color-primary-light: #2d2d2d;
-  --color-accent: #c9a962;
-  --color-accent-hover: #d4b872;
+  --color-accent: #2563eb; /* Primary Blue */
+  --color-accent-hover: #1d4ed8; /* Secondary Blue (Hover) */
   
-  /* Neutrals */
+  /* Neutrals - White background */
   --color-white: #ffffff;
-  --color-off-white: #f8f6f3;
-  --color-gray-100: #f5f5f5;
-  --color-gray-200: #e5e5e5;
-  --color-gray-300: #d4d4d4;
-  --color-gray-400: #a3a3a3;
-  --color-gray-500: #737373;
-  --color-gray-600: #525252;
-  --color-gray-700: #404040;
-  --color-gray-800: #262626;
-  --color-gray-900: #171717;
+  --color-off-white: #ffffff; /* Changed to pure white */
+  --color-gray-100: #f8f9fa;
+  --color-gray-200: #e9ecef;
+  --color-gray-300: #dee2e6;
+  --color-gray-400: #ced4da;
+  --color-gray-500: #6c757d;
+  --color-gray-600: #495057;
+  --color-gray-700: #343a40;
+  --color-gray-800: #212529;
+  --color-gray-900: #111827;
   
-  /* Typography */
+  /* Navbar/Footer Colors - Can be Black or Blue, defaulting to Black/Dark */
+  --color-navbar-bg: #111827; /* Dark Blue/Black */
+  --color-footer-bg: #111827; /* Dark Blue/Black */
+  --color-navbar-text: #ffffff;
+  --color-footer-text: #9ca3af;
+  
+  /* Typography - Black/Dark Gray */
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;
   
@@ -71,8 +78,8 @@ html {
 
 body {
   font-family: var(--font-body);
-  background-color: var(--color-off-white);
-  color: var(--color-primary);
+  background-color: var(--color-off-white); /* White Background */
+  color: var(--color-gray-800); /* Dark Gray/Black text */
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -85,6 +92,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.02em;
+  color: var(--color-gray-900); /* Dark Gray/Black headings */
 }
 
 h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); }
@@ -93,7 +101,7 @@ h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
 h4 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
 
 p {
-  color: var(--color-gray-600);
+  color: var(--color-gray-600); /* Dark Gray text */
   line-height: 1.7;
 }
 
@@ -118,7 +126,7 @@ img {
 }
 
 /* ============================================
-   NAVIGATION
+   NAVIGATION - Updated to Black/Dark Blue
    ============================================ */
 .navbar {
   position: fixed;
@@ -132,10 +140,15 @@ img {
 }
 
 .navbar.scrolled {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
+  background: var(--color-navbar-bg); /* Dark Blue/Black background when scrolled */
+  backdrop-filter: blur(0px);
   box-shadow: var(--shadow-md);
   padding: var(--spacing-md) 0;
+}
+
+.navbar.scrolled .logo,
+.navbar.scrolled .nav-links a {
+  color: var(--color-white);
 }
 
 .navbar .container {
@@ -148,14 +161,14 @@ img {
   font-family: var(--font-heading);
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-primary); /* Dark color for transparent state, will change on scroll */
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
 }
 
 .logo span {
-  color: var(--color-accent);
+  color: var(--color-accent); /* Blue accent */
 }
 
 .nav-links {
@@ -172,6 +185,11 @@ img {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: var(--spacing-sm) 0;
+  color: var(--color-primary); /* Dark for transparent header */
+}
+
+.navbar.scrolled .nav-links a {
+  color: var(--color-white);
 }
 
 .nav-links a::after {
@@ -181,7 +199,7 @@ img {
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--color-accent);
+  background: var(--color-accent); /* Blue underline */
   transition: width var(--transition-base);
 }
 
@@ -191,7 +209,7 @@ img {
 }
 
 .nav-cta {
-  background: var(--color-primary);
+  background: var(--color-accent); /* Primary Blue */
   color: var(--color-white) !important;
   padding: var(--spacing-sm) var(--spacing-lg) !important;
   border-radius: var(--radius-full);
@@ -199,7 +217,7 @@ img {
 }
 
 .nav-cta:hover {
-  background: var(--color-accent);
+  background: var(--color-accent-hover); /* Secondary Blue */
   transform: translateY(-2px);
 }
 
@@ -207,7 +225,7 @@ img {
   display: none !important;
 }
 
-/* Mobile Menu Toggle */
+/* Mobile Menu Toggle - Updated for contrast */
 .menu-toggle {
   display: none;
   flex-direction: column;
@@ -223,6 +241,10 @@ img {
   background: var(--color-primary);
   transition: all var(--transition-base);
   transform-origin: center;
+}
+
+.navbar.scrolled .menu-toggle span {
+  background: var(--color-white);
 }
 
 .menu-toggle.active span:nth-child(1) {
@@ -247,7 +269,7 @@ img {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: var(--color-primary);
+  background: var(--color-gray-900);
 }
 
 .hero-bg {
@@ -275,9 +297,9 @@ img {
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(26, 26, 26, 0.9) 0%,
-    rgba(26, 26, 26, 0.7) 50%,
-    rgba(26, 26, 26, 0.5) 100%
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0.4) 100%
   );
   z-index: 2;
 }
@@ -296,7 +318,7 @@ img {
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-lg);
-  background: rgba(201, 169, 98, 0.2);
+  background: rgba(37, 99, 235, 0.2);
   border: 1px solid var(--color-accent);
   border-radius: var(--radius-full);
   font-size: 0.85rem;
@@ -317,6 +339,7 @@ img {
   opacity: 0;
   animation: fadeInUp 0.8s ease forwards;
   animation-delay: 0.4s;
+  color: var(--color-white);
 }
 
 .hero-title span {
@@ -372,7 +395,7 @@ img {
 }
 
 /* ============================================
-   BUTTONS
+   BUTTONS - Updated to Blue
    ============================================ */
 .btn {
   display: inline-flex;
@@ -392,14 +415,14 @@ img {
 }
 
 .btn-primary {
-  background: var(--color-accent);
-  color: var(--color-primary);
+  background: var(--color-accent); /* Primary Blue */
+  color: var(--color-white);
 }
 
 .btn-primary:hover {
-  background: var(--color-accent-hover);
+  background: var(--color-accent-hover); /* Secondary Blue */
   transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(201, 169, 98, 0.4);
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
 }
 
 .btn-outline {
@@ -420,7 +443,7 @@ img {
 }
 
 .btn-dark:hover {
-  background: var(--color-gray-800);
+  background: var(--color-accent); /* Blue on hover */
   transform: translateY(-3px);
   box-shadow: var(--shadow-xl);
 }
@@ -429,7 +452,7 @@ img {
    MARQUEE / TICKER
    ============================================ */
 .marquee {
-  background: var(--color-primary);
+  background: var(--color-gray-900); /* Dark background */
   color: var(--color-white);
   padding: var(--spacing-md) 0;
   overflow: hidden;
@@ -453,7 +476,7 @@ img {
 .marquee-content span::before {
   content: '✦';
   margin-right: var(--spacing-md);
-  color: var(--color-accent);
+  color: var(--color-accent); /* Blue accent */
 }
 
 @keyframes marquee {
@@ -485,11 +508,12 @@ img {
 
 .section-title {
   margin-bottom: var(--spacing-md);
+  color: var(--color-gray-900);
 }
 
 .section-subtitle {
   font-size: 1.1rem;
-  color: var(--color-gray-500);
+  color: var(--color-gray-600);
 }
 
 /* ============================================
@@ -508,7 +532,7 @@ img {
 .service-card {
   position: relative;
   padding: var(--spacing-2xl);
-  background: var(--color-off-white);
+  background: var(--color-gray-50);
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: all var(--transition-slow);
@@ -522,7 +546,7 @@ img {
   left: 0;
   width: 4px;
   height: 0;
-  background: var(--color-accent);
+  background: var(--color-accent); /* Blue accent */
   transition: height var(--transition-slow);
 }
 
@@ -541,14 +565,14 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-primary);
+  background: var(--color-accent); /* Blue */
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-lg);
   transition: all var(--transition-base);
 }
 
 .service-card:hover .service-icon {
-  background: var(--color-accent);
+  background: var(--color-accent-hover); /* Secondary Blue */
 }
 
 .service-icon svg {
@@ -560,11 +584,13 @@ img {
 .service-title {
   font-size: 1.5rem;
   margin-bottom: var(--spacing-md);
+  color: var(--color-gray-900);
 }
 
 .service-description {
   font-size: 0.95rem;
   margin-bottom: var(--spacing-lg);
+  color: var(--color-gray-600);
 }
 
 .service-link {
@@ -572,7 +598,7 @@ img {
   align-items: center;
   gap: var(--spacing-sm);
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--color-accent); /* Blue */
   transition: all var(--transition-base);
 }
 
@@ -583,7 +609,7 @@ img {
 }
 
 .service-link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-hover);
 }
 
 .service-link:hover svg {
@@ -594,7 +620,7 @@ img {
    PORTFOLIO SECTION
    ============================================ */
 .portfolio {
-  background: var(--color-off-white);
+  background: var(--color-white);
 }
 
 .portfolio-filters {
@@ -617,13 +643,14 @@ img {
   border-radius: var(--radius-full);
   cursor: pointer;
   transition: all var(--transition-base);
+  color: var(--color-gray-700);
 }
 
 .filter-btn:hover,
 .filter-btn.active {
-  background: var(--color-primary);
+  background: var(--color-accent); /* Blue */
   color: var(--color-white);
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
 }
 
 .portfolio-grid {
@@ -656,8 +683,8 @@ img {
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(26, 26, 26, 0.9) 0%,
-    rgba(26, 26, 26, 0) 60%
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0) 60%
   );
   display: flex;
   flex-direction: column;
@@ -735,7 +762,7 @@ img {
   position: absolute;
   bottom: -30px;
   right: -30px;
-  background: var(--color-primary);
+  background: var(--color-accent); /* Blue */
   color: var(--color-white);
   padding: var(--spacing-xl);
   border-radius: var(--radius-lg);
@@ -752,7 +779,7 @@ img {
   font-family: var(--font-heading);
   font-size: 3rem;
   font-weight: 700;
-  color: var(--color-accent);
+  color: var(--color-white);
   line-height: 1;
 }
 
@@ -773,10 +800,12 @@ img {
 .about-content .section-title {
   text-align: left;
   margin-bottom: var(--spacing-lg);
+  color: var(--color-gray-900);
 }
 
 .about-text {
   margin-bottom: var(--spacing-xl);
+  color: var(--color-gray-600);
 }
 
 .about-features {
@@ -801,13 +830,14 @@ img {
 
 .about-feature span {
   font-weight: 500;
+  color: var(--color-gray-800);
 }
 
 /* ============================================
    TESTIMONIALS SECTION
    ============================================ */
 .testimonials {
-  background: var(--color-primary);
+  background: var(--color-gray-900);
   color: var(--color-white);
 }
 
@@ -877,6 +907,7 @@ img {
 .testimonial-info h4 {
   font-size: 1rem;
   margin-bottom: 2px;
+  color: var(--color-white);
 }
 
 .testimonial-info p {
@@ -908,7 +939,7 @@ img {
 .testimonials-nav button:hover {
   background: var(--color-accent);
   border-color: var(--color-accent);
-  color: var(--color-primary);
+  color: var(--color-white);
 }
 
 .testimonials-nav button svg {
@@ -920,7 +951,7 @@ img {
    HOURS SECTION
    ============================================ */
 .hours {
-  background: var(--color-off-white);
+  background: var(--color-white);
 }
 
 .hours-grid {
@@ -935,7 +966,7 @@ img {
 }
 
 .hours-list {
-  background: var(--color-white);
+  background: var(--color-gray-50);
   border-radius: var(--radius-lg);
   padding: var(--spacing-2xl);
   box-shadow: var(--shadow-lg);
@@ -954,14 +985,15 @@ img {
 
 .hours-item .day {
   font-weight: 600;
+  color: var(--color-gray-800);
 }
 
 .hours-item .time {
-  color: var(--color-gray-500);
+  color: var(--color-gray-600);
 }
 
 .hours-item.today {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: var(--color-white);
   margin: 0 calc(var(--spacing-md) * -1);
   padding: var(--spacing-md);
@@ -969,8 +1001,12 @@ img {
   border-bottom: none;
 }
 
+.hours-item.today .day {
+  color: var(--color-white);
+}
+
 .hours-item.today .time {
-  color: var(--color-accent);
+  color: var(--color-gray-200);
 }
 
 .hours-status {
@@ -1017,7 +1053,7 @@ img {
 }
 
 /* ============================================
-   CTA SECTION
+   CTA SECTION - Updated to Blue
    ============================================ */
 .cta {
   position: relative;
@@ -1047,13 +1083,24 @@ img {
 }
 
 .cta-text h2 {
-  color: var(--color-primary);
+  color: var(--color-white);
   margin-bottom: var(--spacing-sm);
 }
 
 .cta-text p {
-  color: var(--color-gray-700);
+  color: var(--color-gray-100);
   font-size: 1.1rem;
+}
+
+.cta .btn-primary {
+  background: var(--color-white);
+  color: var(--color-accent);
+}
+
+.cta .btn-primary:hover {
+  background: var(--color-gray-100);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 /* ============================================
@@ -1071,10 +1118,12 @@ img {
 
 .contact-info h3 {
   margin-bottom: var(--spacing-lg);
+  color: var(--color-gray-900);
 }
 
 .contact-info p {
   margin-bottom: var(--spacing-xl);
+  color: var(--color-gray-600);
 }
 
 .contact-details {
@@ -1096,7 +1145,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-off-white);
+  background: var(--color-gray-100);
   border-radius: var(--radius-md);
   flex-shrink: 0;
 }
@@ -1110,11 +1159,12 @@ img {
 .contact-item-content h4 {
   font-size: 1rem;
   margin-bottom: 4px;
+  color: var(--color-gray-800);
 }
 
 .contact-item-content p,
 .contact-item-content a {
-  color: var(--color-gray-500);
+  color: var(--color-gray-600);
   font-size: 0.95rem;
 }
 
@@ -1133,13 +1183,14 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-off-white);
+  background: var(--color-gray-100);
   border-radius: 50%;
   transition: all var(--transition-base);
+  color: var(--color-gray-700);
 }
 
 .social-link:hover {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: var(--color-white);
   transform: translateY(-3px);
 }
@@ -1150,7 +1201,7 @@ img {
 }
 
 .contact-form-wrapper {
-  background: var(--color-off-white);
+  background: var(--color-gray-50);
   padding: var(--spacing-2xl);
   border-radius: var(--radius-lg);
 }
@@ -1175,6 +1226,7 @@ img {
 .form-group label {
   font-weight: 500;
   font-size: 0.9rem;
+  color: var(--color-gray-700);
 }
 
 .form-group input,
@@ -1187,6 +1239,7 @@ img {
   border-radius: var(--radius-md);
   background: var(--color-white);
   transition: all var(--transition-base);
+  color: var(--color-gray-800);
 }
 
 .form-group input:focus,
@@ -1194,7 +1247,7 @@ img {
 .form-group select:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(201, 169, 98, 0.2);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 .form-group textarea {
@@ -1207,10 +1260,10 @@ img {
 }
 
 /* ============================================
-   FOOTER
+   FOOTER - Updated to Black/Dark Blue
    ============================================ */
 .footer {
-  background: var(--color-primary);
+  background: var(--color-footer-bg); /* Dark Blue/Black */
   color: var(--color-white);
   padding: var(--spacing-4xl) 0 var(--spacing-xl);
 }
@@ -1228,7 +1281,7 @@ img {
 }
 
 .footer-brand p {
-  color: var(--color-gray-400);
+  color: var(--color-footer-text);
   margin-bottom: var(--spacing-lg);
 }
 
@@ -1247,7 +1300,7 @@ img {
 }
 
 .footer-links a {
-  color: var(--color-gray-400);
+  color: var(--color-footer-text);
   transition: color var(--transition-base);
 }
 
@@ -1348,7 +1401,7 @@ img {
 .page-header {
   position: relative;
   padding: 180px 0 100px;
-  background: var(--color-primary);
+  background: var(--color-gray-900);
   text-align: center;
   overflow: hidden;
 }
@@ -1504,12 +1557,16 @@ img {
     height: 100vh;
     flex-direction: column;
     justify-content: center;
-    background: var(--color-white);
+    background: var(--color-navbar-bg);
     transition: right var(--transition-base);
   }
   
   .nav-links.active {
     right: 0;
+  }
+  
+  .nav-links a {
+    color: var(--color-white) !important;
   }
   
   .menu-toggle {
@@ -1584,7 +1641,7 @@ img {
 }
 
 /* ============================================
-   CHAT WIDGET
+   CHAT WIDGET - Updated to Blue
    ============================================ */
 .chat-widget {
   position: fixed;
@@ -1614,7 +1671,7 @@ img {
 .chat-toggle svg {
   width: 28px;
   height: 28px;
-  color: var(--color-primary);
+  color: var(--color-white);
 }
 
 .chat-window {
@@ -1643,7 +1700,7 @@ img {
 
 .chat-header {
   padding: var(--spacing-lg);
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: var(--color-white);
   display: flex;
   justify-content: space-between;
@@ -1653,6 +1710,7 @@ img {
 .chat-header h4 {
   margin: 0;
   font-size: 1rem;
+  color: var(--color-white);
 }
 
 .chat-close {
@@ -1681,11 +1739,12 @@ img {
 
 .chat-message.received {
   background: var(--color-gray-100);
+  color: var(--color-gray-800);
   align-self: flex-start;
 }
 
 .chat-message.sent {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: var(--color-white);
   align-self: flex-end;
 }
@@ -1703,6 +1762,7 @@ img {
   border: 1px solid var(--color-gray-300);
   border-radius: var(--radius-full);
   font-size: 0.9rem;
+  color: var(--color-gray-800);
 }
 
 .chat-input input:focus {
@@ -1725,5 +1785,5 @@ img {
 .chat-input button svg {
   width: 20px;
   height: 20px;
-  color: var(--color-primary);
+  color: var(--color-white);
 }

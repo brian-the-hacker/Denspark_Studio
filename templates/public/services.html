@@ -5,432 +5,377 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Professional photography services by Denspark Studio - Portraits, Events, Weddings, and Video Production in Machakos, Kenya">
   <title>Services | Denspark Studio</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/main.css">
-  
-  <style>
-    .service-detail {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-      padding: 4rem 0;
-      border-bottom: 1px solid var(--color-gray-200);
-    }
-    
-    .service-detail:nth-child(even) {
-      direction: rtl;
-    }
-    
-    .service-detail:nth-child(even) > * {
-      direction: ltr;
-    }
-    
-    .service-detail:last-child {
-      border-bottom: none;
-    }
-    
-    .service-detail-image {
-      position: relative;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      aspect-ratio: 4/3;
-    }
-    
-    .service-detail-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform var(--transition-slower);
-    }
-    
-    .service-detail-image:hover img {
-      transform: scale(1.05);
-    }
-    
-    .service-detail-content h3 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-    
-    .service-detail-content p {
-      margin-bottom: 1.5rem;
-      font-size: 1.1rem;
-    }
-    
-    .service-features {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      margin-bottom: 2rem;
-    }
-    
-    .service-feature {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    
-    .service-feature svg {
-      width: 20px;
-      height: 20px;
-      color: var(--color-accent);
-      flex-shrink: 0;
-    }
-    
-    .pricing-section {
-      background: var(--color-primary);
-      color: var(--color-white);
-    }
-    
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-    
-    .pricing-card {
-      background: var(--color-gray-800);
-      border-radius: var(--radius-lg);
-      padding: 2.5rem;
-      text-align: center;
-      transition: transform var(--transition-base);
-    }
-    
-    .pricing-card:hover {
-      transform: translateY(-10px);
-    }
-    
-    .pricing-card.featured {
-      background: var(--color-accent);
-      color: var(--color-primary);
-    }
-    
-    .pricing-badge {
-      display: inline-block;
-      padding: 0.25rem 1rem;
-      background: var(--color-primary);
-      color: var(--color-white);
-      border-radius: var(--radius-full);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 1rem;
-    }
-    
-    .pricing-card h3 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .pricing-price {
-      font-size: 3rem;
-      font-weight: 700;
-      line-height: 1;
-      margin: 1rem 0;
-    }
-    
-    .pricing-price span {
-      font-size: 1rem;
-      font-weight: 400;
-      opacity: 0.7;
-    }
-    
-    .pricing-features {
-      list-style: none;
-      margin: 1.5rem 0 2rem;
-      text-align: left;
-    }
-    
-    .pricing-features li {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .pricing-card.featured .pricing-features li {
-      border-color: rgba(0,0,0,0.1);
-    }
-    
-    .pricing-features li svg {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-    
-    .pricing-card .btn {
-      width: 100%;
-    }
-    
-    .pricing-card.featured .btn-primary {
-      background: var(--color-primary);
-      color: var(--color-white);
-    }
-    
-    @media (max-width: 768px) {
-      .service-detail {
-        grid-template-columns: 1fr;
-      }
-      
-      .service-detail:nth-child(even) {
-        direction: ltr;
-      }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/public/services.css">
 </head>
 <body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-logo">DENSPARK</div>
+      <div class="preloader-line"><span></span></div>
+    </div>
+  </div>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
   <!-- Navigation -->
-  <nav class="navbar scrolled">
-    <div class="container">
-      <a href="/" class="logo">DENS<span>PARK</span></a>
-      <ul class="nav-links">
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <span class="logo-text">DENSPARK</span>
+        <span class="logo-sub">STUDIO</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
+        <li><a href="/services" class="nav-link active">Services</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="/contact" class="btn-book">Book Now</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
-        <li><a href="/services" class="active">Services</a></li>
+        <li><a href="/services">Services</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
-        <li><a href="/contact" class="nav-cta">Book Now</a></li>
       </ul>
-      <div class="menu-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
+      <a href="/contact" class="btn-book-mobile">Book a Session</a>
+      <div class="mobile-info">
+        <span>Machakos, Kenya</span>
+        <span>+254 700 000 000</span>
       </div>
     </div>
   </nav>
 
-  <!-- Page Header -->
-  <header class="page-header">
-    <div class="container">
-      <h1>Our Services</h1>
-      <p>Professional photography and creative media solutions</p>
+  <!-- Page Hero -->
+  <header class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=85')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
       <div class="breadcrumb">
         <a href="/">Home</a>
-        <span>/</span>
-        <span class="current">Services</span>
+        <span class="bc-sep">→</span>
+        <span>Services</span>
       </div>
+      <h1 class="page-hero-title">Our <em>Services</em></h1>
+      <p class="page-hero-sub">Professional photography and creative media solutions tailored for every occasion — from intimate portraits to grand celebrations.</p>
+    </div>
+    <div class="page-hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
     </div>
   </header>
 
+  <!-- Services Intro Strip -->
+  <div class="services-strip">
+    <div class="services-strip-inner">
+      <div class="strip-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934c.2.614.312 1.286.312 1.993 0 3.628-2.96 6.573-6.635 6.573-3.666 0-6.635-2.945-6.635-6.573S10.199 6.354 13.865 6.354c.7 0 1.376.11 2 .31"/><path d="M21 3l-6.5 6.5"/></svg>
+        <span>Portrait Photography</span>
+      </div>
+      <div class="strip-sep">·</div>
+      <div class="strip-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Wedding Photography</span>
+      </div>
+      <div class="strip-sep">·</div>
+      <div class="strip-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <span>Event Coverage</span>
+      </div>
+      <div class="strip-sep">·</div>
+      <div class="strip-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        <span>Video Production</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Services Details -->
-  <section class="section services-details">
-    <div class="container">
-      <div class="service-detail animate-on-scroll">
-        <div class="service-detail-image">
-          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80" alt="Portrait Photography">
+  <section class="services-section">
+    <!-- Portrait -->
+    <div class="service-block reveal" id="portraits">
+      <div class="service-block-number">01</div>
+      <div class="service-block-image">
+        <div class="img-frame">
+          <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=900&q=85" alt="Portrait Photography">
+          <div class="img-overlay"></div>
         </div>
-        <div class="service-detail-content">
-          <h3>Portrait Photography</h3>
-          <p>Capture your best self with our professional portrait services. Whether it's for personal branding, social media, or cherished memories, we create stunning images that reflect your unique personality.</p>
-          <div class="service-features">
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Studio & Outdoor Sessions</span>
-            </div>
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Professional Retouching</span>
-            </div>
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Multiple Outfit Changes</span>
-            </div>
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Digital & Print Deliverables</span>
-            </div>
-          </div>
-          <a href="/contact" class="btn btn-primary">Book Portrait Session</a>
-        </div>
+        <div class="img-accent-box"></div>
       </div>
-      
-      <div class="service-detail animate-on-scroll">
-        <div class="service-detail-image">
-          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80" alt="Wedding Photography">
-        </div>
-        <div class="service-detail-content">
-          <h3>Wedding Photography</h3>
-          <p>Your wedding day deserves to be documented beautifully. Our experienced team captures every precious moment, from the anticipation of getting ready to the joy of the celebration.</p>
-          <div class="service-features">
-            <div class="service-feature">
+      <div class="service-block-content">
+        <span class="service-eyebrow">Photography</span>
+        <h2 class="service-title">Portrait <em>Photography</em></h2>
+        <p class="service-desc">Capture your best self with our professional portrait services. Whether it's for personal branding, social media, or cherished memories, we create stunning images that reflect your unique personality.</p>
+        <ul class="service-features">
+          <li>
+            <span class="feat-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Full Day Coverage</span>
-            </div>
-            <div class="service-feature">
+            </span>
+            Studio &amp; Outdoor Sessions
+          </li>
+          <li>
+            <span class="feat-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Multiple Photographers</span>
-            </div>
-            <div class="service-feature">
+            </span>
+            Professional Retouching
+          </li>
+          <li>
+            <span class="feat-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Engagement Session Included</span>
-            </div>
-            <div class="service-feature">
+            </span>
+            Multiple Outfit Changes
+          </li>
+          <li>
+            <span class="feat-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Premium Wedding Album</span>
-            </div>
-          </div>
-          <a href="/contact" class="btn btn-primary">Plan Your Wedding</a>
-        </div>
+            </span>
+            Digital &amp; Print Deliverables
+          </li>
+        </ul>
+        <a href="/contact" class="btn-service">Book Portrait Session <span>→</span></a>
       </div>
-      
-      <div class="service-detail animate-on-scroll">
-        <div class="service-detail-image">
-          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" alt="Event Photography">
+    </div>
+
+    <!-- Wedding -->
+    <div class="service-block service-block--flip reveal" id="weddings">
+      <div class="service-block-number">02</div>
+      <div class="service-block-image">
+        <div class="img-frame">
+          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=900&q=85" alt="Wedding Photography">
+          <div class="img-overlay"></div>
         </div>
-        <div class="service-detail-content">
-          <h3>Event Coverage</h3>
-          <p>From corporate conferences to birthday parties, we provide comprehensive event documentation that captures the energy, emotions, and key moments of your special occasions.</p>
-          <div class="service-features">
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Corporate Events</span>
-            </div>
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Parties & Celebrations</span>
-            </div>
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Conferences & Seminars</span>
-            </div>
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Quick Turnaround</span>
-            </div>
-          </div>
-          <a href="/contact" class="btn btn-primary">Book Event Coverage</a>
-        </div>
+        <div class="img-accent-box"></div>
       </div>
-      
-      <div class="service-detail animate-on-scroll">
-        <div class="service-detail-image">
-          <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80" alt="Video Production">
+      <div class="service-block-content">
+        <span class="service-eyebrow">Photography</span>
+        <h2 class="service-title">Wedding <em>Photography</em></h2>
+        <p class="service-desc">Your wedding day deserves to be documented beautifully. Our experienced team captures every precious moment, from the anticipation of getting ready to the joy of the celebration.</p>
+        <ul class="service-features">
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Full Day Coverage
+          </li>
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Multiple Photographers
+          </li>
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Engagement Session Included
+          </li>
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Premium Wedding Album
+          </li>
+        </ul>
+        <a href="/contact" class="btn-service">Plan Your Wedding <span>→</span></a>
+      </div>
+    </div>
+
+    <!-- Events -->
+    <div class="service-block reveal" id="events">
+      <div class="service-block-number">03</div>
+      <div class="service-block-image">
+        <div class="img-frame">
+          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&q=85" alt="Event Photography">
+          <div class="img-overlay"></div>
         </div>
-        <div class="service-detail-content">
-          <h3>Video Production</h3>
-          <p>Bring your stories to life with our professional video production services. From commercials to documentaries, we create compelling visual content that engages and inspires.</p>
-          <div class="service-features">
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Commercials & Ads</span>
-            </div>
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Music Videos</span>
-            </div>
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Documentaries</span>
-            </div>
-            <div class="service-feature">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Professional Editing</span>
-            </div>
-          </div>
-          <a href="/contact" class="btn btn-primary">Start Your Video Project</a>
+        <div class="img-accent-box"></div>
+      </div>
+      <div class="service-block-content">
+        <span class="service-eyebrow">Coverage</span>
+        <h2 class="service-title">Event <em>Coverage</em></h2>
+        <p class="service-desc">From corporate conferences to birthday parties, we provide comprehensive event documentation that captures the energy, emotions, and key moments of your special occasions.</p>
+        <ul class="service-features">
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Corporate Events
+          </li>
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Parties &amp; Celebrations
+          </li>
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Conferences &amp; Seminars
+          </li>
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Quick Turnaround
+          </li>
+        </ul>
+        <a href="/contact" class="btn-service">Book Event Coverage <span>→</span></a>
+      </div>
+    </div>
+
+    <!-- Video -->
+    <div class="service-block service-block--flip reveal" id="video">
+      <div class="service-block-number">04</div>
+      <div class="service-block-image">
+        <div class="img-frame">
+          <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=900&q=85" alt="Video Production">
+          <div class="img-overlay"></div>
         </div>
+        <div class="img-accent-box"></div>
+      </div>
+      <div class="service-block-content">
+        <span class="service-eyebrow">Production</span>
+        <h2 class="service-title">Video <em>Production</em></h2>
+        <p class="service-desc">Bring your stories to life with our professional video production services. From commercials to documentaries, we create compelling visual content that engages and inspires.</p>
+        <ul class="service-features">
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Commercials &amp; Ads
+          </li>
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Music Videos
+          </li>
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Documentaries
+          </li>
+          <li>
+            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Professional Editing
+          </li>
+        </ul>
+        <a href="/contact" class="btn-service">Start Your Video Project <span>→</span></a>
       </div>
     </div>
   </section>
 
-  <!-- Pricing Section -->
-  <section class="section pricing-section">
-    <div class="container">
-      <div class="section-header animate-on-scroll">
-        <span class="section-badge">Pricing</span>
-        <h2 class="section-title" style="color: white;">Simple, Transparent Pricing</h2>
-        <p class="section-subtitle">Choose the package that best fits your needs</p>
+  <!-- Marquee -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span>Portraits</span><span class="dot">·</span>
+        <span>Events</span><span class="dot">·</span>
+        <span>Weddings</span><span class="dot">·</span>
+        <span>Corporate</span><span class="dot">·</span>
+        <span>Product Shoots</span><span class="dot">·</span>
+        <span>Fashion</span><span class="dot">·</span>
+        <span>Video Production</span><span class="dot">·</span>
+        <span>Photo Editing</span><span class="dot">·</span>
+        <span>Portraits</span><span class="dot">·</span>
+        <span>Events</span><span class="dot">·</span>
+        <span>Weddings</span><span class="dot">·</span>
+        <span>Corporate</span><span class="dot">·</span>
+        <span>Product Shoots</span><span class="dot">·</span>
+        <span>Fashion</span><span class="dot">·</span>
+        <span>Video Production</span><span class="dot">·</span>
+        <span>Photo Editing</span><span class="dot">·</span>
       </div>
-      
+    </div>
+  </div>
+
+  <!-- Pricing Section -->
+  <section class="pricing-section">
+    <div class="pricing-bg-text">PRICING</div>
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-eyebrow">Transparent Pricing</span>
+        <h2 class="section-title">Simple, <em>Honest</em> Packages</h2>
+        <p class="section-sub">Choose the package that best fits your needs. Custom quotes available for larger projects.</p>
+      </div>
+
       <div class="pricing-grid">
-        <div class="pricing-card animate-on-scroll delay-1">
-          <h3>Basic</h3>
-          <p>Perfect for simple sessions</p>
-          <div class="pricing-price">KES 5K<span>/session</span></div>
+        <!-- Basic -->
+        <div class="pricing-card reveal" style="--delay: 0.05s">
+          <div class="pricing-card-top">
+            <span class="pricing-tier">Basic</span>
+            <p class="pricing-desc">Perfect for simple sessions</p>
+            <div class="pricing-price">
+              <span class="price-currency">KES</span>
+              <span class="price-amount">5K</span>
+              <span class="price-per">/session</span>
+            </div>
+          </div>
           <ul class="pricing-features">
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>1 Hour Session</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>10 Edited Photos</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Digital Downloads</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>1 Outfit Change</span>
-            </li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>1 Hour Session</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>10 Edited Photos</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Digital Downloads</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>1 Outfit Change</li>
           </ul>
-          <a href="/contact" class="btn btn-outline">Get Started</a>
+          <a href="/contact" class="pricing-btn pricing-btn--outline">Get Started →</a>
         </div>
-        
-        <div class="pricing-card featured animate-on-scroll delay-2">
-          <span class="pricing-badge">Most Popular</span>
-          <h3>Professional</h3>
-          <p>Best for most clients</p>
-          <div class="pricing-price">KES 15K<span>/session</span></div>
+
+        <!-- Professional (Featured) -->
+        <div class="pricing-card pricing-card--featured reveal" style="--delay: 0.15s">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-card-top">
+            <span class="pricing-tier">Professional</span>
+            <p class="pricing-desc">Best for most clients</p>
+            <div class="pricing-price">
+              <span class="price-currency">KES</span>
+              <span class="price-amount">15K</span>
+              <span class="price-per">/session</span>
+            </div>
+          </div>
           <ul class="pricing-features">
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>3 Hour Session</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>30 Edited Photos</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Digital + Print Files</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>3 Outfit Changes</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Makeup Consultation</span>
-            </li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>3 Hour Session</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>30 Edited Photos</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Digital + Print Files</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>3 Outfit Changes</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Makeup Consultation</li>
           </ul>
-          <a href="/contact" class="btn btn-primary">Get Started</a>
+          <a href="/contact" class="pricing-btn pricing-btn--solid">Get Started →</a>
         </div>
-        
-        <div class="pricing-card animate-on-scroll delay-3">
-          <h3>Premium</h3>
-          <p>Complete package for events</p>
-          <div class="pricing-price">KES 35K<span>/event</span></div>
+
+        <!-- Premium -->
+        <div class="pricing-card reveal" style="--delay: 0.25s">
+          <div class="pricing-card-top">
+            <span class="pricing-tier">Premium</span>
+            <p class="pricing-desc">Complete package for events</p>
+            <div class="pricing-price">
+              <span class="price-currency">KES</span>
+              <span class="price-amount">35K</span>
+              <span class="price-per">/event</span>
+            </div>
+          </div>
           <ul class="pricing-features">
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Full Day Coverage</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>100+ Edited Photos</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>2 Photographers</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Premium Album</span>
-            </li>
-            <li>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              <span>Highlight Video</span>
-            </li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Full Day Coverage</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>100+ Edited Photos</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>2 Photographers</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Premium Album</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Highlight Video</li>
           </ul>
-          <a href="/contact" class="btn btn-outline">Get Started</a>
+          <a href="/contact" class="pricing-btn pricing-btn--outline">Get Started →</a>
         </div>
+      </div>
+
+      <p class="pricing-note reveal">Need something custom? <a href="/contact">Let's talk →</a></p>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="cta-banner">
+    <div class="container">
+      <div class="cta-inner reveal">
+        <div>
+          <h2>Ready to Create?</h2>
+          <p>Let's capture your moments beautifully. Book your session with Denspark Studio today.</p>
+        </div>
+        <a href="/contact" class="btn-primary btn-white">Book a Session →</a>
       </div>
     </div>
   </section>
@@ -438,14 +383,25 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
+      <div class="footer-top">
         <div class="footer-brand">
-          <a href="/" class="logo">DENS<span>PARK</span></a>
-          <p>Professional photography and creative media services in Machakos, Kenya.</p>
+          <div class="footer-logo">DENSPARK <span>STUDIO</span></div>
+          <p>Professional photography and creative media services in Machakos, Kenya. Capturing moments that last forever.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="Twitter/X">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          </div>
         </div>
-        <div class="footer-column">
-          <h4>Quick Links</h4>
-          <ul class="footer-links">
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/portfolio">Portfolio</a></li>
             <li><a href="/services">Services</a></li>
@@ -453,18 +409,19 @@
             <li><a href="/contact">Contact</a></li>
           </ul>
         </div>
-        <div class="footer-column">
+        <div class="footer-col">
           <h4>Services</h4>
-          <ul class="footer-links">
+          <ul>
             <li><a href="/services">Portrait Photography</a></li>
             <li><a href="/services">Event Coverage</a></li>
             <li><a href="/services">Wedding Photography</a></li>
             <li><a href="/services">Video Production</a></li>
+            <li><a href="/services">Photo Editing</a></li>
           </ul>
         </div>
-        <div class="footer-column">
+        <div class="footer-col">
           <h4>Contact</h4>
-          <ul class="footer-links">
+          <ul>
             <li>Machakos Town, Kenya</li>
             <li><a href="tel:+254700000000">+254 700 000 000</a></li>
             <li><a href="mailto:info@densparkstudio.co.ke">info@densparkstudio.co.ke</a></li>
@@ -472,7 +429,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2024 Denspark Studio. All rights reserved.</p>
+        <p>&copy; 2025 Denspark Studio. All rights reserved.</p>
         <div class="footer-legal">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
@@ -481,6 +438,35 @@
     </div>
   </footer>
 
-  <script src="/static/js/main.js"></script>
+  <!-- Chat Widget -->
+  <div class="chat-widget" id="chatWidget">
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="chat-avatar">DS</div>
+          <div>
+            <h4>Denspark Studio</h4>
+            <span class="chat-status"><span class="online-dot"></span>Online</span>
+          </div>
+        </div>
+        <button class="chat-close-btn" id="chatClose">×</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg received">Hi there! 👋 Interested in any of our photography services? We'd love to help!</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Type a message...">
+        <button id="chatSend">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+    <button class="chat-toggle-btn" id="chatToggle" aria-label="Chat with us">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="chat-badge">1</span>
+    </button>
+  </div>
+
+  <script src="static/js/public/services.js"></script>
 </body>
 </html>
