@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/portfolio/main.css') }}">
 </head>
 <body class="admin-body">
     {% include 'components/admin_sidebar.html' %}
@@ -389,7 +389,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="uploadForm" action="{{ url_for('admin.upload_photo') if url_for else '/admin/upload' }}" method="POST" enctype="multipart/form-data">
+                <form id="uploadForm" action="{{ url_for('admin.upload_portfolio') }}" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
                     
                     <div class="upload-dropzone" id="uploadDropzone">
@@ -521,6 +521,6 @@
     </div>
     
     <!-- Scripts -->
-    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin/portfolio/main.js') }}"></script>
 </body>
 </html>

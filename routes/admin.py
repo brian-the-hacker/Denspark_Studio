@@ -85,8 +85,8 @@ def bookings():
 @admin_bp.route('/messages')
 @login_required
 def messages():  # Changed from get_messages to messages
-    messages = Message.query.order_by(Message.created_at.desc()).all()
-    return render_template('admin/messages.html', messages=messages, current_user=current_user)
+    messages = Message.query.order_by(Message.timestamp.desc()).all()
+    return render_template('admin/chat.html', messages=messages, current_user=current_user)
 
 @admin_bp.route('/payments')
 @login_required
