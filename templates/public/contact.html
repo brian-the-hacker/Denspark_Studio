@@ -2,479 +2,471 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Contact Denspark Studio - Get in touch for photography bookings and inquiries">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="Contact Denspark Studio - Get in touch for photography bookings and inquiries in Machakos, Kenya">
   <title>Contact Us | Denspark Studio</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/main.css">
-  
-  <style>
-    .contact-hero {
-      background: var(--color-white);
-    }
-    
-    .contact-main-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      gap: 4rem;
-    }
-    
-    .contact-sidebar {
-      background: var(--color-primary);
-      color: var(--color-white);
-      padding: 3rem;
-      border-radius: var(--radius-lg);
-    }
-    
-    .contact-sidebar h3 {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-      color: var(--color-white);
-    }
-    
-    .contact-sidebar > p {
-      color: var(--color-gray-400);
-      margin-bottom: 2rem;
-    }
-    
-    .contact-method {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1.5rem 0;
-      border-bottom: 1px solid var(--color-gray-700);
-    }
-    
-    .contact-method:last-of-type {
-      border-bottom: none;
-    }
-    
-    .contact-method-icon {
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--color-gray-800);
-      border-radius: var(--radius-md);
-      flex-shrink: 0;
-    }
-    
-    .contact-method-icon svg {
-      width: 24px;
-      height: 24px;
-      color: var(--color-accent);
-    }
-    
-    .contact-method-content h4 {
-      font-size: 1rem;
-      margin-bottom: 0.25rem;
-      color: var(--color-white);
-    }
-    
-    .contact-method-content p,
-    .contact-method-content a {
-      color: var(--color-gray-400);
-      font-size: 0.95rem;
-    }
-    
-    .contact-method-content a:hover {
-      color: var(--color-accent);
-    }
-    
-    .contact-sidebar-social {
-      display: flex;
-      gap: 1rem;
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--color-gray-700);
-    }
-    
-    .contact-sidebar-social a {
-      width: 45px;
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--color-gray-800);
-      border-radius: 50%;
-      color: var(--color-white);
-      transition: all var(--transition-base);
-    }
-    
-    .contact-sidebar-social a:hover {
-      background: var(--color-accent);
-      color: var(--color-primary);
-    }
-    
-    .contact-sidebar-social svg {
-      width: 20px;
-      height: 20px;
-    }
-    
-    .booking-form-wrapper {
-      background: var(--color-off-white);
-      padding: 3rem;
-      border-radius: var(--radius-lg);
-    }
-    
-    .booking-form-wrapper h3 {
-      font-size: 1.75rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .booking-form-wrapper > p {
-      color: var(--color-gray-500);
-      margin-bottom: 2rem;
-    }
-    
-    .map-section {
-      background: var(--color-off-white);
-      padding: 4rem 0;
-    }
-    
-    .map-container {
-      height: 450px;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      background: var(--color-gray-200);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .map-placeholder {
-      text-align: center;
-      color: var(--color-gray-500);
-    }
-    
-    .map-placeholder svg {
-      width: 64px;
-      height: 64px;
-      margin-bottom: 1rem;
-      color: var(--color-gray-400);
-    }
-    
-    .faq-section {
-      background: var(--color-white);
-    }
-    
-    .faq-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-    }
-    
-    .faq-item {
-      background: var(--color-off-white);
-      padding: 2rem;
-      border-radius: var(--radius-lg);
-      transition: transform var(--transition-base);
-    }
-    
-    .faq-item:hover {
-      transform: translateY(-5px);
-    }
-    
-    .faq-item h4 {
-      font-size: 1.1rem;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    
-    .faq-item h4 svg {
-      width: 20px;
-      height: 20px;
-      color: var(--color-accent);
-      flex-shrink: 0;
-    }
-    
-    .faq-item p {
-      font-size: 0.95rem;
-    }
-    
-    @media (max-width: 1024px) {
-      .contact-main-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .faq-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/public/contact.css">
 </head>
 <body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-logo">DENSPARK STUDIO</div>
+      <div class="preloader-line"><span></span></div>
+    </div>
+  </div>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
   <!-- Navigation -->
-  <nav class="navbar scrolled">
-    <div class="container">
-      <a href="/" class="logo"><span>DENSPARK</span></a>
-      <ul class="nav-links">
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <img src="/static/uploads/DENSPARK STUDIOs wallpaper (1).png" alt="Denspark Studio Logo" class="logo-img">
+        <div class="logo-text-wrap">
+          <span class="logo-text">DENSPARK PHOTO</span>
+          <span class="logo-sub">STUDIO</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
+        <li><a href="/services" class="nav-link">Services</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/contact" class="nav-link active">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="#booking-form" class="btn-book">Book Now</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
         <li><a href="/services">Services</a></li>
         <li><a href="/about">About</a></li>
-        <li><a href="/contact" class="active">Contact</a></li>
-        <li><a href="/contact" class="nav-cta">Book Now</a></li>
+        <li><a href="/contact">Contact</a></li>
       </ul>
-      <div class="menu-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
+      <a href="#booking-form" class="btn-book-mobile">Book a Session</a>
+      <div class="mobile-info">
+        <span>Machakos, Kenya</span>
+        <span>+254 700 000 000</span>
       </div>
     </div>
   </nav>
 
-  <!-- Page Header -->
-  <header class="page-header">
-    <div class="container">
-      <h1>Contact Us</h1>
-      <p>Let's discuss your project and bring your vision to life</p>
+  <!-- Page Hero -->
+  <header class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1920&q=85')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
       <div class="breadcrumb">
         <a href="/">Home</a>
-        <span>/</span>
-        <span class="current">Contact</span>
+        <span class="bc-sep">→</span>
+        <span>Contact</span>
       </div>
+      <h1 class="page-hero-title">Let's <em>Connect</em></h1>
+      <p class="page-hero-sub">Tell us about your vision and let's create something beautiful together. We respond within 24 hours.</p>
+    </div>
+    <div class="page-hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
     </div>
   </header>
 
-  <!-- Contact Section -->
-  <section class="section contact-hero">
-    <div class="container">
-      <div class="contact-main-grid">
-        <div class="contact-sidebar animate-on-scroll">
-          <h3>Get in Touch</h3>
-          <p>We'd love to hear from you. Reach out through any of these channels.</p>
-          
-          <div class="contact-method">
-            <div class="contact-method-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                <circle cx="12" cy="10" r="3"/>
-              </svg>
-            </div>
-            <div class="contact-method-content">
-              <h4>Visit Our Studio</h4>
-              <p>Machakos Town, Kenya<br>Near Central Business District</p>
-            </div>
-          </div>
-          
-          <div class="contact-method">
-            <div class="contact-method-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-              </svg>
-            </div>
-            <div class="contact-method-content">
-              <h4>Call Us</h4>
-              <a href="tel:+254700000000">+254 700 000 000</a>
-            </div>
-          </div>
-          
-          <div class="contact-method">
-            <div class="contact-method-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-              </svg>
-            </div>
-            <div class="contact-method-content">
-              <h4>Email Us</h4>
-              <a href="mailto:info@densparkstudio.co.ke">info@densparkstudio.co.ke</a>
-            </div>
-          </div>
-          
-          <div class="contact-method">
-            <div class="contact-method-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-              </svg>
-            </div>
-            <div class="contact-method-content">
-              <h4>Business Hours</h4>
-              <p>Mon - Sat: 8:30 AM – 8:00 PM<br>Sunday: 8:00 AM – 8:00 PM</p>
-            </div>
-          </div>
-          
-          <div class="contact-sidebar-social">
-            <a href="#" aria-label="Facebook">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-              </svg>
-            </a>
-            <a href="#" aria-label="Instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-              </svg>
-            </a>
-            <a href="#" aria-label="WhatsApp">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-              </svg>
-            </a>
-          </div>
+  <!-- Contact Info Strip -->
+  <div class="contact-strip">
+    <div class="contact-strip-inner">
+      <a href="tel:+254700000000" class="strip-item">
+        <div class="strip-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         </div>
-        
-        <div class="booking-form-wrapper animate-on-scroll">
-          <h3>Book a Session</h3>
-          <p>Fill out the form below and we'll get back to you within 24 hours.</p>
-          
-          <form class="contact-form" action="/api/booking" method="POST">
-            <div class="form-row">
-              <div class="form-group">
-                <label for="first_name">First Name</label>
-                <input type="text" id="first_name" name="first_name" placeholder="Your first name" required>
+        <div class="strip-text">
+          <span class="strip-label">Call Us</span>
+          <span class="strip-value">+254 700 000 000</span>
+        </div>
+      </a>
+      <div class="strip-divider"></div>
+      <a href="mailto:info@densparkstudio.co.ke" class="strip-item">
+        <div class="strip-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="strip-text">
+          <span class="strip-label">Email Us</span>
+          <span class="strip-value">info@densparkstudio.co.ke</span>
+        </div>
+      </a>
+      <div class="strip-divider"></div>
+      <div class="strip-item">
+        <div class="strip-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="strip-text">
+          <span class="strip-label">Visit Us</span>
+          <span class="strip-value">Machakos Town, Kenya</span>
+        </div>
+      </div>
+      <div class="strip-divider"></div>
+      <div class="strip-item">
+        <div class="strip-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="strip-text">
+          <span class="strip-label">Open Hours</span>
+          <span class="strip-value">Mon–Sun: 8:00 AM – 8:00 PM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Contact Section -->
+  <section class="contact-section" id="booking-form">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- Sidebar -->
+        <aside class="contact-sidebar reveal">
+          <div class="sidebar-top">
+            <span class="section-eyebrow">Get in Touch</span>
+            <h2 class="sidebar-title">We'd Love to <em>Hear</em> from You</h2>
+            <p class="sidebar-desc">Reach out through any channel below, or fill in the booking form and we'll be in touch within 24 hours.</p>
+          </div>
+
+          <div class="contact-methods">
+            <a href="tel:+254700000000" class="contact-method">
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               </div>
-              <div class="form-group">
-                <label for="last_name">Last Name</label>
-                <input type="text" id="last_name" name="last_name" placeholder="Your last name" required>
+              <div class="method-content">
+                <span class="method-label">Phone</span>
+                <span class="method-value">+254 700 000 000</span>
+              </div>
+              <span class="method-arrow">→</span>
+            </a>
+
+            <a href="mailto:info@densparkstudio.co.ke" class="contact-method">
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div class="method-content">
+                <span class="method-label">Email</span>
+                <span class="method-value">info@densparkstudio.co.ke</span>
+              </div>
+              <span class="method-arrow">→</span>
+            </a>
+
+            <div class="contact-method contact-method--static">
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div class="method-content">
+                <span class="method-label">Location</span>
+                <span class="method-value">Machakos Town, Kenya</span>
+                <span class="method-sub">Near Central Business District</span>
               </div>
             </div>
-            
+
+            <div class="contact-method contact-method--static">
+              <div class="method-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="method-content">
+                <span class="method-label">Working Hours</span>
+                <span class="method-value">Mon – Sat: 8:30 AM – 8:00 PM</span>
+                <span class="method-sub">Sunday: 8:00 AM – 8:00 PM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-social">
+            <span class="social-label">Follow Us</span>
+            <div class="social-links">
+              <a href="https://www.facebook.com/share/1BK8dk8VsJ/" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/densparkstudio?igsh=MTRqdXpjd241dzMzMg==" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://youtube.com/@densparkfilmsmachakos6509?si=b-HHFd-jDE5Z76mQ" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </a>
+
+            <a href="https://www.tiktok.com/@densparkstudio300?_r=1&_t=ZS-95khoiW18dB" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/>
+              </svg>
+            </a>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Booking Form -->
+        <div class="form-wrap reveal" style="--delay: 0.12s">
+          <div class="form-header">
+            <span class="section-eyebrow">Booking Request</span>
+            <h2 class="form-title">Book a <em>Session</em></h2>
+            <p class="form-desc">Fill out the form and we'll get back to you within 24 hours with availability and pricing.</p>
+          </div>
+
+          <form class="contact-form" id="contactForm" novalidate>
             <div class="form-row">
               <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                <label for="first_name">First Name <span class="req">*</span></label>
+                <input type="text" id="first_name" name="first_name" placeholder="Your first name" required autocomplete="given-name">
+                <span class="form-error" id="err-first_name"></span>
+              </div>
+              <div class="form-group">
+                <label for="last_name">Last Name <span class="req">*</span></label>
+                <input type="text" id="last_name" name="last_name" placeholder="Your last name" required autocomplete="family-name">
+                <span class="form-error" id="err-last_name"></span>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email Address <span class="req">*</span></label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required autocomplete="email">
+                <span class="form-error" id="err-email"></span>
               </div>
               <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" placeholder="+254 700 000 000">
+                <input type="tel" id="phone" name="phone" placeholder="+254 700 000 000" autocomplete="tel">
               </div>
             </div>
-            
+
             <div class="form-row">
               <div class="form-group">
-                <label for="service">Service Type</label>
-                <select id="service" name="service" required>
-                  <option value="">Select a service</option>
-                  <option value="portrait">Portrait Photography</option>
-                  <option value="wedding">Wedding Coverage</option>
-                  <option value="event">Event Photography</option>
-                  <option value="video">Video Production</option>
-                  <option value="commercial">Commercial Photography</option>
-                  <option value="other">Other</option>
-                </select>
+                <label for="service">Service Type <span class="req">*</span></label>
+                <div class="select-wrap">
+                  <select id="service" name="service" required>
+                    <option value="">Select a service</option>
+                    <option value="portrait">Portrait Photography</option>
+                    <option value="wedding">Wedding Coverage</option>
+                    <option value="event">Event Photography</option>
+                    <option value="video">Video Production</option>
+                    <option value="commercial">Commercial Photography</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <span class="form-error" id="err-service"></span>
               </div>
               <div class="form-group">
                 <label for="date">Preferred Date</label>
                 <input type="date" id="date" name="date">
               </div>
             </div>
-            
-            <div class="form-group">
-              <label for="message">Tell Us About Your Project</label>
-              <textarea id="message" name="message" placeholder="Describe your vision, requirements, or any questions you have..." required></textarea>
+
+            <div class="form-group form-group--full">
+              <label for="message">Tell Us About Your Project <span class="req">*</span></label>
+              <textarea id="message" name="message" placeholder="Describe your vision, requirements, or any questions you have..." required rows="5"></textarea>
+              <span class="form-error" id="err-message"></span>
+              <span class="char-count" id="charCount">0 / 500</span>
             </div>
-            
-            <button type="submit" class="btn btn-primary">
-              Send Booking Request
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="22" y1="2" x2="11" y2="13"/>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-              </svg>
+
+            <button type="submit" class="btn-submit" id="submitBtn">
+              <span class="btn-text">Send Booking Request</span>
+              <span class="btn-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </span>
+              <span class="btn-loading" aria-hidden="true"></span>
             </button>
+
+            <!-- Success message -->
+            <div class="form-success" id="formSuccess">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <div>
+                <strong>Booking request sent!</strong>
+                <p>We'll get back to you within 24 hours.</p>
+              </div>
+            </div>
           </form>
         </div>
-      </div>
+
+      </div><!-- /contact-grid -->
     </div>
   </section>
 
   <!-- Map Section -->
-  <section class="map-section">
+  <section class="map-section reveal">
     <div class="container">
+      <div class="map-header">
+        <span class="section-eyebrow">Find Us</span>
+        <h2 class="section-title-sm">Our <em>Location</em></h2>
+      </div>
       <div class="map-container">
-        <div class="map-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          <p>Machakos Town, Kenya</p>
-          <p style="font-size: 0.85rem; margin-top: 0.5rem;">Map will be embedded here</p>
+        <iframe
+          title="Denspark Studio Location"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.273688!2d37.2634!3d-1.5167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f5a5c3d8f4b0d%3A0x10abf8b3ab0e5e9c!2sMachakos%2C%20Kenya!5e0!3m2!1sen!2sus!4v1700000000000"
+          width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+        <div class="map-pin-card">
+          <div class="pin-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <strong>Denspark Studio</strong>
+            <span>Machakos Town, Kenya</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- FAQ Section -->
-  <section class="section faq-section">
+  <section class="faq-section">
     <div class="container">
-      <div class="section-header animate-on-scroll">
-        <span class="section-badge">FAQ</span>
-        <h2 class="section-title">Frequently Asked Questions</h2>
-        <p class="section-subtitle">Quick answers to common questions</p>
+      <div class="section-header reveal">
+        <span class="section-eyebrow">FAQ</span>
+        <h2 class="section-title">Common <em>Questions</em></h2>
+        <p class="section-sub">Quick answers to help you plan your session with us.</p>
       </div>
-      
+
       <div class="faq-grid">
-        <div class="faq-item animate-on-scroll delay-1">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-              <line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-            How far in advance should I book?
-          </h4>
-          <p>For weddings and major events, we recommend booking at least 2-3 months in advance. For portrait sessions, 1-2 weeks notice is usually sufficient.</p>
+        <div class="faq-item reveal" style="--delay: 0.04s">
+          <button class="faq-question" aria-expanded="false">
+            <span>How far in advance should I book?</span>
+            <span class="faq-toggle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <p>For weddings and major events, we recommend booking at least 2–3 months in advance to secure your date. For portrait sessions, 1–2 weeks notice is usually sufficient.</p>
+          </div>
         </div>
-        
-        <div class="faq-item animate-on-scroll delay-2">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-              <line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-            What is your payment policy?
-          </h4>
-          <p>We require a 50% deposit to secure your booking, with the remaining balance due on the day of the session or event.</p>
+
+        <div class="faq-item reveal" style="--delay: 0.08s">
+          <button class="faq-question" aria-expanded="false">
+            <span>What is your payment policy?</span>
+            <span class="faq-toggle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <p>We require a 50% deposit to secure your booking, with the remaining balance due on the day of the session or event. We accept M-Pesa and bank transfers.</p>
+          </div>
         </div>
-        
-        <div class="faq-item animate-on-scroll delay-3">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-              <line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-            How long until I receive my photos?
-          </h4>
-          <p>Portrait sessions are typically delivered within 1-2 weeks. Wedding and event photography takes 2-4 weeks for full editing.</p>
+
+        <div class="faq-item reveal" style="--delay: 0.12s">
+          <button class="faq-question" aria-expanded="false">
+            <span>How long until I receive my photos?</span>
+            <span class="faq-toggle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <p>Portrait sessions are typically delivered within 1–2 weeks. Wedding and event photography takes 2–4 weeks for full professional editing and delivery.</p>
+          </div>
         </div>
-        
-        <div class="faq-item animate-on-scroll delay-4">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-              <line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-            Do you travel for shoots?
-          </h4>
-          <p>Yes! We cover events and sessions throughout Machakos County and beyond. Travel fees may apply for locations outside the town.</p>
+
+        <div class="faq-item reveal" style="--delay: 0.16s">
+          <button class="faq-question" aria-expanded="false">
+            <span>Do you travel for shoots?</span>
+            <span class="faq-toggle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! We cover events throughout Machakos County and beyond. Travel fees may apply for locations outside Machakos Town — contact us for a custom quote.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal" style="--delay: 0.20s">
+          <button class="faq-question" aria-expanded="false">
+            <span>Can I reschedule my session?</span>
+            <span class="faq-toggle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, we allow one free reschedule with at least 48 hours notice. Rescheduling requests made less than 48 hours before the session may incur a small rebooking fee.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal" style="--delay: 0.24s">
+          <button class="faq-question" aria-expanded="false">
+            <span>What formats will I receive my photos in?</span>
+            <span class="faq-toggle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </button>
+          <div class="faq-answer">
+            <p>You'll receive high-resolution JPEG files suitable for printing, plus web-optimised versions. Files are delivered via a private online gallery link, active for 30 days.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Marquee -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span>Portraits</span><span class="dot">·</span>
+        <span>Events</span><span class="dot">·</span>
+        <span>Weddings</span><span class="dot">·</span>
+        <span>Corporate</span><span class="dot">·</span>
+        <span>Product Shoots</span><span class="dot">·</span>
+        <span>Fashion</span><span class="dot">·</span>
+        <span>Video Production</span><span class="dot">·</span>
+        <span>Photo Editing</span><span class="dot">·</span>
+        <span>Portraits</span><span class="dot">·</span>
+        <span>Events</span><span class="dot">·</span>
+        <span>Weddings</span><span class="dot">·</span>
+        <span>Corporate</span><span class="dot">·</span>
+        <span>Product Shoots</span><span class="dot">·</span>
+        <span>Fashion</span><span class="dot">·</span>
+        <span>Video Production</span><span class="dot">·</span>
+        <span>Photo Editing</span><span class="dot">·</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
+      <div class="footer-top">
         <div class="footer-brand">
-          <a href="/" class="logo"><span>DENSPARK</span></a>
-          <p>Professional photography and creative media services in Machakos, Kenya.</p>
+          <div class="footer-logo">DENSPARK PHOTO <span>STUDIO</span></div>
+          <p>Professional photography and creative media services in Machakos, Kenya. Capturing moments that last forever.</p>
+          <div class="footer-social">
+            <a href="https://www.facebook.com/share/1BK8dk8VsJ/" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/densparkstudio?igsh=MTRqdXpjd241dzMzMg==" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://youtube.com/@densparkfilmsmachakos6509?si=b-HHFd-jDE5Z76mQ" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </a>
+
+            <a href="https://www.tiktok.com/@densparkstudio300?_r=1&_t=ZS-95khoiW18dB" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/>
+              </svg>
+            </a>
+          </div>
         </div>
-        <div class="footer-column">
-          <h4>Quick Links</h4>
-          <ul class="footer-links">
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/portfolio">Portfolio</a></li>
             <li><a href="/services">Services</a></li>
@@ -482,18 +474,19 @@
             <li><a href="/contact">Contact</a></li>
           </ul>
         </div>
-        <div class="footer-column">
+        <div class="footer-col">
           <h4>Services</h4>
-          <ul class="footer-links">
+          <ul>
             <li><a href="/services">Portrait Photography</a></li>
             <li><a href="/services">Event Coverage</a></li>
             <li><a href="/services">Wedding Photography</a></li>
             <li><a href="/services">Video Production</a></li>
+            <li><a href="/services">Photo Editing</a></li>
           </ul>
         </div>
-        <div class="footer-column">
+        <div class="footer-col">
           <h4>Contact</h4>
-          <ul class="footer-links">
+          <ul>
             <li>Machakos Town, Kenya</li>
             <li><a href="tel:+254700000000">+254 700 000 000</a></li>
             <li><a href="mailto:info@densparkstudio.co.ke">info@densparkstudio.co.ke</a></li>
@@ -501,7 +494,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2024 Denspark Studio. All rights reserved.</p>
+        <p>&copy; 2025 Denspark Studio. All rights reserved.</p>
         <div class="footer-legal">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
@@ -510,6 +503,6 @@
     </div>
   </footer>
 
-  <script src="/static/js/main.js"></script>
+  <script src="static/js/public/contact.js"></script>
 </body>
 </html>

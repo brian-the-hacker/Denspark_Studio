@@ -19,43 +19,10 @@
     }, 1600);
   });
 
-  /* ──────────────────────────────────────────
-     CUSTOM CURSOR
-  ────────────────────────────────────────── */
-  const cursor   = document.getElementById('cursor');
-  const follower = document.getElementById('cursorFollower');
-
-  let mouseX = 0, mouseY = 0;
-  let followerX = 0, followerY = 0;
-
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    cursor.style.left = mouseX + 'px';
-    cursor.style.top  = mouseY + 'px';
-  });
-
-  function animateCursor() {
-    followerX += (mouseX - followerX) * 0.12;
-    followerY += (mouseY - followerY) * 0.12;
-    follower.style.left = followerX + 'px';
-    follower.style.top  = followerY + 'px';
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
-
-  const hoverTargets = 'a, button, .strip-item, input, [role="button"], .service-block, .pricing-card';
-  document.addEventListener('mouseover', (e) => {
-    if (e.target.closest(hoverTargets)) document.body.classList.add('cursor-hover');
-  });
-  document.addEventListener('mouseout', (e) => {
-    if (e.target.closest(hoverTargets)) document.body.classList.remove('cursor-hover');
-  });
-  document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; follower.style.opacity = '0'; });
-  document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; follower.style.opacity = '1'; });
+  
 
   /* ──────────────────────────────────────────
-     NAVBAR — SCROLL
+     NAVBAR — SCROLL cursor
   ────────────────────────────────────────── */
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
@@ -160,7 +127,6 @@
 
   // Click strip item → smooth scroll to section
   stripItems.forEach((item, i) => {
-    item.style.cursor = 'none';
     item.addEventListener('click', () => {
       const target = document.getElementById(serviceIds[i]);
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });

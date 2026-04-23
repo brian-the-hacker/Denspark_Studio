@@ -21,54 +21,7 @@
 
   document.body.style.overflow = 'hidden';
 
-  /* ──────────────────────────────────────────
-     CUSTOM CURSOR
-  ────────────────────────────────────────── */
-  const cursor   = document.getElementById('cursor');
-  const follower = document.getElementById('cursorFollower');
-
-  let mouseX = 0, mouseY = 0;
-  let followerX = 0, followerY = 0;
-
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    cursor.style.left = mouseX + 'px';
-    cursor.style.top  = mouseY + 'px';
-  });
-
-  // Smooth follower via rAF
-  function animateCursor() {
-    followerX += (mouseX - followerX) * 0.12;
-    followerY += (mouseY - followerY) * 0.12;
-    follower.style.left = followerX + 'px';
-    follower.style.top  = followerY + 'px';
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
-
-  // Hover effect on interactive elements
-  const hoverTargets = 'a, button, .pf-item, input, [role="button"]';
-  document.addEventListener('mouseover', (e) => {
-    if (e.target.closest(hoverTargets)) {
-      document.body.classList.add('cursor-hover');
-    }
-  });
-  document.addEventListener('mouseout', (e) => {
-    if (e.target.closest(hoverTargets)) {
-      document.body.classList.remove('cursor-hover');
-    }
-  });
-
-  // Hide cursor when it leaves the window
-  document.addEventListener('mouseleave', () => {
-    cursor.style.opacity   = '0';
-    follower.style.opacity = '0';
-  });
-  document.addEventListener('mouseenter', () => {
-    cursor.style.opacity   = '1';
-    follower.style.opacity = '1';
-  });
+ 
 
   /* ──────────────────────────────────────────
      NAVBAR — SCROLL BEHAVIOUR

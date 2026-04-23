@@ -2,282 +2,122 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta name="description" content="Learn about Denspark Studio - Machakos's premier photography and creative media studio">
   <title>About Us | Denspark Studio</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/main.css">
-  
-  <style>
-    .story-section {
-      background: var(--color-white);
-    }
-    
-    .story-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-    
-    .story-content h2 {
-      margin-bottom: 1.5rem;
-    }
-    
-    .story-content p {
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-      line-height: 1.8;
-    }
-    
-    .story-image {
-      position: relative;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
-    
-    .story-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .stats-section {
-      background: var(--color-primary);
-      padding: 4rem 0;
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2rem;
-      text-align: center;
-    }
-    
-    .stat-item {
-      color: var(--color-white);
-    }
-    
-    .stat-number {
-      font-family: var(--font-heading);
-      font-size: 3.5rem;
-      font-weight: 700;
-      color: var(--color-accent);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-    
-    .stat-label {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--color-gray-400);
-    }
-    
-    .team-section {
-      background: var(--color-off-white);
-    }
-    
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-    }
-    
-    .team-card {
-      background: var(--color-white);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      transition: transform var(--transition-base), box-shadow var(--transition-base);
-    }
-    
-    .team-card:hover {
-      transform: translateY(-10px);
-      box-shadow: var(--shadow-xl);
-    }
-    
-    .team-image {
-      aspect-ratio: 1;
-      overflow: hidden;
-    }
-    
-    .team-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform var(--transition-slower);
-    }
-    
-    .team-card:hover .team-image img {
-      transform: scale(1.1);
-    }
-    
-    .team-info {
-      padding: 1.5rem;
-      text-align: center;
-    }
-    
-    .team-info h4 {
-      font-size: 1.25rem;
-      margin-bottom: 0.25rem;
-    }
-    
-    .team-info p {
-      color: var(--color-accent);
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-    }
-    
-    .team-social {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-    }
-    
-    .team-social a {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--color-off-white);
-      border-radius: 50%;
-      transition: all var(--transition-base);
-    }
-    
-    .team-social a:hover {
-      background: var(--color-primary);
-      color: var(--color-white);
-    }
-    
-    .team-social svg {
-      width: 16px;
-      height: 16px;
-    }
-    
-    .values-section {
-      background: var(--color-white);
-    }
-    
-    .values-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-    }
-    
-    .value-card {
-      text-align: center;
-      padding: 2.5rem;
-    }
-    
-    .value-icon {
-      width: 80px;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--color-off-white);
-      border-radius: 50%;
-      margin: 0 auto 1.5rem;
-      transition: all var(--transition-base);
-    }
-    
-    .value-card:hover .value-icon {
-      background: var(--color-primary);
-    }
-    
-    .value-card:hover .value-icon svg {
-      color: var(--color-white);
-    }
-    
-    .value-icon svg {
-      width: 36px;
-      height: 36px;
-      color: var(--color-accent);
-      transition: color var(--transition-base);
-    }
-    
-    .value-card h4 {
-      font-size: 1.25rem;
-      margin-bottom: 0.75rem;
-    }
-    
-    .value-card p {
-      font-size: 0.95rem;
-    }
-    
-    @media (max-width: 1024px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .story-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-      }
-      
-      .stat-number {
-        font-size: 2.5rem;
-      }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/public/about.css">
 </head>
 <body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-logo">DENSPARK STUDIO</div>
+      <div class="preloader-line"><span></span></div>
+    </div>
+  </div>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
   <!-- Navigation -->
-  <nav class="navbar scrolled">
-    <div class="container">
-      <a href="/" class="logo"><span>DENSPARK</span></a>
-      <ul class="nav-links">
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <img src="/static/uploads/DENSPARK STUDIOs wallpaper (1).png" alt="Denspark Studio Logo" class="logo-img">
+        <div class="logo-text-wrap">
+          <span class="logo-text">DENSPARK PHOTO</span>
+          <span class="logo-sub">STUDIO</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
+        <li><a href="/services" class="nav-link">Services</a></li>
+        <li><a href="/about" class="nav-link active">About</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="/contact" class="btn-book">Book Now</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
         <li><a href="/services">Services</a></li>
-        <li><a href="/about" class="active">About</a></li>
+        <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
-        <li><a href="/contact" class="nav-cta">Book Now</a></li>
       </ul>
-      <div class="menu-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
+      <a href="/contact" class="btn-book-mobile">Book a Session</a>
+      <div class="mobile-info">
+        <span>Machakos, Kenya</span>
+        <span>+254 700 000 000</span>
       </div>
     </div>
   </nav>
 
-  <!-- Page Header -->
-  <header class="page-header">
-    <div class="container">
-      <h1>About Us</h1>
-      <p>Our story, our passion, our commitment</p>
+  <!-- Page Hero -->
+  <header class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=1920&q=85')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
       <div class="breadcrumb">
         <a href="/">Home</a>
-        <span>/</span>
-        <span class="current">About</span>
+        <span class="bc-sep">→</span>
+        <span>About</span>
       </div>
+      <h1 class="page-hero-title">Our <em>Story</em></h1>
+      <p class="page-hero-sub">Passion, craft, and community — the heart of everything we create in Machakos, Kenya.</p>
+    </div>
+    <div class="page-hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
     </div>
   </header>
 
   <!-- Story Section -->
-  <section class="section story-section">
+  <section class="story-section">
     <div class="container">
       <div class="story-grid">
-        <div class="story-content animate-on-scroll">
-          <span class="section-badge">Our Story</span>
-          <h2>Where Creativity Meets Excellence</h2>
+        <!-- Image side -->
+        <div class="story-image-wrap reveal">
+          <div class="story-img-frame">
+            <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=900&q=85" alt="Denspark Studio behind the scenes">
+            <div class="story-img-overlay"></div>
+          </div>
+          <div class="story-img-badge">
+            <span class="badge-year">Est.</span>
+            <span class="badge-num">2014</span>
+            <span class="badge-label">Machakos, Kenya</span>
+          </div>
+          <div class="story-accent-box"></div>
+        </div>
+
+        <!-- Content side -->
+        <div class="story-content reveal" style="--delay: 0.12s">
+          <span class="section-eyebrow">Our Story</span>
+          <h2 class="story-title">Where Creativity <em>Meets</em> Excellence</h2>
           <p>Founded in Machakos, Kenya, Denspark Studio emerged from a deep passion for visual storytelling. What started as a small dream has grown into one of the region's most trusted photography and creative media studios.</p>
           <p>Our journey began with a simple belief: every moment deserves to be captured beautifully. Over the years, we've had the privilege of documenting countless weddings, corporate events, personal milestones, and creative projects.</p>
           <p>Today, we continue to push the boundaries of creativity while staying true to our core values of quality, professionalism, and genuine connection with our clients.</p>
-        </div>
-        <div class="story-image animate-on-scroll">
-          <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80" alt="Denspark Studio">
+          <div class="story-signature">
+            <div class="sig-line"></div>
+            <div class="sig-info">
+              <span class="sig-name">Dennis Mutua</span>
+              <span class="sig-role">Founder &amp; Lead Photographer</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -285,170 +125,66 @@
 
   <!-- Stats Section -->
   <section class="stats-section">
+    <div class="stats-bg-text">10+</div>
     <div class="container">
       <div class="stats-grid">
-        <div class="stat-item animate-on-scroll delay-1">
+        <div class="stat-item reveal" style="--delay: 0.00s">
           <div class="stat-number counter" data-target="10">0</div>
+          <div class="stat-sup">+</div>
           <div class="stat-label">Years Experience</div>
         </div>
-        <div class="stat-item animate-on-scroll delay-2">
+        <div class="stat-item reveal" style="--delay: 0.08s">
           <div class="stat-number counter" data-target="500">0</div>
+          <div class="stat-sup">+</div>
           <div class="stat-label">Projects Completed</div>
         </div>
-        <div class="stat-item animate-on-scroll delay-3">
+        <div class="stat-item reveal" style="--delay: 0.16s">
           <div class="stat-number counter" data-target="200">0</div>
+          <div class="stat-sup">+</div>
           <div class="stat-label">Weddings Captured</div>
         </div>
-        <div class="stat-item animate-on-scroll delay-4">
+        <div class="stat-item reveal" style="--delay: 0.24s">
           <div class="stat-number counter" data-target="1000">0</div>
+          <div class="stat-sup">+</div>
           <div class="stat-label">Happy Clients</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Team Section -->
-  <section class="section team-section">
-    <div class="container">
-      <div class="section-header animate-on-scroll">
-        <span class="section-badge">Our Team</span>
-        <h2 class="section-title">Meet the Creatives</h2>
-        <p class="section-subtitle">The talented individuals behind every beautiful shot</p>
-      </div>
-      
-      <div class="team-grid">
-        <div class="team-card animate-on-scroll delay-1">
-          <div class="team-image">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="Team Member">
-          </div>
-          <div class="team-info">
-            <h4>Dennis Mutua</h4>
-            <p>Founder & Lead Photographer</p>
-            <div class="team-social">
-              <a href="#" aria-label="Instagram">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-              </a>
-              <a href="#" aria-label="Twitter">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-        
-        <div class="team-card animate-on-scroll delay-2">
-          <div class="team-image">
-            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80" alt="Team Member">
-          </div>
-          <div class="team-info">
-            <h4>Mary Wanjiku</h4>
-            <p>Senior Photographer</p>
-            <div class="team-social">
-              <a href="#" aria-label="Instagram">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-              </a>
-              <a href="#" aria-label="Twitter">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-        
-        <div class="team-card animate-on-scroll delay-3">
-          <div class="team-image">
-            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80" alt="Team Member">
-          </div>
-          <div class="team-info">
-            <h4>James Ochieng</h4>
-            <p>Videographer</p>
-            <div class="team-social">
-              <a href="#" aria-label="Instagram">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-              </a>
-              <a href="#" aria-label="Twitter">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-        
-        <div class="team-card animate-on-scroll delay-4">
-          <div class="team-image">
-            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80" alt="Team Member">
-          </div>
-          <div class="team-info">
-            <h4>Grace Muthoni</h4>
-            <p>Photo Editor</p>
-            <div class="team-social">
-              <a href="#" aria-label="Instagram">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-              </a>
-              <a href="#" aria-label="Twitter">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Values Section -->
-  <section class="section values-section">
+  <section class="values-section">
     <div class="container">
-      <div class="section-header animate-on-scroll">
-        <span class="section-badge">Our Values</span>
-        <h2 class="section-title">What Drives Us</h2>
-        <p class="section-subtitle">The principles that guide everything we do</p>
+      <div class="section-header reveal">
+        <span class="section-eyebrow">Our Values</span>
+        <h2 class="section-title">What <em>Drives</em> Us</h2>
+        <p class="section-sub">The principles that guide every frame we capture and every story we tell.</p>
       </div>
-      
+
       <div class="values-grid">
-        <div class="value-card animate-on-scroll delay-1">
-          <div class="value-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="value-card reveal" style="--delay: 0.05s">
+          <div class="value-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
             </svg>
           </div>
           <h4>Excellence</h4>
           <p>We strive for perfection in every shot, ensuring our clients receive nothing but the best quality work.</p>
         </div>
-        
-        <div class="value-card animate-on-scroll delay-2">
-          <div class="value-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+        <div class="value-card reveal" style="--delay: 0.12s">
+          <div class="value-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
             </svg>
           </div>
           <h4>Passion</h4>
-          <p>Photography isn't just our job—it's our passion. We love what we do and it shows in our work.</p>
+          <p>Photography isn't just our job — it's our passion. We love what we do and it shows in every image.</p>
         </div>
-        
-        <div class="value-card animate-on-scroll delay-3">
-          <div class="value-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+        <div class="value-card reveal" style="--delay: 0.19s">
+          <div class="value-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
               <circle cx="9" cy="7" r="4"/>
               <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
@@ -458,10 +194,10 @@
           <h4>Client Focus</h4>
           <p>Our clients are at the heart of everything we do. Your satisfaction is our ultimate goal.</p>
         </div>
-        
-        <div class="value-card animate-on-scroll delay-4">
-          <div class="value-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+        <div class="value-card reveal" style="--delay: 0.26s">
+          <div class="value-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <circle cx="12" cy="12" r="10"/>
               <polyline points="12 6 12 12 16 14"/>
             </svg>
@@ -473,20 +209,136 @@
     </div>
   </section>
 
-  <!-- CTA Section -->
-  <section class="cta">
+  <!-- Team Section -->
+  <section class="team-section">
     <div class="container">
-      <div class="cta-content animate-on-scroll">
-        <div class="cta-text">
-          <h2>Ready to Work Together?</h2>
-          <p>Let's create something amazing. Get in touch today!</p>
+      <div class="section-header reveal">
+        <span class="section-eyebrow">Our Team</span>
+        <h2 class="section-title">Meet the <em>Creatives</em></h2>
+        <p class="section-sub">The talented individuals behind every beautiful shot.</p>
+      </div>
+
+      <div class="team-grid">
+        <!-- Dennis -->
+        <div class="team-card reveal" style="--delay: 0.04s">
+          <div class="team-img-wrap">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Dennis Mutua">
+            <div class="team-img-overlay">
+              <div class="team-social">
+                <a href="#" aria-label="Instagram">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                </a>
+                <a href="#" aria-label="Twitter/X">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="team-info">
+            <h4>Dennis Mutua</h4>
+            <span class="team-role">Founder &amp; Lead Photographer</span>
+          </div>
         </div>
-        <a href="/contact" class="btn btn-dark">
-          Contact Us
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
+
+        <!-- Mary -->
+        <div class="team-card reveal" style="--delay: 0.10s">
+          <div class="team-img-wrap">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=80" alt="Mary Wanjiku">
+            <div class="team-img-overlay">
+              <div class="team-social">
+                <a href="#" aria-label="Instagram">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                </a>
+                <a href="#" aria-label="Twitter/X">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="team-info">
+            <h4>Mary Wanjiku</h4>
+            <span class="team-role">Senior Photographer</span>
+          </div>
+        </div>
+
+        <!-- James -->
+        <div class="team-card reveal" style="--delay: 0.16s">
+          <div class="team-img-wrap">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&q=80" alt="James Ochieng">
+            <div class="team-img-overlay">
+              <div class="team-social">
+                <a href="#" aria-label="Instagram">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                </a>
+                <a href="#" aria-label="Twitter/X">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="team-info">
+            <h4>James Ochieng</h4>
+            <span class="team-role">Videographer</span>
+          </div>
+        </div>
+
+        <!-- Grace -->
+        <div class="team-card reveal" style="--delay: 0.22s">
+          <div class="team-img-wrap">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&q=80" alt="Grace Muthoni">
+            <div class="team-img-overlay">
+              <div class="team-social">
+                <a href="#" aria-label="Instagram">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                </a>
+                <a href="#" aria-label="Twitter/X">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="team-info">
+            <h4>Grace Muthoni</h4>
+            <span class="team-role">Photo Editor</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span>Portraits</span><span class="dot">·</span>
+        <span>Events</span><span class="dot">·</span>
+        <span>Weddings</span><span class="dot">·</span>
+        <span>Corporate</span><span class="dot">·</span>
+        <span>Product Shoots</span><span class="dot">·</span>
+        <span>Fashion</span><span class="dot">·</span>
+        <span>Video Production</span><span class="dot">·</span>
+        <span>Photo Editing</span><span class="dot">·</span>
+        <span>Portraits</span><span class="dot">·</span>
+        <span>Events</span><span class="dot">·</span>
+        <span>Weddings</span><span class="dot">·</span>
+        <span>Corporate</span><span class="dot">·</span>
+        <span>Product Shoots</span><span class="dot">·</span>
+        <span>Fashion</span><span class="dot">·</span>
+        <span>Video Production</span><span class="dot">·</span>
+        <span>Photo Editing</span><span class="dot">·</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Banner -->
+  <section class="cta-banner">
+    <div class="container">
+      <div class="cta-inner reveal">
+        <div>
+          <h2>Ready to Work Together?</h2>
+          <p>Let's create something amazing that lasts a lifetime. Get in touch today.</p>
+        </div>
+        <a href="/contact" class="btn-primary btn-white">Contact Us →</a>
       </div>
     </div>
   </section>
@@ -494,14 +346,33 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
+      <div class="footer-top">
         <div class="footer-brand">
-          <a href="/" class="logo"><span>DENSPARK</span></a>
-          <p>Professional photography and creative media services in Machakos, Kenya.</p>
+          <div class="footer-logo">DENSPARK PHOTO <span>STUDIO</span></div>
+          <p>Professional photography and creative media services in Machakos, Kenya. Capturing moments that last forever.</p>
+          <div class="footer-social">
+            <a href="https://www.facebook.com/share/1BK8dk8VsJ/" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/densparkstudio?igsh=MTRqdXpjd241dzMzMg==" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://youtube.com/@densparkfilmsmachakos6509?si=b-HHFd-jDE5Z76mQ" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </a>
+
+            <a href="https://www.tiktok.com/@densparkstudio300?_r=1&_t=ZS-95khoiW18dB" aria-label="TikTok">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/>
+              </svg>
+            </a>
+          </div>
         </div>
-        <div class="footer-column">
-          <h4>Quick Links</h4>
-          <ul class="footer-links">
+        <div class="footer-col">
+          <h4>Navigate</h4>
+          <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/portfolio">Portfolio</a></li>
             <li><a href="/services">Services</a></li>
@@ -509,18 +380,19 @@
             <li><a href="/contact">Contact</a></li>
           </ul>
         </div>
-        <div class="footer-column">
+        <div class="footer-col">
           <h4>Services</h4>
-          <ul class="footer-links">
+          <ul>
             <li><a href="/services">Portrait Photography</a></li>
             <li><a href="/services">Event Coverage</a></li>
             <li><a href="/services">Wedding Photography</a></li>
             <li><a href="/services">Video Production</a></li>
+            <li><a href="/services">Photo Editing</a></li>
           </ul>
         </div>
-        <div class="footer-column">
+        <div class="footer-col">
           <h4>Contact</h4>
-          <ul class="footer-links">
+          <ul>
             <li>Machakos Town, Kenya</li>
             <li><a href="tel:+254700000000">+254 700 000 000</a></li>
             <li><a href="mailto:info@densparkstudio.co.ke">info@densparkstudio.co.ke</a></li>
@@ -528,7 +400,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2024 Denspark Studio. All rights reserved.</p>
+        <p>&copy; 2025 Denspark Studio. All rights reserved.</p>
         <div class="footer-legal">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
@@ -537,6 +409,35 @@
     </div>
   </footer>
 
-  <script src="/static/js/main.js"></script>
+  <!-- Chat Widget -->
+  <div class="chat-widget" id="chatWidget">
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="chat-avatar">DS</div>
+          <div>
+            <h4>Denspark Studio</h4>
+            <span class="chat-status"><span class="online-dot"></span>Online</span>
+          </div>
+        </div>
+        <button class="chat-close-btn" id="chatClose">×</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg received">Hi there! 👋 Want to know more about our team or services? Ask away!</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Type a message...">
+        <button id="chatSend">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+    <button class="chat-toggle-btn" id="chatToggle" aria-label="Chat with us">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="chat-badge">1</span>
+    </button>
+  </div>
+
+  <script src="static/js/public/about.js"></script>
 </body>
 </html>
