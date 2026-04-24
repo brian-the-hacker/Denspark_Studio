@@ -16,16 +16,27 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
+# Add these two columns to your existing Portfolio model in models.py
+# (only the Portfolio class is shown — keep everything else as-is)
+
 class Portfolio(db.Model):
     __tablename__ = 'portfolio'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text)
-    file_path = db.Column(db.String(200), nullable=False)
-    category = db.Column(db.String(50), default='general')
-    featured = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    id             = db.Column(db.Integer, primary_key=True)
+    title          = db.Column(db.String(100), nullable=False)
+    description    = db.Column(db.Text)
+    file_path      = db.Column(db.String(200), nullable=False, default='')  # local fallback
+    category       = db.Column(db.String(50), default='general')
+    featured       = db.Column(db.Boolean, default=False)
+
+    # ── Cloudinary (new columns) ──────────────────────────────
+    # Run: flask db migrate -m "add cloudinary fields"
+    #      flask db upgrade
+    cloudinary_url = db.Column(db.String(500), nullable=True)   # full https URL
+    cloudinary_id  = db.Column(db.String(200), nullable=True)   # public_id for deletion
+    # ─────────────────────────────────────────────────────────
+
+    created_at     = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Booking(db.Model):
     __tablename__ = 'bookings'

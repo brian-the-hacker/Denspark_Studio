@@ -15,12 +15,7 @@
 <body>
 
   <!-- Preloader -->
-  <div class="preloader" id="preloader">
-    <div class="preloader-inner">
-      <div class="preloader-logo">DENSPARK STUDIO</div>
-      <div class="preloader-line"><span></span></div>
-    </div>
-  </div>
+ 
 
   <!-- Cursor -->
   
@@ -45,6 +40,7 @@
       <div class="nav-right">
         <a href="/contact" class="btn-book">Book Now</a>
         <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+          <span></span>
           <span></span>
           <span></span>
         </button>
@@ -89,42 +85,62 @@
   <!-- Services Intro Strip -->
   <div class="services-strip">
     <div class="services-strip-inner">
-      <div class="strip-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934c.2.614.312 1.286.312 1.993 0 3.628-2.96 6.573-6.635 6.573-3.666 0-6.635-2.945-6.635-6.573S10.199 6.354 13.865 6.354c.7 0 1.376.11 2 .31"/><path d="M21 3l-6.5 6.5"/></svg>
-        <span>Portrait Photography</span>
+      <div class="strip-item" data-target="photography">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+        <span>Photography</span>
       </div>
       <div class="strip-sep">·</div>
-      <div class="strip-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10z"/></svg>
-        <span>Wedding Photography</span>
+      <div class="strip-item" data-target="videography">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        <span>Videography</span>
       </div>
       <div class="strip-sep">·</div>
-      <div class="strip-item">
+      <div class="strip-item" data-target="graphic-design">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span>Graphic Design</span>
+      </div>
+      <div class="strip-sep">·</div>
+      <div class="strip-item" data-target="branding">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Branding</span>
+      </div>
+      <div class="strip-sep">·</div>
+      <div class="strip-item" data-target="printing">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>
+        <span>Printing</span>
+      </div>
+      <div class="strip-sep">·</div>
+      <div class="strip-item" data-target="events">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
         <span>Event Coverage</span>
       </div>
       <div class="strip-sep">·</div>
-      <div class="strip-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-        <span>Video Production</span>
+      <div class="strip-item" data-target="social-media">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span>Social Media</span>
       </div>
       <div class="strip-sep">·</div>
-      <div class="strip-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 12c0 6-9 10-9 10s-9-4-9-10a9 9 0 1 1 18 0z"/><circle cx="14" cy="12" r="3"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+      <div class="strip-item" data-target="drone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 7h.01"/><path d="M3.4 18a2 2 0 0 0 1.4.6h14.4a2 2 0 0 0 1.4-.6"/><path d="M17 7v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7"/><circle cx="12" cy="13" r="3"/></svg>
+        <span>Drone Services</span>
+      </div>
+      <div class="strip-sep">·</div>
+      <div class="strip-item" data-target="livestream">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12.5a4.5 0 0 1 4.5-4.5h11a4.5 0 0 1 4.5 4.5v0a4.5 0 0 1-4.5 4.5h-11A4.5 0 0 1 2 12.5v0Z"/><circle cx="12" cy="12.5" r="1.5"/></svg>
         <span>Live Streaming</span>
       </div>
       <div class="strip-sep">·</div>
-      <div class="strip-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 8V4H8"/><rect x="2" y="8" width="20" height="8" rx="2"/><path d="M6 8v8"/><path d="M18 8v8"/><path d="M12 16v4h4"/><path d="M8 12h8"/></svg>
-        <span>Drone Services</span>
+      <div class="strip-item" data-target="other-services">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        <span>Other Services</span>
       </div>
     </div>
   </div>
 
   <!-- Services Details -->
   <section class="services-section">
-    <!-- Portrait -->
-    <div class="service-block reveal" id="portraits">
+    <!-- 01 Photography -->
+    <div class="service-block reveal" id="photography">
       <div class="service-block-number">01</div>
       <div class="service-block-image">
         <div class="img-frame">
@@ -136,112 +152,20 @@
       <div class="service-block-content">
         <span class="service-eyebrow">Photography</span>
         <h2 class="service-title">Portrait <em>Photography</em></h2>
-        <p class="service-desc">Capture your best self with our professional portrait services. Whether it's for personal branding, social media, or cherished memories, we create stunning images that reflect your unique personality.</p>
+        <p class="service-desc">We provide professional photography services for both individuals and businesses. Our sessions are carefully planned to capture natural expressions, emotions, and high-quality visuals. We guide clients on posing, styling, and concepts to ensure clean, sharp, and visually appealing results.</p>
         <ul class="service-features">
-          <li>
-            <span class="feat-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            Studio &amp; Outdoor Sessions
-          </li>
-          <li>
-            <span class="feat-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            Professional Retouching
-          </li>
-          <li>
-            <span class="feat-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            Multiple Outfit Changes
-          </li>
-          <li>
-            <span class="feat-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            Digital &amp; Print Deliverables
-          </li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Studio & Outdoor Sessions</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Family, Kids, Baby Bump, Birthdays</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Corporate Headshots & Lifestyle</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Posing & Styling Guidance</li>
         </ul>
         <a href="/contact" class="btn-service">Book Portrait Session <span>→</span></a>
       </div>
     </div>
 
-    <!-- Wedding -->
-    <div class="service-block service-block--flip reveal" id="weddings">
+    <!-- 02 Videography -->
+    <div class="service-block service-block--flip reveal" id="videography">
       <div class="service-block-number">02</div>
-      <div class="service-block-image">
-        <div class="img-frame">
-          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=900&q=85" alt="Wedding Photography">
-          <div class="img-overlay"></div>
-        </div>
-        <div class="img-accent-box"></div>
-      </div>
-      <div class="service-block-content">
-        <span class="service-eyebrow">Photography</span>
-        <h2 class="service-title">Wedding <em>Photography</em></h2>
-        <p class="service-desc">Your wedding day deserves to be documented beautifully. Our experienced team captures every precious moment, from the anticipation of getting ready to the joy of the celebration.</p>
-        <ul class="service-features">
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Full Day Coverage
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Multiple Photographers
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Engagement Session Included
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Premium Wedding Album
-          </li>
-        </ul>
-        <a href="/contact" class="btn-service">Plan Your Wedding <span>→</span></a>
-      </div>
-    </div>
-
-    <!-- Events -->
-    <div class="service-block reveal" id="events">
-      <div class="service-block-number">03</div>
-      <div class="service-block-image">
-        <div class="img-frame">
-          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&q=85" alt="Event Photography">
-          <div class="img-overlay"></div>
-        </div>
-        <div class="img-accent-box"></div>
-      </div>
-      <div class="service-block-content">
-        <span class="service-eyebrow">Coverage</span>
-        <h2 class="service-title">Event <em>Coverage</em></h2>
-        <p class="service-desc">From corporate conferences to birthday parties, we provide comprehensive event documentation that captures the energy, emotions, and key moments of your special occasions.</p>
-        <ul class="service-features">
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Corporate Events
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Parties &amp; Celebrations
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Conferences &amp; Seminars
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Quick Turnaround
-          </li>
-        </ul>
-        <a href="/contact" class="btn-service">Book Event Coverage <span>→</span></a>
-      </div>
-    </div>
-
-    <!-- Video -->
-    <div class="service-block service-block--flip reveal" id="video">
-      <div class="service-block-number">04</div>
       <div class="service-block-image">
         <div class="img-frame">
           <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=900&q=85" alt="Video Production">
@@ -250,32 +174,166 @@
         <div class="img-accent-box"></div>
       </div>
       <div class="service-block-content">
-        <span class="service-eyebrow">Production</span>
+        <span class="service-eyebrow">Videography</span>
         <h2 class="service-title">Video <em>Production</em></h2>
-        <p class="service-desc">Bring your stories to life with our professional video production services. From commercials to documentaries, we create compelling visual content that engages and inspires.</p>
+        <p class="service-desc">Our videography services focus on storytelling through motion. We create high-quality videos for events, brands, and personal projects. We combine professional filming techniques with smooth editing, color grading, and sound design to deliver cinematic results.</p>
         <ul class="service-features">
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Commercials &amp; Ads
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Music Videos
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Documentaries
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Professional Editing
-          </li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Wedding & Birthday Coverage</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Corporate & Promotional Videos</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Creative Shoots & Music Videos</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Color Grading & Sound Design</li>
         </ul>
         <a href="/contact" class="btn-service">Start Your Video Project <span>→</span></a>
       </div>
-       <!-- Live Streaming -->
-    <div class="service-block reveal" id="livestream">
+    </div>
+
+    <!-- 03 Graphic Design -->
+    <div class="service-block reveal" id="graphic-design">
+      <div class="service-block-number">03</div>
+      <div class="service-block-image">
+        <div class="img-frame">
+          <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?w=900&q=85" alt="Graphic Design">
+          <div class="img-overlay"></div>
+        </div>
+        <div class="img-accent-box"></div>
+      </div>
+      <div class="service-block-content">
+        <span class="service-eyebrow">Design</span>
+        <h2 class="service-title">Graphic <em>Design</em></h2>
+        <p class="service-desc">We create visually appealing designs that communicate your message clearly and professionally. Each design is customized to match your brand identity and attract attention across print and digital platforms.</p>
+        <ul class="service-features">
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Logos, Flyers & Posters</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Business Cards & Banners</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Social Media Graphics</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Marketing Materials</li>
+        </ul>
+        <a href="/contact" class="btn-service">Request Design <span>→</span></a>
+      </div>
+    </div>
+
+    <!-- 04 Branding -->
+    <div class="service-block service-block--flip reveal" id="branding">
+      <div class="service-block-number">04</div>
+      <div class="service-block-image">
+        <div class="img-frame">
+          <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&q=85" alt="Branding Services">
+          <div class="img-overlay"></div>
+        </div>
+        <div class="img-accent-box"></div>
+      </div>
+      <div class="service-block-content">
+        <span class="service-eyebrow">Identity</span>
+        <h2 class="service-title">Brand <em>Identity</em></h2>
+        <p class="service-desc">We help businesses build a strong and consistent visual identity. Our branding ensures your business looks professional and stands out across all platforms with cohesive styling and clear guidelines.</p>
+        <ul class="service-features">
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Logo Creation & Refinement</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Brand Color & Typography</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Brand Guidelines</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Complete Brand Styling</li>
+        </ul>
+        <a href="/contact" class="btn-service">Build Your Brand <span>→</span></a>
+      </div>
+    </div>
+
+    <!-- 05 Printing -->
+    <div class="service-block reveal" id="printing">
       <div class="service-block-number">05</div>
+      <div class="service-block-image">
+        <div class="img-frame">
+          <img src="https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?w=900&q=85" alt="Printing Services">
+          <div class="img-overlay"></div>
+        </div>
+        <div class="img-accent-box"></div>
+      </div>
+      <div class="service-block-content">
+        <span class="service-eyebrow">Printing</span>
+        <h2 class="service-title">Printing <em>Services</em></h2>
+        <p class="service-desc">We provide high-quality printing services to bring your visuals to life. We focus on quality, durability, and a premium finish for all personal and business printing needs.</p>
+        <ul class="service-features">
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Photo Prints, Frames & Albums</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Photobooks & Banners</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Posters & Marketing Materials</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Custom Mugs & Branded Items</li>
+        </ul>
+        <a href="/contact" class="btn-service">Order Prints <span>→</span></a>
+      </div>
+    </div>
+
+    <!-- 06 Event Coverage -->
+    <div class="service-block service-block--flip reveal" id="events">
+      <div class="service-block-number">06</div>
+      <div class="service-block-image">
+        <div class="img-frame">
+          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&q=85" alt="Event Coverage">
+          <div class="img-overlay"></div>
+        </div>
+        <div class="img-accent-box"></div>
+      </div>
+      <div class="service-block-content">
+        <span class="service-eyebrow">Coverage</span>
+        <h2 class="service-title">Event <em>Coverage</em></h2>
+        <p class="service-desc">We offer full event coverage to ensure every important moment is captured. This includes photography and videography for weddings, graduations, birthdays, corporate functions, and special occasions — documenting both key highlights and natural moments.</p>
+        <ul class="service-features">
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Weddings & Graduations</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Birthdays & Celebrations</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Corporate Functions</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Photo + Video Packages</li>
+        </ul>
+        <a href="/contact" class="btn-service">Book Event Coverage <span>→</span></a>
+      </div>
+    </div>
+
+    <!-- 07 Social Media Management -->
+    <div class="service-block reveal" id="social-media">
+      <div class="service-block-number">07</div>
+      <div class="service-block-image">
+        <div class="img-frame">
+          <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=900&q=85" alt="Social Media Management">
+          <div class="img-overlay"></div>
+        </div>
+        <div class="img-accent-box"></div>
+      </div>
+      <div class="service-block-content">
+        <span class="service-eyebrow">Digital</span>
+        <h2 class="service-title">Social Media <em>Management</em></h2>
+        <p class="service-desc">We help individuals and businesses grow their online presence through creative content and strategy. We focus on creating consistent, high-quality content that attracts and retains followers.</p>
+        <ul class="service-features">
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Content Creation: Photos, Videos, Graphics</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Page Management & Posting Schedules</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Captions & Engagement Strategy</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Growth & Analytics Reporting</li>
+        </ul>
+        <a href="/contact" class="btn-service">Grow Your Socials <span>→</span></a>
+      </div>
+    </div>
+
+    <!-- 08 Drone Services -->
+    <div class="service-block service-block--flip reveal" id="drone">
+      <div class="service-block-number">08</div>
+      <div class="service-block-image">
+        <div class="img-frame">
+          <img src="https://images.unsplash.com/photo-1507582020474-9a35fc62ec80?w=900&q=85" alt="Drone Aerial Services">
+          <div class="img-overlay"></div>
+        </div>
+        <div class="img-accent-box"></div>
+      </div>
+      <div class="service-block-content">
+        <span class="service-eyebrow">Aerial</span>
+        <h2 class="service-title">Drone <em>Services</em></h2>
+        <p class="service-desc">Elevate your visuals with cinematic aerial footage. Perfect for real estate, weddings, events, and commercial projects. Licensed pilots, 4K cameras, and smooth gimbal stabilization deliver unique perspectives.</p>
+        <ul class="service-features">
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>4K Aerial Photography & Video</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Real Estate & Construction</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Event & Wedding Coverage</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>KCAA Licensed Pilots</li>
+        </ul>
+        <a href="/contact" class="btn-service">Book Drone Shoot <span>→</span></a>
+      </div>
+    </div>
+
+    <!-- 09 Live Streaming -->
+    <div class="service-block reveal" id="livestream">
+      <div class="service-block-number">09</div>
       <div class="service-block-image">
         <div class="img-frame">
           <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=900&q=85" alt="Live Streaming Services">
@@ -288,62 +346,37 @@
         <h2 class="service-title">Live <em>Streaming</em></h2>
         <p class="service-desc">Reach audiences anywhere in real-time. We handle professional multi-camera live broadcasts for weddings, conferences, church services, and corporate events with crystal-clear audio and HD video.</p>
         <ul class="service-features">
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Multi-Camera Setup
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Facebook, YouTube & Custom RTMP
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Professional Audio Mixing
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Graphics & Lower Thirds
-          </li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Multi-Camera Setup</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Facebook, YouTube & Custom RTMP</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Professional Audio Mixing</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Graphics & Lower Thirds</li>
         </ul>
         <a href="/contact" class="btn-service">Book Live Stream <span>→</span></a>
       </div>
     </div>
 
-    <!-- Drone Services -->
-    <div class="service-block service-block--flip reveal" id="drone">
-      <div class="service-block-number">06</div>
+    <!-- 10 Other Services -->
+    <div class="service-block service-block--flip reveal" id="other-services">
+      <div class="service-block-number">10</div>
       <div class="service-block-image">
         <div class="img-frame">
-          <img src="https://images.unsplash.com/photo-1507582020474-9a35fc62ec80?w=900&q=85" alt="Drone Aerial Services">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=85" alt="Other Creative Services">
           <div class="img-overlay"></div>
         </div>
         <div class="img-accent-box"></div>
       </div>
       <div class="service-block-content">
-        <span class="service-eyebrow">Aerial</span>
-        <h2 class="service-title">Drone <em>Services</em></h2>
-        <p class="service-desc">Elevate your visuals with cinematic aerial footage. Perfect for real estate, weddings, events, and commercial projects. Licensed pilots, 4K cameras, and smooth gimbal stabilization.</p>
+        <span class="service-eyebrow">Additional</span>
+        <h2 class="service-title">Other <em>Services</em></h2>
+        <p class="service-desc">At Denspark Studio, we combine creativity, technology, and professionalism to deliver complete visual solutions. Whether you need to capture memories, promote your business, or create impactful content, we are committed to delivering results that exceed expectations.</p>
         <ul class="service-features">
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            4K Aerial Photography & Video
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Real Estate & Construction
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Event & Wedding Coverage
-          </li>
-          <li>
-            <span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
-            KCAA Licensed Pilots
-          </li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Photo & Video Editing/Retouching</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Content Creation for Marketing Campaigns</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Creative Direction for Photoshoots</li>
+          <li><span class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>Custom Project Consultation</li>
         </ul>
-        <a href="/contact" class="btn-service">Book Drone Shoot <span>→</span></a>
+        <a href="/contact" class="btn-service">Discuss Your Project <span>→</span></a>
       </div>
-    </div>
     </div>
   </section>
 

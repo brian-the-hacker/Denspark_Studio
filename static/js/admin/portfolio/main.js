@@ -1,619 +1,376 @@
-/* ========================================
-   PORTFOLIO MANAGEMENT - JAVASCRIPT
-   ======================================== */
+/* =========================================
+   DENSPARK ADMIN — Portfolio Manager JS
+   ========================================= */
+(function () {
+  'use strict';
 
-document.addEventListener('DOMContentLoaded', function () {
-    initializePortfolio();
-});
+  /* ---- Helpers ---- */
+  const $  = (sel, ctx = document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
-// ========================================
-// STATE MANAGEMENT
-// ========================================
+  function showToast(msg, type = 'success') {
+    const toast = $('#apToast');
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.className = 'ap-toast' + (type === 'error' ? ' error' : '');
+    // force reflow
+    void toast.offsetHeight;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
 
-const portfolioState = {
-    currentFilter: 'all',
-    currentView: 'grid',
-    selectedItems: new Set(),
-    searchQuery: '',
-    sortBy: 'newest',
-};
+  /* ============================================================
+     FILTER + SEARCH
+  ============================================================ */
+  const filterBtns = $$('.ap-filter');
+  const apGrid     = $('#apGrid');
+  const apSearch   = $('#apSearch');
+  const noResults  = $('#apNoResults');
+  const apCount    = $('#apCount');
 
-// ========================================
-// INITIALIZATION
-// ========================================
+  let activeFilter = 'all';
+  let searchQuery  = '';
 
-function initializePortfolio() {
-    setupEventListeners();
-    loadPortfolioItems();
-    setupDragAndDrop();
-    animateOnScroll();
-}
+  function applyFilterSearch() {
+    const cards = $$('.ap-card', apGrid);
+    let visible = 0;
 
-// ========================================
-// EVENT LISTENERS
-// ========================================
+    cards.forEach((card) => {
+      const cat     = card.dataset.cat || '';
+      const title   = card.dataset.title || '';
+      const catOk   = activeFilter === 'all' || cat === activeFilter;
+      const searchOk= !searchQuery || title.includes(searchQuery);
+      const show    = catOk && searchOk;
 
-function setupEventListeners() {
-    // Upload buttons
-    document.getElementById('uploadBtn')?.addEventListener('click', openUploadModal);
-    document.getElementById('emptyUploadBtn')?.addEventListener('click', openUploadModal);
-
-    // Modal controls
-    document.getElementById('closeUploadModal')?.addEventListener('click', closeUploadModal);
-    document.getElementById('cancelUpload')?.addEventListener('click', closeUploadModal);
-    document.getElementById('submitUpload')?.addEventListener('click', handleUpload);
-
-    document.getElementById('closeEditModal')?.addEventListener('click', closeEditModal);
-    document.getElementById('cancelEdit')?.addEventListener('click', closeEditModal);
-    document.getElementById('saveEdit')?.addEventListener('click', handleSaveEdit);
-
-    document.getElementById('closeDeleteModal')?.addEventListener('click', closeDeleteModal);
-    document.getElementById('cancelDelete')?.addEventListener('click', closeDeleteModal);
-    document.getElementById('confirmDelete')?.addEventListener('click', handleDelete);
-
-    // Filter tabs
-    document.querySelectorAll('.filter-tab').forEach((tab) => {
-        tab.addEventListener('click', function () {
-            handleFilterChange(this.dataset.filter);
-        });
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
     });
 
-    // Search
-    document.getElementById('photoSearch')?.addEventListener('input', debounce(handleSearch, 300));
+    if (noResults) noResults.style.display = visible === 0 && cards.length > 0 ? 'block' : 'none';
+    if (apCount)   apCount.textContent = `${visible} item${visible !== 1 ? 's' : ''}`;
+  }
 
-    // Sort
-    document.getElementById('sortSelect')?.addEventListener('change', handleSort);
-
-    // View toggle
-    document.querySelectorAll('.view-toggle').forEach((btn) => {
-        btn.addEventListener('click', function () {
-            handleViewChange(this.dataset.view);
-        });
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.cat;
+      applyFilterSearch();
     });
+  });
 
-    // Bulk actions
-    document.getElementById('bulkDelete')?.addEventListener('click', handleBulkDelete);
-    document.getElementById('bulkCategory')?.addEventListener('click', handleBulkCategory);
-    document.getElementById('bulkDownload')?.addEventListener('click', handleBulkDownload);
-    document.getElementById('bulkCancel')?.addEventListener('click', cancelBulkActions);
+  apSearch?.addEventListener('input', (e) => {
+    searchQuery = e.target.value.toLowerCase().trim();
+    applyFilterSearch();
+  });
 
-    // Upload form
-    const browseLink = document.querySelector('.browse-link');
-    if (browseLink) {
-        browseLink.addEventListener('click', () => {
-            document.getElementById('photoInput')?.click();
-        });
-    }
-
-    document.getElementById('photoInput')?.addEventListener('change', handleFileSelect);
-
-    // Upload category
-    const uploadCategory = document.getElementById('uploadCategory');
-    if (uploadCategory) {
-        uploadCategory.addEventListener('change', function () {
-            localStorage.setItem('lastCategory', this.value);
-        });
-    }
-}
-
-// ========================================
-// FILTER & SEARCH
-// ========================================
-
-function handleFilterChange(filter) {
-    portfolioState.currentFilter = filter;
-
-    // Update active tab
-    document.querySelectorAll('.filter-tab').forEach((tab) => {
-        tab.classList.remove('active');
-    });
-    document.querySelector(`[data-filter="${filter}"]`)?.classList.add('active');
-
-    // Filter items
-    filterAndDisplayItems();
-}
-
-function handleSearch(e) {
-    portfolioState.searchQuery = e.target.value.toLowerCase();
-    filterAndDisplayItems();
-}
-
-function handleSort(e) {
-    portfolioState.sortBy = e.target.value;
-    filterAndDisplayItems();
-}
-
-function handleViewChange(view) {
-    portfolioState.currentView = view;
-
-    // Update active button
-    document.querySelectorAll('.view-toggle').forEach((btn) => {
-        btn.classList.remove('active');
-    });
-    document.querySelector(`[data-view="${view}"]`)?.classList.add('active');
-
-    // Change grid layout
-    const grid = document.getElementById('portfolioGrid');
-    if (grid) {
-        if (view === 'list') {
-            grid.style.gridTemplateColumns = '1fr';
-        } else {
-            grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(250px, 1fr))';
-        }
-    }
-}
-
-function filterAndDisplayItems() {
-    const items = document.querySelectorAll('.portfolio-item');
-    let visibleCount = 0;
-
-    items.forEach((item) => {
-        const category = item.dataset.category;
-        const title = item.querySelector('.portfolio-info h3')?.textContent.toLowerCase() || '';
-        const matchesFilter =
-            portfolioState.currentFilter === 'all' || category === portfolioState.currentFilter;
-        const matchesSearch = title.includes(portfolioState.searchQuery);
-
-        if (matchesFilter && matchesSearch) {
-            item.style.display = '';
-            visibleCount++;
-            animateItem(item);
-        } else {
-            item.style.display = 'none';
-        }
-    });
-
-    // Show/hide empty state
-    const emptyState = document.getElementById('emptyState');
-    if (emptyState) {
-        emptyState.style.display = visibleCount === 0 ? 'flex' : 'none';
-    }
-}
-
-// ========================================
-// SELECTION & BULK ACTIONS
-// ========================================
-
-document.addEventListener('change', function (e) {
-    if (e.target.classList.contains('photo-select')) {
-        const item = e.target.closest('.portfolio-item');
-        if (e.target.checked) {
-            portfolioState.selectedItems.add(item.dataset.id);
-            item.classList.add('selected');
-        } else {
-            portfolioState.selectedItems.delete(item.dataset.id);
-            item.classList.remove('selected');
-        }
-        updateBulkActionsUI();
-    }
-});
-
-function updateBulkActionsUI() {
-    const bulkActions = document.getElementById('bulkActions');
-    const selectedCount = document.getElementById('selectedCount');
-
-    if (portfolioState.selectedItems.size > 0) {
-        bulkActions.style.display = 'flex';
-        selectedCount.textContent = portfolioState.selectedItems.size;
-    } else {
-        bulkActions.style.display = 'none';
-    }
-}
-
-function cancelBulkActions() {
-    document.querySelectorAll('.photo-select').forEach((checkbox) => {
-        checkbox.checked = false;
-    });
-    document.querySelectorAll('.portfolio-item').forEach((item) => {
-        item.classList.remove('selected');
-    });
-    portfolioState.selectedItems.clear();
-    updateBulkActionsUI();
-}
-
-function handleBulkDelete() {
-    if (portfolioState.selectedItems.size === 0) return;
-
-    showDeleteModal(Array.from(portfolioState.selectedItems));
-}
-
-function handleBulkCategory() {
-    if (portfolioState.selectedItems.size === 0) return;
-
-    const category = prompt(
-        'Enter new category (portraits, events, commercial, video):',
-        'portraits'
-    );
-    if (category) {
-        console.log('Changing category for:', Array.from(portfolioState.selectedItems), category);
-        cancelBulkActions();
-    }
-}
-
-function handleBulkDownload() {
-    if (portfolioState.selectedItems.size === 0) return;
-
-    Array.from(portfolioState.selectedItems).forEach((id) => {
-        const item = document.querySelector(`[data-id="${id}"]`);
-        if (item) {
-            const img = item.querySelector('img');
-            const link = document.createElement('a');
-            link.href = img.src;
-            link.download = `portfolio-${id}.jpg`;
-            link.click();
-        }
-    });
-}
-
-// ========================================
-// UPLOAD MODAL
-// ========================================
-
-function openUploadModal() {
-    const modal = document.getElementById('uploadModal');
-    if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-
-        // Restore last selected category
-        const lastCategory = localStorage.getItem('lastCategory');
-        if (lastCategory) {
-            document.getElementById('uploadCategory').value = lastCategory;
-        }
-    }
-}
-
-function closeUploadModal() {
-    const modal = document.getElementById('uploadModal');
-    if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-        resetUploadForm();
-    }
-}
-
-function resetUploadForm() {
-    document.getElementById('uploadForm')?.reset();
-    document.getElementById('uploadPreview').innerHTML = '';
-}
-
-function setupDragAndDrop() {
-    const dropzone = document.getElementById('uploadDropzone');
-    if (!dropzone) return;
-
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => {
-        dropzone.addEventListener(eventName, preventDefaults, false);
-    });
-
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    ['dragenter', 'dragover'].forEach((eventName) => {
-        dropzone.addEventListener(eventName, () => {
-            dropzone.classList.add('dragover');
-        });
-    });
-
-    ['dragleave', 'drop'].forEach((eventName) => {
-        dropzone.addEventListener(eventName, () => {
-            dropzone.classList.remove('dragover');
-        });
-    });
-
-    dropzone.addEventListener('drop', handleDrop);
-}
-
-function handleDrop(e) {
-    const dt = e.dataTransfer;
-    const files = dt.files;
-    document.getElementById('photoInput').files = files;
-    handleFileSelect({ target: { files } });
-}
-
-function handleFileSelect(e) {
-    const files = e.target.files;
-    const preview = document.getElementById('uploadPreview');
-    preview.innerHTML = '';
-
-    Array.from(files).forEach((file, index) => {
-        if (file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const div = document.createElement('div');
-                div.className = 'preview-item';
-                div.innerHTML = `
-                    <img src="${event.target.result}" alt="Preview">
-                    <button class="preview-remove" data-index="${index}" type="button">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M18 6L6 18M6 6l12 12"/>
-                        </svg>
-                    </button>
-                `;
-                preview.appendChild(div);
-
-                div.querySelector('.preview-remove')?.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    div.remove();
-                });
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-}
-
-function handleUpload() {
-    const form = document.getElementById('uploadForm');
-    if (!form) return;
-
-    const category = document.getElementById('uploadCategory').value;
-    if (!category) {
-        alert('Please select a category');
-        return;
-    }
-
-    // Show loading state
-    const submitBtn = document.getElementById('submitUpload');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<span class="spinner"></span> Uploading...';
-    submitBtn.disabled = true;
-
-    // In a real app, submit form via AJAX
-    setTimeout(() => {
-        console.log('Upload successful');
-        showNotification('Photos uploaded successfully!', 'success');
-        closeUploadModal();
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    }, 1500);
-}
-
-// ========================================
-// EDIT MODAL
-// ========================================
-
-let currentEditId = null;
-
-document.addEventListener('click', function (e) {
-    if (e.target.closest('[data-action="edit"]')) {
-        const item = e.target.closest('.portfolio-item');
-        if (item) {
-            openEditModal(item);
-        }
-    }
-
-    if (e.target.closest('[data-action="view"]')) {
-        const item = e.target.closest('.portfolio-item');
-        if (item) {
-            openViewModal(item);
-        }
-    }
-
-    if (e.target.closest('[data-action="delete"]')) {
-        const item = e.target.closest('.portfolio-item');
-        if (item) {
-            showDeleteModal([item.dataset.id]);
-        }
-    }
-});
-
-function openEditModal(item) {
-    const modal = document.getElementById('editModal');
-    if (!modal) return;
-
-    currentEditId = item.dataset.id;
-    const img = item.querySelector('img');
-    const title = item.querySelector('.portfolio-info h3')?.textContent || '';
-    const category = item.dataset.category;
-
-    document.getElementById('editPhotoId').value = currentEditId;
-    document.getElementById('editPreviewImg').src = img.src;
-    document.getElementById('editTitle').value = title;
-    document.getElementById('editCategory').value = category;
-
-    modal.classList.add('active');
+  /* ============================================================
+     MODAL HELPERS
+  ============================================================ */
+  function openModal(id) {
+    const el = document.getElementById(id);
+    el && el.classList.add('open');
     document.body.style.overflow = 'hidden';
-}
+  }
+  function closeModal(id) {
+    const el = document.getElementById(id);
+    el && el.classList.remove('open');
+    document.body.style.overflow = '';
+  }
 
-function closeEditModal() {
-    const modal = document.getElementById('editModal');
-    if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-}
-
-function handleSaveEdit() {
-    const form = document.getElementById('editForm');
-    if (!form) return;
-
-    const formData = new FormData(form);
-    console.log('Saving edits:', Object.fromEntries(formData));
-
-    showNotification('Photo updated successfully!', 'success');
-    closeEditModal();
-}
-
-function openViewModal(item) {
-    const img = item.querySelector('img');
-    window.open(img.src, '_blank');
-}
-
-// ========================================
-// DELETE MODAL
-// ========================================
-
-let itemsToDelete = [];
-
-function showDeleteModal(ids) {
-    itemsToDelete = ids;
-    const modal = document.getElementById('deleteModal');
-    if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function closeDeleteModal() {
-    const modal = document.getElementById('deleteModal');
-    if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-    itemsToDelete = [];
-}
-
-function handleDelete() {
-    if (itemsToDelete.length === 0) return;
-
-    console.log('Deleting items:', itemsToDelete);
-
-    // Animate deletion
-    itemsToDelete.forEach((id) => {
-        const item = document.querySelector(`[data-id="${id}"]`);
-        if (item) {
-            item.style.animation = 'scaleOut 0.3s ease forwards';
-            setTimeout(() => {
-                item.remove();
-                filterAndDisplayItems();
-            }, 300);
-        }
+  // Close on backdrop click
+  $$('.ap-modal-overlay').forEach((overlay) => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal(overlay.id);
     });
+  });
 
-    portfolioState.selectedItems.clear();
-    updateBulkActionsUI();
-    closeDeleteModal();
-    showNotification('Photo deleted successfully!', 'success');
-}
-
-// ========================================
-// UTILITIES
-// ========================================
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        padding: 12px 20px;
-        background: ${type === 'success' ? '#10b981' : '#ef4444'};
-        color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        animation: slideUp 0.3s ease;
-        z-index: 2000;
-    `;
-
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
-        notification.style.animation = 'slideDown 0.3s ease forwards';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
-
-function animateItem(item) {
-    item.style.animation = 'none';
-    setTimeout(() => {
-        item.style.animation = 'scaleUp 0.3s ease';
-    }, 10);
-}
-
-function animateOnScroll() {
-    if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = 'scaleUp 0.5s ease forwards';
-                    observer.unobserve(entry.target);
-                }
-            });
-        });
-
-        document.querySelectorAll('[data-animate]').forEach((el) => {
-            observer.observe(el);
-        });
-    }
-}
-
-function loadPortfolioItems() {
-    // This would typically load from the backend
-    filterAndDisplayItems();
-}
-
-// Add animation keyframes to document
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes scaleOut {
-        to {
-            opacity: 0;
-            transform: scale(0.9);
-        }
-    }
-    
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    @keyframes slideDown {
-        from {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// ========================================
-// KEYBOARD SHORTCUTS
-// ========================================
-
-document.addEventListener('keydown', function (e) {
-    // Close modal on Escape
+  // Escape key
+  document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-        closeUploadModal();
-        closeEditModal();
-        closeDeleteModal();
+      ['uploadModal', 'editModal', 'deleteModal'].forEach(closeModal);
     }
+  });
 
-    // Cmd/Ctrl + K for search focus
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        document.getElementById('photoSearch')?.focus();
-    }
-});
+  /* ============================================================
+     UPLOAD MODAL
+  ============================================================ */
+  const uploadModal   = 'uploadModal';
+  const uploadForm    = $('#uploadForm');
+  const dropzone      = $('#apDropzone');
+  const fileInput     = $('#fileInput');
+  const previewStrip  = $('#previewStrip');
+  const progressWrap  = $('#uploadProgressWrap');
+  const progressFill  = $('#uploadProgressFill');
+  const progressText  = $('#uploadProgressText');
 
-// Close modal on backdrop click
-document.querySelectorAll('.modal-backdrop').forEach((backdrop) => {
-    backdrop.addEventListener('click', function () {
-        this.closest('.modal').classList.remove('active');
-        document.body.style.overflow = '';
+  let filesToUpload = [];
+
+  $('#openUploadModal')?.addEventListener('click', () => openModal(uploadModal));
+  $('#emptyUploadBtn')?.addEventListener('click', () => openModal(uploadModal));
+  $('#closeUploadModal')?.addEventListener('click', () => closeModal(uploadModal));
+  $('#cancelUpload')?.addEventListener('click', () => closeModal(uploadModal));
+
+  // Drag & drop
+  dropzone?.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropzone.classList.add('drag-over');
+  });
+  dropzone?.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+  dropzone?.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropzone.classList.remove('drag-over');
+    handleFiles([...e.dataTransfer.files]);
+  });
+
+  fileInput?.addEventListener('change', () => handleFiles([...fileInput.files]));
+
+  function handleFiles(files) {
+    const imageFiles = files.filter((f) => f.type.startsWith('image/'));
+    imageFiles.forEach((file) => {
+      if (file.size > 10 * 1024 * 1024) {
+        showToast(`${file.name} exceeds 10MB limit`, 'error');
+        return;
+      }
+      if (filesToUpload.find((f) => f.name === file.name)) return;
+      filesToUpload.push(file);
+      addPreviewThumb(file);
     });
-});
+  }
+
+  function addPreviewThumb(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const thumb = document.createElement('div');
+      thumb.className = 'ap-preview-thumb';
+      thumb.dataset.name = file.name;
+      thumb.innerHTML = `
+        <img src="${e.target.result}" alt="${file.name}">
+        <button class="ap-thumb-remove" type="button" title="Remove">×</button>
+      `;
+      thumb.querySelector('.ap-thumb-remove').addEventListener('click', () => {
+        filesToUpload = filesToUpload.filter((f) => f.name !== file.name);
+        thumb.remove();
+      });
+      previewStrip?.appendChild(thumb);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Upload submit
+  uploadForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const title    = $('#uploadTitle').value.trim();
+    const category = $('#uploadCategory').value;
+    const desc     = $('#uploadDesc').value.trim();
+    const featured = $('#uploadFeatured').checked;
+
+    if (!title || !category) {
+      showToast('Title and category are required', 'error'); return;
+    }
+    if (filesToUpload.length === 0) {
+      showToast('Please select at least one photo', 'error'); return;
+    }
+
+    const submitBtn = $('#uploadSubmit');
+    submitBtn.disabled = true;
+    if (progressWrap) progressWrap.style.display = 'block';
+
+    let successCount = 0;
+    let lastItem = null;
+
+    for (let i = 0; i < filesToUpload.length; i++) {
+      const file = filesToUpload[i];
+      const pct  = Math.round(((i) / filesToUpload.length) * 100);
+      if (progressFill) progressFill.style.width = pct + '%';
+      if (progressText) progressText.textContent = `Uploading ${i + 1} of ${filesToUpload.length}…`;
+
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('title', title + (filesToUpload.length > 1 ? ` (${i + 1})` : ''));
+      fd.append('category', category);
+      fd.append('description', desc);
+      fd.append('featured', featured ? '1' : '0');
+
+      try {
+        const res  = await fetch('/admin/portfolio/upload', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.success) {
+          successCount++;
+          lastItem = data;
+        } else {
+          showToast(`Failed: ${data.error || 'Unknown error'}`, 'error');
+        }
+      } catch {
+        showToast('Upload failed — check connection', 'error');
+      }
+    }
+
+    if (progressFill) progressFill.style.width = '100%';
+    if (progressText) progressText.textContent = 'Done!';
+
+    setTimeout(() => {
+      submitBtn.disabled = false;
+      if (progressWrap) progressWrap.style.display = 'none';
+      if (progressFill) progressFill.style.width = '0';
+
+      if (successCount > 0) {
+        showToast(`${successCount} photo${successCount > 1 ? 's' : ''} uploaded!`);
+        closeModal(uploadModal);
+        uploadForm.reset();
+        filesToUpload = [];
+        if (previewStrip) previewStrip.innerHTML = '';
+        // Reload page to show new items
+        setTimeout(() => window.location.reload(), 600);
+      }
+    }, 800);
+  });
+
+  /* ============================================================
+     EDIT MODAL
+  ============================================================ */
+  let editingId = null;
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.ap-edit-btn');
+    if (!btn) return;
+
+    editingId = btn.dataset.id;
+    $('#editId').value          = editingId;
+    $('#editTitle').value       = btn.dataset.title || '';
+    $('#editDesc').value        = btn.dataset.desc  || '';
+    $('#editCategory').value    = btn.dataset.cat   || '';
+    $('#editFeatured').checked  = btn.dataset.featured === 'true';
+    $('#editPreviewImg').src    = btn.dataset.img   || '';
+    openModal('editModal');
+  });
+
+  $('#closeEditModal')?.addEventListener('click', () => closeModal('editModal'));
+  $('#cancelEdit')?.addEventListener('click',    () => closeModal('editModal'));
+
+  $('#editForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+
+    const payload = {
+      id:          editingId,
+      title:       $('#editTitle').value.trim(),
+      category:    $('#editCategory').value,
+      description: $('#editDesc').value.trim(),
+      featured:    $('#editFeatured').checked,
+    };
+
+    try {
+      const res  = await fetch(`/admin/portfolio/edit/${editingId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        showToast('Changes saved!');
+        closeModal('editModal');
+
+        // Update card in DOM without full reload
+        const card = $(`.ap-card[data-id="${editingId}"]`);
+        if (card) {
+          card.dataset.cat   = payload.category;
+          card.dataset.title = payload.title.toLowerCase();
+          const titleEl = card.querySelector('.ap-card-title');
+          const catEl   = card.querySelector('.ap-cat-tag');
+          const descEl  = card.querySelector('.ap-card-desc');
+          const editBtn = card.querySelector('.ap-edit-btn');
+
+          if (titleEl) titleEl.textContent = payload.title;
+          if (catEl) {
+            catEl.textContent = payload.category.charAt(0).toUpperCase() + payload.category.slice(1);
+            catEl.className = `ap-cat-tag ap-cat-${payload.category}`;
+          }
+          if (descEl) descEl.textContent = payload.description.slice(0, 60) + (payload.description.length > 60 ? '…' : '');
+          if (editBtn) {
+            editBtn.dataset.title    = payload.title;
+            editBtn.dataset.desc     = payload.description;
+            editBtn.dataset.cat      = payload.category;
+            editBtn.dataset.featured = String(payload.featured);
+          }
+
+          // Toggle featured badge
+          const badge = card.querySelector('.ap-featured-badge');
+          if (payload.featured && !badge) {
+            const imgWrap = card.querySelector('.ap-card-img');
+            const b = document.createElement('span');
+            b.className = 'ap-featured-badge';
+            b.textContent = 'Featured';
+            imgWrap?.prepend(b);
+          } else if (!payload.featured && badge) {
+            badge.remove();
+          }
+        }
+      } else {
+        showToast(data.error || 'Save failed', 'error');
+      }
+    } catch {
+      showToast('Network error', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Save Changes';
+    }
+  });
+
+  /* ============================================================
+     DELETE MODAL
+  ============================================================ */
+  let deletingId = null;
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.ap-delete-btn');
+    if (!btn) return;
+    deletingId = btn.dataset.id;
+    $('#deleteItemTitle').textContent = `"${btn.dataset.title}"`;
+    openModal('deleteModal');
+  });
+
+  $('#closeDeleteModal')?.addEventListener('click', () => closeModal('deleteModal'));
+  $('#cancelDelete')?.addEventListener('click',    () => closeModal('deleteModal'));
+
+  $('#confirmDelete')?.addEventListener('click', async () => {
+    if (!deletingId) return;
+    const btn = $('#confirmDelete');
+    btn.disabled = true;
+    btn.textContent = 'Deleting…';
+
+    try {
+      const res  = await fetch(`/admin/portfolio/delete/${deletingId}`, { method: 'DELETE' });
+      const data = await res.json();
+
+      if (data.success) {
+        closeModal('deleteModal');
+        showToast('Item deleted.');
+
+        const card = $(`.ap-card[data-id="${deletingId}"]`);
+        if (card) {
+          card.classList.add('hiding');
+          setTimeout(() => {
+            card.remove();
+            applyFilterSearch(); // Update count
+          }, 220);
+        }
+      } else {
+        showToast(data.error || 'Delete failed', 'error');
+      }
+    } catch {
+      showToast('Network error', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Delete';
+    }
+  });
+
+  /* ---- Initial count ---- */
+  applyFilterSearch();
+
+})();

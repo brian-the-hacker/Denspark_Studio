@@ -1,209 +1,312 @@
 /* ============================================================
-   DENSPARK STUDIO — Services JS
-   Matches portfolio.js patterns exactly
+   DENSPARK STUDIO — services.js
    ============================================================ */
 
 (function () {
   'use strict';
 
-  /* ──────────────────────────────────────────
-     PRELOADER
-  ────────────────────────────────────────── */
+  /* ── Preloader ─────────────────────────────────────────────── */
   const preloader = document.getElementById('preloader');
-  document.body.style.overflow = 'hidden';
 
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      preloader.classList.add('hidden');
-      document.body.style.overflow = '';
-    }, 1600);
-  });
+  function hidePreloader() {
+    if (!preloader) return;
+    preloader.classList.add('hide');
+    // Remove from DOM after transition
+    preloader.addEventListener('transitionend', function handler() {
+      preloader.removeEventListener('transitionend', handler);
+      if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+    });
+  }
 
-  
+  if (document.readyState === 'complete') {
+    setTimeout(hidePreloader, 800);
+  } else {
+    window.addEventListener('load', function () {
+      setTimeout(hidePreloader, 800);
+    });
+  }
 
-  /* ──────────────────────────────────────────
-     NAVBAR — SCROLL cursor
-  ────────────────────────────────────────── */
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
-  }, { passive: true });
-
-  /* ──────────────────────────────────────────
-     MOBILE MENU
-  ────────────────────────────────────────── */
+  /* ── Navbar: scroll + mobile toggle ───────────────────────── */
+  const navbar     = document.getElementById('navbar');
   const menuToggle = document.getElementById('menuToggle');
   const mobileMenu = document.getElementById('mobileMenu');
 
-  menuToggle.addEventListener('click', () => {
-    const isOpen = mobileMenu.classList.toggle('open');
-    menuToggle.classList.toggle('open', isOpen);
-    menuToggle.setAttribute('aria-expanded', String(isOpen));
-  });
-  mobileMenu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu.classList.remove('open');
-      menuToggle.classList.remove('open');
-    });
-  });
-
-  /* ──────────────────────────────────────────
-     SCROLL REVEAL
-  ────────────────────────────────────────── */
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-  /* ──────────────────────────────────────────
-     SERVICE BLOCKS — STAGGERED ENTRY
-  ────────────────────────────────────────── */
-  const blockObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        blockObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-
-  document.querySelectorAll('.service-block').forEach(block => blockObserver.observe(block));
-
-  /* ──────────────────────────────────────────
-     PRICING CARDS — TILT ON MOUSE
-  ────────────────────────────────────────── */
-  document.querySelectorAll('.pricing-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect  = card.getBoundingClientRect();
-      const cx    = rect.left + rect.width / 2;
-      const cy    = rect.top  + rect.height / 2;
-      const dx    = (e.clientX - cx) / (rect.width  / 2);
-      const dy    = (e.clientY - cy) / (rect.height / 2);
-      const tiltX = dy * -4;
-      const tiltY = dx *  4;
-      card.style.transform = `perspective(900px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-8px)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      const isFeatured = card.classList.contains('pricing-card--featured');
-      card.style.transform = isFeatured ? 'scale(1.04)' : '';
-      card.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
-    });
-    card.addEventListener('mouseenter', () => {
-      card.style.transition = 'transform 0.1s ease, box-shadow 0.35s, border-color 0.35s, background 0.35s';
-    });
-  });
-
-  /* ──────────────────────────────────────────
-     SERVICES STRIP — SCROLL INDICATOR
-  ────────────────────────────────────────── */
-  // Highlight the strip item matching the currently visible service
-  const serviceIds = ['portraits', 'weddings', 'events', 'video'];
-  const stripItems = document.querySelectorAll('.strip-item');
-
-  const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        const idx = serviceIds.indexOf(id);
-        if (idx !== -1) {
-          stripItems.forEach((item, i) => {
-            item.style.color = i === idx ? 'var(--blue)' : '';
-          });
-        }
-      }
-    });
-  }, { threshold: 0.4, rootMargin: '-80px 0px 0px 0px' });
-
-  serviceIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) sectionObserver.observe(el);
-  });
-
-  // Click strip item → smooth scroll to section
-  stripItems.forEach((item, i) => {
-    item.addEventListener('click', () => {
-      const target = document.getElementById(serviceIds[i]);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-
-  /* ──────────────────────────────────────────
-     MARQUEE — REDUCED MOTION
-  ────────────────────────────────────────── */
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const mc = document.querySelector('.marquee-content');
-    if (mc) mc.style.animation = 'none';
+  // Scroll
+  function onScroll() {
+    if (!navbar) return;
+    if (window.scrollY > 40) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
   }
 
-  /* ──────────────────────────────────────────
-     CHAT WIDGET
-  ────────────────────────────────────────── */
-  const chatToggle   = document.getElementById('chatToggle');
-  const chatWindow   = document.getElementById('chatWindow');
-  const chatClose    = document.getElementById('chatClose');
-  const chatInput    = document.getElementById('chatInput');
-  const chatSend     = document.getElementById('chatSend');
-  const chatMessages = document.getElementById('chatMessages');
-  const chatBadge    = chatToggle.querySelector('.chat-badge');
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // run once on load
 
-  let chatOpen = false;
+  // Mobile toggle
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', function () {
+      const isOpen = mobileMenu.classList.contains('open');
+
+      if (isOpen) {
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('open');
+        navbar.classList.remove('menu-open');
+      } else {
+        mobileMenu.classList.add('open');
+        menuToggle.classList.add('open');
+        navbar.classList.add('menu-open');
+      }
+    });
+
+    // Close on mobile link click
+    mobileMenu.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('open');
+        navbar.classList.remove('menu-open');
+      });
+    });
+  }
+
+  // Close mobile menu on outside click
+  document.addEventListener('click', function (e) {
+    if (!navbar) return;
+    if (!navbar.contains(e.target)) {
+      if (mobileMenu) mobileMenu.classList.remove('open');
+      if (menuToggle) menuToggle.classList.remove('open');
+      if (navbar)    navbar.classList.remove('menu-open');
+    }
+  });
+
+  /* ── Scroll Reveal ─────────────────────────────────────────── */
+  function initReveal() {
+    const revealEls = document.querySelectorAll('.reveal');
+
+    if (!revealEls.length) return;
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              // Respect CSS transition-delay set via --delay custom property
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      revealEls.forEach(function (el) {
+        observer.observe(el);
+      });
+    } else {
+      // Fallback: show all immediately
+      revealEls.forEach(function (el) { el.classList.add('visible'); });
+    }
+  }
+
+  initReveal();
+
+  /* ── Service Strip: smooth scroll to section ─────────────── */
+  const stripItems = document.querySelectorAll('.strip-item[data-target]');
+
+  stripItems.forEach(function (item) {
+    item.addEventListener('click', function () {
+      const targetId = item.getAttribute('data-target');
+      const target   = document.getElementById(targetId);
+
+      if (target) {
+        const navH   = navbar ? navbar.offsetHeight : 72;
+        const top    = target.getBoundingClientRect().top + window.pageYOffset - navH - 16;
+
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  /* ── Parallax: Page Hero background ──────────────────────── */
+  const heroBg = document.querySelector('.page-hero-bg');
+
+  function onScrollParallax() {
+    if (!heroBg) return;
+    const scrolled = window.pageYOffset;
+    if (scrolled < window.innerHeight) {
+      heroBg.style.transform = 'translateY(' + (scrolled * 0.3) + 'px)';
+    }
+  }
+
+  if (heroBg) {
+    window.addEventListener('scroll', onScrollParallax, { passive: true });
+  }
+
+  /* ── Chat Widget ───────────────────────────────────────────── */
+  const chatToggle  = document.getElementById('chatToggle');
+  const chatWindow  = document.getElementById('chatWindow');
+  const chatClose   = document.getElementById('chatClose');
+  const chatInput   = document.getElementById('chatInput');
+  const chatSend    = document.getElementById('chatSend');
+  const chatMessages = document.getElementById('chatMessages');
+  const chatBadge   = document.querySelector('.chat-badge');
+
+  var chatOpen = false;
+
+  // Auto responses pool
+  var autoReplies = [
+    "Thanks for reaching out! We'll get back to you shortly. 📸",
+    "Great question! Feel free to book a session via our contact page.",
+    "We'd love to work with you! Check out our pricing above for details.",
+    "Our team typically responds within a few hours. Stay tuned!",
+    "You can also reach us on Instagram @densparkstudio 😊"
+  ];
+
+  var replyIndex = 0;
 
   function toggleChat() {
     chatOpen = !chatOpen;
-    chatWindow.classList.toggle('open', chatOpen);
-    if (chatOpen && chatBadge) chatBadge.style.display = 'none';
-    if (chatOpen) chatInput.focus();
+
+    if (chatOpen) {
+      chatWindow.classList.add('open');
+      chatWindow.style.display = 'flex';
+      if (chatBadge) chatBadge.style.display = 'none';
+      setTimeout(function () { if (chatInput) chatInput.focus(); }, 100);
+    } else {
+      chatWindow.classList.remove('open');
+      chatWindow.style.display = 'none';
+    }
   }
 
-  chatToggle.addEventListener('click', toggleChat);
-  chatClose.addEventListener('click', (e) => { e.stopPropagation(); toggleChat(); });
-
   function addMessage(text, type) {
-    const msg = document.createElement('div');
-    msg.className = `chat-msg ${type}`;
+    if (!chatMessages) return;
+
+    var msg = document.createElement('div');
+    msg.className = 'chat-msg ' + type;
     msg.textContent = text;
     chatMessages.appendChild(msg);
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
   function sendMessage() {
-    const text = chatInput.value.trim();
+    if (!chatInput) return;
+
+    var text = chatInput.value.trim();
     if (!text) return;
+
     addMessage(text, 'sent');
     chatInput.value = '';
-    setTimeout(() => {
-      const replies = [
-        "Thanks! We'll get back to you shortly. 📸",
-        "Great question! Our team will respond within the hour.",
-        "We'd love to capture your special moments. Check our packages above!",
-        "Feel free to book a session at your convenience!"
-      ];
-      addMessage(replies[Math.floor(Math.random() * replies.length)], 'received');
-    }, 900 + Math.random() * 500);
+
+    // Auto reply after short delay
+    setTimeout(function () {
+      var reply = autoReplies[replyIndex % autoReplies.length];
+      replyIndex++;
+      addMessage(reply, 'received');
+    }, 900 + Math.random() * 600);
   }
 
-  chatSend.addEventListener('click', sendMessage);
-  chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+  if (chatToggle)  chatToggle.addEventListener('click', toggleChat);
+  if (chatClose)   chatClose.addEventListener('click', toggleChat);
 
-  /* ──────────────────────────────────────────
-     SERVICE BLOCK PARALLAX (subtle)
-  ────────────────────────────────────────── */
-  const imgFrames = document.querySelectorAll('.img-frame img');
+  if (chatSend) {
+    chatSend.addEventListener('click', sendMessage);
+  }
 
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    imgFrames.forEach(img => {
-      const rect = img.closest('.service-block-image').getBoundingClientRect();
-      const center = rect.top + rect.height / 2;
-      const offset = (window.innerHeight / 2 - center) * 0.04;
-      img.style.transform = `scale(1.06) translateY(${offset}px)`;
+  if (chatInput) {
+    chatInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
     });
-  }, { passive: true });
+  }
+
+  // Show badge after 4 seconds if not opened
+  setTimeout(function () {
+    if (!chatOpen && chatBadge) {
+      chatBadge.style.display = 'flex';
+    }
+  }, 4000);
+
+  /* ── Marquee: pause on hover ──────────────────────────────── */
+  var marqueeContent = document.querySelector('.marquee-content');
+
+  if (marqueeContent) {
+    marqueeContent.addEventListener('mouseenter', function () {
+      marqueeContent.style.animationPlayState = 'paused';
+    });
+    marqueeContent.addEventListener('mouseleave', function () {
+      marqueeContent.style.animationPlayState = 'running';
+    });
+  }
+
+  /* ── Service blocks: stagger image reveal on scroll ─────── */
+  function initServiceBlocks() {
+    var blocks = document.querySelectorAll('.service-block');
+
+    if (!blocks.length || !('IntersectionObserver' in window)) return;
+
+    var blockObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          blockObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    blocks.forEach(function (block) {
+      blockObserver.observe(block);
+    });
+  }
+
+  initServiceBlocks();
+
+  /* ── Pricing cards: stagger on scroll ────────────────────── */
+  function initPricingStagger() {
+    var cards = document.querySelectorAll('.pricing-card.reveal');
+
+    if (!cards.length) return;
+
+    // CSS --delay is already set on individual cards via inline style
+    // IntersectionObserver handles the .visible class via initReveal()
+    // Nothing extra needed; this is handled by the shared reveal system
+  }
+
+  initPricingStagger();
+
+  /* ── Keyboard nav: close mobile menu on Escape ───────────── */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (mobileMenu && mobileMenu.classList.contains('open')) {
+        mobileMenu.classList.remove('open');
+        if (menuToggle) menuToggle.classList.remove('open');
+        if (navbar)     navbar.classList.remove('menu-open');
+      }
+      if (chatOpen) {
+        toggleChat();
+      }
+    }
+  });
+
+  /* ── Smooth hover tilt on service images (desktop only) ─── */
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    var imgFrames = document.querySelectorAll('.img-frame');
+
+    imgFrames.forEach(function (frame) {
+      frame.addEventListener('mousemove', function (e) {
+        var rect = frame.getBoundingClientRect();
+        var x    = (e.clientX - rect.left) / rect.width  - 0.5;
+        var y    = (e.clientY - rect.top)  / rect.height - 0.5;
+
+        frame.style.transform = 'perspective(800px) rotateY(' + (x * 3) + 'deg) rotateX(' + (-y * 3) + 'deg)';
+      });
+
+      frame.addEventListener('mouseleave', function () {
+        frame.style.transform = 'perspective(800px) rotateY(0) rotateX(0)';
+      });
+    });
+  }
 
 })();

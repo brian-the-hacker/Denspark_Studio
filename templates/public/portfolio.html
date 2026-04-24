@@ -11,23 +11,86 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="static/css/public/portfolio.css">
+
+  <style>
+    /* ── Loading skeleton ── */
+    .pf-skeleton-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 32px;
+    }
+    .pf-skeleton-item {
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f3f4f6;
+    }
+    .pf-skeleton-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+    .pf-skeleton-item:nth-child(3n+2) .pf-skeleton-img { aspect-ratio: 4/5; }
+    .pf-skeleton-item:nth-child(5n+4) .pf-skeleton-img { aspect-ratio: 16/9; }
+    .pf-skeleton-info {
+      padding: 14px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pf-skeleton-tag {
+      width: 64px; height: 10px; border-radius: 4px;
+      background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+    .pf-skeleton-title {
+      width: 75%; height: 14px; border-radius: 4px;
+      background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite 0.1s;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ── Error state ── */
+    .pf-error {
+      text-align: center;
+      padding: 80px 24px;
+      color: #4b5563;
+    }
+    .pf-error svg { margin: 0 auto 16px; opacity: 0.4; display: block; }
+    .pf-error p { margin-bottom: 20px; font-size: 1rem; }
+    .pf-error-retry {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #1A56DB; color: #fff;
+      padding: 10px 24px; border-radius: 4px; border: none;
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.06em;
+      cursor: pointer; transition: background 0.3s;
+    }
+    .pf-error-retry:hover { background: #1240A8; }
+
+    /* ── Filter count badge ── */
+    .pf-filter-count { min-width: 20px; }
+  </style>
 </head>
 <body>
 
   <!-- Preloader -->
-  <div class="preloader" id="preloader">
-    <div class="preloader-inner">
-      <div class="preloader-logo">DENSPARK</div>
-      <div class="preloader-line"><span></span></div>
-    </div>
-  </div>
+  
 
   <!-- Cursor -->
-  
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
   <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="/" class="logo">
-        <img src="/static/uploads/DENSPARK STUDIOs wallpaper (1).png" alt="Denspark Studio Logo" class="logo-img">
+        <img src="/static/uploads/DENSPARK-STUDIOs-wallpaper.webp" alt="Denspark Studio Logo" class="logo-img">
         <div class="logo-text-wrap">
           <span class="logo-text">DENSPARK PHOTO</span>
           <span class="logo-sub">STUDIO</span>
@@ -52,7 +115,6 @@
       </div>
     </div>
 
-    <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
       <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
@@ -61,7 +123,7 @@
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
       </ul>
-      <a href="#booking-form" class="btn-book-mobile">Book a Session</a>
+      <a href="/contact" class="btn-book-mobile">Book a Session</a>
       <div class="mobile-info">
         <span>Machakos, Kenya</span>
         <span>+254 700 000 000</span>
@@ -94,31 +156,13 @@
 
       <!-- Filter Bar -->
       <div class="pf-filter-bar reveal">
-        <div class="pf-filters">
+        <div class="pf-filters" id="pfFilters">
+          <!-- Filters are built dynamically from API data -->
           <button class="pf-filter active" data-filter="all">
             <span class="pf-filter-label">All Work</span>
-            <span class="pf-filter-count" id="count-all">12</span>
+            <span class="pf-filter-count" id="count-all">—</span>
           </button>
-          <button class="pf-filter" data-filter="portraits">
-            <span class="pf-filter-label">Portraits</span>
-            <span class="pf-filter-count" id="count-portraits">3</span>
-          </button>
-          <button class="pf-filter" data-filter="weddings">
-            <span class="pf-filter-label">Weddings</span>
-            <span class="pf-filter-count" id="count-weddings">3</span>
-          </button>
-          <button class="pf-filter" data-filter="events">
-            <span class="pf-filter-label">Events</span>
-            <span class="pf-filter-count" id="count-events">2</span>
-          </button>
-          <button class="pf-filter" data-filter="commercial">
-            <span class="pf-filter-label">Commercial</span>
-            <span class="pf-filter-count" id="count-commercial">2</span>
-          </button>
-          <button class="pf-filter" data-filter="fashion">
-            <span class="pf-filter-label">Fashion</span>
-            <span class="pf-filter-count" id="count-fashion">2</span>
-          </button>
+          <!-- Category filters injected by JS -->
         </div>
 
         <div class="pf-view-toggle">
@@ -136,210 +180,33 @@
 
       <!-- Results Count -->
       <div class="pf-meta reveal">
-        <span id="pfResultText">Showing 12 works</span>
+        <span id="pfResultText">Loading portfolio…</span>
       </div>
 
-      <!-- Portfolio Grid -->
+      <!-- Portfolio Grid — populated by JS -->
       <div class="pf-grid pf-grid--masonry" id="pfGrid">
-
-        <!-- Item 1 -->
-        <div class="pf-item" data-category="portraits" data-title="Creative Portrait Session" data-img="static/uploads/portfolio/DNS_2716a.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/DNS_2716a.jpg" alt="Creative Portrait Session" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Portrait</span>
-            <h3 class="pf-title">Creative Portrait Session</h3>
-          </div>
+        <!-- Skeleton placeholders shown while loading -->
+        <div class="pf-skeleton-grid" id="pfSkeleton">
+          <div class="pf-skeleton-item"><div class="pf-skeleton-img"></div><div class="pf-skeleton-info"><div class="pf-skeleton-tag"></div><div class="pf-skeleton-title"></div></div></div>
+          <div class="pf-skeleton-item"><div class="pf-skeleton-img"></div><div class="pf-skeleton-info"><div class="pf-skeleton-tag"></div><div class="pf-skeleton-title"></div></div></div>
+          <div class="pf-skeleton-item"><div class="pf-skeleton-img"></div><div class="pf-skeleton-info"><div class="pf-skeleton-tag"></div><div class="pf-skeleton-title"></div></div></div>
+          <div class="pf-skeleton-item"><div class="pf-skeleton-img"></div><div class="pf-skeleton-info"><div class="pf-skeleton-tag"></div><div class="pf-skeleton-title"></div></div></div>
+          <div class="pf-skeleton-item"><div class="pf-skeleton-img"></div><div class="pf-skeleton-info"><div class="pf-skeleton-tag"></div><div class="pf-skeleton-title"></div></div></div>
+          <div class="pf-skeleton-item"><div class="pf-skeleton-img"></div><div class="pf-skeleton-info"><div class="pf-skeleton-tag"></div><div class="pf-skeleton-title"></div></div></div>
         </div>
-
-        <!-- Item 2 -->
-        <div class="pf-item pf-tall" data-category="weddings" data-title="Beautiful Wedding Day" data-img="static/uploads/portfolio/hjk.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/hjk.jpg" alt="Beautiful Wedding Day" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Wedding</span>
-            <h3 class="pf-title">Beautiful Wedding Day</h3>
-          </div>
-        </div>
-
-        <!-- Item 3 -->
-        <div class="pf-item" data-category="events" data-title="Corporate Conference" data-img="static/uploads/portfolio/DSC_6546.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/DSC_6546.jpg" alt="Corporate Conference" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Event</span>
-            <h3 class="pf-title">Corporate Conference</h3>
-          </div>
-        </div>
-
-        <!-- Item 4 -->
-        <div class="pf-item" data-category="fashion" data-title="Fashion Editorial" data-img="static/uploads/portfolio/DNS_6657.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/DNS_6657.jpg" alt="Fashion Editorial" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Fashion</span>
-            <h3 class="pf-title">Fashion Editorial</h3>
-          </div>
-        </div>
-
-        <!-- Item 5 -->
-        <div class="pf-item pf-wide" data-category="commercial" data-title="Product Showcase" data-img="static/uploads/portfolio/DNS_6632.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/DNS_6632.jpg" alt="Product Showcase" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Commercial</span>
-            <h3 class="pf-title">Product Showcase</h3>
-          </div>
-        </div>
-
-        <!-- Item 6 -->
-        <div class="pf-item" data-category="weddings" data-title="Reception Moments" data-img="static/uploads/portfolio/DNS_5726.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/DNS_5726.jpg" alt="Reception Moments" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Wedding</span>
-            <h3 class="pf-title">Reception Moments</h3>
-          </div>
-        </div>
-
-        <!-- Item 7 -->
-        <div class="pf-item" data-category="portraits" data-title="Studio Portrait" data-img="static/uploads/portfolio/DNS_2106.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/DNS_2106.jpg" alt="Studio Portrait" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Portrait</span>
-            <h3 class="pf-title">Studio Portrait</h3>
-          </div>
-        </div>
-
-        <!-- Item 8 -->
-        <div class="pf-item pf-tall" data-category="events" data-title="Birthday Celebration" data-img="static/uploads/portfolio/DSC_4898.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/DSC_4898.jpg" alt="Birthday Celebration" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Event</span>
-            <h3 class="pf-title">Birthday Celebration</h3>
-          </div>
-        </div>
-
-        <!-- Item 9 -->
-        <div class="pf-item" data-category="fashion" data-title="Fashion Photoshoot" data-img="static/uploads/portfolio/DSC_5080.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/DSC_5080.jpg" alt="Fashion Photoshoot" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Fashion</span>
-            <h3 class="pf-title">Fashion Photoshoot</h3>
-          </div>
-        </div>
-
-        <!-- Item 10 -->
-        <div class="pf-item" data-category="commercial" data-title="Brand Photography" data-img="static/uploads/portfolio/DNS_2765.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/DNS_2765.jpg" alt="Brand Photography" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Commercial</span>
-            <h3 class="pf-title">Brand Photography</h3>
-          </div>
-        </div>
-
-        <!-- Item 11 -->
-        <div class="pf-item pf-wide" data-category="weddings" data-title="Wedding Ceremony" data-img="static/uploads/portfolio/DSC_5128.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/DSC_5128.jpg" alt="Wedding Ceremony" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Wedding</span>
-            <h3 class="pf-title">Wedding Ceremony</h3>
-          </div>
-        </div>
-
-        <!-- Item 12 -->
-        <div class="pf-item" data-category="portraits" data-title="Professional Headshot" data-img="static/uploads/portfolio/DNS_2100.jpg">
-          <div class="pf-img-wrap">
-            <img src="static/uploads/portfolio/DNS_2100.jpg" alt="Professional Headshot" loading="lazy">
-            <div class="pf-hover">
-              <button class="pf-zoom" aria-label="View fullscreen">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/></svg>
-              </button>
-            </div>
-          </div>
-          <div class="pf-info">
-            <span class="pf-cat">Portrait</span>
-            <h3 class="pf-title">Professional Headshot</h3>
-          </div>
-        </div>
-
-      </div><!-- /pf-grid -->
+      </div>
 
       <!-- Empty State -->
       <div class="pf-empty" id="pfEmpty" style="display:none">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         <p>No works found in this category.</p>
+      </div>
+
+      <!-- Error State -->
+      <div class="pf-error" id="pfError" style="display:none">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p>Could not load portfolio. Please check your connection.</p>
+        <button class="pf-error-retry" id="pfRetry">Try Again</button>
       </div>
 
     </div>
@@ -401,14 +268,13 @@
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
             </a>
-
             <a href="https://www.tiktok.com/@densparkstudio300?_r=1&_t=ZS-95khoiW18dB" aria-label="TikTok">
               <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/>
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/>
               </svg>
             </a>
           </div>
-        </div>
+        </div><!-- end .footer-brand -->
         <div class="footer-col">
           <h4>Navigate</h4>
           <ul>
@@ -495,5 +361,285 @@
   </div>
 
   <script src="static/js/public/portfolio.js"></script>
+
+  <script>
+  /* ============================================================
+     PORTFOLIO — Dynamic loader
+     Expects your FastAPI endpoint: GET /api/portfolio
+     
+     Response shape (array of items):
+     [
+       {
+         "id": 1,
+         "title": "Creative Portrait Session",
+         "category": "portraits",       // slug, lowercase
+         "category_label": "Portrait",  // display name (optional)
+         "image_url": "/static/uploads/portfolio/DNS_2716a.jpg",
+         "size": "tall" | "wide" | ""   // optional: "tall" or "wide" for masonry
+       },
+       ...
+     ]
+  ============================================================ */
+  (function () {
+    'use strict';
+
+    const API_URL     = '/api/portfolio';   // ← your FastAPI endpoint
+    const pfGrid      = document.getElementById('pfGrid');
+    const pfSkeleton  = document.getElementById('pfSkeleton');
+    const pfEmpty     = document.getElementById('pfEmpty');
+    const pfError     = document.getElementById('pfError');
+    const pfResultText = document.getElementById('pfResultText');
+    const pfFiltersEl  = document.getElementById('pfFilters');
+    const pfRetry      = document.getElementById('pfRetry');
+
+    // All items fetched from API — used for filtering
+    let allItems        = [];
+    let activeFilter    = 'all';
+    let visibleItems    = [];  // currently shown, for lightbox navigation
+
+    /* ── Fetch from API ────────────────────────── */
+    async function loadPortfolio() {
+      showSkeleton();
+      hideError();
+
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        // Support both { items: [...] } and bare array
+        allItems = Array.isArray(data) ? data : (data.items || []);
+
+        hideSkeleton();
+
+        if (allItems.length === 0) {
+          showEmpty();
+          return;
+        }
+
+        buildCategoryFilters(allItems);
+        renderItems(allItems);
+        updateResultText(allItems.length);
+
+      } catch (err) {
+        console.error('Portfolio load error:', err);
+        hideSkeleton();
+        showError();
+      }
+    }
+
+    /* ── Build category filter buttons ─────────── */
+    function buildCategoryFilters(items) {
+      // Tally counts per category
+      const counts = {};
+      items.forEach(item => {
+        const cat = (item.category || 'uncategorized').toLowerCase();
+        counts[cat] = (counts[cat] || 0) + 1;
+      });
+
+      // Update the "All Work" count
+      document.getElementById('count-all').textContent = items.length;
+
+      // Remove existing dynamic filter buttons (keep "All Work")
+      pfFiltersEl.querySelectorAll('.pf-filter[data-filter]:not([data-filter="all"])').forEach(b => b.remove());
+
+      // Insert one button per category, sorted alphabetically
+      Object.keys(counts).sort().forEach(cat => {
+        const label = toTitleCase(cat);
+        const btn = document.createElement('button');
+        btn.className = 'pf-filter';
+        btn.dataset.filter = cat;
+        btn.innerHTML = `
+          <span class="pf-filter-label">${label}</span>
+          <span class="pf-filter-count">${counts[cat]}</span>
+        `;
+        pfFiltersEl.appendChild(btn);
+      });
+
+      // Bind filter click
+      pfFiltersEl.querySelectorAll('.pf-filter').forEach(btn => {
+        btn.addEventListener('click', () => {
+          pfFiltersEl.querySelectorAll('.pf-filter').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeFilter = btn.dataset.filter;
+          applyFilter();
+        });
+      });
+    }
+
+    /* ── Filter logic ───────────────────────────── */
+    function applyFilter() {
+      const filtered = activeFilter === 'all'
+        ? allItems
+        : allItems.filter(item => (item.category || '').toLowerCase() === activeFilter);
+
+      renderItems(filtered);
+      updateResultText(filtered.length);
+
+      pfEmpty.style.display = filtered.length === 0 ? 'block' : 'none';
+    }
+
+    /* ── Render grid items ─────────────────────── */
+    function renderItems(items) {
+      // Remove any previously rendered real items (not skeleton)
+      pfGrid.querySelectorAll('.pf-item').forEach(el => el.remove());
+
+      visibleItems = items;
+
+      items.forEach((item, index) => {
+        const sizeClass = item.size === 'tall' ? 'pf-tall'
+                        : item.size === 'wide' ? 'pf-wide'
+                        : '';
+
+        const catLabel   = item.category_label || toTitleCase(item.category || 'Other');
+        const imgSrc     = item.image_url || '';
+        const title      = item.title || 'Untitled';
+        const delay      = (index * 0.04).toFixed(2);
+
+        const div = document.createElement('div');
+        div.className     = `pf-item${sizeClass ? ' ' + sizeClass : ''} reveal`;
+        div.dataset.category = (item.category || '').toLowerCase();
+        div.dataset.title    = title;
+        div.dataset.img      = imgSrc;
+        div.dataset.index    = index;
+        div.style.cssText    = `--delay:${delay}s`;
+
+        div.innerHTML = `
+          <div class="pf-img-wrap">
+            <img
+              src="${escHtml(imgSrc)}"
+              alt="${escHtml(title)}"
+              loading="lazy"
+              onerror="this.closest('.pf-item').classList.add('pf-img-error')"
+            >
+            <div class="pf-hover">
+              <button class="pf-zoom" aria-label="View fullscreen">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.35-4.35M11 8v6M8 11h6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="pf-info">
+            <span class="pf-cat">${escHtml(catLabel)}</span>
+            <h3 class="pf-title">${escHtml(title)}</h3>
+          </div>
+        `;
+
+        // Zoom button → open lightbox
+        div.querySelector('.pf-zoom').addEventListener('click', () => openLightbox(index));
+        // Clicking image also opens lightbox
+        div.querySelector('.pf-img-wrap').addEventListener('click', () => openLightbox(index));
+
+        pfGrid.appendChild(div);
+      });
+
+      // Trigger reveal observer on newly added elements
+      pfGrid.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+    }
+
+    /* ── Result text ────────────────────────────── */
+    function updateResultText(count) {
+      pfResultText.textContent = `Showing ${count} work${count !== 1 ? 's' : ''}`;
+    }
+
+    /* ── Skeleton / error helpers ──────────────── */
+    function showSkeleton()  { pfSkeleton.style.display = ''; }
+    function hideSkeleton()  { pfSkeleton.style.display = 'none'; }
+    function showEmpty()     { pfEmpty.style.display = 'block'; pfResultText.textContent = 'No works found.'; }
+    function showError()     { pfError.style.display = 'block'; pfResultText.textContent = 'Failed to load portfolio.'; }
+    function hideError()     { pfError.style.display = 'none'; }
+
+    /* ── Retry button ────────────────────────────── */
+    pfRetry.addEventListener('click', loadPortfolio);
+
+    /* ── Scroll reveal (shared pattern) ─────────── */
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    /* ── Lightbox ────────────────────────────────── */
+    const lightbox       = document.getElementById('lightbox');
+    const lbImg          = document.getElementById('lightboxImg');
+    const lbCaption      = document.getElementById('lightboxCaption');
+    const lbCounter      = document.getElementById('lightboxCounter');
+    const lbClose        = document.getElementById('lightboxClose');
+    const lbBackdrop     = document.getElementById('lightboxBackdrop');
+    const lbPrev         = document.getElementById('lbPrev');
+    const lbNext         = document.getElementById('lbNext');
+    let   lbCurrentIndex = 0;
+
+    function openLightbox(index) {
+      lbCurrentIndex = index;
+      updateLightbox();
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function updateLightbox() {
+      const item = visibleItems[lbCurrentIndex];
+      if (!item) return;
+      lbImg.src         = item.image_url || '';
+      lbImg.alt         = item.title     || '';
+      lbCaption.textContent = item.title || '';
+      lbCounter.textContent = `${lbCurrentIndex + 1} / ${visibleItems.length}`;
+    }
+
+    lbClose.addEventListener('click', closeLightbox);
+    lbBackdrop.addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', () => { lbCurrentIndex = (lbCurrentIndex - 1 + visibleItems.length) % visibleItems.length; updateLightbox(); });
+    lbNext.addEventListener('click', () => { lbCurrentIndex = (lbCurrentIndex + 1) % visibleItems.length; updateLightbox(); });
+
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'ArrowLeft')  { lbCurrentIndex = (lbCurrentIndex - 1 + visibleItems.length) % visibleItems.length; updateLightbox(); }
+      if (e.key === 'ArrowRight') { lbCurrentIndex = (lbCurrentIndex + 1) % visibleItems.length; updateLightbox(); }
+      if (e.key === 'Escape')     closeLightbox();
+    });
+
+    /* ── View toggle (grid / masonry / list) ─────── */
+    ['viewGrid', 'viewMasonry', 'viewList'].forEach(id => {
+      document.getElementById(id).addEventListener('click', function () {
+        document.querySelectorAll('.pf-view-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        pfGrid.className = 'pf-grid ' + {
+          viewGrid:    'pf-grid--grid',
+          viewMasonry: 'pf-grid--masonry',
+          viewList:    'pf-grid--list',
+        }[id];
+      });
+    });
+
+    /* ── Utility ─────────────────────────────────── */
+    function toTitleCase(str) {
+      return str.replace(/\b\w/g, c => c.toUpperCase());
+    }
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    /* ── Boot ────────────────────────────────────── */
+    loadPortfolio();
+
+  })();
+  </script>
+
 </body>
 </html>

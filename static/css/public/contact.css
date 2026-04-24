@@ -45,13 +45,87 @@ img { display: block; max-width: 100%; }
 /* ============================================================
    PRELOADER
    ============================================================ */
-.preloader { position: fixed; inset: 0; background: var(--navy); z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.6s ease, visibility 0.6s ease; }
-.preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-.preloader-logo { font-family: var(--font-display); font-size: clamp(2rem, 6vw, 4rem); font-weight: 300; letter-spacing: 0.25em; color: var(--white); animation: pulseLogo 1.2s ease-in-out infinite alternate; }
-@keyframes pulseLogo { from { opacity: 0.4; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-.preloader-line { width: 200px; height: 1px; background: rgba(255,255,255,0.15); margin: 20px auto 0; position: relative; overflow: hidden; }
-.preloader-line span { position: absolute; inset: 0; background: var(--blue-light); animation: loadLine 1.4s cubic-bezier(0.4,0,0.2,1) forwards; transform-origin: left; transform: scaleX(0); }
-@keyframes loadLine { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+/* ── Preloader - Unified ─────────────────────────────────────────────── */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--navy, var(--dark)); /* falls back if one isn't set */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s var(--ease-out, ease), 
+              visibility 0.6s var(--ease-out, ease);
+}
+
+/* Support both .hidden and .hide for the fade-out state */
+.preloader.hidden,
+.preloader.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.preloader-inner { 
+  text-align: center; 
+}
+
+.preloader-logo {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4vw, 2.2rem); /* using smaller clamp as base */
+  font-weight: 300; /* use 600 if you prefer the bolder one */
+  color: var(--white);
+  letter-spacing: 0.25em;
+  margin-bottom: 1.5rem;
+}
+
+/* Optional pulse - add .pulse class to .preloader-logo to enable */
+.preloader-logo.pulse {
+  animation: pulseLogo 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes pulseLogo { 
+  from { opacity: 0.4; transform: scale(0.98); } 
+  to { opacity: 1; transform: scale(1); } 
+}
+
+.preloader-line {
+  width: 200px;
+  height: 1px;
+  background: rgba(255,255,255,0.15);
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.preloader-line span {
+  position: absolute;
+  inset: 0;
+  background: var(--blue-light, var(--blue-primary));
+}
+
+/* Animation Style 1: Scale from left - add .scale class */
+.preloader-line.scale span {
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: loadLine 1.4s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+
+@keyframes loadLine { 
+  0% { transform: scaleX(0); } 
+  100% { transform: scaleX(1); } 
+}
+
+/* Animation Style 2: Slide in - default or add .slide class */
+.preloader-line span,
+.preloader-line.slide span {
+  transform: translateX(-100%);
+  animation: preloaderSlide 1.4s var(--ease-out, ease) forwards;
+}
+
+@keyframes preloaderSlide {
+  to { transform: translateX(0); }
+}
 
 /* ============================================================
    CURSOR
@@ -64,48 +138,71 @@ body.cursor-hover .cursor-follower { width: 48px; height: 48px; border-color: rg
 /* ============================================================
    NAVBAR
    ============================================================ */
-.navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: transparent; transition: background var(--transition), box-shadow var(--transition), padding var(--transition); padding: 24px 0; }
-.navbar.scrolled { background: var(--navy); box-shadow: 0 2px 30px rgba(0,0,0,0.2); padding: 14px 0; }
-.nav-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: transparent;
+  transition: background 0.4s var(--ease-out), box-shadow 0.4s;
+  padding: 0;
+}
+
+.navbar.scrolled,
+.navbar.menu-open {
+  background: var(--nav-bg);
+  box-shadow: 0 2px 24px rgba(0,0,0,0.18);
+}
+
+.nav-container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* Logo */
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  text-decoration: none;
+  gap: 0.75rem;
+  flex-shrink: 0;
 }
 
 .logo-img {
-  height: 42px;
   width: 42px;
+  height: 42px;
   object-fit: contain;
   border-radius: 50%;
-  background: #0F172A;
-  padding: 5px;
-  border: 1.5px solid rgba(59, 130, 246, 0.4); /* subtle blue border */
+  border: 1.5px solid rgba(255,255,255,0.25);
 }
 
 .logo-text-wrap {
   display: flex;
   flex-direction: column;
-  line-height: 1;
-  gap: 2px;
+  line-height: 1.1;
 }
 
 .logo-text {
   font-family: var(--font-display);
-  font-size: 1.4rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--white);
   letter-spacing: 0.1em;
 }
 
 .logo-sub {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  color: var(--blue-light);
-  letter-spacing: 0.1em;
-  font-weight: 600;
-  margin-left: 50px;
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
 }
 
 .nav-links { display: flex; align-items: center; gap: 36px; }

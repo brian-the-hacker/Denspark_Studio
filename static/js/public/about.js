@@ -1,235 +1,324 @@
 /* ============================================================
-   DENSPARK STUDIO — About JS
-   Consistent with portfolio.js & services.js patterns
+   DENSPARK STUDIO — about.js
    ============================================================ */
 
 (function () {
   'use strict';
 
-  /* ──────────────────────────────────────────
-     PRELOADER
-  ────────────────────────────────────────── */
-  const preloader = document.getElementById('preloader');
-  document.body.style.overflow = 'hidden';
+  /* ── Preloader ─────────────────────────────────────────────── */
+  var preloader = document.getElementById('preloader');
 
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      preloader.classList.add('hidden');
-      document.body.style.overflow = '';
-    }, 1600);
-  });
+  function hidePreloader() {
+    if (!preloader) return;
+    preloader.classList.add('hide');
+    preloader.addEventListener('transitionend', function handler() {
+      preloader.removeEventListener('transitionend', handler);
+      if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+    });
+  }
 
-  /* ──────────────────────────────────────────
-     CUSTOM CURSOR
-  ────────────────────────────────────────── */
-  const cursor   = document.getElementById('cursor');
-  const follower = document.getElementById('cursorFollower');
-  let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
+  if (document.readyState === 'complete') {
+    setTimeout(hidePreloader, 800);
+  } else {
+    window.addEventListener('load', function () {
+      setTimeout(hidePreloader, 800);
+    });
+  }
 
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX; mouseY = e.clientY;
-    cursor.style.left = mouseX + 'px';
-    cursor.style.top  = mouseY + 'px';
-  });
+  /* ── Custom Cursor ─────────────────────────────────────────── */
+  var cursor         = document.getElementById('cursor');
+  var cursorFollower = document.getElementById('cursorFollower');
 
-  (function animateCursor() {
+  var mouseX = 0, mouseY = 0;
+  var followerX = 0, followerY = 0;
+  var cursorVisible = false;
+
+  function updateCursor() {
+    if (!cursor || !cursorFollower) return;
+
     followerX += (mouseX - followerX) * 0.12;
     followerY += (mouseY - followerY) * 0.12;
-    follower.style.left = followerX + 'px';
-    follower.style.top  = followerY + 'px';
-    requestAnimationFrame(animateCursor);
-  })();
 
-  const hoverTargets = 'a, button, .team-card, .value-card, input, [role="button"]';
-  document.addEventListener('mouseover', (e) => { if (e.target.closest(hoverTargets)) document.body.classList.add('cursor-hover'); });
-  document.addEventListener('mouseout',  (e) => { if (e.target.closest(hoverTargets)) document.body.classList.remove('cursor-hover'); });
-  document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; follower.style.opacity = '0'; });
-  document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; follower.style.opacity = '1'; });
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top  = mouseY + 'px';
+    cursorFollower.style.left = followerX + 'px';
+    cursorFollower.style.top  = followerY + 'px';
 
-  /* ──────────────────────────────────────────
-     NAVBAR SCROLL
-  ────────────────────────────────────────── */
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
-  }, { passive: true });
+    requestAnimationFrame(updateCursor);
+  }
 
-  /* ──────────────────────────────────────────
-     MOBILE MENU
-  ────────────────────────────────────────── */
-  const menuToggle = document.getElementById('menuToggle');
-  const mobileMenu = document.getElementById('mobileMenu');
+  document.addEventListener('mousemove', function (e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
 
-  menuToggle.addEventListener('click', () => {
-    const isOpen = mobileMenu.classList.toggle('open');
-    menuToggle.classList.toggle('open', isOpen);
-    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    if (!cursorVisible && cursor) {
+      cursor.style.opacity = '1';
+      cursorFollower.style.opacity = '1';
+      cursorVisible = true;
+    }
   });
-  mobileMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
-    mobileMenu.classList.remove('open');
-    menuToggle.classList.remove('open');
-  }));
 
-  /* ──────────────────────────────────────────
-     SCROLL REVEAL (shared .reveal pattern)
-  ────────────────────────────────────────── */
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        revealObs.unobserve(entry.target);
+  // Scale cursor on interactive elements
+  document.querySelectorAll('a, button, .team-card, .mvv-card, .value-card').forEach(function (el) {
+    el.addEventListener('mouseenter', function () {
+      if (cursor) cursor.style.transform = 'translate(-50%, -50%) scale(2.2)';
+      if (cursorFollower) {
+        cursorFollower.style.transform = 'translate(-50%, -50%) scale(0.5)';
+        cursorFollower.style.opacity = '0.4';
       }
     });
-  }, { threshold: 0.1 });
 
-  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+    el.addEventListener('mouseleave', function () {
+      if (cursor) cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+      if (cursorFollower) {
+        cursorFollower.style.transform = 'translate(-50%, -50%) scale(1)';
+        cursorFollower.style.opacity = '1';
+      }
+    });
+  });
 
-  /* ──────────────────────────────────────────
-     COUNTER ANIMATION
-  ────────────────────────────────────────── */
-  function animateCounter(el, target, duration = 1800) {
-    let start = null;
-    const step = (timestamp) => {
+  if (cursor && cursorFollower) {
+    cursor.style.opacity = '0';
+    cursorFollower.style.opacity = '0';
+    updateCursor();
+  }
+
+  /* ── Navbar ────────────────────────────────────────────────── */
+  var navbar     = document.getElementById('navbar');
+  var menuToggle = document.getElementById('menuToggle');
+  var mobileMenu = document.getElementById('mobileMenu');
+
+  function onScroll() {
+    if (!navbar) return;
+    if (window.scrollY > 40) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', function () {
+      var isOpen = mobileMenu.classList.contains('open');
+      if (isOpen) {
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('open');
+        navbar.classList.remove('menu-open');
+      } else {
+        mobileMenu.classList.add('open');
+        menuToggle.classList.add('open');
+        navbar.classList.add('menu-open');
+      }
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('open');
+        navbar.classList.remove('menu-open');
+      });
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    if (!navbar || navbar.contains(e.target)) return;
+    if (mobileMenu) mobileMenu.classList.remove('open');
+    if (menuToggle) menuToggle.classList.remove('open');
+    if (navbar)    navbar.classList.remove('menu-open');
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (mobileMenu) mobileMenu.classList.remove('open');
+    if (menuToggle) menuToggle.classList.remove('open');
+    if (navbar)    navbar.classList.remove('menu-open');
+    if (chatIsOpen) toggleChat();
+  });
+
+  /* ── Scroll Reveal ─────────────────────────────────────────── */
+  function initReveal() {
+    var els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      els.forEach(function (el) { obs.observe(el); });
+    } else {
+      els.forEach(function (el) { el.classList.add('visible'); });
+    }
+  }
+
+  initReveal();
+
+  /* ── Animated Number Counters ──────────────────────────────── */
+  function easeOut(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function animateCounter(el) {
+    var target   = parseInt(el.getAttribute('data-target'), 10);
+    var duration = 1800;
+    var start    = null;
+
+    function step(timestamp) {
       if (!start) start = timestamp;
-      const progress = Math.min((timestamp - start) / duration, 1);
-      // Ease out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.floor(eased * target);
-      if (progress < 1) requestAnimationFrame(step);
-      else el.textContent = target;
-    };
+      var progress = Math.min((timestamp - start) / duration, 1);
+      var value    = Math.floor(easeOut(progress) * target);
+
+      el.textContent = value.toLocaleString();
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = target.toLocaleString();
+      }
+    }
+
     requestAnimationFrame(step);
   }
 
-  const counterObs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el     = entry.target;
-        const target = parseInt(el.dataset.target, 10);
-        animateCounter(el, target);
-        counterObs.unobserve(el);
-      }
-    });
-  }, { threshold: 0.4 });
+  function initCounters() {
+    var counters = document.querySelectorAll('.counter');
+    if (!counters.length) return;
 
-  document.querySelectorAll('.counter').forEach(el => counterObs.observe(el));
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
 
-  /* ──────────────────────────────────────────
-     STAT ITEMS — top line reveal via class
-  ────────────────────────────────────────── */
-  const statObs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        statObs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
-
-  document.querySelectorAll('.stat-item').forEach(el => statObs.observe(el));
-
-  /* ──────────────────────────────────────────
-     TEAM CARDS — social links slide up stagger
-  ────────────────────────────────────────── */
-  document.querySelectorAll('.team-card').forEach(card => {
-    const links = card.querySelectorAll('.team-social a');
-    card.addEventListener('mouseenter', () => {
-      links.forEach((link, i) => {
-        link.style.transitionDelay = `${i * 0.06}s`;
+      counters.forEach(function (counter) { obs.observe(counter); });
+    } else {
+      counters.forEach(function (counter) {
+        counter.textContent = counter.getAttribute('data-target');
       });
-    });
-    card.addEventListener('mouseleave', () => {
-      links.forEach(link => { link.style.transitionDelay = '0s'; });
-    });
-  });
-
-  /* ──────────────────────────────────────────
-     VALUE CARDS — subtle parallax on hover
-  ────────────────────────────────────────── */
-  document.querySelectorAll('.value-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const cx   = rect.left + rect.width  / 2;
-      const cy   = rect.top  + rect.height / 2;
-      const dx   = (e.clientX - cx) / (rect.width  / 2);
-      const dy   = (e.clientY - cy) / (rect.height / 2);
-      card.style.transform = `perspective(600px) rotateX(${dy * -3}deg) rotateY(${dx * 3}deg) translateY(-2px)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-      card.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1), background 0.35s';
-    });
-    card.addEventListener('mouseenter', () => {
-      card.style.transition = 'transform 0.12s ease, background 0.35s';
-    });
-  });
-
-  /* ──────────────────────────────────────────
-     STORY IMAGE PARALLAX
-  ────────────────────────────────────────── */
-  const storyImg = document.querySelector('.story-img-frame img');
-  if (storyImg) {
-    window.addEventListener('scroll', () => {
-      const rect   = storyImg.closest('.story-image-wrap').getBoundingClientRect();
-      const center = rect.top + rect.height / 2;
-      const offset = (window.innerHeight / 2 - center) * 0.05;
-      storyImg.style.transform = `scale(1.08) translateY(${offset}px)`;
-    }, { passive: true });
+    }
   }
 
-  /* ──────────────────────────────────────────
-     MARQUEE — REDUCED MOTION
-  ────────────────────────────────────────── */
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const mc = document.querySelector('.marquee-content');
-    if (mc) mc.style.animation = 'none';
+  initCounters();
+
+  /* ── Hero Parallax ─────────────────────────────────────────── */
+  var heroBg = document.querySelector('.page-hero-bg');
+
+  function onScrollParallax() {
+    if (!heroBg) return;
+    var scrolled = window.pageYOffset;
+    if (scrolled < window.innerHeight) {
+      heroBg.style.transform = 'translateY(' + (scrolled * 0.3) + 'px)';
+    }
   }
 
-  /* ──────────────────────────────────────────
-     CHAT WIDGET
-  ────────────────────────────────────────── */
-  const chatToggle   = document.getElementById('chatToggle');
-  const chatWindow   = document.getElementById('chatWindow');
-  const chatClose    = document.getElementById('chatClose');
-  const chatInput    = document.getElementById('chatInput');
-  const chatSend     = document.getElementById('chatSend');
-  const chatMessages = document.getElementById('chatMessages');
-  const chatBadge    = chatToggle.querySelector('.chat-badge');
-  let chatOpen = false;
+  if (heroBg) {
+    window.addEventListener('scroll', onScrollParallax, { passive: true });
+  }
+
+  /* ── Marquee pause on hover ────────────────────────────────── */
+  var marqueeContent = document.querySelector('.marquee-content');
+
+  if (marqueeContent) {
+    marqueeContent.addEventListener('mouseenter', function () {
+      marqueeContent.style.animationPlayState = 'paused';
+    });
+    marqueeContent.addEventListener('mouseleave', function () {
+      marqueeContent.style.animationPlayState = 'running';
+    });
+  }
+
+  /* ── Chat Widget ───────────────────────────────────────────── */
+  var chatToggle   = document.getElementById('chatToggle');
+  var chatWindow   = document.getElementById('chatWindow');
+  var chatClose    = document.getElementById('chatClose');
+  var chatInput    = document.getElementById('chatInput');
+  var chatSend     = document.getElementById('chatSend');
+  var chatMessages = document.getElementById('chatMessages');
+  var chatBadge    = document.querySelector('.chat-badge');
+  var chatIsOpen   = false;
+
+  var autoReplies = [
+    "Great question! Our team is always happy to help 😊",
+    "Feel free to book a session via our contact page!",
+    "Dennis leads our team with 10+ years of experience.",
+    "We'd love to work with you. Check out our services page!",
+    "You can also find us on Instagram @densparkstudio"
+  ];
+  var replyIndex = 0;
 
   function toggleChat() {
-    chatOpen = !chatOpen;
-    chatWindow.classList.toggle('open', chatOpen);
-    if (chatOpen && chatBadge) chatBadge.style.display = 'none';
-    if (chatOpen) chatInput.focus();
+    chatIsOpen = !chatIsOpen;
+    if (chatIsOpen) {
+      chatWindow.classList.add('open');
+      chatWindow.style.display = 'flex';
+      if (chatBadge) chatBadge.style.display = 'none';
+      setTimeout(function () { if (chatInput) chatInput.focus(); }, 100);
+    } else {
+      chatWindow.classList.remove('open');
+      chatWindow.style.display = 'none';
+    }
   }
 
-  chatToggle.addEventListener('click', toggleChat);
-  chatClose.addEventListener('click', (e) => { e.stopPropagation(); toggleChat(); });
-
   function addMessage(text, type) {
-    const msg = document.createElement('div');
-    msg.className = `chat-msg ${type}`;
+    if (!chatMessages) return;
+    var msg = document.createElement('div');
+    msg.className = 'chat-msg ' + type;
     msg.textContent = text;
     chatMessages.appendChild(msg);
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
   function sendMessage() {
-    const text = chatInput.value.trim();
+    if (!chatInput) return;
+    var text = chatInput.value.trim();
     if (!text) return;
     addMessage(text, 'sent');
     chatInput.value = '';
-    const replies = [
-      "Thanks for reaching out! We'd love to work with you. 📸",
-      "Great to hear from you! Our team will respond shortly.",
-      "We're passionate about capturing your moments — let's connect!",
-      "Feel free to book a session or check out our portfolio!"
-    ];
-    setTimeout(() => addMessage(replies[Math.floor(Math.random() * replies.length)], 'received'), 850 + Math.random() * 500);
+    setTimeout(function () {
+      addMessage(autoReplies[replyIndex % autoReplies.length], 'received');
+      replyIndex++;
+    }, 900 + Math.random() * 500);
   }
 
-  chatSend.addEventListener('click', sendMessage);
-  chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+  if (chatToggle) chatToggle.addEventListener('click', toggleChat);
+  if (chatClose)  chatClose.addEventListener('click', toggleChat);
+  if (chatSend)   chatSend.addEventListener('click', sendMessage);
+  if (chatInput) {
+    chatInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
+    });
+  }
+
+  setTimeout(function () {
+    if (!chatIsOpen && chatBadge) chatBadge.style.display = 'flex';
+  }, 4000);
+
+  /* ── Team cards: tilt on desktop ───────────────────────────── */
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('.team-card').forEach(function (card) {
+      card.addEventListener('mousemove', function (e) {
+        var rect = card.getBoundingClientRect();
+        var x = (e.clientX - rect.left) / rect.width  - 0.5;
+        var y = (e.clientY - rect.top)  / rect.height - 0.5;
+        card.style.transform = 'translateY(-8px) perspective(600px) rotateY(' + (x * 5) + 'deg) rotateX(' + (-y * 5) + 'deg)';
+      });
+
+      card.addEventListener('mouseleave', function () {
+        card.style.transform = '';
+      });
+    });
+  }
 
 })();
