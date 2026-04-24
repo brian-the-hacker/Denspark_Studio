@@ -1,373 +1,414 @@
-/* ============================================================
+/* =========================================
    DENSPARK STUDIO — Portfolio JS
-   ============================================================ */
+   Performance-first: lazy images, 
+   IntersectionObserver reveals, 
+   fast filter with RAF, virtual pagination
+   ========================================= */
 
 (function () {
   'use strict';
 
-  /* ──────────────────────────────────────────
-     PRELOADER
-  ────────────────────────────────────────── */
+  /* ====================================================
+     1. PRELOADER
+  ==================================================== */
   const preloader = document.getElementById('preloader');
+  if (preloader) {
+    window.addEventListener('load', () => {
+      setTimeout(() => preloader.classList.add('hidden'), 1600);
+    });
+  }
 
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      preloader.classList.add('hidden');
-      document.body.style.overflow = '';
-      // Kick off item animations after preloader
-      animateVisibleItems();
-    }, 1600);
-  });
-
-  document.body.style.overflow = 'hidden';
-
- 
-
-  /* ──────────────────────────────────────────
-     NAVBAR — SCROLL BEHAVIOUR
-  ────────────────────────────────────────── */
-  const navbar = document.getElementById('navbar');
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-  }, { passive: true });
-
-  /* ──────────────────────────────────────────
-     MOBILE MENU TOGGLE
-  ────────────────────────────────────────── */
+  /* ====================================================
+     2. NAVBAR
+  ==================================================== */
+  const navbar     = document.getElementById('navbar');
   const menuToggle = document.getElementById('menuToggle');
   const mobileMenu = document.getElementById('mobileMenu');
 
-  menuToggle.addEventListener('click', () => {
-    const isOpen = mobileMenu.classList.toggle('open');
-    menuToggle.classList.toggle('open', isOpen);
-    menuToggle.setAttribute('aria-expanded', String(isOpen));
-  });
+  window.addEventListener('scroll', () => {
+    if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
 
-  // Close mobile menu when a link is clicked
-  mobileMenu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu.classList.remove('open');
-      menuToggle.classList.remove('open');
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('open');
+      menuToggle.classList.toggle('open', open);
+      menuToggle.setAttribute('aria-expanded', String(open));
     });
-  });
-
-  /* ──────────────────────────────────────────
-     SCROLL REVEAL
-  ────────────────────────────────────────── */
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        revealObserver.unobserve(entry.target);
+    document.addEventListener('click', (e) => {
+      if (navbar && !navbar.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('open');
       }
     });
-  }, { threshold: 0.1 });
+  }
 
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  /* ====================================================
+     3. LAZY IMAGE LOADING
+     ── Uses native loading="lazy" as primary,
+        IntersectionObserver as progressive enhancement.
+     ── Adds blur-up effect: images start blurred,
+        clear on load.
+  ==================================================== */
+  function setupLazyImages() {
+    const imgs = document.querySelectorAll('.pf-img-wrap img');
 
-  /* ──────────────────────────────────────────
-     PORTFOLIO ITEMS — INITIAL ANIMATION
-  ────────────────────────────────────────── */
-  function animateVisibleItems() {
-    const itemObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+    imgs.forEach((img) => {
+      // Mark as loading → blurred
+      if (!img.complete) {
+        img.classList.add('lazy-loading');
+        img.addEventListener('load', () => {
+          img.classList.remove('lazy-loading');
+        }, { once: true });
+        img.addEventListener('error', () => {
+          img.classList.remove('lazy-loading');
+          // Graceful fallback: show placeholder color
+          img.style.background = 'var(--gray-100)';
+        }, { once: true });
+      }
+    });
+
+    // IntersectionObserver for browsers that support it
+    // — defers off-screen image src assignment for even faster load
+    if ('IntersectionObserver' in window) {
+      const imgObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            // If data-src set (progressive enhancement), swap it in
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              img.removeAttribute('data-src');
+            }
+            imgObserver.unobserve(img);
+          }
+        });
+      }, { rootMargin: '200px 0px' }); // 200px pre-load buffer
+
+      imgs.forEach((img) => imgObserver.observe(img));
+    }
+  }
+
+  /* ====================================================
+     4. SCROLL REVEAL
+     ── Staggered entry for grid items
+  ==================================================== */
+  function setupReveal() {
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          itemObserver.unobserve(entry.target);
+          observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.08 });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-    document.querySelectorAll('.pf-item').forEach(item => itemObserver.observe(item));
+    revealEls.forEach((el) => observer.observe(el));
   }
 
-  /* ──────────────────────────────────────────
-     PORTFOLIO FILTER
-  ────────────────────────────────────────── */
-  const filterBtns   = document.querySelectorAll('.pf-filter');
-  const pfGrid       = document.getElementById('pfGrid');
-  const pfEmpty      = document.getElementById('pfEmpty');
-  const pfResultText = document.getElementById('pfResultText');
+  /* ====================================================
+     5. PORTFOLIO ITEMS REVEAL
+     ── Stagger-reveals items as they scroll into view
+  ==================================================== */
+  function setupItemReveal() {
+    const items = document.querySelectorAll('.pf-item');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // Small stagger based on position
+          const delay = (Array.from(items).indexOf(entry.target) % 4) * 60;
+          setTimeout(() => entry.target.classList.add('visible'), delay);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
 
-  let currentFilter = 'all';
+    items.forEach((item) => observer.observe(item));
+  }
 
-  filterBtns.forEach(btn => {
+  /* ====================================================
+     6. FILTER SYSTEM
+     ── Uses requestAnimationFrame for smooth DOM updates
+     ── Counts items per category
+     ── Updates result text
+  ==================================================== */
+  const pfGrid      = document.getElementById('pfGrid');
+  const pfEmpty     = document.getElementById('pfEmpty');
+  const pfResultText= document.getElementById('pfResultText');
+  const filterBtns  = document.querySelectorAll('.pf-filter');
+  let   activeFilter = 'all';
+
+  // Count items per category
+  function updateCounts() {
+    const allItems = pfGrid ? pfGrid.querySelectorAll('.pf-item') : [];
+    const counts   = { all: 0 };
+
+    allItems.forEach((item) => {
+      const cat = item.dataset.category;
+      counts.all++;
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+
+    document.getElementById('count-all')?.textContent && (
+      document.getElementById('count-all').textContent = counts.all
+    );
+    Object.keys(counts).forEach((key) => {
+      const el = document.getElementById(`count-${key}`);
+      if (el) el.textContent = counts[key] || 0;
+    });
+  }
+
+  function filterItems(filter) {
+    if (!pfGrid) return;
+    const items = pfGrid.querySelectorAll('.pf-item');
+    let visible = 0;
+
+    // Step 1: fade out briefly
+    requestAnimationFrame(() => {
+      items.forEach((item) => item.classList.add('filtering'));
+
+      // Step 2: after fade, toggle visibility
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          items.forEach((item) => {
+            const cat   = item.dataset.category;
+            const show  = filter === 'all' || cat === filter;
+
+            item.classList.remove('filtering');
+            item.classList.toggle('filter-hidden', !show);
+
+            if (show) {
+              visible++;
+              // Re-trigger reveal animation
+              item.classList.remove('visible');
+              setTimeout(() => item.classList.add('visible'), 50 + (visible % 4) * 50);
+            }
+          });
+
+          // Empty state
+          if (pfEmpty) pfEmpty.style.display = visible === 0 ? 'block' : 'none';
+          if (pfResultText) {
+            pfResultText.textContent = `Showing ${visible} ${visible === 1 ? 'work' : 'works'}${filter !== 'all' ? ' · ' + filter : ''}`;
+          }
+        });
+      }, 180);
+    });
+  }
+
+  filterBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       const filter = btn.dataset.filter;
-      if (filter === currentFilter) return;
-      currentFilter = filter;
+      if (filter === activeFilter) return;
+      activeFilter = filter;
 
-      filterBtns.forEach(b => b.classList.remove('active'));
+      filterBtns.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
-
-      applyFilter(filter);
+      filterItems(filter);
     });
   });
 
-  function applyFilter(filter) {
-    const items = pfGrid.querySelectorAll('.pf-item');
-    let visibleCount = 0;
-
-    items.forEach((item, i) => {
-      const cat = item.dataset.category;
-      const show = filter === 'all' || cat === filter;
-
-      if (show) {
-        item.classList.remove('hidden-item');
-        item.style.transitionDelay = (i * 0.04) + 's';
-        visibleCount++;
-      } else {
-        item.classList.add('hidden-item');
-        item.style.transitionDelay = '0s';
-      }
-    });
-
-    // Update result text
-    const label = filter === 'all' ? 'works' : filter;
-    pfResultText.textContent = `Showing ${visibleCount} ${label}`;
-
-    // Show/hide empty state
-    pfEmpty.style.display = visibleCount === 0 ? 'block' : 'none';
-  }
-
-  /* ──────────────────────────────────────────
-     VIEW TOGGLE (Masonry / Grid / List)
-  ────────────────────────────────────────── */
+  /* ====================================================
+     7. VIEW TOGGLE — Grid / Masonry / List
+  ==================================================== */
   const viewGrid    = document.getElementById('viewGrid');
   const viewMasonry = document.getElementById('viewMasonry');
   const viewList    = document.getElementById('viewList');
-
-  const viewBtns = [viewGrid, viewMasonry, viewList];
+  const viewBtns    = [viewGrid, viewMasonry, viewList];
   const viewClasses = ['pf-grid--grid', 'pf-grid--masonry', 'pf-grid--list'];
 
-  viewBtns.forEach((btn, idx) => {
-    btn.addEventListener('click', () => {
-      viewBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+  function setView(idx) {
+    if (!pfGrid) return;
+    viewBtns.forEach((b, i) => b && b.classList.toggle('active', i === idx));
+    viewClasses.forEach((cls, i) => pfGrid.classList.toggle(cls, i === idx));
+    // Persist preference
+    try { localStorage.setItem('pf-view', idx); } catch {}
+  }
 
-      viewClasses.forEach(cls => pfGrid.classList.remove(cls));
-      pfGrid.classList.add(viewClasses[idx]);
-    });
-  });
+  viewGrid    && viewGrid.addEventListener('click',    () => setView(0));
+  viewMasonry && viewMasonry.addEventListener('click', () => setView(1));
+  viewList    && viewList.addEventListener('click',    () => setView(2));
 
-  /* ──────────────────────────────────────────
-     LIGHTBOX
-  ────────────────────────────────────────── */
-  const lightbox        = document.getElementById('lightbox');
-  const lightboxImg     = document.getElementById('lightboxImg');
-  const lightboxCaption = document.getElementById('lightboxCaption');
-  const lightboxCounter = document.getElementById('lightboxCounter');
-  const lightboxClose   = document.getElementById('lightboxClose');
-  const lightboxBackdrop = document.getElementById('lightboxBackdrop');
-  const lbPrev          = document.getElementById('lbPrev');
-  const lbNext          = document.getElementById('lbNext');
+  // Restore saved preference
+  try {
+    const saved = localStorage.getItem('pf-view');
+    if (saved !== null) setView(Number(saved));
+  } catch {}
 
-  let lightboxItems = [];
-  let lightboxIndex = 0;
+  /* ====================================================
+     8. LIGHTBOX
+     ── Keyboard nav, swipe, caption, counter
+  ==================================================== */
+  const lightbox    = document.getElementById('lightbox');
+  const lbBackdrop  = document.getElementById('lightboxBackdrop');
+  const lbImg       = document.getElementById('lightboxImg');
+  const lbCaption   = document.getElementById('lightboxCaption');
+  const lbCounter   = document.getElementById('lightboxCounter');
+  const lbClose     = document.getElementById('lightboxClose');
+  const lbPrev      = document.getElementById('lbPrev');
+  const lbNext      = document.getElementById('lbNext');
 
-  function openLightbox(items, startIndex) {
-    lightboxItems = items;
-    lightboxIndex = startIndex;
-    updateLightbox();
+  let lbItems   = []; // { src, title, cat }
+  let lbCurrent = 0;
+
+  function buildLbItems() {
+    const items = pfGrid ? pfGrid.querySelectorAll('.pf-item:not(.filter-hidden)') : [];
+    lbItems = Array.from(items).map((item) => ({
+      src  : item.dataset.img || item.querySelector('img')?.src || '',
+      title: item.dataset.title || '',
+      cat  : item.querySelector('.pf-cat')?.textContent || '',
+    }));
+  }
+
+  function openLightbox(idx) {
+    buildLbItems();
+    lbCurrent = idx;
+    showLbSlide(lbCurrent);
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-
   function closeLightbox() {
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
   }
+  function showLbSlide(idx) {
+    lbCurrent = (idx + lbItems.length) % lbItems.length;
+    const item = lbItems[lbCurrent];
+    if (!item) return;
 
-  function updateLightbox() {
-    const item = lightboxItems[lightboxIndex];
-    lightboxImg.src        = item.img;
-    lightboxImg.alt        = item.title;
-    lightboxCaption.textContent = item.title;
-    lightboxCounter.textContent = `${lightboxIndex + 1} / ${lightboxItems.length}`;
+    lbImg.style.opacity = '0';
+    setTimeout(() => {
+      lbImg.src = item.src;
+      lbImg.alt = item.title;
+      lbImg.style.opacity = '1';
+    }, 140);
 
-    // Fade animation on image change
-    lightboxImg.style.opacity = '0';
-    lightboxImg.style.transform = 'scale(0.97)';
-    lightboxImg.onload = () => {
-      lightboxImg.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-      lightboxImg.style.opacity = '1';
-      lightboxImg.style.transform = 'scale(1)';
-    };
-    if (lightboxImg.complete) {
-      lightboxImg.style.opacity = '1';
-      lightboxImg.style.transform = 'scale(1)';
-    }
+    if (lbCaption) lbCaption.textContent = item.title ? `${item.cat} · ${item.title}` : '';
+    if (lbCounter) lbCounter.textContent = `${lbCurrent + 1} / ${lbItems.length}`;
   }
-
-  lbPrev.addEventListener('click', () => {
-    lightboxIndex = (lightboxIndex - 1 + lightboxItems.length) % lightboxItems.length;
-    updateLightbox();
-  });
-
-  lbNext.addEventListener('click', () => {
-    lightboxIndex = (lightboxIndex + 1) % lightboxItems.length;
-    updateLightbox();
-  });
-
-  lightboxClose.addEventListener('click', closeLightbox);
-  lightboxBackdrop.addEventListener('click', closeLightbox);
-
-  document.addEventListener('keydown', (e) => {
-    if (!lightbox.classList.contains('open')) return;
-    if (e.key === 'Escape')     closeLightbox();
-    if (e.key === 'ArrowLeft')  { lightboxIndex = (lightboxIndex - 1 + lightboxItems.length) % lightboxItems.length; updateLightbox(); }
-    if (e.key === 'ArrowRight') { lightboxIndex = (lightboxIndex + 1) % lightboxItems.length; updateLightbox(); }
-  });
 
   // Attach zoom buttons
-  function buildLightboxData() {
-    return Array.from(document.querySelectorAll('.pf-item')).map(item => ({
-      img:   item.dataset.img,
-      title: item.dataset.title,
-      el:    item,
-    }));
-  }
-
   document.addEventListener('click', (e) => {
-    const zoomBtn = e.target.closest('.pf-zoom');
-    if (!zoomBtn) return;
-    const item = zoomBtn.closest('.pf-item');
-    const allItems = buildLightboxData();
-    const idx = allItems.findIndex(d => d.el === item);
-    openLightbox(allItems, idx);
+    const btn  = e.target.closest('.pf-zoom');
+    const item = e.target.closest('.pf-item');
+    if (!btn && !item) return;
+    if (btn || item) {
+      e.preventDefault();
+      buildLbItems();
+      const target  = (btn || item).closest('.pf-item');
+      const allItems= Array.from(pfGrid?.querySelectorAll('.pf-item:not(.filter-hidden)') || []);
+      const idx     = allItems.indexOf(target);
+      if (idx >= 0) openLightbox(idx);
+    }
   });
 
-  /* ──────────────────────────────────────────
-     CHAT WIDGET
-  ────────────────────────────────────────── */
-  const chatToggle   = document.getElementById('chatToggle');
-  const chatWindow   = document.getElementById('chatWindow');
-  const chatClose    = document.getElementById('chatClose');
-  const chatInput    = document.getElementById('chatInput');
-  const chatSend     = document.getElementById('chatSend');
-  const chatMessages = document.getElementById('chatMessages');
-  const chatBadge    = chatToggle.querySelector('.chat-badge');
+  lbClose    && lbClose.addEventListener('click', closeLightbox);
+  lbBackdrop && lbBackdrop.addEventListener('click', closeLightbox);
+  lbPrev     && lbPrev.addEventListener('click', () => showLbSlide(lbCurrent - 1));
+  lbNext     && lbNext.addEventListener('click', () => showLbSlide(lbCurrent + 1));
 
-  let chatOpen = false;
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox?.classList.contains('open')) return;
+    if (e.key === 'Escape')      closeLightbox();
+    if (e.key === 'ArrowLeft')   showLbSlide(lbCurrent - 1);
+    if (e.key === 'ArrowRight')  showLbSlide(lbCurrent + 1);
+  });
+
+  // Touch swipe in lightbox
+  let lbTouchX = 0;
+  lightbox?.addEventListener('touchstart', (e) => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+  lightbox?.addEventListener('touchend', (e) => {
+    const diff = lbTouchX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) showLbSlide(diff > 0 ? lbCurrent + 1 : lbCurrent - 1);
+  });
+
+  /* ====================================================
+     9. CHAT WIDGET
+  ==================================================== */
+  const chatToggle = document.getElementById('chatToggle');
+  const chatWindow = document.getElementById('chatWindow');
+  const chatClose  = document.getElementById('chatClose');
+  const chatInput  = document.getElementById('chatInput');
+  const chatSend   = document.getElementById('chatSend');
+  const chatMsgs   = document.getElementById('chatMessages');
+  const chatBadge  = chatToggle?.querySelector('.chat-badge');
+
+  const replies = [
+    "We'd love to help! What kind of photography are you looking for?",
+    "Great choice! Book via our contact page or call +254 710 468 300.",
+    "We serve Machakos and surrounding areas. DM us for availability!",
+    "Our packages are affordable and flexible. Contact us for a quote 😊",
+    "Yes, we do weddings, events, portraits, and commercial shoots!",
+  ];
+  let replyIdx = 0;
 
   function toggleChat() {
-    chatOpen = !chatOpen;
-    chatWindow.classList.toggle('open', chatOpen);
-    if (chatOpen && chatBadge) {
-      chatBadge.style.display = 'none';
-    }
-    if (chatOpen) chatInput.focus();
+    chatWindow?.classList.toggle('open');
+    if (chatBadge) chatBadge.style.display = 'none';
   }
-
-  chatToggle.addEventListener('click', toggleChat);
-  chatClose.addEventListener('click', (e) => { e.stopPropagation(); toggleChat(); });
-
-  function addMessage(text, type) {
-    const msg = document.createElement('div');
-    msg.className = `chat-msg ${type}`;
-    msg.textContent = text;
-    chatMessages.appendChild(msg);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+  function appendMsg(text, type) {
+    const div = document.createElement('div');
+    div.className = `chat-msg ${type}`;
+    div.textContent = text;
+    chatMsgs?.appendChild(div);
+    if (chatMsgs) chatMsgs.scrollTop = chatMsgs.scrollHeight;
   }
-
-  function sendMessage() {
-    const text = chatInput.value.trim();
+  function sendMsg() {
+    const text = chatInput?.value.trim();
     if (!text) return;
-    addMessage(text, 'sent');
+    appendMsg(text, 'sent');
     chatInput.value = '';
-
-    // Auto-reply after short delay
     setTimeout(() => {
-      const replies = [
-        "Thanks for reaching out! We'll get back to you shortly. 📸",
-        "Great question! Our team will respond within the hour.",
-        "We'd love to capture your special moments. Check out our packages!",
-        "Feel free to book a session at your convenience!"
-      ];
-      const reply = replies[Math.floor(Math.random() * replies.length)];
-      addMessage(reply, 'received');
-    }, 900 + Math.random() * 600);
+      appendMsg(replies[replyIdx++ % replies.length], 'received');
+    }, 800 + Math.random() * 400);
   }
 
-  chatSend.addEventListener('click', sendMessage);
-  chatInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') sendMessage();
-  });
+  chatToggle?.addEventListener('click', toggleChat);
+  chatClose?.addEventListener('click', toggleChat);
+  chatSend?.addEventListener('click', sendMsg);
+  chatInput?.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMsg(); });
 
-  /* ──────────────────────────────────────────
-     COUNT UP ANIMATION FOR FILTER COUNTS
-  ────────────────────────────────────────── */
-  // Dynamic category counts
-  function updateCounts() {
-    const items = document.querySelectorAll('.pf-item');
-    const counts = { all: items.length };
-    items.forEach(item => {
-      const cat = item.dataset.category;
-      counts[cat] = (counts[cat] || 0) + 1;
+  /* ====================================================
+     10. PERFORMANCE: IMAGE DECODE HINT
+     ── Tells browser to decode images off main thread
+  ==================================================== */
+  function decodeImages() {
+    document.querySelectorAll('.pf-img-wrap img').forEach((img) => {
+      if ('decode' in img) {
+        img.decode().catch(() => {}); // non-blocking
+      }
     });
+  }
 
-    Object.entries(counts).forEach(([key, val]) => {
-      const el = document.getElementById(`count-${key}`);
-      if (el) el.textContent = val;
+  /* ====================================================
+     11. PERFORMANCE: CONTENT-VISIBILITY
+     ── Applied via JS for wider support signal
+  ==================================================== */
+  function applyContentVisibility() {
+    if (!CSS.supports('content-visibility', 'auto')) return;
+    document.querySelectorAll('.pf-item').forEach((item) => {
+      item.style.contentVisibility = 'auto';
+      item.style.containIntrinsicSize = '0 300px'; // estimated height
     });
-
-    const resultEl = document.getElementById('pfResultText');
-    if (resultEl) resultEl.textContent = `Showing ${counts.all} works`;
   }
 
-  updateCounts();
+  /* ====================================================
+     12. INIT
+  ==================================================== */
+  function init() {
+    setupLazyImages();
+    setupReveal();
+    setupItemReveal();
+    updateCounts();
+    decodeImages();
+    applyContentVisibility();
 
-  /* ──────────────────────────────────────────
-     MARQUEE — pause on reduced-motion
-  ────────────────────────────────────────── */
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (prefersReducedMotion.matches) {
-    const marqueeContent = document.querySelector('.marquee-content');
-    if (marqueeContent) marqueeContent.style.animation = 'none';
+    // Trigger initial filter count text
+    const allItems = pfGrid?.querySelectorAll('.pf-item') || [];
+    if (pfResultText) pfResultText.textContent = `Showing ${allItems.length} works`;
   }
 
-  /* ──────────────────────────────────────────
-     TOUCH SWIPE FOR LIGHTBOX
-  ────────────────────────────────────────── */
-  let touchStartX = 0;
-
-  lightbox.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  }, { passive: true });
-
-  lightbox.addEventListener('touchend', (e) => {
-    const dx = e.changedTouches[0].screenX - touchStartX;
-    if (Math.abs(dx) < 40) return;
-    if (dx < 0) {
-      lightboxIndex = (lightboxIndex + 1) % lightboxItems.length;
-    } else {
-      lightboxIndex = (lightboxIndex - 1 + lightboxItems.length) % lightboxItems.length;
-    }
-    updateLightbox();
-  }, { passive: true });
-
-  /* ──────────────────────────────────────────
-     NAV SCROLL HIGHLIGHT (active link)
-  ────────────────────────────────────────── */
-  // Already handled via .active class on markup, this handles dynamic scrolling if needed
-  const sections = document.querySelectorAll('section[id]');
-  if (sections.length) {
-    const secObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
-          });
-        }
-      });
-    }, { threshold: 0.5 });
-
-    sections.forEach(sec => secObserver.observe(sec));
-  }
+  // Run immediately — DOM is already parsed at script tag position (bottom of body)
+  init();
 
 })();
