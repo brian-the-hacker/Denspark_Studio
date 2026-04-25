@@ -15,12 +15,7 @@
 <body>
 
   <!-- Preloader -->
-  <div class="preloader" id="preloader">
-    <div class="preloader-inner">
-      <div class="preloader-logo">DENSPARK STUDIO</div>
-      <div class="preloader-line"><span></span></div>
-    </div>
-  </div>
+
 
   <!-- Cursor -->
   <div class="cursor" id="cursor"></div>
@@ -94,13 +89,13 @@
         <!-- Image side -->
         <div class="story-image-wrap reveal">
           <div class="story-img-frame">
-            <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=900&q=85" alt="Denspark Studio behind the scenes">
+            <img src="static/uploads/about/dennis.webp" alt="Denspark Studio behind the scenes">
             <div class="story-img-overlay"></div>
           </div>
           <div class="story-img-badge">
             <span class="badge-year">Est.</span>
             <span class="badge-num">2014</span>
-            <span class="badge-label">Machakos, Kenya</span>
+            <span class="badge-label">Machakos Town, Kenya</span>
           </div>
           <div class="story-accent-box"></div>
         </div>
@@ -109,13 +104,49 @@
         <div class="story-content reveal" style="--delay: 0.12s">
           <span class="section-eyebrow">Our Story</span>
           <h2 class="story-title">Where Creativity <em>Meets</em> Excellence</h2>
-          <p>Founded in Machakos, Kenya, Denspark Studio emerged from a deep passion for visual storytelling. What started as a small dream has grown into one of the region's most trusted photography and creative media studios.</p>
-          <p>Our journey began with a simple belief: every moment deserves to be captured beautifully. Over the years, we've had the privilege of documenting countless weddings, corporate events, personal milestones, and creative projects.</p>
-          <p>Today, we continue to push the boundaries of creativity while staying true to our core values of quality, professionalism, and genuine connection with our clients.</p>
+          
+          <div class="story-intro">
+            <p>At <strong>Denspark Studio</strong>, we believe every moment has a story worth capturing. We are a creative photography and videography studio dedicated to delivering high-quality visuals that preserve memories, build brands, and tell powerful stories.</p>
+            
+            <p>Founded in Machakos Town, Kenya with a passion for creativity and attention to detail, Denspark Studio has grown into a trusted name for professional photography, cinematic videography, and modern visual content creation. Whether it’s a personal milestone or a business project, we approach every shoot with professionalism, creativity, and a commitment to excellence.</p>
+          </div>
+
+          <div class="story-services">
+            <h3 class="services-heading">What We Do</h3>
+            <p class="services-intro">We offer a wide range of services tailored to meet the needs of individuals, families, and businesses:</p>
+            
+            <ul class="services-list">
+              <li>
+                <strong>Photography</strong>
+                From studio portraits to outdoor sessions, we specialize in capturing authentic moments. Our photography services include family shoots, kids and baby bump sessions, birthdays, graduations, corporate headshots, and event coverage.
+              </li>
+              <li>
+                <strong>Videography</strong>
+                We create engaging and cinematic videos for events, brands, and personal projects. From weddings and parties to promotional content and creative shoots, we ensure every video tells a compelling story.
+              </li>
+              <li>
+                <strong>Drone Services</strong>
+                We provide aerial photography and videography to give your content a unique and cinematic perspective—perfect for events, real estate, and outdoor projects.
+              </li>
+              <li>
+                <strong>Editing & Retouching</strong>
+                Our work doesn’t stop at capturing images—we enhance every photo and video through professional editing, ensuring clean, polished, and visually striking results.
+              </li>
+              <li>
+                <strong>Printing & Custom Products</strong>
+                We offer high-quality prints, frames, albums, and customized items to help you preserve your memories in tangible form.
+              </li>
+              <li>
+                <strong>Branding & Content Creation</strong>
+                We help businesses grow by creating professional visual content for marketing, social media, and brand identity.
+              </li>
+            </ul>
+          </div>
+
           <div class="story-signature">
             <div class="sig-line"></div>
             <div class="sig-info">
-              <span class="sig-name">Dennis Mutua</span>
+              <span class="sig-name">Dennis Kioko</span>
               <span class="sig-role">Founder &amp; Lead Photographer</span>
             </div>
           </div>
@@ -182,7 +213,7 @@
           <div class="stat-label">Years Experience</div>
         </div>
         <div class="stat-item reveal" style="--delay: 0.08s">
-          <div class="stat-number counter" data-target="500">0</div>
+          <div class="stat-number counter" data-target="1000">0</div>
           <div class="stat-sup">+</div>
           <div class="stat-label">Projects Completed</div>
         </div>
@@ -192,7 +223,7 @@
           <div class="stat-label">Weddings Captured</div>
         </div>
         <div class="stat-item reveal" style="--delay: 0.24s">
-          <div class="stat-number counter" data-target="1000">0</div>
+          <div class="stat-number counter" data-target="1200">0</div>
           <div class="stat-sup">+</div>
           <div class="stat-label">Happy Clients</div>
         </div>
@@ -319,11 +350,9 @@
         <!-- Nicholas -->
         <div class="team-card reveal" style="--delay: 0.16s">
           <div class="team-img-wrap">
-            <img src="static/uploads/about/nicholas.webp" alt="James Ochieng">
-            <div class="team-img-overlay">
-              <div class="team-social">
-              </div>
-            </div>
+            <img src="static/uploads/about/nicholas.webp" alt="Nicholas Ndeto">
+            <div class="team-img-overlay"></div>
+          </div>  <!-- ← this closing tag is MISSING in your HTML -->
           <div class="team-info">
             <h4>Nicholas Ndeto</h4>
             <span class="team-role">Videographer</span>
@@ -415,7 +444,7 @@
   </section>
 
   <!-- Footer -->
-  <footer class="footer">
+   <footer class="footer">
     <div class="container">
       <div class="footer-top">
         <div class="footer-brand">
@@ -430,16 +459,17 @@
             </a>
             <a href="https://youtube.com/@densparkfilmsmachakos6509?si=b-HHFd-jDE5Z76mQ" aria-label="YouTube">
               <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
             </a>
 
             <a href="https://www.tiktok.com/@densparkstudio300?_r=1&_t=ZS-95khoiW18dB" aria-label="TikTok">
               <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.59 6.69a4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 0 0 0 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/>
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/>
               </svg>
             </a>
           </div>
+        </div>
         <div class="footer-col">
           <h4>Navigate</h4>
           <ul>
@@ -464,13 +494,13 @@
           <h4>Contact</h4>
           <ul>
             <li>Machakos Town, Kenya</li>
-            <li><a href="tel:+254700000000">+254 700 000 000</a></li>
-            <li><a href="mailto:info@densparkstudio.co.ke">info@densparkstudio.co.ke</a></li>
+            <li><a href="tel:+254710468300">+254 710 468 300</a></li>
+            <li><a href="mailto:densparkstudio@gmail.com">densparkstudio@gmail.com</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2025 Denspark Studio. All rights reserved.</p>
+        <p>&copy; 2026 Denspark Studio. All rights reserved.</p>
         <div class="footer-legal">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
@@ -478,6 +508,7 @@
       </div>
     </div>
   </footer>
+
 
   <!-- Chat Widget -->
   <div class="chat-widget" id="chatWidget">

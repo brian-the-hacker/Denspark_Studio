@@ -472,7 +472,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     <div class="slider-track" id="sliderTrack">
       <!-- Slide 1: first bg loads instantly via preload above -->
       <div class="slide active" data-category="Wedding">
-        <div class="slide-bg" style="background-image: url('static/uploads/DCM _68.JPG.webp')"></div>
+        <div class="slide-bg" style="background-image: url('static/uploads/DCM _68.webp')"></div>
         <div class="slide-overlay"></div>
         <div class="slide-content">
           <span class="slide-tag">Wedding</span>
@@ -686,95 +686,146 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
         <button class="filter-btn" data-filter="weddings">Weddings</button>
         <button class="filter-btn" data-filter="commercial">Commercial</button>
       </div>
-      
-      <div class="portfolio-grid">
-      <!-- PORTRAITS - 5 items -->
-      <div class="portfolio-item reveal" data-category="portraits">
-          <div class="portfolio-img-wrap"><img src="static/uploads/port1.webp" alt="Portrait Photography" loading="lazy" width="800" height="1000"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Portrait</span><h4>Creative Portrait Session</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="portraits">
-          <div class="portfolio-img-wrap"><img src="static/uploads/port6.webp" alt="Fashion Portrait" loading="lazy" width="800" height="1000"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Portrait</span><h4>Fashion Editorial</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="portraits">
-          <div class="portfolio-img-wrap"><img src="static/uploads/port2.webp" alt="Studio Portrait" loading="lazy" width="800" height="1000"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Portrait</span><h4>Studio Lighting</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="portraits">
-          <div class="portfolio-img-wrap"><img src="static/uploads/port3.webp" alt="Outdoor Portrait" loading="lazy" width="800" height="1000"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Portrait</span><h4>Natural Light Session</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="portraits">
-          <div class="portfolio-img-wrap"><img src="static/uploads/port4.webp" alt="Black & White Portrait" loading="lazy" width="800" height="1000"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Portrait</span><h4>Monochrome Mood</h4><a href="/portfolio" class="portfolio-view">View</a></div>
+
+      <div class="portfolio-grid" id="homePortfolioGrid">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF;font-size:0.9rem">
+          Loading portfolio…
+        </div>
       </div>
 
-      <!-- WEDDINGS - 5 items -->
-      <div class="portfolio-item reveal" data-category="weddings">
-          <div class="portfolio-img-wrap"><img src="static/uploads/wedding/wedding1.webp" alt="Wedding Photography" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Wedding</span><h4>Beautiful Wedding Day</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal portfolio-wide" data-category="weddings">
-          <div class="portfolio-img-wrap"><img src="static/uploads/wedding/wedding2.webp" alt="Wedding Reception" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Wedding</span><h4>Reception Moments</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal portfolio-wide" data-category="weddings">
-          <div class="portfolio-img-wrap"><img src="static/uploads/wedding/wedding3.webp" alt="Wedding Couple" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Wedding</span><h4>Couple Portraits</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="weddings">
-          <div class="portfolio-img-wrap"><img src="static/uploads/wedding/wedding4.webp" alt="Wedding Ceremony" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Wedding</span><h4>Ceremony Vows</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="weddings">
-          <div class="portfolio-img-wrap"><img src="static/uploads/wedding/wedding5.webp" alt="Wedding Details" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Wedding</span><h4>Ring & Details</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
+      <script>
+      (function () {
+        'use strict';
 
-      <!-- EVENTS - 5 items -->
-      <div class="portfolio-item reveal portfolio-tall" data-category="events">
-          <div class="portfolio-img-wrap"><img src="static/uploads/event/event1.webp" alt="Event Photography" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Event</span><h4>Corporate Conference</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="events">
-          <div class="portfolio-img-wrap"><img src="static/uploads/event/event2.webp" alt="Birthday Party" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Event</span><h4>Birthday Celebration</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="events">
-          <div class="portfolio-img-wrap"><img src="static/uploads/event/event3.webp" alt="Concert Photography" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Event</span><h4>Live Music Night</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="events">
-          <div class="portfolio-img-wrap"><img src="static/uploads/event/event4.webp" alt="Product Launch" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Event</span><h4>Product Launch</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="events">
-          <div class="portfolio-img-wrap"><img src="static/uploads/event/event5.webp" alt="Award Ceremony" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Event</span><h4>Awards Gala</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
+        const grid       = document.getElementById('homePortfolioGrid');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        let allItems     = [];
+        let visibleItems = [];
+        let activeFilter = 'all';
 
-      <!-- COMMERCIAL - 5 items -->
-      <div class="portfolio-item reveal" data-category="commercial">
-          <div class="portfolio-img-wrap"><img src="static/uploads/com/com1.webp" alt="Product Photography" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Commercial</span><h4>Product Showcase</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="commercial">
-          <div class="portfolio-img-wrap"><img src="static/uploads/com/com2.webp" alt="Brand Campaign" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Commercial</span><h4>Brand Campaign</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="commercial">
-          <div class="portfolio-img-wrap"><img src="static/uploads/com/com3.webp" alt="Food Photography" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Commercial</span><h4>Food & Beverage</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="commercial">
-          <div class="portfolio-img-wrap"><img src="static/uploads/com/com4.webp" alt="Real Estate" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Commercial</span><h4>Real Estate</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
-      <div class="portfolio-item reveal" data-category="commercial">
-          <div class="portfolio-img-wrap"><img src="static/uploads/com/com5.webp" alt="Fashion Commercial" loading="lazy" width="800" height="533"></div>
-          <div class="portfolio-overlay"><span class="portfolio-cat">Commercial</span><h4>Fashion Lookbook</h4><a href="/portfolio" class="portfolio-view">View</a></div>
-      </div>
+        const sizePatterns = ['', '', 'portfolio-tall', '', 'portfolio-wide', '', '', 'portfolio-tall', 'portfolio-wide', ''];
+
+        async function loadPortfolio() {
+          try {
+            const res  = await fetch('/api/portfolio?per_page=12&page=1');
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            allItems   = data.items || [];
+            renderGrid(allItems);
+          } catch {
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF">Could not load portfolio.</div>';
+          }
+        }
+
+        function renderGrid(items) {
+          grid.innerHTML = '';
+          visibleItems   = items;
+
+          if (items.length === 0) {
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF">No items found.</div>';
+            return;
+          }
+
+          items.forEach((item, i) => {
+            const sizeClass = sizePatterns[i % sizePatterns.length];
+            const thumbUrl  = item.image_url || '';
+            const fullUrl   = item.full_url  || thumbUrl;
+            const cat       = (item.category || 'general').toLowerCase();
+            const catLabel  = item.category_label || cat;
+            const title     = item.title || 'Untitled';
+
+            const div = document.createElement('div');
+            div.className        = `portfolio-item reveal${sizeClass ? ' ' + sizeClass : ''}`;
+            div.dataset.category = cat;
+
+            div.innerHTML = `
+              <div class="portfolio-img-wrap">
+                <img src="${esc(thumbUrl)}" alt="${esc(title)}" loading="lazy"
+                     onerror="this.closest('.portfolio-item').style.display='none'">
+              </div>
+              <div class="portfolio-overlay">
+                <span class="portfolio-cat">${esc(catLabel)}</span>
+                <h4>${esc(title)}</h4>
+                <a href="/portfolio" class="portfolio-view">View all →</a>
+              </div>`;
+
+            div.addEventListener('click', (e) => {
+              if (e.target.tagName === 'A') return;
+              openLightbox(i);
+            });
+
+            grid.appendChild(div);
+
+            // trigger reveal
+            setTimeout(() => div.classList.add('visible'), i * 60);
+          });
+        }
+
+        // Filter
+        filterBtns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            filterBtns.forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeFilter = btn.dataset.filter;
+            const filtered = activeFilter === 'all'
+              ? allItems
+              : allItems.filter((item) => (item.category || '').toLowerCase() === activeFilter);
+            renderGrid(filtered);
+          });
+        });
+
+        // Lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lbImg    = document.getElementById('lightboxImg');
+        const lbClose  = document.getElementById('lightboxClose');
+        const lbPrev   = document.getElementById('lbPrev');
+        const lbNext   = document.getElementById('lbNext');
+        let lbIdx = 0;
+
+        function openLightbox(idx) {
+          lbIdx = idx; showSlide();
+          lightbox.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+          lightbox.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+        function showSlide() {
+          const item = visibleItems[lbIdx];
+          if (!item) return;
+          lbImg.style.opacity = '0';
+          setTimeout(() => {
+            lbImg.src = item.full_url || item.image_url || '';
+            lbImg.alt = item.title || '';
+            lbImg.style.opacity = '1';
+          }, 140);
+        }
+        function lbGo(dir) {
+          lbIdx = (lbIdx + dir + visibleItems.length) % visibleItems.length;
+          showSlide();
+        }
+
+        if (lbClose) lbClose.addEventListener('click', closeLightbox);
+        if (lightbox) lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+        if (lbPrev)  lbPrev.addEventListener('click', () => lbGo(-1));
+        if (lbNext)  lbNext.addEventListener('click', () => lbGo(1));
+        document.addEventListener('keydown', (e) => {
+          if (!lightbox?.classList.contains('open')) return;
+          if (e.key === 'Escape')     closeLightbox();
+          if (e.key === 'ArrowLeft')  lbGo(-1);
+          if (e.key === 'ArrowRight') lbGo(1);
+        });
+
+        function esc(str) {
+          return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        loadPortfolio();
+      })();
+      </script>
   </div>
       <div class="section-cta reveal">
         <a href="/portfolio" class="btn-primary btn-dark">View All Work →</a>
@@ -1012,7 +1063,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2025 Denspark Studio. All rights reserved.</p>
+        <p>&copy; 2026 Denspark Studio. All rights reserved.</p>
         <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
       </div>
     </div>

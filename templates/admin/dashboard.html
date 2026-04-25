@@ -1,700 +1,324 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Denspark Studio Admin</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/main.css') }}">
-</head>
-<body class="admin-body">
-    <!-- SINGLE SIDEBAR (unified - no conflict) -->
-    <aside class="admin-sidebar" id="adminSidebar">
-        <!-- Sidebar Header -->
-        <div class="sidebar-header">
-            <a href="{{ url_for('admin.dashboard') }}" class="sidebar-logo">
-                <span class="logo-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M12 2v2m0 16v2M2 12h2m16 0h2"/>
-                    </svg>
-                </span>
-                <span class="logo-text">Denspark<span class="accent">Studio</span></span>
-            </a>
-            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M15 18l-6-6 6-6"/>
-                </svg>
-            </button>
+{% extends "admin/base.html" %}
+{% block title %}Dashboard | Denspark Studio Admin{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_sub %}Welcome back, {{ current_user.username if current_user.is_authenticated else 'Admin' }}!{% endblock %}
+
+{% block content %}
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card" data-animate>
+        <div class="stat-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <path d="m21 15-5-5L5 21"/>
+            </svg>
         </div>
-        
-        <!-- Sidebar Navigation -->
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar-nav">
-            <div class="nav-section">
-                <span class="nav-section-title">Main</span>
-                <ul>
-                    <li>
-                        <a href="{{ url_for('admin.dashboard') }}" class="{% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="7" height="7" rx="1"/>
-                                <rect x="14" y="3" width="7" height="7" rx="1"/>
-                                <rect x="14" y="14" width="7" height="7" rx="1"/>
-                                <rect x="3" y="14" width="7" height="7" rx="1"/>
-                            </svg>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/portfolio" class="{% if request.endpoint == 'admin.portfolio' %}active{% endif %}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                                <circle cx="8.5" cy="8.5" r="1.5"/>
-                                <path d="m21 15-5-5L5 21"/>
-                            </svg>
-                            <span>Portfolio</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/bookings" class="{% if request.endpoint == 'admin.bookings' %}active{% endif %}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2"/>
-                                <path d="M16 2v4M8 2v4M3 10h18"/>
-                            </svg>
-                            <span>Bookings</span>
-                            {% if pending_bookings %}
-                            <span class="badge">{{ pending_bookings }}</span>
-                            {% endif %}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/portfolio?action=upload" class="{% if request.endpoint == 'admin.uploads' %}active{% endif %}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="17 8 12 3 7 8"/>
-                                <line x1="12" y1="3" x2="12" y2="15"/>
-                            </svg>
-                            <span>Upload Media</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="nav-section">
-                <span class="nav-section-title">Communication</span>
-                <ul>
-                    <li>
-                        <a href="/admin/messages" class="{% if request.endpoint == 'admin.messages' %}active{% endif %}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                            </svg>
-                            <span>Recent Messages</span>
-                            {% if unread_messages %}
-                            <span class="badge">{{ unread_messages }}</span>
-                            {% endif %}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="nav-section">
-                <span class="nav-section-title">Finance</span>
-                <ul>
-                    <li>
-                        <a href="/admin/payments" class="{% if request.endpoint == 'admin.payments' %}active{% endif %}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="1" y="4" width="22" height="16" rx="2"/>
-                                <path d="M1 10h22"/>
-                            </svg>
-                            <span>Payments</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/analytics" class="{% if request.endpoint == 'admin.analytics' %}active{% endif %}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="2" x2="12" y2="22"/>
-                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                            </svg>
-                            <span>Analytics</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="nav-section">
-                <span class="nav-section-title">System</span>
-                <ul>
-                    <li>
-                        <a href="/admin/settings" class="{% if request.endpoint == 'admin.settings' %}active{% endif %}">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="3"/>
-                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                            </svg>
-                            <span>Settings</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('public.index') }}" target="_blank">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                <polyline points="15 3 21 3 21 9"/>
-                                <line x1="10" y1="14" x2="21" y2="3"/>
-                            </svg>
-                            <span>View Site</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        
-        <!-- Sidebar Footer -->
-        <div class="sidebar-footer">
-            <div class="user-info">
-                <div class="user-avatar">
-                    {% if current_user.is_authenticated and current_user.avatar %}
-                        <img src="{{ url_for('static', filename='uploads/' + current_user.avatar) }}" alt="{{ current_user.username }}">
+        <div class="stat-info">
+            <h3>{{ total_uploads|default(0) }}</h3>
+            <p>Total Photos</p>
+        </div>
+    </div>
+
+    <div class="stat-card" data-animate>
+        <div class="stat-icon gold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <path d="M16 2v4M8 2v4M3 10h18"/>
+            </svg>
+        </div>
+        <div class="stat-info">
+            <h3>{{ total_bookings|default(0) }}</h3>
+            <p>Total Bookings</p>
+        </div>
+    </div>
+
+    <div class="stat-card" data-animate>
+        <div class="stat-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+        </div>
+        <div class="stat-info">
+            <h3>KES {{ "{:,.0f}".format(total_revenue|default(0)) }}</h3>
+            <p>Total Revenue</p>
+        </div>
+    </div>
+
+    <div class="stat-card" data-animate>
+        <div class="stat-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+        </div>
+        <div class="stat-info">
+            <h3>{{ total_messages|default(0) }}</h3>
+            <p>Total Messages</p>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="dashboard-row">
+    <div class="chart-card" data-animate>
+        <div class="card-header">
+            <h2>Booking Overview</h2>
+            <select class="chart-filter">
+                <option value="week">This Week</option>
+                <option value="month" selected>This Month</option>
+                <option value="year">This Year</option>
+            </select>
+        </div>
+        <div class="chart-container">
+            <canvas id="bookingsChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card small" data-animate>
+        <div class="card-header">
+            <h2>Service Breakdown</h2>
+        </div>
+        <div class="chart-container">
+            <canvas id="servicesChart"></canvas>
+        </div>
+        <div class="chart-legend" id="servicesLegend"></div>
+    </div>
+</div>
+
+<div class="dashboard-row">
+    <div class="chart-card" data-animate>
+        <div class="card-header">
+            <h2>Revenue Trend</h2>
+            <select class="chart-filter">
+                <option value="week">This Week</option>
+                <option value="month" selected>This Month</option>
+                <option value="year">This Year</option>
+            </select>
+        </div>
+        <div class="chart-container">
+            <canvas id="revenueChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card small" data-animate>
+        <div class="card-header">
+            <h2>Payment Methods</h2>
+        </div>
+        <div class="chart-container">
+            <canvas id="paymentMethodsChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Bookings -->
+<div class="dashboard-row">
+    <div class="data-card" data-animate>
+        <div class="card-header">
+            <h2>Recent Bookings</h2>
+            <a href="/admin/bookings" class="view-all">View All</a>
+        </div>
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Service</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in recent_bookings %}
+                    <tr>
+                        <td>
+                            <div class="client-info">
+                                <div class="client-avatar">{{ booking.name[0].upper() }}</div>
+                                <div>
+                                    <span class="client-name">{{ booking.name }}</span>
+                                    <span class="client-email">{{ booking.email }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ booking.service }}</td>
+                        <td>{{ booking.created_at.strftime('%b %d, %Y') }}</td>
+                        <td>
+                            <span class="status-badge {{ booking.status }}">
+                                {{ booking.status|capitalize }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="/admin/bookings" class="action-btn" title="View">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
                     {% else %}
-                        <span>{{ current_user.username[0].upper() if current_user.is_authenticated else 'A' }}</span>
-                    {% endif %}
-                </div>
-                <div class="user-details">
-                    <span class="user-name">{{ current_user.username if current_user.is_authenticated else 'Admin' }}</span>
-                    <span class="user-role">Administrator</span>
-                </div>
-            </div>
-            <a href="{{ url_for('auth.logout') }}" class="logout-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-            </a>
+                    <tr><td colspan="5" style="text-align:center;color:#737373;padding:24px">No bookings yet</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-    </aside>
+    </div>
+</div>
 
-    <!-- MAIN CONTENT -->
-    <main class="admin-main" id="adminMain">
-        <!-- Top Bar -->
-        <header class="admin-topbar">
-            <div class="topbar-left">
-                <button class="mobile-sidebar-toggle" id="mobileSidebarToggle">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 12h18M3 6h18M3 18h18"/>
-                    </svg>
-                </button>
-                <div class="page-title">
-                    <h1>Dashboard</h1>
-                    <p>Welcome back, {{ current_user.username if current_user.is_authenticated else 'Admin' }}!</p>
+<!-- Messages + Quick Stats -->
+<div class="dashboard-row">
+    <div class="data-card" data-animate>
+        <div class="card-header">
+            <h2>Recent Messages</h2>
+            <a href="/admin/messages" class="view-all">View All</a>
+        </div>
+        <div class="messages-container">
+            {% for msg in messages %}
+            <div class="message-item">
+                <div class="message-avatar">{{ msg.sender_name[0].upper() }}</div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="message-sender">{{ msg.sender_name }}</span>
+                        <span class="message-time">{{ msg.created_at.strftime('%b %d') }}</span>
+                    </div>
+                    <p class="message-text">{{ msg.content[:80] }}{% if msg.content|length > 80 %}…{% endif %}</p>
                 </div>
             </div>
-            <div class="topbar-right">
-                <div class="topbar-search">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.35-4.35"/>
-                    </svg>
-                    <input type="text" placeholder="Search...">
-                </div>
-                <button class="topbar-icon-btn" id="notificationsBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                    </svg>
-                    <span class="notification-badge">3</span>
-                </button>
-            </div>
-        </header>
-        
-        <!-- Dashboard Content -->
-        <div class="admin-content">
-            <!-- Stats Grid -->
-            <!-- Stats Grid - Replace static numbers with dynamic data -->
-            <div class="stats-grid">
-                <div class="stat-card" data-animate>
-                    <div class="stat-icon blue">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2"/>
-                            <circle cx="8.5" cy="8.5" r="1.5"/>
-                            <path d="m21 15-5-5L5 21"/>
-                        </svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3>{{ total_uploads|default(0) }}</h3>
-                        <p>Total Photos</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card" data-animate>
-                    <div class="stat-icon gold">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2"/>
-                            <path d="M16 2v4M8 2v4M3 10h18"/>
-                        </svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3>{{ total_bookings|default(0) }}</h3>
-                        <p>Total Bookings</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card" data-animate>
-                    <div class="stat-icon green">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                        </svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3>KES {{ "{:,.0f}".format(total_revenue|default(0)) }}</h3>
-                        <p>Total Revenue</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card" data-animate>
-                    <div class="stat-icon purple">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                        </svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3>{{ total_messages|default(0) }}</h3>
-                        <p>Total Messages</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Charts Row -->
-            <div class="dashboard-row">
-                <div class="chart-card" data-animate>
-                    <div class="card-header">
-                        <h2>Booking Overview</h2>
-                        <select class="chart-filter">
-                            <option value="week">This Week</option>
-                            <option value="month" selected>This Month</option>
-                            <option value="year">This Year</option>
-                        </select>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="bookingsChart"></canvas>
-                    </div>
-                </div>
-                
-                <div class="chart-card small" data-animate>
-                    <div class="card-header">
-                        <h2>Service Breakdown</h2>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="servicesChart"></canvas>
-                    </div>
-                    <div class="chart-legend" id="servicesLegend"></div>
-                </div>
-            </div>
+            {% else %}
+            <p style="color:#737373;padding:20px;text-align:center">No messages yet</p>
+            {% endfor %}
+        </div>
+    </div>
 
-            <!-- Revenue & Performance Charts -->
-            <div class="dashboard-row">
-                <div class="chart-card" data-animate>
-                    <div class="card-header">
-                        <h2>Revenue Trend</h2>
-                        <select class="chart-filter">
-                            <option value="week">This Week</option>
-                            <option value="month" selected>This Month</option>
-                            <option value="year">This Year</option>
-                        </select>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="revenueChart"></canvas>
-                    </div>
-                </div>
-                
-                <div class="chart-card small" data-animate>
-                    <div class="card-header">
-                        <h2>Payment Methods</h2>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="paymentMethodsChart"></canvas>
-                    </div>
-                </div>
+    <div class="data-card small" data-animate>
+        <div class="card-header"><h2>Quick Stats</h2></div>
+        <div class="quick-stats">
+            <div class="quick-stat-item">
+                <span class="stat-label">Pending Bookings</span>
+                <span class="stat-value">{{ pending_bookings|default(0) }}</span>
             </div>
-            
-            <!-- Recent Activity -->
-            <div class="dashboard-row">
-                <!-- Recent Bookings -->
-                <div class="data-card" data-animate>
-                    <div class="card-header">
-                        <h2>Recent Bookings</h2>
-                        <a href="/admin/bookings" class="view-all">View All</a>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Client</th>
-                                    <th>Service</th>
-                                    <th>Date</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="client-info">
-                                            <div class="client-avatar">J</div>
-                                            <div>
-                                                <span class="client-name">John Kamau</span>
-                                                <span class="client-email">john@email.com</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>Portrait Session</td>
-                                    <td>Apr 25, 2026</td>
-                                    <td>KES 8,000</td>
-                                    <td><span class="status-badge confirmed">Confirmed</span></td>
-                                    <td>
-                                        <button class="action-btn">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                                <circle cx="12" cy="12" r="3"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="client-info">
-                                            <div class="client-avatar">M</div>
-                                            <div>
-                                                <span class="client-name">Mary Wanjiku</span>
-                                                <span class="client-email">mary@email.com</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>Wedding Coverage</td>
-                                    <td>Apr 28, 2026</td>
-                                    <td>KES 45,000</td>
-                                    <td><span class="status-badge pending">Pending</span></td>
-                                    <td>
-                                        <button class="action-btn">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                                <circle cx="12" cy="12" r="3"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="client-info">
-                                            <div class="client-avatar">P</div>
-                                            <div>
-                                                <span class="client-name">Peter Ochieng</span>
-                                                <span class="client-email">peter@email.com</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>Product Shoot</td>
-                                    <td>Apr 30, 2026</td>
-                                    <td>KES 12,000</td>
-                                    <td><span class="status-badge confirmed">Confirmed</span></td>
-                                    <td>
-                                        <button class="action-btn">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                                <circle cx="12" cy="12" r="3"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="quick-stat-item">
+                <span class="stat-label">Unread Messages</span>
+                <span class="stat-value">{{ unread_messages|default(0) }}</span>
             </div>
-
-            <!-- Recent Messages -->
-            <div class="dashboard-row">
-                <div class="data-card" data-animate>
-                    <div class="card-header">
-                        <h2>Recent Messages</h2>
-                        <a href="/admin/messages" class="view-all">View All</a>
-                    </div>
-                    <div class="messages-container">
-                        <div class="message-item">
-                            <div class="message-avatar">A</div>
-                            <div class="message-content">
-                                <div class="message-header">
-                                    <span class="message-sender">Alice Johnson</span>
-                                    <span class="message-time">2 hours ago</span>
-                                </div>
-                                <p class="message-text">Hi, I'm interested in booking a wedding photography session...</p>
-                            </div>
-                        </div>
-                        <div class="message-item">
-                            <div class="message-avatar">B</div>
-                            <div class="message-content">
-                                <div class="message-header">
-                                    <span class="message-sender">Bob Smith</span>
-                                    <span class="message-time">5 hours ago</span>
-                                </div>
-                                <p class="message-text">Do you offer same-day delivery for event photos?</p>
-                            </div>
-                        </div>
-                        <div class="message-item">
-                            <div class="message-avatar">C</div>
-                            <div class="message-content">
-                                <div class="message-header">
-                                    <span class="message-sender">Cynthia Lee</span>
-                                    <span class="message-time">1 day ago</span>
-                                </div>
-                                <p class="message-text">Can you provide a custom package quote for corporate events?</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Stats -->
-                <div class="data-card small" data-animate>
-                    <div class="card-header">
-                        <h2>Quick Stats</h2>
-                    </div>
-                    <div class="quick-stats">
-                        <div class="quick-stat-item">
-                            <span class="stat-label">Pending Bookings</span>
-                            <span class="stat-value">5</span>
-                        </div>
-                        <div class="quick-stat-item">
-                            <span class="stat-label">Unread Messages</span>
-                            <span class="stat-value">12</span>
-                        </div>
-                        <div class="quick-stat-item">
-                            <span class="stat-label">Pending Payments</span>
-                            <span class="stat-value">KES 52,000</span>
-                        </div>
-                        <div class="quick-stat-item">
-                            <span class="stat-label">Scheduled Shoots</span>
-                            <span class="stat-value">8</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="quick-stat-item">
+                <span class="stat-label">Total Revenue</span>
+                <span class="stat-value">KES {{ "{:,.0f}".format(total_revenue|default(0)) }}</span>
             </div>
-
-            <!-- Payments Overview -->
-            <div class="dashboard-row">
-                <div class="data-card" data-animate>
-                    <div class="card-header">
-                        <h2>Recent Payments</h2>
-                        <a href="/admin/payments" class="view-all">View All</a>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Client</th>
-                                    <th>Amount</th>
-                                    <th>Method</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>John Kamau</td>
-                                    <td>KES 8,000</td>
-                                    <td>M-Pesa</td>
-                                    <td>Apr 20, 2026</td>
-                                    <td><span class="status-badge completed">Completed</span></td>
-                                    <td>
-                                        <button class="action-btn">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                                <circle cx="12" cy="12" r="3"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Sarah Williams</td>
-                                    <td>KES 25,000</td>
-                                    <td>Bank Transfer</td>
-                                    <td>Apr 18, 2026</td>
-                                    <td><span class="status-badge completed">Completed</span></td>
-                                    <td>
-                                        <button class="action-btn">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                                <circle cx="12" cy="12" r="3"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>David Brown</td>
-                                    <td>KES 15,000</td>
-                                    <td>Credit Card</td>
-                                    <td>Apr 15, 2026</td>
-                                    <td><span class="status-badge pending">Pending</span></td>
-                                    <td>
-                                        <button class="action-btn">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                                <circle cx="12" cy="12" r="3"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="quick-stat-item">
+                <span class="stat-label">Portfolio Items</span>
+                <span class="stat-value">{{ total_uploads|default(0) }}</span>
             </div>
         </div>
-    </main>
+    </div>
+</div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
-    <script>
-        // Initialize Charts
-        document.addEventListener('DOMContentLoaded', () => {
-            // Bookings Chart
-            const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
-            new Chart(bookingsCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                    datasets: [{
-                        label: 'Bookings',
-                        data: [4, 6, 8, 6],
-                        borderColor: '#D4AF37',
-                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#D4AF37',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { color: '#737373' }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: '#737373' }
-                        }
-                    }
-                }
-            });
-            
-            // Services Chart
-            const servicesCtx = document.getElementById('servicesChart').getContext('2d');
-            const servicesData = {
-                labels: ['Portraits', 'Events', 'Commercial', 'Video'],
-                datasets: [{
-                    data: [35, 30, 20, 15],
-                    backgroundColor: ['#D4AF37', '#3B82F6', '#22C55E', '#8B5CF6'],
-                    borderWidth: 0
-                }]
-            };
-            
-            new Chart(servicesCtx, {
-                type: 'doughnut',
-                data: servicesData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '70%',
-                    plugins: {
-                        legend: { display: false }
-                    }
-                }
-            });
+<!-- Recent Payments -->
+<div class="dashboard-row">
+    <div class="data-card" data-animate>
+        <div class="card-header">
+            <h2>Recent Payments</h2>
+            <a href="/admin/payments" class="view-all">View All</a>
+        </div>
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in recent_payments %}
+                    <tr>
+                        <td>{{ payment.booking.name if payment.booking else '—' }}</td>
+                        <td>KES {{ "{:,.0f}".format(payment.amount) }}</td>
+                        <td>{{ payment.payment_method|default('—')|capitalize }}</td>
+                        <td>{{ payment.created_at.strftime('%b %d, %Y') }}</td>
+                        <td><span class="status-badge {{ payment.status }}">{{ payment.status|capitalize }}</span></td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" style="text-align:center;color:#737373;padding:24px">No payments yet</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-            // Revenue Chart
-            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-            new Chart(revenueCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                    datasets: [{
-                        label: 'Revenue (KES)',
-                        data: [45000, 52000, 48000, 65000],
-                        backgroundColor: '#22C55E',
-                        borderRadius: 8,
-                        borderSkipped: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { color: '#737373' }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: '#737373' }
-                        }
-                    }
-                }
-            });
+{% endblock %}
 
-            // Payment Methods Chart
-            const paymentMethodsCtx = document.getElementById('paymentMethodsChart').getContext('2d');
-            const paymentData = {
-                labels: ['M-Pesa', 'Bank', 'Card', 'Cash'],
-                datasets: [{
-                    data: [45, 30, 15, 10],
-                    backgroundColor: ['#D4AF37', '#3B82F6', '#22C55E', '#8B5CF6'],
-                    borderWidth: 0
-                }]
-            };
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const chartDefaults = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+    };
+    const gridColor = 'rgba(255,255,255,0.05)';
+    const tickColor = '#737373';
 
-            new Chart(paymentMethodsCtx, {
-                type: 'doughnut',
-                data: paymentData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '70%',
-                    plugins: {
-                        legend: { display: false }
-                    }
-                }
-            });
-            
-            // Generate Services Legend
-            const legend = document.getElementById('servicesLegend');
-            const colors = ['#D4AF37', '#3B82F6', '#22C55E', '#8B5CF6'];
-            servicesData.labels.forEach((label, i) => {
-                legend.innerHTML += `
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: ${colors[i]}"></span>
-                        <span class="legend-label">${label}</span>
-                        <span class="legend-value">${servicesData.datasets[0].data[i]}%</span>
-                    </div>
-                `;
-            });
+    // Bookings line chart
+    new Chart(document.getElementById('bookingsChart'), {
+        type: 'line',
+        data: {
+            labels: ['Week 1','Week 2','Week 3','Week 4'],
+            datasets: [{
+                label: 'Bookings',
+                data: [4, 6, 8, 6],
+                borderColor: '#D4AF37',
+                backgroundColor: 'rgba(212,175,55,0.08)',
+                fill: true, tension: 0.4,
+                pointBackgroundColor: '#D4AF37',
+                pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 5,
+            }]
+        },
+        options: { ...chartDefaults, scales: {
+            y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor } },
+            x: { grid: { display: false }, ticks: { color: tickColor } },
+        }},
+    });
+
+    // Services doughnut
+    const servicesData = { labels: ['Portraits','Events','Commercial','Video'], data: [35,30,20,15] };
+    const colors = ['#D4AF37','#3B82F6','#22C55E','#8B5CF6'];
+    new Chart(document.getElementById('servicesChart'), {
+        type: 'doughnut',
+        data: { labels: servicesData.labels, datasets: [{ data: servicesData.data, backgroundColor: colors, borderWidth: 0 }] },
+        options: { ...chartDefaults, cutout: '70%' },
+    });
+    const legend = document.getElementById('servicesLegend');
+    if (legend) {
+        servicesData.labels.forEach((l, i) => {
+            legend.innerHTML += `<div class="legend-item"><span class="legend-color" style="background:${colors[i]}"></span><span class="legend-label">${l}</span><span class="legend-value">${servicesData.data[i]}%</span></div>`;
         });
-    </script>
-</body>
-</html>
+    }
+
+    // Revenue bar chart
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Week 1','Week 2','Week 3','Week 4'],
+            datasets: [{ label: 'Revenue (KES)', data: [45000,52000,48000,65000], backgroundColor: '#22C55E', borderRadius: 8, borderSkipped: false }]
+        },
+        options: { ...chartDefaults, scales: {
+            y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor } },
+            x: { grid: { display: false }, ticks: { color: tickColor } },
+        }},
+    });
+
+    // Payment methods doughnut
+    new Chart(document.getElementById('paymentMethodsChart'), {
+        type: 'doughnut',
+        data: { labels: ['M-Pesa','Bank','Card','Cash'], datasets: [{ data: [45,30,15,10], backgroundColor: colors, borderWidth: 0 }] },
+        options: { ...chartDefaults, cutout: '70%' },
+    });
+});
+</script>
+{% endblock %}

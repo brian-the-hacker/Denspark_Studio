@@ -1,10 +1,9 @@
 /* =========================================
-   DENSPARK STUDIO — Portfolio JS
-   Performance-first: lazy images, 
-   IntersectionObserver reveals, 
-   fast filter with RAF, virtual pagination
+   DENSPARK STUDIO — Public Portfolio JS
+   Works with dynamic API-loaded items.
+   The HTML inline script handles fetch/render;
+   this file handles all UI interactions.
    ========================================= */
-
 (function () {
   'use strict';
 
@@ -44,173 +43,147 @@
   }
 
   /* ====================================================
-     3. LAZY IMAGE LOADING
-     ── Uses native loading="lazy" as primary,
-        IntersectionObserver as progressive enhancement.
-     ── Adds blur-up effect: images start blurred,
-        clear on load.
+     3. SCROLL REVEAL
+     Exported as window.__revealObs so the inline
+     API script can observe dynamically added items.
   ==================================================== */
-  function setupLazyImages() {
-    const imgs = document.querySelectorAll('.pf-img-wrap img');
-
-    imgs.forEach((img) => {
-      // Mark as loading → blurred
-      if (!img.complete) {
-        img.classList.add('lazy-loading');
-        img.addEventListener('load', () => {
-          img.classList.remove('lazy-loading');
-        }, { once: true });
-        img.addEventListener('error', () => {
-          img.classList.remove('lazy-loading');
-          // Graceful fallback: show placeholder color
-          img.style.background = 'var(--gray-100)';
-        }, { once: true });
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObs.unobserve(entry.target);
       }
     });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 
-    // IntersectionObserver for browsers that support it
-    // — defers off-screen image src assignment for even faster load
-    if ('IntersectionObserver' in window) {
-      const imgObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            // If data-src set (progressive enhancement), swap it in
-            if (img.dataset.src) {
-              img.src = img.dataset.src;
-              img.removeAttribute('data-src');
-            }
-            imgObserver.unobserve(img);
-          }
-        });
-      }, { rootMargin: '200px 0px' }); // 200px pre-load buffer
-
-      imgs.forEach((img) => imgObserver.observe(img));
-    }
-  }
+  document.querySelectorAll('.reveal').forEach((el) => revealObs.observe(el));
+  window.__revealObs = revealObs; // used by inline script for dynamic .pf-item elements
 
   /* ====================================================
-     4. SCROLL REVEAL
-     ── Staggered entry for grid items
+     4. ITEM REVEAL
+     Called by inline script after it injects items.
+     Staggered by position mod 4.
   ==================================================== */
-  function setupReveal() {
-    const revealEls = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
-    revealEls.forEach((el) => observer.observe(el));
-  }
-
-  /* ====================================================
-     5. PORTFOLIO ITEMS REVEAL
-     ── Stagger-reveals items as they scroll into view
-  ==================================================== */
-  function setupItemReveal() {
+  window.__setupItemReveal = function () {
     const items = document.querySelectorAll('.pf-item');
-    const observer = new IntersectionObserver((entries) => {
+    const itemObs = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          // Small stagger based on position
-          const delay = (Array.from(items).indexOf(entry.target) % 4) * 60;
-          setTimeout(() => entry.target.classList.add('visible'), delay);
-          observer.unobserve(entry.target);
-        }
+        if (!entry.isIntersecting) return;
+        const idx   = Array.from(items).indexOf(entry.target);
+        const delay = (idx % 4) * 60;
+        setTimeout(() => entry.target.classList.add('visible'), delay);
+        itemObs.unobserve(entry.target);
       });
     }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
 
-    items.forEach((item) => observer.observe(item));
-  }
+    items.forEach((item) => itemObs.observe(item));
+  };
+
+  /* ====================================================
+     5. LAZY IMAGE LOADING
+     Called by inline script after items are rendered.
+     Blur-up effect + IntersectionObserver pre-loading.
+  ==================================================== */
+  window.__setupLazyImages = function () {
+    const imgs = document.querySelectorAll('.pf-img-wrap img');
+
+    imgs.forEach((img) => {
+      if (!img.complete) {
+        img.classList.add('lazy-loading');
+        img.addEventListener('load',  () => img.classList.remove('lazy-loading'), { once: true });
+        img.addEventListener('error', () => {
+          img.classList.remove('lazy-loading');
+          img.style.background = 'var(--gray-100)';
+        }, { once: true });
+      }
+      // Off-main-thread decode hint
+      if ('decode' in img) img.decode().catch(() => {});
+    });
+
+    if ('IntersectionObserver' in window) {
+      const imgObs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const img = entry.target;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+          }
+          imgObs.unobserve(img);
+        });
+      }, { rootMargin: '200px 0px' });
+      imgs.forEach((img) => imgObs.observe(img));
+    }
+
+    // content-visibility for off-screen items
+    if (CSS.supports('content-visibility', 'auto')) {
+      document.querySelectorAll('.pf-item').forEach((item) => {
+        item.style.contentVisibility    = 'auto';
+        item.style.containIntrinsicSize = '0 300px';
+      });
+    }
+  };
 
   /* ====================================================
      6. FILTER SYSTEM
-     ── Uses requestAnimationFrame for smooth DOM updates
-     ── Counts items per category
-     ── Updates result text
+     The inline script builds and populates the grid.
+     It calls window.__bindFilters() once items are ready.
   ==================================================== */
-  const pfGrid      = document.getElementById('pfGrid');
-  const pfEmpty     = document.getElementById('pfEmpty');
-  const pfResultText= document.getElementById('pfResultText');
-  const filterBtns  = document.querySelectorAll('.pf-filter');
-  let   activeFilter = 'all';
+  window.__bindFilters = function () {
+    const pfGrid       = document.getElementById('pfGrid');
+    const pfEmpty      = document.getElementById('pfEmpty');
+    const pfResultText = document.getElementById('pfResultText');
+    const filterBtns   = document.querySelectorAll('.pf-filter');
+    let   activeFilter = 'all';
 
-  // Count items per category
-  function updateCounts() {
-    const allItems = pfGrid ? pfGrid.querySelectorAll('.pf-item') : [];
-    const counts   = { all: 0 };
+    function filterItems(filter) {
+      if (!pfGrid) return;
+      const items = pfGrid.querySelectorAll('.pf-item');
+      let visible = 0;
 
-    allItems.forEach((item) => {
-      const cat = item.dataset.category;
-      counts.all++;
-      counts[cat] = (counts[cat] || 0) + 1;
-    });
+      requestAnimationFrame(() => {
+        items.forEach((item) => item.classList.add('filtering'));
 
-    document.getElementById('count-all')?.textContent && (
-      document.getElementById('count-all').textContent = counts.all
-    );
-    Object.keys(counts).forEach((key) => {
-      const el = document.getElementById(`count-${key}`);
-      if (el) el.textContent = counts[key] || 0;
-    });
-  }
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            items.forEach((item) => {
+              const cat  = item.dataset.category;
+              const show = filter === 'all' || cat === filter;
+              item.classList.remove('filtering');
+              item.classList.toggle('filter-hidden', !show);
+              if (show) {
+                visible++;
+                item.classList.remove('visible');
+                setTimeout(() => item.classList.add('visible'), 50 + (visible % 4) * 50);
+              }
+            });
 
-  function filterItems(filter) {
-    if (!pfGrid) return;
-    const items = pfGrid.querySelectorAll('.pf-item');
-    let visible = 0;
-
-    // Step 1: fade out briefly
-    requestAnimationFrame(() => {
-      items.forEach((item) => item.classList.add('filtering'));
-
-      // Step 2: after fade, toggle visibility
-      setTimeout(() => {
-        requestAnimationFrame(() => {
-          items.forEach((item) => {
-            const cat   = item.dataset.category;
-            const show  = filter === 'all' || cat === filter;
-
-            item.classList.remove('filtering');
-            item.classList.toggle('filter-hidden', !show);
-
-            if (show) {
-              visible++;
-              // Re-trigger reveal animation
-              item.classList.remove('visible');
-              setTimeout(() => item.classList.add('visible'), 50 + (visible % 4) * 50);
+            if (pfEmpty)      pfEmpty.style.display = visible === 0 ? 'block' : 'none';
+            if (pfResultText) {
+              const suffix = filter !== 'all' ? ` · ${filter}` : '';
+              pfResultText.textContent = `Showing ${visible} ${visible === 1 ? 'work' : 'works'}${suffix}`;
             }
           });
+        }, 180);
+      });
+    }
 
-          // Empty state
-          if (pfEmpty) pfEmpty.style.display = visible === 0 ? 'block' : 'none';
-          if (pfResultText) {
-            pfResultText.textContent = `Showing ${visible} ${visible === 1 ? 'work' : 'works'}${filter !== 'all' ? ' · ' + filter : ''}`;
-          }
-        });
-      }, 180);
+    filterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        if (filter === activeFilter) return;
+        activeFilter = filter;
+        filterBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterItems(filter);
+      });
     });
-  }
-
-  filterBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const filter = btn.dataset.filter;
-      if (filter === activeFilter) return;
-      activeFilter = filter;
-
-      filterBtns.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-      filterItems(filter);
-    });
-  });
+  };
 
   /* ====================================================
      7. VIEW TOGGLE — Grid / Masonry / List
   ==================================================== */
+  const pfGrid      = document.getElementById('pfGrid');
   const viewGrid    = document.getElementById('viewGrid');
   const viewMasonry = document.getElementById('viewMasonry');
   const viewList    = document.getElementById('viewList');
@@ -221,7 +194,6 @@
     if (!pfGrid) return;
     viewBtns.forEach((b, i) => b && b.classList.toggle('active', i === idx));
     viewClasses.forEach((cls, i) => pfGrid.classList.toggle(cls, i === idx));
-    // Persist preference
     try { localStorage.setItem('pf-view', idx); } catch {}
   }
 
@@ -229,7 +201,7 @@
   viewMasonry && viewMasonry.addEventListener('click', () => setView(1));
   viewList    && viewList.addEventListener('click',    () => setView(2));
 
-  // Restore saved preference
+  // Restore saved preference on load
   try {
     const saved = localStorage.getItem('pf-view');
     if (saved !== null) setView(Number(saved));
@@ -237,21 +209,33 @@
 
   /* ====================================================
      8. LIGHTBOX
-     ── Keyboard nav, swipe, caption, counter
+     buildLbItems() reads from the inline script's
+     visibleItems array via window.__visibleItems,
+     which the inline script must set.
   ==================================================== */
-  const lightbox    = document.getElementById('lightbox');
-  const lbBackdrop  = document.getElementById('lightboxBackdrop');
-  const lbImg       = document.getElementById('lightboxImg');
-  const lbCaption   = document.getElementById('lightboxCaption');
-  const lbCounter   = document.getElementById('lightboxCounter');
-  const lbClose     = document.getElementById('lightboxClose');
-  const lbPrev      = document.getElementById('lbPrev');
-  const lbNext      = document.getElementById('lbNext');
+  const lightbox   = document.getElementById('lightbox');
+  const lbBackdrop = document.getElementById('lightboxBackdrop');
+  const lbImg      = document.getElementById('lightboxImg');
+  const lbCaption  = document.getElementById('lightboxCaption');
+  const lbCounter  = document.getElementById('lightboxCounter');
+  const lbClose    = document.getElementById('lightboxClose');
+  const lbPrev     = document.getElementById('lbPrev');
+  const lbNext     = document.getElementById('lbNext');
 
-  let lbItems   = []; // { src, title, cat }
+  let lbItems   = [];
   let lbCurrent = 0;
 
   function buildLbItems() {
+    // Prefer inline script's data array (has Cloudinary URLs)
+    if (window.__visibleItems && window.__visibleItems.length) {
+      lbItems = window.__visibleItems.map((item) => ({
+        src  : item.image_url || '',
+        title: item.title     || '',
+        cat  : item.category_label || item.category || '',
+      }));
+      return;
+    }
+    // Fallback: read from DOM
     const items = pfGrid ? pfGrid.querySelectorAll('.pf-item:not(.filter-hidden)') : [];
     lbItems = Array.from(items).map((item) => ({
       src  : item.dataset.img || item.querySelector('img')?.src || '',
@@ -275,31 +259,31 @@
     lbCurrent = (idx + lbItems.length) % lbItems.length;
     const item = lbItems[lbCurrent];
     if (!item) return;
-
     lbImg.style.opacity = '0';
     setTimeout(() => {
       lbImg.src = item.src;
       lbImg.alt = item.title;
       lbImg.style.opacity = '1';
     }, 140);
-
     if (lbCaption) lbCaption.textContent = item.title ? `${item.cat} · ${item.title}` : '';
     if (lbCounter) lbCounter.textContent = `${lbCurrent + 1} / ${lbItems.length}`;
   }
 
-  // Attach zoom buttons
+  // Delegate click — works for dynamically added items
   document.addEventListener('click', (e) => {
-    const btn  = e.target.closest('.pf-zoom');
-    const item = e.target.closest('.pf-item');
-    if (!btn && !item) return;
-    if (btn || item) {
-      e.preventDefault();
-      buildLbItems();
-      const target  = (btn || item).closest('.pf-item');
-      const allItems= Array.from(pfGrid?.querySelectorAll('.pf-item:not(.filter-hidden)') || []);
-      const idx     = allItems.indexOf(target);
-      if (idx >= 0) openLightbox(idx);
-    }
+    const zoomBtn  = e.target.closest('.pf-zoom');
+    const imgWrap  = e.target.closest('.pf-img-wrap');
+    const pfItem   = e.target.closest('.pf-item');
+
+    if (!zoomBtn && !imgWrap) return;
+    if (!pfItem) return;
+
+    e.preventDefault();
+    buildLbItems();
+
+    const allItems = Array.from(pfGrid?.querySelectorAll('.pf-item:not(.filter-hidden)') || []);
+    const idx      = allItems.indexOf(pfItem);
+    if (idx >= 0) openLightbox(idx);
   });
 
   lbClose    && lbClose.addEventListener('click', closeLightbox);
@@ -309,15 +293,14 @@
 
   document.addEventListener('keydown', (e) => {
     if (!lightbox?.classList.contains('open')) return;
-    if (e.key === 'Escape')      closeLightbox();
-    if (e.key === 'ArrowLeft')   showLbSlide(lbCurrent - 1);
-    if (e.key === 'ArrowRight')  showLbSlide(lbCurrent + 1);
+    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft')  showLbSlide(lbCurrent - 1);
+    if (e.key === 'ArrowRight') showLbSlide(lbCurrent + 1);
   });
 
-  // Touch swipe in lightbox
   let lbTouchX = 0;
   lightbox?.addEventListener('touchstart', (e) => { lbTouchX = e.touches[0].clientX; }, { passive: true });
-  lightbox?.addEventListener('touchend', (e) => {
+  lightbox?.addEventListener('touchend',   (e) => {
     const diff = lbTouchX - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 40) showLbSlide(diff > 0 ? lbCurrent + 1 : lbCurrent - 1);
   });
@@ -358,57 +341,13 @@
     if (!text) return;
     appendMsg(text, 'sent');
     chatInput.value = '';
-    setTimeout(() => {
-      appendMsg(replies[replyIdx++ % replies.length], 'received');
-    }, 800 + Math.random() * 400);
+    setTimeout(() => appendMsg(replies[replyIdx++ % replies.length], 'received'),
+      800 + Math.random() * 400);
   }
 
   chatToggle?.addEventListener('click', toggleChat);
-  chatClose?.addEventListener('click', toggleChat);
-  chatSend?.addEventListener('click', sendMsg);
+  chatClose?.addEventListener('click',  toggleChat);
+  chatSend?.addEventListener('click',   sendMsg);
   chatInput?.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMsg(); });
-
-  /* ====================================================
-     10. PERFORMANCE: IMAGE DECODE HINT
-     ── Tells browser to decode images off main thread
-  ==================================================== */
-  function decodeImages() {
-    document.querySelectorAll('.pf-img-wrap img').forEach((img) => {
-      if ('decode' in img) {
-        img.decode().catch(() => {}); // non-blocking
-      }
-    });
-  }
-
-  /* ====================================================
-     11. PERFORMANCE: CONTENT-VISIBILITY
-     ── Applied via JS for wider support signal
-  ==================================================== */
-  function applyContentVisibility() {
-    if (!CSS.supports('content-visibility', 'auto')) return;
-    document.querySelectorAll('.pf-item').forEach((item) => {
-      item.style.contentVisibility = 'auto';
-      item.style.containIntrinsicSize = '0 300px'; // estimated height
-    });
-  }
-
-  /* ====================================================
-     12. INIT
-  ==================================================== */
-  function init() {
-    setupLazyImages();
-    setupReveal();
-    setupItemReveal();
-    updateCounts();
-    decodeImages();
-    applyContentVisibility();
-
-    // Trigger initial filter count text
-    const allItems = pfGrid?.querySelectorAll('.pf-item') || [];
-    if (pfResultText) pfResultText.textContent = `Showing ${allItems.length} works`;
-  }
-
-  // Run immediately — DOM is already parsed at script tag position (bottom of body)
-  init();
 
 })();

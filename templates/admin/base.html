@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin | Denspark Studio{% endblock %}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/portfolio/main.css') }}">
+    {% block styles %}{% endblock %}
+</head>
+<body class="admin-body">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <a href="{{ url_for('admin.dashboard') }}" class="sidebar-logo">
+                <span class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 2v2m0 16v2M2 12h2m16 0h2"/>
+                    </svg>
+                </span>
+                <span class="logo-text">Denspark<span class="accent">Studio</span></span>
+            </a>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <span class="nav-section-title">Main</span>
+                <ul>
+                    <li>
+                        <a href="{{ url_for('admin.dashboard') }}"
+                           class="{% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7" rx="1"/>
+                                <rect x="14" y="3" width="7" height="7" rx="1"/>
+                                <rect x="14" y="14" width="7" height="7" rx="1"/>
+                                <rect x="3" y="14" width="7" height="7" rx="1"/>
+                            </svg>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin.portfolio') }}"
+                           class="{% if request.endpoint == 'admin.portfolio' %}active{% endif %}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <path d="m21 15-5-5L5 21"/>
+                            </svg>
+                            <span>Portfolio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin.bookings') }}"
+                           class="{% if request.endpoint == 'admin.bookings' %}active{% endif %}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                                <path d="M16 2v4M8 2v4M3 10h18"/>
+                            </svg>
+                            <span>Bookings</span>
+                            {% if pending_bookings is defined and pending_bookings %}
+                            <span class="badge">{{ pending_bookings }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin.portfolio') }}?action=upload"
+                           class="{% if request.endpoint == 'admin.uploads' %}active{% endif %}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            <span>Upload Media</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title">Communication</span>
+                <ul>
+                    <li>
+                        <a href="{{ url_for('admin.messages') }}"
+                           class="{% if request.endpoint == 'admin.messages' %}active{% endif %}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            <span>Messages</span>
+                            {% if unread_messages is defined and unread_messages %}
+                            <span class="badge">{{ unread_messages }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title">Finance</span>
+                <ul>
+                    <li>
+                        <a href="{{ url_for('admin.payments') }}"
+                           class="{% if request.endpoint == 'admin.payments' %}active{% endif %}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="4" width="22" height="16" rx="2"/>
+                                <path d="M1 10h22"/>
+                            </svg>
+                            <span>Payments</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin.analytics') }}"
+                           class="{% if request.endpoint == 'admin.analytics' %}active{% endif %}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="2" x2="12" y2="22"/>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title">System</span>
+                <ul>
+                    <li>
+                        <a href="{{ url_for('admin.settings') }}"
+                           class="{% if request.endpoint == 'admin.settings' %}active{% endif %}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('public.index') }}" target="_blank">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                            <span>View Site</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    {% if current_user.is_authenticated and current_user.avatar %}
+                        <img src="{{ url_for('static', filename='uploads/' + current_user.avatar) }}"
+                             alt="{{ current_user.username }}">
+                    {% else %}
+                        <span>{{ current_user.username[0].upper() if current_user.is_authenticated else 'A' }}</span>
+                    {% endif %}
+                </div>
+                <div class="user-details">
+                    <span class="user-name">{{ current_user.username if current_user.is_authenticated else 'Admin' }}</span>
+                    <span class="user-role">Administrator</span>
+                </div>
+            </div>
+            <a href="{{ url_for('auth.logout') }}" class="logout-btn" title="Logout">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main" id="adminMain">
+        <header class="admin-topbar">
+            <div class="topbar-left">
+                <button class="mobile-sidebar-toggle" id="mobileSidebarToggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12h18M3 6h18M3 18h18"/>
+                    </svg>
+                </button>
+                <div class="page-title">
+                    <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+                    <p>{% block page_sub %}Welcome back, {{ current_user.username if current_user.is_authenticated else 'Admin' }}!{% endblock %}</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <button class="topbar-icon-btn" id="notificationsBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    {% if pending_bookings is defined and pending_bookings %}
+                    <span class="notification-badge">{{ pending_bookings }}</span>
+                    {% endif %}
+                </button>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

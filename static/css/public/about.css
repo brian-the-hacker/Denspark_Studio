@@ -17,9 +17,6 @@
   --blue-hover:     #1245b5;
   --blue-light:  #3B82F6;
   --blue-dark:   #1240A8;
-
-
-
   --nav-bg:      #0a0a0a;
   --footer-bg:   #0a0a0a;
 
@@ -922,6 +919,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   overflow: hidden;
   border: 1px solid var(--border);
   transition: transform 0.35s var(--ease-out), box-shadow 0.35s;
+  display: flex;
+  flex-direction: column;
 }
 
 .team-card:hover {
@@ -931,17 +930,47 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .team-img-wrap {
   position: relative;
-  aspect-ratio: 3 / 4;
+  width: 100%;
+  padding-bottom: 120%; /* 5:6 portrait ratio — consistent across all cards */
   overflow: hidden;
   background: var(--light-gray);
+  flex-shrink: 0;
 }
 
 .team-img-wrap img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: top center;
   transition: transform 0.6s var(--ease-out);
+  /* Prevent layout shift while loading */
+  will-change: transform;
+}
+
+/* Placeholder shimmer while image loads */
+.team-img-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--light-gray) 25%,
+    #e8e8e8 50%,
+    var(--light-gray) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  z-index: 0;
+}
+
+/* Hide shimmer once image is loaded (JS adds .loaded class) */
+.team-img-wrap.loaded::before { display: none; }
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
 }
 
 .team-card:hover .team-img-wrap img {
@@ -953,8 +982,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   inset: 0;
   background: linear-gradient(
     to bottom,
-    transparent 40%,
-    rgba(10,10,10,0.65) 100%
+    transparent 50%,
+    rgba(10,10,10,0.7) 100%
   );
   opacity: 0;
   transition: opacity 0.35s;
@@ -962,29 +991,33 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   align-items: flex-end;
   justify-content: center;
   padding-bottom: 1rem;
+  z-index: 2;
 }
 
 .team-card:hover .team-img-overlay { opacity: 1; }
 
 .team-info {
-  padding: 1.25rem 1.25rem 1.5rem;
+  padding: 1.1rem 1.25rem 1.4rem;
   border-top: 1px solid var(--border);
+  background: var(--white);
 }
 
 .team-info h4 {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: var(--black);
   margin-bottom: 0.2rem;
+  line-height: 1.2;
 }
 
 .team-role {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--blue-primary);
+  line-height: 1.4;
 }
 
 /* ── Marquee ───────────────────────────────────────────────── */
@@ -1137,7 +1170,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   margin-bottom: 0.85rem;
 }
 
-.footer-logo span { color: var(--blue-primary); }
+.footer-logo span {
+  color: var(--blue-primary);
+}
 
 .footer-brand p {
   font-size: 0.85rem;
@@ -1147,6 +1182,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   color: rgba(255,255,255,0.45);
 }
 
+/* Social Links */
 .footer-social {
   display: flex;
   gap: 0.75rem;
@@ -1170,8 +1206,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transform: translateY(-2px);
 }
 
-.footer-social svg { width: 16px; height: 16px; }
+.footer-social svg {
+  width: 16px;
+  height: 16px;
+}
 
+/* Footer Columns */
 .footer-col h4 {
   font-size: 0.72rem;
   font-weight: 700;
@@ -1196,6 +1236,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .footer-col a:hover { color: var(--white); }
 
+/* Footer Bottom */
 .footer-bottom {
   display: flex;
   align-items: center;
@@ -1207,7 +1248,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   flex-wrap: wrap;
 }
 
-.footer-legal { display: flex; gap: 1.25rem; }
+.footer-legal {
+  display: flex;
+  gap: 1.25rem;
+}
 
 .footer-legal a {
   color: rgba(255,255,255,0.3);
@@ -1215,6 +1259,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 
 .footer-legal a:hover { color: rgba(255,255,255,0.6); }
+
 
 /* ── Chat Widget ───────────────────────────────────────────── */
 .chat-widget {
@@ -1472,4 +1517,70 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .chat-widget { bottom: 1rem; right: 1rem; }
   .chat-window { width: calc(100vw - 2rem); right: 0; }
   .story-img-badge { right: 0; bottom: -0.75rem; }
+}
+/* ── Story Content Additions ─────────────────────────────── */
+.story-intro p {
+  margin-bottom: 1.25rem;
+  line-height: 1.7;
+  color: var(--text-muted, #666);
+}
+
+.story-services {
+  margin: 2.5rem 0;
+}
+
+.services-heading {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--white, #fff);
+  letter-spacing: 0.05em;
+}
+
+.services-intro {
+  margin-bottom: 1.5rem;
+  color: var(--text-muted, #666);
+}
+
+.services-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.services-list li {
+  position: relative;
+  padding-left: 1.25rem;
+  line-height: 1.7;
+  color: var(--text-muted, #666);
+}
+
+.services-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 6px;
+  background: var(--blue-light, var(--blue-primary));
+  border-radius: 50%;
+}
+
+.services-list strong {
+  display: block;
+  color: var(--white, #fff);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  font-family: var(--font-display);
+}
+
+/* Responsive: 2 columns on larger screens */
+@media (min-width: 768px) {
+  .services-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 3rem;
+  }
 }

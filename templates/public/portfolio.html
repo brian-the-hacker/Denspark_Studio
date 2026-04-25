@@ -9,60 +9,31 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="static/css/public/portfolio.css">
+  <link rel="stylesheet" href="/static/css/public/portfolio.css">
 
   <style>
-    /* ── Loading skeleton ── */
+    /* ── Skeleton loader ── */
     .pf-skeleton-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      margin-top: 32px;
+      gap: 20px; margin-top: 32px;
     }
-    .pf-skeleton-item {
-      border-radius: 12px;
-      overflow: hidden;
-      background: #f3f4f6;
-    }
+    .pf-skeleton-item { border-radius: 12px; overflow: hidden; background: #f3f4f6; }
     .pf-skeleton-img {
-      width: 100%;
-      aspect-ratio: 4/3;
+      width: 100%; aspect-ratio: 4/3;
       background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
       background-size: 200% 100%;
       animation: shimmer 1.4s infinite;
     }
     .pf-skeleton-item:nth-child(3n+2) .pf-skeleton-img { aspect-ratio: 4/5; }
     .pf-skeleton-item:nth-child(5n+4) .pf-skeleton-img { aspect-ratio: 16/9; }
-    .pf-skeleton-info {
-      padding: 14px 16px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .pf-skeleton-tag {
-      width: 64px; height: 10px; border-radius: 4px;
-      background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-    }
-    .pf-skeleton-title {
-      width: 75%; height: 14px; border-radius: 4px;
-      background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite 0.1s;
-    }
-    @keyframes shimmer {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
+    .pf-skeleton-info { padding: 14px 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+    .pf-skeleton-tag  { width: 64px; height: 10px; border-radius: 4px; background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+    .pf-skeleton-title{ width: 75%; height: 14px; border-radius: 4px; background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite 0.1s; }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
     /* ── Error state ── */
-    .pf-error {
-      text-align: center;
-      padding: 80px 24px;
-      color: #4b5563;
-    }
+    .pf-error { text-align: center; padding: 80px 24px; color: #4b5563; }
     .pf-error svg { margin: 0 auto 16px; opacity: 0.4; display: block; }
     .pf-error p { margin-bottom: 20px; font-size: 1rem; }
     .pf-error-retry {
@@ -73,20 +44,16 @@
       cursor: pointer; transition: background 0.3s;
     }
     .pf-error-retry:hover { background: #1240A8; }
-
-    /* ── Filter count badge ── */
     .pf-filter-count { min-width: 20px; }
   </style>
 </head>
 <body>
 
-  <!-- Preloader -->
-  
-
-  <!-- Cursor -->
+  <!-- Custom cursor -->
   <div class="cursor" id="cursor"></div>
   <div class="cursor-follower" id="cursorFollower"></div>
 
+  <!-- Navbar -->
   <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="/" class="logo">
@@ -96,7 +63,6 @@
           <span class="logo-sub">STUDIO</span>
         </div>
       </a>
-      
       <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/portfolio" class="nav-link active">Portfolio</a></li>
@@ -104,17 +70,13 @@
         <li><a href="/about" class="nav-link">About</a></li>
         <li><a href="/contact" class="nav-link">Contact</a></li>
       </ul>
-
       <div class="nav-right">
         <a href="/contact" class="btn-book">Book Now</a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
-          <span></span>
-          <span></span>
-          <span></span>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
         </button>
       </div>
     </div>
-
     <div class="mobile-menu" id="mobileMenu">
       <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
@@ -126,7 +88,7 @@
       <a href="/contact" class="btn-book-mobile">Book a Session</a>
       <div class="mobile-info">
         <span>Machakos, Kenya</span>
-        <span>+254 700 000 000</span>
+        <span>+254 710 468 300</span>
       </div>
     </div>
   </nav>
@@ -157,14 +119,11 @@
       <!-- Filter Bar -->
       <div class="pf-filter-bar reveal">
         <div class="pf-filters" id="pfFilters">
-          <!-- Filters are built dynamically from API data -->
           <button class="pf-filter active" data-filter="all">
             <span class="pf-filter-label">All Work</span>
             <span class="pf-filter-count" id="count-all">—</span>
           </button>
-          <!-- Category filters injected by JS -->
         </div>
-
         <div class="pf-view-toggle">
           <button class="pf-view-btn active" id="viewGrid" aria-label="Grid view">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -178,14 +137,13 @@
         </div>
       </div>
 
-      <!-- Results Count -->
+      <!-- Results count -->
       <div class="pf-meta reveal">
         <span id="pfResultText">Loading portfolio…</span>
       </div>
 
-      <!-- Portfolio Grid — populated by JS -->
+      <!-- Grid — JS populates this -->
       <div class="pf-grid pf-grid--masonry" id="pfGrid">
-        <!-- Skeleton placeholders shown while loading -->
         <div class="pf-skeleton-grid" id="pfSkeleton">
           <div class="pf-skeleton-item"><div class="pf-skeleton-img"></div><div class="pf-skeleton-info"><div class="pf-skeleton-tag"></div><div class="pf-skeleton-title"></div></div></div>
           <div class="pf-skeleton-item"><div class="pf-skeleton-img"></div><div class="pf-skeleton-info"><div class="pf-skeleton-tag"></div><div class="pf-skeleton-title"></div></div></div>
@@ -196,13 +154,13 @@
         </div>
       </div>
 
-      <!-- Empty State -->
+      <!-- Empty state -->
       <div class="pf-empty" id="pfEmpty" style="display:none">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         <p>No works found in this category.</p>
       </div>
 
-      <!-- Error State -->
+      <!-- Error state -->
       <div class="pf-error" id="pfError" style="display:none">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <p>Could not load portfolio. Please check your connection.</p>
@@ -264,17 +222,13 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             </a>
             <a href="https://youtube.com/@densparkfilmsmachakos6509?si=b-HHFd-jDE5Z76mQ" aria-label="YouTube">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             </a>
             <a href="https://www.tiktok.com/@densparkstudio300?_r=1&_t=ZS-95khoiW18dB" aria-label="TikTok">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/>
-              </svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/></svg>
             </a>
           </div>
-        </div><!-- end .footer-brand -->
+        </div>
         <div class="footer-col">
           <h4>Navigate</h4>
           <ul>
@@ -299,13 +253,13 @@
           <h4>Contact</h4>
           <ul>
             <li>Machakos Town, Kenya</li>
-            <li><a href="tel:+254700000000">+254 700 000 000</a></li>
-            <li><a href="mailto:info@densparkstudio.co.ke">info@densparkstudio.co.ke</a></li>
+            <li><a href="tel:+254710468300">+254 710 468 300</a></li>
+            <li><a href="mailto:densparkstudio@gmail.com">densparkstudio@gmail.com</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2025 Denspark Studio. All rights reserved.</p>
+        <p>&copy; 2026 Denspark Studio. All rights reserved.</p>
         <div class="footer-legal">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
@@ -360,106 +314,96 @@
     </button>
   </div>
 
-  <script src="static/js/public/portfolio.js"></script>
+  <!-- External: navbar + chat only -->
+  <script src="/static/js/public/portfolio.js"></script>
 
+  <!-- Inline: fetch API, render grid, filter, lightbox, view toggle -->
   <script>
-  /* ============================================================
-     PORTFOLIO — Dynamic loader
-     Expects your FastAPI endpoint: GET /api/portfolio
-     
-     Response shape (array of items):
-     [
-       {
-         "id": 1,
-         "title": "Creative Portrait Session",
-         "category": "portraits",       // slug, lowercase
-         "category_label": "Portrait",  // display name (optional)
-         "image_url": "/static/uploads/portfolio/DNS_2716a.jpg",
-         "size": "tall" | "wide" | ""   // optional: "tall" or "wide" for masonry
-       },
-       ...
-     ]
-  ============================================================ */
   (function () {
     'use strict';
 
-    const API_URL     = '/api/portfolio';   // ← your FastAPI endpoint
-    const pfGrid      = document.getElementById('pfGrid');
-    const pfSkeleton  = document.getElementById('pfSkeleton');
-    const pfEmpty     = document.getElementById('pfEmpty');
-    const pfError     = document.getElementById('pfError');
+    const API_URL      = '/api/portfolio';
+    const pfGrid       = document.getElementById('pfGrid');
+    const pfSkeleton   = document.getElementById('pfSkeleton');
+    const pfEmpty      = document.getElementById('pfEmpty');
+    const pfError      = document.getElementById('pfError');
     const pfResultText = document.getElementById('pfResultText');
     const pfFiltersEl  = document.getElementById('pfFilters');
     const pfRetry      = document.getElementById('pfRetry');
 
-    // All items fetched from API — used for filtering
-    let allItems        = [];
-    let activeFilter    = 'all';
-    let visibleItems    = [];  // currently shown, for lightbox navigation
+    let allItems     = [];
+    let visibleItems = [];
+    let activeFilter = 'all';
 
-    /* ── Fetch from API ────────────────────────── */
+    /* ── Scroll reveal ──────────────────────── */
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+    document.querySelectorAll('.reveal').forEach((el) => revealObs.observe(el));
+
+    /* ── Item stagger reveal ─────────────────── */
+    function observeItems() {
+      const items = pfGrid.querySelectorAll('.pf-item');
+      const itemObs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const idx = Array.from(items).indexOf(entry.target);
+          setTimeout(() => entry.target.classList.add('visible'), (idx % 4) * 60);
+          itemObs.unobserve(entry.target);
+        });
+      }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+      items.forEach((item) => itemObs.observe(item));
+    }
+
+    /* ── Fetch ───────────────────────────────── */
     async function loadPortfolio() {
-      showSkeleton();
-      hideError();
-
+      showSkeleton(); hideError();
       try {
-        const res = await fetch(API_URL);
+        const res  = await fetch(API_URL);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-
-        // Support both { items: [...] } and bare array
-        allItems = Array.isArray(data) ? data : (data.items || []);
-
+        allItems   = data.items || [];
         hideSkeleton();
-
-        if (allItems.length === 0) {
-          showEmpty();
-          return;
-        }
-
-        buildCategoryFilters(allItems);
+        if (allItems.length === 0) { showEmpty(); return; }
+        buildFilters(allItems);
         renderItems(allItems);
-        updateResultText(allItems.length);
-
+        updateText(allItems.length);
       } catch (err) {
         console.error('Portfolio load error:', err);
-        hideSkeleton();
-        showError();
+        hideSkeleton(); showError();
       }
     }
 
-    /* ── Build category filter buttons ─────────── */
-    function buildCategoryFilters(items) {
-      // Tally counts per category
+    /* ── Build filter buttons ────────────────── */
+    function buildFilters(items) {
       const counts = {};
-      items.forEach(item => {
+      items.forEach((item) => {
         const cat = (item.category || 'uncategorized').toLowerCase();
         counts[cat] = (counts[cat] || 0) + 1;
       });
 
-      // Update the "All Work" count
-      document.getElementById('count-all').textContent = items.length;
+      const countAll = document.getElementById('count-all');
+      if (countAll) countAll.textContent = items.length;
 
-      // Remove existing dynamic filter buttons (keep "All Work")
-      pfFiltersEl.querySelectorAll('.pf-filter[data-filter]:not([data-filter="all"])').forEach(b => b.remove());
+      pfFiltersEl.querySelectorAll('.pf-filter:not([data-filter="all"])').forEach((b) => b.remove());
 
-      // Insert one button per category, sorted alphabetically
-      Object.keys(counts).sort().forEach(cat => {
-        const label = toTitleCase(cat);
+      Object.keys(counts).sort().forEach((cat) => {
         const btn = document.createElement('button');
-        btn.className = 'pf-filter';
+        btn.className      = 'pf-filter';
         btn.dataset.filter = cat;
-        btn.innerHTML = `
-          <span class="pf-filter-label">${label}</span>
-          <span class="pf-filter-count">${counts[cat]}</span>
-        `;
+        btn.innerHTML = `<span class="pf-filter-label">${titleCase(cat)}</span><span class="pf-filter-count">${counts[cat]}</span>`;
         pfFiltersEl.appendChild(btn);
       });
 
-      // Bind filter click
-      pfFiltersEl.querySelectorAll('.pf-filter').forEach(btn => {
+      pfFiltersEl.querySelectorAll('.pf-filter').forEach((btn) => {
         btn.addEventListener('click', () => {
-          pfFiltersEl.querySelectorAll('.pf-filter').forEach(b => b.classList.remove('active'));
+          pfFiltersEl.querySelectorAll('.pf-filter').forEach((b) => b.classList.remove('active'));
           btn.classList.add('active');
           activeFilter = btn.dataset.filter;
           applyFilter();
@@ -467,175 +411,174 @@
       });
     }
 
-    /* ── Filter logic ───────────────────────────── */
+    /* ── Filter ──────────────────────────────── */
     function applyFilter() {
       const filtered = activeFilter === 'all'
         ? allItems
-        : allItems.filter(item => (item.category || '').toLowerCase() === activeFilter);
-
+        : allItems.filter((item) => (item.category || '').toLowerCase() === activeFilter);
       renderItems(filtered);
-      updateResultText(filtered.length);
-
-      pfEmpty.style.display = filtered.length === 0 ? 'block' : 'none';
+      updateText(filtered.length);
+      if (pfEmpty) pfEmpty.style.display = filtered.length === 0 ? 'block' : 'none';
     }
 
-    /* ── Render grid items ─────────────────────── */
+    /* ── Render items ────────────────────────── */
     function renderItems(items) {
-      // Remove any previously rendered real items (not skeleton)
-      pfGrid.querySelectorAll('.pf-item').forEach(el => el.remove());
-
+      pfGrid.querySelectorAll('.pf-item').forEach((el) => el.remove());
       visibleItems = items;
+      window.__visibleItems = items; // shared with portfolio.js for lightbox
 
       items.forEach((item, index) => {
-        const sizeClass = item.size === 'tall' ? 'pf-tall'
-                        : item.size === 'wide' ? 'pf-wide'
-                        : '';
-
-        const catLabel   = item.category_label || toTitleCase(item.category || 'Other');
-        const imgSrc     = item.image_url || '';
-        const title      = item.title || 'Untitled';
-        const delay      = (index * 0.04).toFixed(2);
+        const sizeClass = item.size === 'tall' ? ' pf-tall'
+                        : item.size === 'wide' ? ' pf-wide' : '';
+        const catLabel  = item.category_label || titleCase(item.category || 'Other');
+        const imgSrc    = item.image_url || '';  // compressed thumbnail
+        const fullSrc   = item.full_url  || imgSrc; // full res for lightbox
+        const title     = item.title || 'Untitled';
 
         const div = document.createElement('div');
-        div.className     = `pf-item${sizeClass ? ' ' + sizeClass : ''} reveal`;
+        div.className        = `pf-item${sizeClass} reveal`;
         div.dataset.category = (item.category || '').toLowerCase();
         div.dataset.title    = title;
-        div.dataset.img      = imgSrc;
-        div.dataset.index    = index;
-        div.style.cssText    = `--delay:${delay}s`;
+        div.dataset.img      = fullSrc; // lightbox uses full res
+        div.style.cssText    = `--delay:${(index * 0.04).toFixed(2)}s`;
 
         div.innerHTML = `
           <div class="pf-img-wrap">
-            <img
-              src="${escHtml(imgSrc)}"
-              alt="${escHtml(title)}"
-              loading="lazy"
-              onerror="this.closest('.pf-item').classList.add('pf-img-error')"
-            >
+            <img src="${esc(imgSrc)}" alt="${esc(title)}" loading="lazy"
+                 onerror="this.closest('.pf-item').classList.add('pf-img-error')">
             <div class="pf-hover">
               <button class="pf-zoom" aria-label="View fullscreen">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="11" cy="11" r="8"/>
-                  <path d="m21 21-4.35-4.35M11 8v6M8 11h6"/>
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35M11 8v6M8 11h6"/>
                 </svg>
               </button>
             </div>
           </div>
           <div class="pf-info">
-            <span class="pf-cat">${escHtml(catLabel)}</span>
-            <h3 class="pf-title">${escHtml(title)}</h3>
-          </div>
-        `;
+            <span class="pf-cat">${esc(catLabel)}</span>
+            <h3 class="pf-title">${esc(title)}</h3>
+          </div>`;
 
-        // Zoom button → open lightbox
-        div.querySelector('.pf-zoom').addEventListener('click', () => openLightbox(index));
-        // Clicking image also opens lightbox
+        // Lightbox triggers
+        div.querySelector('.pf-zoom').addEventListener('click',     () => openLightbox(index));
         div.querySelector('.pf-img-wrap').addEventListener('click', () => openLightbox(index));
+
+        // Lazy decode hint
+        const img = div.querySelector('img');
+        img.addEventListener('load', () => img.classList.remove('lazy-loading'));
+        if (!img.complete) img.classList.add('lazy-loading');
+        if ('decode' in img) img.decode().catch(() => {});
 
         pfGrid.appendChild(div);
       });
 
-      // Trigger reveal observer on newly added elements
-      pfGrid.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+      pfGrid.querySelectorAll('.reveal').forEach((el) => revealObs.observe(el));
+      observeItems();
     }
 
-    /* ── Result text ────────────────────────────── */
-    function updateResultText(count) {
-      pfResultText.textContent = `Showing ${count} work${count !== 1 ? 's' : ''}`;
+    /* ── Result text ─────────────────────────── */
+    function updateText(count) {
+      if (pfResultText) pfResultText.textContent = `Showing ${count} work${count !== 1 ? 's' : ''}`;
     }
 
-    /* ── Skeleton / error helpers ──────────────── */
-    function showSkeleton()  { pfSkeleton.style.display = ''; }
-    function hideSkeleton()  { pfSkeleton.style.display = 'none'; }
-    function showEmpty()     { pfEmpty.style.display = 'block'; pfResultText.textContent = 'No works found.'; }
-    function showError()     { pfError.style.display = 'block'; pfResultText.textContent = 'Failed to load portfolio.'; }
-    function hideError()     { pfError.style.display = 'none'; }
+    /* ── Skeleton / error helpers ────────────── */
+    function showSkeleton() { if (pfSkeleton) pfSkeleton.style.display = ''; }
+    function hideSkeleton() { if (pfSkeleton) pfSkeleton.style.display = 'none'; }
+    function showEmpty()    { if (pfEmpty) pfEmpty.style.display = 'block'; updateText(0); }
+    function showError()    { if (pfError) pfError.style.display = 'block'; if (pfResultText) pfResultText.textContent = 'Failed to load portfolio.'; }
+    function hideError()    { if (pfError) pfError.style.display = 'none'; }
 
-    /* ── Retry button ────────────────────────────── */
-    pfRetry.addEventListener('click', loadPortfolio);
+    pfRetry?.addEventListener('click', loadPortfolio);
 
-    /* ── Scroll reveal (shared pattern) ─────────── */
-    const revealObs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          revealObs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.08 });
+    /* ── Lightbox ─────────────────────────────── */
+    const lightbox   = document.getElementById('lightbox');
+    const lbBackdrop = document.getElementById('lightboxBackdrop');
+    const lbImg      = document.getElementById('lightboxImg');
+    const lbCaption  = document.getElementById('lightboxCaption');
+    const lbCounter  = document.getElementById('lightboxCounter');
+    const lbClose    = document.getElementById('lightboxClose');
+    const lbPrev     = document.getElementById('lbPrev');
+    const lbNext     = document.getElementById('lbNext');
+    let   lbIdx      = 0;
 
-    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
-    /* ── Lightbox ────────────────────────────────── */
-    const lightbox       = document.getElementById('lightbox');
-    const lbImg          = document.getElementById('lightboxImg');
-    const lbCaption      = document.getElementById('lightboxCaption');
-    const lbCounter      = document.getElementById('lightboxCounter');
-    const lbClose        = document.getElementById('lightboxClose');
-    const lbBackdrop     = document.getElementById('lightboxBackdrop');
-    const lbPrev         = document.getElementById('lbPrev');
-    const lbNext         = document.getElementById('lbNext');
-    let   lbCurrentIndex = 0;
-
-    function openLightbox(index) {
-      lbCurrentIndex = index;
-      updateLightbox();
+    function openLightbox(idx) {
+      lbIdx = idx; showSlide();
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
-
     function closeLightbox() {
       lightbox.classList.remove('open');
       document.body.style.overflow = '';
     }
-
-    function updateLightbox() {
-      const item = visibleItems[lbCurrentIndex];
+    function showSlide() {
+      const item = visibleItems[lbIdx];
       if (!item) return;
-      lbImg.src         = item.image_url || '';
-      lbImg.alt         = item.title     || '';
-      lbCaption.textContent = item.title || '';
-      lbCounter.textContent = `${lbCurrentIndex + 1} / ${visibleItems.length}`;
+      lbImg.style.opacity = '0';
+      setTimeout(() => {
+        // Use full_url for lightbox so visitors see the full resolution image
+        lbImg.src = item.full_url || item.image_url || '';
+        lbImg.alt = item.title || '';
+        lbImg.style.opacity = '1';
+      }, 140);
+      if (lbCaption) lbCaption.textContent = item.title || '';
+      if (lbCounter) lbCounter.textContent = `${lbIdx + 1} / ${visibleItems.length}`;
+    }
+    function lbGo(dir) {
+      lbIdx = (lbIdx + dir + visibleItems.length) % visibleItems.length;
+      showSlide();
     }
 
-    lbClose.addEventListener('click', closeLightbox);
-    lbBackdrop.addEventListener('click', closeLightbox);
-    lbPrev.addEventListener('click', () => { lbCurrentIndex = (lbCurrentIndex - 1 + visibleItems.length) % visibleItems.length; updateLightbox(); });
-    lbNext.addEventListener('click', () => { lbCurrentIndex = (lbCurrentIndex + 1) % visibleItems.length; updateLightbox(); });
+    lbClose?.addEventListener('click', closeLightbox);
+    lbBackdrop?.addEventListener('click', closeLightbox);
+    lbPrev?.addEventListener('click', () => lbGo(-1));
+    lbNext?.addEventListener('click', () => lbGo(1));
 
     document.addEventListener('keydown', (e) => {
-      if (!lightbox.classList.contains('open')) return;
-      if (e.key === 'ArrowLeft')  { lbCurrentIndex = (lbCurrentIndex - 1 + visibleItems.length) % visibleItems.length; updateLightbox(); }
-      if (e.key === 'ArrowRight') { lbCurrentIndex = (lbCurrentIndex + 1) % visibleItems.length; updateLightbox(); }
+      if (!lightbox?.classList.contains('open')) return;
+      if (e.key === 'ArrowLeft')  lbGo(-1);
+      if (e.key === 'ArrowRight') lbGo(1);
       if (e.key === 'Escape')     closeLightbox();
     });
 
-    /* ── View toggle (grid / masonry / list) ─────── */
-    ['viewGrid', 'viewMasonry', 'viewList'].forEach(id => {
-      document.getElementById(id).addEventListener('click', function () {
-        document.querySelectorAll('.pf-view-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        pfGrid.className = 'pf-grid ' + {
-          viewGrid:    'pf-grid--grid',
-          viewMasonry: 'pf-grid--masonry',
-          viewList:    'pf-grid--list',
-        }[id];
-      });
+    // Touch swipe on lightbox
+    let lbTouchX = 0;
+    lightbox?.addEventListener('touchstart', (e) => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+    lightbox?.addEventListener('touchend',   (e) => {
+      const diff = lbTouchX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) lbGo(diff > 0 ? 1 : -1);
     });
 
-    /* ── Utility ─────────────────────────────────── */
-    function toTitleCase(str) {
-      return str.replace(/\b\w/g, c => c.toUpperCase());
-    }
-    function escHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+    /* ── View toggle ──────────────────────────── */
+    const viewMap = {
+      viewGrid:    'pf-grid--grid',
+      viewMasonry: 'pf-grid--masonry',
+      viewList:    'pf-grid--list',
+    };
+    function setView(id) {
+      document.querySelectorAll('.pf-view-btn').forEach((b) => b.classList.remove('active'));
+      document.getElementById(id)?.classList.add('active');
+      pfGrid.className = `pf-grid ${viewMap[id]}`;
+      try { localStorage.setItem('pf-view', id); } catch {}
     }
 
-    /* ── Boot ────────────────────────────────────── */
+    Object.keys(viewMap).forEach((id) => {
+      document.getElementById(id)?.addEventListener('click', () => setView(id));
+    });
+
+    try {
+      const saved = localStorage.getItem('pf-view');
+      if (saved && viewMap[saved]) setView(saved);
+    } catch {}
+
+    /* ── Utilities ────────────────────────────── */
+    function titleCase(str) { return String(str).replace(/\b\w/g, (c) => c.toUpperCase()); }
+    function esc(str) {
+      return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    /* ── Boot ─────────────────────────────────── */
     loadPortfolio();
 
   })();
