@@ -36,11 +36,10 @@ def create_admin_now():
         # Delete all existing users to start clean
         User.query.delete()
         
-        # Create new admin - username must be email format for your form
+        # Create admin - only using columns that exist: username, password_hash
         admin = User(
             username='admin@denspark.com',
-            password_hash=generate_password_hash('Admin123'),
-            is_admin=True
+            password_hash=generate_password_hash('Admin123')
         )
         db.session.add(admin)
         db.session.commit()
