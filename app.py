@@ -8,18 +8,14 @@ import cloudinary
 def create_app():
     app = Flask(__name__)
 
-    # ── Config ───────────────────────────────────────────────────────────────
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'fallback-key-for-local-only')
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
 
-    # Railway MySQL - no SQLite fallback allowed
+    # Railway injects DATABASE_URL from MySQL service
     db_url = os.environ.get('DATABASE_URL')
     if not db_url:
-        raise RuntimeError('DATABASE_URL not set. Link MySQL service in Railway Variables')
+        raise RuntimeError('DATABASE_URL not set. Add MySQL service in Railway')
 
-    # Print to logs so you can see what URL Railway is using
-    print(f"Using DATABASE_URL: {db_url.replace(db_url.split('@')[0], 'mysql://***:***')}")
-
-    # Convert mysql:// to mysql+pymysql:// for SQLAlchemy
+    # Railway gives mysql:// but SQLAlchemy needs mysql+pymysql://
     if db_url.startswith('mysql://'):
         db_url = db_url.replace('mysql://', 'mysql+pymysql://', 1)
 
@@ -34,7 +30,6 @@ def create_app():
     app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
     app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'jpeg', 'png', 'webp', 'gif'}
 
-    # ── Cloudinary ────────────────────────────────────────────────────────────
     cloudinary.config(
         cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME'),
         api_key = os.environ.get('CLOUDINARY_API_KEY'),
@@ -42,11 +37,9 @@ def create_app():
         secure = True,
     )
 
-    # ── Extensions ───────────────────────────────────────────────────────────
     db.init_app(app)
     CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-    # ── Flask-Login ───────────────────────────────────────────────────────────
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
@@ -57,7 +50,6 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    # ── Blueprints ────────────────────────────────────────────────────────────
     from routes.public import public_bp
     from routes.admin import admin_bp
     from routes.auth import auth_bp
@@ -66,7 +58,7 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
-    # DO NOT RUN db.create_all() HERE - Railway will crash
+    # REMOVED db.create_all() - don't run on Railway
     return app
 
 app = create_app()
