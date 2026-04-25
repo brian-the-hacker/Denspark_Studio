@@ -8,16 +8,18 @@ import cloudinary
 def create_app():
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret')
 
-    # Railway injects DATABASE_URL from MySQL service
+    # Get Railway DATABASE_URL
     db_url = os.environ.get('DATABASE_URL')
     if not db_url:
-        raise RuntimeError('DATABASE_URL not set. Add MySQL service in Railway')
+        raise RuntimeError('DATABASE_URL not set in Railway Variables')
 
-    # Railway gives mysql:// but SQLAlchemy needs mysql+pymysql://
+    # CRITICAL: Convert mysql:// to mysql+pymysql:// or you get MySQLdb error
     if db_url.startswith('mysql://'):
         db_url = db_url.replace('mysql://', 'mysql+pymysql://', 1)
+
+    print(f"Connecting to: {db_url.split('@')[1]}") # Shows host but hides password
 
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -58,7 +60,6 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
-    # REMOVED db.create_all() - don't run on Railway
     return app
 
 app = create_app()
