@@ -5,42 +5,33 @@ from flask_cors import CORS
 from models import db, User
 import cloudinary
 
-# Only load .env locally, not on Vercel
-if os.environ.get('VERCEL') != '1':
-    from dotenv import load_dotenv
-    load_dotenv()
-
-# ── App factory ──────────────────────────────────────────────────────────────
+# Don't use dotenv on Railway - it uses env vars directly
 def create_app():
     app = Flask(__name__)
 
     # ── Config ───────────────────────────────────────────────────────────────
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
     if not app.config['SECRET_KEY']:
-        raise RuntimeError('SECRET_KEY env var not set')
+        raise RuntimeError('SECRET_KEY env var not set in Railway')
 
-    # Database — Railway MySQL via DATABASE_URL
+    # Database — Railway injects DATABASE_URL from MySQL service
     db_url = os.environ.get('DATABASE_URL')
     if not db_url:
-        raise RuntimeError('DATABASE_URL not set. Add Railway MYSQL_URL to Vercel env vars')
+        raise RuntimeError('DATABASE_URL not set. Link MySQL service in Railway Variables')
     
     # Railway gives mysql:// but SQLAlchemy needs mysql+pymysql://
     if db_url.startswith('mysql://'):
         db_url = db_url.replace('mysql://', 'mysql+pymysql://', 1)
-    
-    # Handle old postgres:// format just in case
-    elif db_url.startswith('postgres://'):
-        db_url = db_url.replace('postgres://', 'postgresql://', 1)
         
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-        'pool_pre_ping': True,  # Fixes MySQL server has gone away
-        'pool_recycle': 280,    # Railway kills connections after 5min
+        'pool_pre_ping': True,
+        'pool_recycle': 300,
     }
 
-    # Uploads
-    app.config['UPLOAD_FOLDER'] = '/tmp'  # Vercel can only write to /tmp
+    # Uploads - Railway has persistent disk but use /tmp for safety
+    app.config['UPLOAD_FOLDER'] = '/tmp'
     app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
     app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'jpeg', 'png', 'webp', 'gif'}
 
@@ -76,10 +67,12 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(auth_bp,  url_prefix='/auth')
 
-    # REMOVED: db.create_all() — run this manually once, not on Vercel
+    # REMOVE THIS - causes crash on Railway deploy
+    # with app.app_context():
+    #     db.create_all()
+
     return app
 
-# ── Entry point ───────────────────────────────────────────────────────────────
 app = create_app()
 
 if __name__ == '__main__':
