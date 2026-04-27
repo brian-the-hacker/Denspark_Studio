@@ -32,7 +32,7 @@ def create_app():
     }
 
     app.config['UPLOAD_FOLDER'] = '/tmp'
-    app.config['MAX_CONTENT_LENGTH'] = 10 * 1024  # 10MB  # FIXED: 10MB not 10KB
+    app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB
     app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'jpeg', 'png', 'webp', 'gif'}
 
     # Cloudinary config - this is all you need
