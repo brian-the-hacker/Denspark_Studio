@@ -24,7 +24,7 @@
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
       <a href="/" class="logo">
-        <img src="/static/uploads/DENSPARK STUDIOs wallpaper (1).png" alt="Denspark Studio Logo" class="logo-img">
+        <img src="/static/uploads/DENSPARK-STUDIOs-wallpaper.webp" alt="Denspark Studio Logo" class="logo-img">
         <div class="logo-text-wrap">
           <span class="logo-text">DENSPARK PHOTO</span>
           <span class="logo-sub">STUDIO</span>
@@ -33,7 +33,55 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
-        <li><a href="/services" class="nav-link active">Services</a></li>
+
+        <!-- SERVICES MEGA MENU -->
+        <li class="has-mega" id="servicesMenu">
+          <a href="/services" class="nav-link" id="servicesToggle">Services</a>
+
+          <div class="mega-menu">
+            <div class="mega-grid">
+
+              <div class="mega-column">
+                <h4>Photography</h4>
+                <a href="/services#photography">Studio Portrait</a>
+                <a href="/services#photography">Wedding Coverage</a>
+                <a href="/services#events">Event Photography</a>
+                <a href="/services#branding">Commercial Photography</a>
+              </div>
+
+              <div class="mega-column">
+                <h4>Special Shoots</h4>
+                <a href="/services#photography">Birthday Photoshoot</a>
+                <a href="/services#photography">Maternity Photoshoot</a>
+                <a href="/services#photography">Graduation Photoshoot</a>
+                <a href="/services#photography">Kids Photoshoot</a>
+                <a href="/services#photography">Family Photoshoot</a>
+                <a href="/services#other-services">Passport Photos</a>
+              </div>
+
+              <div class="mega-column">
+                <h4>Video</h4>
+                <a href="/services#videography">Video Production</a>
+                <a href="/services#drone">Drone Services</a>
+                <a href="/services#livestream">Live Streaming</a>
+              </div>
+
+              <div class="mega-column">
+                <h4>Creative</h4>
+                <a href="/services#graphic-design">Graphic Design</a>
+                <a href="/services#branding">Branding</a>
+                <a href="/services#printing">Printing</a>
+                <a href="/services#social-media">Social Media</a>
+              </div>
+
+            </div>
+
+            <div class="mega-footer">
+              Premium Studio Services • Machakos, Kenya
+            </div>
+          </div>
+        </li>
+
         <li><a href="/about" class="nav-link">About</a></li>
         <li><a href="/contact" class="nav-link">Contact</a></li>
       </ul>
@@ -312,7 +360,7 @@
       <div class="service-block-number">08</div>
       <div class="service-block-image">
         <div class="img-frame">
-          <img src="https://images.unsplash.com/photo-1507582020474-9a35fc62ec80?w=900&q=85" alt="Drone Aerial Services">
+          <img src="static/uploads/web drone shoot_30.jpg.webp" alt="Drone Aerial Services">
           <div class="img-overlay"></div>
         </div>
         <div class="img-accent-box"></div>
@@ -336,7 +384,7 @@
       <div class="service-block-number">09</div>
       <div class="service-block-image">
         <div class="img-frame">
-          <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=900&q=85" alt="Live Streaming Services">
+          <img src="static/uploads/live stream.jpg (3).webp" alt="Live Streaming Services">
           <div class="img-overlay"></div>
         </div>
         <div class="img-accent-box"></div>
@@ -405,83 +453,152 @@
   </div>
 
   <!-- Pricing Section -->
-  <section class="pricing-section">
-    <div class="pricing-bg-text">PRICING</div>
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-eyebrow">Transparent Pricing</span>
-        <h2 class="section-title">Simple, <em>Honest</em> Packages</h2>
-        <p class="section-sub">Choose the package that best fits your needs. Custom quotes available for larger projects.</p>
+  <section class="bp-section">
+    <div class="bp-bg">RATES</div>
+    <div class="bp-container">
+      <div class="bp-header">
+        <span class="bp-eyebrow">Transparent Pricing</span>
+        <h2 class="bp-title">Pay for what <em>you need</em></h2>
+        <p class="bp-sub">No bundles, no surprises. Mix and match photos, makeup, and styling extras to build your perfect session.</p>
       </div>
 
-      <div class="pricing-grid">
-        <!-- Basic -->
-        <div class="pricing-card reveal" style="--delay: 0.05s">
-          <div class="pricing-card-top">
-            <span class="pricing-tier">Basic</span>
-            <p class="pricing-desc">Perfect for simple sessions</p>
-            <div class="pricing-price">
-              <span class="price-currency">KES</span>
-              <span class="price-amount">5K</span>
-              <span class="price-per">/session</span>
-            </div>
+      <div class="bp-grid">
+
+        <!-- Photos -->
+        <div class="bp-card bp-card--accent">
+          <div class="bp-card-icon">
+            <svg viewBox="0 0 24 24" stroke-width="1.8" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M9 5V3h6v2"/></svg>
           </div>
-          <ul class="pricing-features">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>1 Hour Session</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>10 Edited Photos</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Digital Downloads</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>1 Outfit Change</li>
-          </ul>
-          <a href="/contact" class="pricing-btn pricing-btn--outline">Get Started →</a>
+          <span class="bp-card-label">Photography</span>
+          <div class="bp-card-name">Photo Rates</div>
+          <p class="bp-card-desc">Minimum order of 5 photos per session.</p>
+          <div class="bp-rate-row"><span class="bp-rate-label">Single / solo photo</span><span class="bp-rate-val">KES 200</span></div>
+          <div class="bp-rate-row"><span class="bp-rate-label">Group photo <span style="font-size:0.75rem;color:#aaa">(4+ people)</span></span><span class="bp-rate-val">KES 300</span></div>
+          <p class="bp-rate-note">Minimum 5 photos per booking.</p>
+          <button class="bp-card-book-btn" onclick="bookService('📸 Photography Session', '• Solo photo — KES 200 per photo\n• Group photo (4+ people) — KES 300 per photo\n• Minimum 5 photos per booking')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Book Now
+          </button>
         </div>
 
-        <!-- Professional (Featured) -->
-        <div class="pricing-card pricing-card--featured reveal" style="--delay: 0.15s">
-          <div class="pricing-badge">Most Popular</div>
-          <div class="pricing-card-top">
-            <span class="pricing-tier">Professional</span>
-            <p class="pricing-desc">Best for most clients</p>
-            <div class="pricing-price">
-              <span class="price-currency">KES</span>
-              <span class="price-amount">15K</span>
-              <span class="price-per">/session</span>
-            </div>
+        <!-- Makeup -->
+        <div class="bp-card">
+          <div class="bp-card-icon">
+            <svg viewBox="0 0 24 24" stroke-width="1.8" fill="none" stroke="currentColor"><path d="M12 2c0 0-4 4-4 9a4 4 0 008 0c0-5-4-9-4-9z"/><path d="M8 13s1 3 4 3 4-3 4-3"/></svg>
           </div>
-          <ul class="pricing-features">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>3 Hour Session</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>30 Edited Photos</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Digital + Print Files</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>3 Outfit Changes</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Makeup Consultation</li>
-          </ul>
-          <a href="/contact" class="pricing-btn pricing-btn--solid">Get Started →</a>
+          <span class="bp-card-label">Makeup</span>
+          <div class="bp-card-name">Makeup Services</div>
+          <p class="bp-card-desc">Professional makeup for your shoot.</p>
+          <div class="bp-rate-row"><span class="bp-rate-label">Starting from</span><span class="bp-rate-val">KES 1,000</span></div>
+          <p class="bp-rate-note">Final price depends on your preferred style and complexity of the look.</p>
+          <button class="bp-card-book-btn" onclick="bookService('💄 Makeup Services', '• Professional makeup — starting from KES 1,000\n• Final price depends on preferred style and complexity of the look')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Book Now
+          </button>
         </div>
 
-        <!-- Premium -->
-        <div class="pricing-card reveal" style="--delay: 0.25s">
-          <div class="pricing-card-top">
-            <span class="pricing-tier">Premium</span>
-            <p class="pricing-desc">Complete package for events</p>
-            <div class="pricing-price">
-              <span class="price-currency">KES</span>
-              <span class="price-amount">35K</span>
-              <span class="price-per">/event</span>
-            </div>
+        <!-- Wardrobe -->
+        <div class="bp-card">
+          <div class="bp-card-icon">
+            <svg viewBox="0 0 24 24" stroke-width="1.8" fill="none" stroke="currentColor"><path d="M6 3l-3 4h4v14h10V7h4L18 3"/><path d="M9 3c0 1.7 1.3 3 3 3s3-1.3 3-3"/></svg>
           </div>
-          <ul class="pricing-features">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Full Day Coverage</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>100+ Edited Photos</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>2 Photographers</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Premium Album</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Highlight Video</li>
-          </ul>
-          <a href="/contact" class="pricing-btn pricing-btn--outline">Get Started →</a>
+          <span class="bp-card-label">Wardrobe Hire</span>
+          <div class="bp-card-name">Outfit Rentals</div>
+          <p class="bp-card-desc">Includes free beaded accessories &amp; head gears.</p>
+          <div class="bp-rate-row"><span class="bp-rate-label">Wraps</span><span class="bp-rate-val">KES 350</span></div>
+          <div class="bp-rate-row"><span class="bp-rate-label">Non-stitch gown</span><span class="bp-rate-val">KES 1,500 – 3,000</span></div>
+          <p class="bp-rate-note">Gown price depends on fabric choice. Beaded accessories and head gears included free.</p>
+          <button class="bp-card-book-btn" onclick="bookService('👗 Wardrobe Hire', '• Wraps — KES 350\n• Non-stitch gown — KES 1,500 to 3,000 (depending on fabric)\n• Free beaded accessories and head gears included')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Book Now
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Delivery + How it works -->
+      <div class="bp-bottom-row">
+        <div class="bp-note-box">
+          <span class="bp-note-title">Delivery</span>
+          <strong>10 photos or fewer</strong> — delivered same day.<br>
+          Larger orders vary based on number of photos and editing time required. We'll confirm your turnaround at booking.
+        </div>
+        <div class="bp-note-box">
+          <span class="bp-note-title">How it works</span>
+          Choose your photos, add makeup or outfit hire if you'd like, and we'll put together a total before your session. <strong>No hidden fees.</strong> Custom quotes available for events and larger groups.
         </div>
       </div>
 
-      <p class="pricing-note reveal">Need something custom? <a href="/contact">Let's talk →</a></p>
+      <!-- M-Pesa Payment -->
+      <div class="bp-mpesa-box">
+        <div class="bp-mpesa-header">
+          <div class="bp-mpesa-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M7 15h2"/><path d="M12 15h5"/></svg>
+          </div>
+          <div>
+            <span class="bp-mpesa-label">Payment Method</span>
+            <div class="bp-mpesa-title">Pay via M-Pesa</div>
+          </div>
+        </div>
+        <div class="bp-mpesa-details">
+          <div class="bp-mpesa-row">
+            <span class="bp-mpesa-key">Paybill Number</span>
+            <span class="bp-mpesa-val">714888</span>
+          </div>
+          <div class="bp-mpesa-row">
+            <span class="bp-mpesa-key">Account Number</span>
+            <span class="bp-mpesa-val">129437</span>
+          </div>
+        </div>
+        <div class="bp-mpesa-steps">
+          <span>Go to M-Pesa</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span>Lipa na M-Pesa</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span>Pay Bill</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span>Enter details above</span>
+        </div>
+      </div>
+
+      <!-- Main Book Now Button -->
+      <div class="bp-book-wrap">
+        <button class="bp-book-btn" onclick="bookNow()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Book Now on WhatsApp
+        </button>
+        <p class="bp-book-note">We'll respond within a few hours to confirm your session.</p>
+      </div>
+
+      <p class="bp-cta">Have questions or need a custom quote? <a href="/contact">Get in touch →</a></p>
     </div>
   </section>
+
+  <script>
+  function bookService(service, details) {
+    var page = window.location.pathname.replace('/', '') || 'Home';
+    page = page.charAt(0).toUpperCase() + page.slice(1).replace(/-/g, ' ');
+    var message = encodeURIComponent(
+      "Hello! I'd like to book the following service 📸\n\n" +
+      "*" + service + "*\n" +
+      details + "\n\n" +
+      "I'm reaching out from the *" + page + "* page.\n" +
+      "Please let me know your availability. Thank you!"
+    );
+    window.open("https://wa.me/254112865629?text=" + message, "_blank");
+  }
+
+  function bookNow() {
+    var page = window.location.pathname.replace('/', '') || 'Home';
+    page = page.charAt(0).toUpperCase() + page.slice(1).replace(/-/g, ' ');
+    var message = encodeURIComponent(
+      "Hello! I'd like to book a session 📸\n\n" +
+      "I'm reaching out from the *" + page + "* page of your website.\n\n" +
+      "Please let me know your availability. Thank you!"
+    );
+    window.open("https://wa.me/254112865629?text=" + message, "_blank");
+  }
+  </script>
 
   <!-- CTA Banner -->
   <section class="cta-banner">
@@ -548,6 +665,7 @@
           <ul>
             <li>Machakos Town, Kenya</li>
             <li><a href="tel:+254710468300">+254 710 468 300</a></li>
+            <li><a href="tel:+254797216727">+254 797 216 727</a></li>
             <li><a href="mailto:densparkstudio@gmail.com">densparkstudio@gmail.com</a></li>
           </ul>
         </div>

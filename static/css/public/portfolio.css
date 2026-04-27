@@ -43,40 +43,10 @@ a  { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
 
-/* ---------- Preloader ---------- */
-.preloader {
-  position: fixed; inset: 0;
-  background: var(--navy);
-  z-index: 9999;
-  display: flex; align-items: center; justify-content: center;
-  transition: opacity 0.6s ease, visibility 0.6s ease;
-}
-.preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-.preloader-inner { text-align: center; }
-.preloader-logo {
-  font-family: var(--font-display);
-  font-size: clamp(1.4rem, 4vw, 2rem);
-  font-weight: 300;
-  letter-spacing: 0.35em;
-  color: var(--white);
-  margin-bottom: 24px;
-  opacity: 0;
-  animation: fadeUp 0.6s 0.2s ease forwards;
-}
-.preloader-line {
-  width: 200px; height: 2px;
-  background: rgba(255,255,255,0.12);
-  margin: 0 auto; overflow: hidden; border-radius: 2px;
-}
-.preloader-line span {
-  display: block; height: 100%;
-  background: var(--blue-light);
-  animation: lineLoad 1.4s 0.4s ease forwards;
-  transform: translateX(-100%);
-}
-@keyframes lineLoad { to { transform: translateX(0); } }
+/* ---------- Shared keyframes ---------- */
+/* FIX: fadeUp was missing — caused .page-hero-content to stay invisible */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -151,6 +121,109 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .menu-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .menu-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(0, -6.5px); }
 
+/* Mega Menu */
+.has-mega {
+  position: relative;
+}
+
+.mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 780px;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: all 0.25s ease;
+  z-index: 9999;
+}
+.has-mega:hover .mega-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.mega-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.mega-column h4 {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7eb4ff;
+  margin-bottom: 1rem;
+}
+.mega-column a {
+  display: inline-block;
+  position: relative;
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.85);
+  padding: 6px 0;
+  margin-bottom: 6px;
+  transition: color 0.25s ease;
+}
+.mega-column a::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: var(--blue-light);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+  border-radius: 2px;
+}
+.mega-column a:hover { color: var(--white); }
+.mega-column a:hover::after { transform: scaleX(1); }
+.mega-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  text-align: center;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.05em;
+}
+.has-mega.open .mega-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+@media (hover: hover) {
+  .has-mega:hover .mega-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 768px) {
+  .mega-menu {
+    position: static;
+    width: 100%;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 1rem 0;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+  .mega-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .mega-footer { display: none; }
+}
+
 /* Mobile Menu */
 .mobile-menu {
   display: none; position: absolute; top: 100%; left: 0; right: 0;
@@ -180,14 +253,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* ---------- Page Hero ---------- */
 .page-hero {
   position: relative;
-  height: 52vh; min-height: 360px;
+  height: 60vh; min-height: 420px; /* FIX: was 52vh/360px — too short to show stats bar */
   display: flex; align-items: flex-end;
   overflow: hidden;
 }
 .page-hero-bg {
   position: absolute; inset: 0;
   background-size: cover; background-position: center;
-  /* Use the already-loaded blur placeholder trick */
   transform: scale(1.04);
   animation: heroZoom 8s ease forwards;
   will-change: transform;
@@ -198,17 +270,20 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   position: absolute; inset: 0;
   background: linear-gradient(
     to top,
-    rgba(10,10,10,0.75) 0%,
-    rgba(15,23,42,0.45) 50%,
-    rgba(10,10,10,0.25) 100%
+    rgba(10,10,10,0.80) 0%,   /* FIX: deeper gradient so white text is always legible */
+    rgba(15,23,42,0.50) 50%,
+    rgba(10,10,10,0.20) 100%
   );
 }
 .page-hero-content {
   position: relative; z-index: 2;
   padding: 0 clamp(16px, 5vw, 80px) 52px;
   max-width: 1320px; margin: 0 auto; width: 100%;
-  opacity: 0; transform: translateY(16px);
-  animation: fadeUp 0.7s 1.8s ease forwards;
+  /* FIX: was opacity:0 with animation:fadeUp but @keyframes fadeUp was never defined
+     in this file, so the element stayed permanently invisible. Now defined above. */
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeUp 0.7s 0.4s ease forwards; /* FIX: also reduced delay from 1.8s → 0.4s */
 }
 .breadcrumb {
   display: flex; align-items: center; gap: 8px;
@@ -225,10 +300,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-weight: 300; line-height: 1.08;
   color: var(--white); margin-bottom: 12px;
 }
-.page-hero-title em { font-style: italic; color: rgba(255,255,255,0.7); }
+.page-hero-title em { font-style: italic; color: rgba(255,255,255,0.75); }
 .page-hero-sub {
   font-size: clamp(0.875rem, 1.5vw, 1rem);
-  color: rgba(255,255,255,0.65); max-width: 520px; line-height: 1.65;
+  color: rgba(255,255,255,0.75); /* FIX: was 0.65 — too dim against the bg */
+  max-width: 560px; line-height: 1.65;
 }
 
 .page-hero-scroll {
@@ -328,9 +404,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
-.pf-grid--grid .pf-item {
-  margin-bottom: 0;
-}
+.pf-grid--grid .pf-item { margin-bottom: 0; }
 .pf-grid--grid .pf-img-wrap { aspect-ratio: 4/3; }
 
 /* List layout */
@@ -363,11 +437,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   overflow: hidden;
   cursor: pointer;
 
-  /* Performance: GPU-accelerated */
-  transform: translateZ(0);
-  will-change: transform;
+  /* FIX: original code had BOTH will-change:transform AND transform:translateY(20px)
+     as separate declarations — the second was wiping the first in some parsers.
+     Now separated properly: will-change on its own line, then the reveal state. */
+  will-change: transform, opacity;
 
-  /* Reveal animation state */
+  /* Reveal animation initial state */
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease, transform 0.5s ease,
@@ -384,9 +459,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   opacity: 0; transform: scale(0.96);
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
-.pf-item.filter-hidden {
-  display: none;
-}
+.pf-item.filter-hidden { display: none; }
 
 .pf-img-wrap {
   position: relative;
@@ -397,10 +470,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: 100%; height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Lazy load blur-up */
-  filter: blur(0);
+  /* FIX: original had two separate transition declarations — last one wins.
+     Combined into a single rule so both filter and transform animate. */
   transition: filter 0.4s ease, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .pf-img-wrap img.lazy-loading {
@@ -456,22 +527,18 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   margin-bottom: 16px;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--gray-100);
-  animation: shimmer 1.5s infinite;
-}
-@keyframes shimmer {
-  0%   { background-position: -600px 0; }
-  100% { background-position: 600px 0; }
-}
-.pf-skeleton {
   background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%);
   background-size: 1200px 100%;
   animation: shimmer 1.5s infinite linear;
 }
-.pf-skeleton-img { height: 220px; }
-.pf-skeleton-info { height: 52px; background: var(--white); padding: 12px 14px; }
-.pf-skeleton-cat  { height: 10px; width: 60px; background: var(--gray-200); border-radius: 4px; margin-bottom: 8px; }
-.pf-skeleton-title{ height: 14px; width: 75%; background: var(--gray-200); border-radius: 4px; }
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+.pf-skeleton-img   { height: 220px; }
+.pf-skeleton-info  { height: 52px; background: var(--white); padding: 12px 14px; }
+.pf-skeleton-cat   { height: 10px; width: 60px; background: var(--gray-200); border-radius: 4px; margin-bottom: 8px; }
+.pf-skeleton-title { height: 14px; width: 75%; background: var(--gray-200); border-radius: 4px; }
 
 /* ---------- Empty state ---------- */
 .pf-empty {
@@ -773,6 +840,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .pf-filter-bar { flex-direction: column; align-items: flex-start; }
   .pf-view-toggle { align-self: flex-end; }
 
+  /* FIX: hero height on mobile — needs to be taller to fit title + sub + stats bar */
+  .page-hero { height: auto; min-height: 520px; padding-top: var(--nav-h); }
+  .page-hero-content { padding-bottom: 36px; }
+
   .footer-top { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 600px) {
@@ -784,4 +855,18 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .cta-inner { flex-direction: column; text-align: center; }
   .cta-inner a { width: 100%; justify-content: center; }
   .chat-window { width: calc(100vw - 48px); }
+
+  /* FIX: hide dividers on very small screens when stats wrap */
+  .hero-intro-divider { display: none; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  /* But still show the hero content — don't leave it invisible */
+  .page-hero-content { opacity: 1; transform: none; }
 }

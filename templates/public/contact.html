@@ -25,18 +25,66 @@
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
       <a href="/" class="logo">
-        <img src="/static/uploads/DENSPARK STUDIOs wallpaper (1).png" alt="Denspark Studio Logo" class="logo-img">
-        <div class="logo-text-wrap">
-          <span class="logo-text">DENSPARK PHOTO</span>
-          <span class="logo-sub">STUDIO</span>
-        </div>
-      </a>
-      <ul class="nav-links" id="navLinks">
+          <img src="/static/uploads/DENSPARK STUDIOs wallpaper (1).png" alt="Denspark Studio Logo" class="logo-img">
+          <div class="logo-text-wrap">
+            <span class="logo-text">DENSPARK PHOTO</span>
+            <span class="logo-sub">STUDIO</span>
+          </div>
+        </a>
+         <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
-        <li><a href="/services" class="nav-link">Services</a></li>
+
+        <!-- SERVICES MEGA MENU -->
+        <li class="has-mega" id="servicesMenu">
+          <a href="/services" class="nav-link" id="servicesToggle">Services</a>
+
+          <div class="mega-menu">
+            <div class="mega-grid">
+
+              <div class="mega-column">
+                <h4>Photography</h4>
+                <a href="/services#photography">Studio Portrait</a>
+                <a href="/services#photography">Wedding Coverage</a>
+                <a href="/services#events">Event Photography</a>
+                <a href="/services#branding">Commercial Photography</a>
+              </div>
+
+              <div class="mega-column">
+                <h4>Special Shoots</h4>
+                <a href="/services#photography">Birthday Photoshoot</a>
+                <a href="/services#photography">Maternity Photoshoot</a>
+                <a href="/services#photography">Graduation Photoshoot</a>
+                <a href="/services#photography">Kids Photoshoot</a>
+                <a href="/services#photography">Family Photoshoot</a>
+                <a href="/services#other-services">Passport Photos</a>
+              </div>
+
+              <div class="mega-column">
+                <h4>Video</h4>
+                <a href="/services#videography">Video Production</a>
+                <a href="/services#drone">Drone Services</a>
+                <a href="/services#livestream">Live Streaming</a>
+              </div>
+
+              <div class="mega-column">
+                <h4>Creative</h4>
+                <a href="/services#graphic-design">Graphic Design</a>
+                <a href="/services#branding">Branding</a>
+                <a href="/services#printing">Printing</a>
+                <a href="/services#social-media">Social Media</a>
+              </div>
+
+            </div>
+
+            <div class="mega-footer">
+              Premium Studio Services • Machakos, Kenya
+            </div>
+          </div>
+        </li>
+
         <li><a href="/about" class="nav-link">About</a></li>
-        <li><a href="/contact" class="nav-link active">Contact</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
       </ul>
       <div class="nav-right">
         <a href="#booking-form" class="btn-book">Book Now</a>
@@ -163,28 +211,51 @@
               <span class="method-arrow">→</span>
             </a>
 
+            <!-- LOCATION -->
             <div class="contact-method contact-method--static">
               <div class="method-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
               </div>
+
               <div class="method-content">
                 <span class="method-label">Location</span>
-                <span class="method-value">Machakos Town, Kenya</span>
-                <span class="method-sub">Near Central Business District</span>
+
+                <a href="https://maps.google.com/?q=Peter+Mulei+Wholesalers+Building+Machakos"
+                  target="_blank"
+                  class="method-value link">
+                  Machakos Town, Kenya
+                </a>
+
+                <span class="method-sub">
+                  Peter Mulei Wholesalers Building, 1st Floor Room 4 — Opposite Bus Station, Next to VAA Smart Clothes Shop
+                </span>
+
+                <a href="https://maps.google.com/?q=Peter+Mulei+Wholesalers+Building+Machakos"
+                  target="_blank"
+                  class="btn-location">
+                  Get Directions
+                </a>
               </div>
             </div>
 
+            <!-- WORKING HOURS -->
             <div class="contact-method contact-method--static">
               <div class="method-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
               </div>
+
               <div class="method-content">
                 <span class="method-label">Working Hours</span>
                 <span class="method-value">Mon – Sat: 8:30 AM – 8:00 PM</span>
                 <span class="method-sub">Sunday: 8:00 AM – 8:00 PM</span>
               </div>
             </div>
-          </div>
 
           <div class="sidebar-social">
             <span class="social-label">Follow Us</span>
@@ -250,11 +321,20 @@
                 <div class="select-wrap">
                   <select id="service" name="service" required>
                     <option value="">Select a service</option>
-                    <option value="portrait">Portrait Photography</option>
+
+                    <option value="studio-portrait">Studio Portrait</option>
                     <option value="wedding">Wedding Coverage</option>
                     <option value="event">Event Photography</option>
                     <option value="video">Video Production</option>
                     <option value="commercial">Commercial Photography</option>
+
+                    <option value="birthday">Birthday Photoshoot</option>
+                    <option value="maternity">Maternity Photoshoot</option>
+                    <option value="graduation">Graduation Photoshoot</option>
+                    <option value="passport">Passport Photos</option>
+                    <option value="kids">Kids Photoshoot</option>
+                    <option value="family">Family Photoshoot</option>
+
                     <option value="other">Other</option>
                   </select>
                   <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
@@ -305,10 +385,13 @@
         <h2 class="section-title-sm">Our <em>Location</em></h2>
       </div>
       <div class="map-container">
-        <iframe
-          title="Denspark Studio Location"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.273688!2d37.2634!3d-1.5167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f5a5c3d8f4b0d%3A0x10abf8b3ab0e5e9c!2sMachakos%2C%20Kenya!5e0!3m2!1sen!2sus!4v1700000000000"
-          width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2621.6399354243363!2d37.263751365396615!3d-1.5197885583039161!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f87ef8749ac73%3A0x6ac159c8b733f540!2sDenspark%20Photo%20Studio!5e0!3m2!1sen!2ske!4v1777327178565!5m2!1sen!2ske"
+          width="100%" 
+          height="350" 
+          style="border:0; border-radius:8px;" 
+          allowfullscreen="" 
+          loading="lazy" 
           referrerpolicy="no-referrer-when-downgrade">
         </iframe>
         <div class="map-pin-card">
@@ -485,6 +568,7 @@
           <ul>
             <li>Machakos Town, Kenya</li>
             <li><a href="tel:+254710468300">+254 710 468 300</a></li>
+            <li><a href="tel:+254797216727">+254 797 216 727</a></li>
             <li><a href="mailto:densparkstudio@gmail.com">densparkstudio@gmail.com</a></li>
           </ul>
         </div>

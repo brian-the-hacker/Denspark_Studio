@@ -25,7 +25,7 @@
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
       <a href="/" class="logo">
-        <img src="/static/uploads/DENSPARK STUDIOs wallpaper (1).png" alt="Denspark Studio Logo" class="logo-img">
+        <img src="/static/uploads/DENSPARK-STUDIOs-wallpaper.webp" alt="Denspark Studio Logo" class="logo-img">
         <div class="logo-text-wrap">
           <span class="logo-text">DENSPARK PHOTO</span>
           <span class="logo-sub">STUDIO</span>
@@ -34,8 +34,56 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
-        <li><a href="/services" class="nav-link">Services</a></li>
-        <li><a href="/about" class="nav-link active">About</a></li>
+
+        <!-- SERVICES MEGA MENU -->
+        <li class="has-mega" id="servicesMenu">
+          <a href="/services" class="nav-link" id="servicesToggle">Services</a>
+
+          <div class="mega-menu">
+            <div class="mega-grid">
+
+              <div class="mega-column">
+                <h4>Photography</h4>
+                <a href="/services#photography">Studio Portrait</a>
+                <a href="/services#photography">Wedding Coverage</a>
+                <a href="/services#events">Event Photography</a>
+                <a href="/services#branding">Commercial Photography</a>
+              </div>
+
+              <div class="mega-column">
+                <h4>Special Shoots</h4>
+                <a href="/services#photography">Birthday Photoshoot</a>
+                <a href="/services#photography">Maternity Photoshoot</a>
+                <a href="/services#photography">Graduation Photoshoot</a>
+                <a href="/services#photography">Kids Photoshoot</a>
+                <a href="/services#photography">Family Photoshoot</a>
+                <a href="/services#other-services">Passport Photos</a>
+              </div>
+
+              <div class="mega-column">
+                <h4>Video</h4>
+                <a href="/services#videography">Video Production</a>
+                <a href="/services#drone">Drone Services</a>
+                <a href="/services#livestream">Live Streaming</a>
+              </div>
+
+              <div class="mega-column">
+                <h4>Creative</h4>
+                <a href="/services#graphic-design">Graphic Design</a>
+                <a href="/services#branding">Branding</a>
+                <a href="/services#printing">Printing</a>
+                <a href="/services#social-media">Social Media</a>
+              </div>
+
+            </div>
+
+            <div class="mega-footer">
+              Premium Studio Services • Machakos, Kenya
+            </div>
+          </div>
+        </li>
+
+        <li><a href="/about" class="nav-link">About</a></li>
         <li><a href="/contact" class="nav-link">Contact</a></li>
       </ul>
       <div class="nav-right">
@@ -47,6 +95,7 @@
         </button>
       </div>
     </div>
+    <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
       <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
@@ -146,7 +195,7 @@
           <div class="story-signature">
             <div class="sig-line"></div>
             <div class="sig-info">
-              <span class="sig-name">Dennis Kioko</span>
+              <span class="sig-name">Denis Kioko</span>
               <span class="sig-role">Founder &amp; Lead Photographer</span>
             </div>
           </div>
@@ -161,11 +210,15 @@
       <div class="section-header reveal">
         <span class="section-eyebrow">Our Foundation</span>
         <h2 class="section-title">Mission, Vision & <em>Purpose</em></h2>
-        <p class="section-sub">The driving force behind every frame we capture and every brand we build.</p>
+        <p class="section-sub">
+          The driving force behind every frame we capture and every brand we build.
+        </p>
       </div>
 
       <div class="mvv-grid">
-        <div class="mvv-card reveal" style="--delay: 0.05s">
+
+        <!-- MISSION -->
+        <div class="mvv-card reveal">
           <div class="mvv-icon-wrap">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M12 2L2 7l10 5 10-5-10-5z"/>
@@ -173,11 +226,28 @@
               <path d="M2 12l10 5 10-5"/>
             </svg>
           </div>
+
           <h3>Our Mission</h3>
-          <p>To deliver complete visual solutions that capture authentic moments, build powerful brands, and create high-quality content that exceeds client expectations. We combine creativity, technology, and professionalism in every project.</p>
+
+          <p>
+            To deliver complete visual solutions that capture authentic moments, build powerful brands,
+            and create high-quality content that exceeds client expectations.
+          </p>
+
+          <span class="mvv-more">View details</span>
+
+          <div class="mvv-expand">
+            <ul class="mvv-list">
+              <li><strong>Capture with Purpose:</strong> Produce visually stunning and emotionally impactful content tailored to each client.</li>
+              <li><strong>Deliver Excellence:</strong> Maintain the highest standards in production, editing, and creative direction.</li>
+              <li><strong>Foster Connection:</strong> Build long-term relationships through exceptional service.</li>
+              <li><strong>Inspire Creativity:</strong> Embrace innovation, learning, and creative growth.</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="mvv-card reveal" style="--delay: 0.12s">
+        <!-- VISION -->
+        <div class="mvv-card reveal">
           <div class="mvv-icon-wrap">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <circle cx="12" cy="12" r="10"/>
@@ -185,19 +255,29 @@
               <circle cx="12" cy="12" r="2"/>
             </svg>
           </div>
+
           <h3>Our Vision</h3>
-          <p>To be East Africa's most trusted creative media studio — known for excellence, innovation, and genuine storytelling. We envision a future where every individual and business can access world-class visual content.</p>
+          <p>
+            To become a premier photo and videography studio known for artistic excellence,
+            innovative storytelling, and outstanding client experiences—locally and globally.
+          </p>
         </div>
 
-        <div class="mvv-card reveal" style="--delay: 0.19s">
+        <!-- PURPOSE -->
+        <div class="mvv-card reveal">
           <div class="mvv-icon-wrap">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
             </svg>
           </div>
+
           <h3>Our Purpose</h3>
-          <p>We believe every story deserves to be told beautifully. Whether capturing memories or promoting businesses, we're committed to delivering results that create lasting impact and genuine emotional connection.</p>
+          <p>
+            To creatively capture life’s most meaningful moments through high-quality photography
+            and videography, delivering visually compelling stories that resonate and inspire.
+          </p>
         </div>
+
       </div>
     </div>
   </section>
@@ -329,7 +409,7 @@
             </div>
           </div>
           <div class="team-info">
-            <h4>Dennis Kioko</h4>
+            <h4>Denis Kioko</h4>
             <span class="team-role">Founder CEO &amp; Lead Photographer</span>
           </div>
         </div>
@@ -367,7 +447,7 @@
             </div>
           </div>
           <div class="team-info">
-            <h4>Matthew Kiko</h4>
+            <h4>Matthew Kioko</h4>
             <span class="team-role">Photo Editor</span>
           </div>
         </div>
@@ -495,6 +575,8 @@
           <ul>
             <li>Machakos Town, Kenya</li>
             <li><a href="tel:+254710468300">+254 710 468 300</a></li>
+            <li><a href="tel:+254710468300">+254 710 468 300</a></li>
+            <li><a href="tel:+254797216727">+254 797 216 727</a></li>
             <li><a href="mailto:densparkstudio@gmail.com">densparkstudio@gmail.com</a></li>
           </ul>
         </div>

@@ -266,7 +266,26 @@ document.addEventListener('DOMContentLoaded', () => {
     mo.observe(mapSection);
   }
 
+  const servicesMenu = document.getElementById("servicesMenu");
+  const servicesToggle = document.getElementById("servicesToggle");
 
+  // open/close on click
+  servicesToggle.addEventListener("click", function (e) {
+    e.preventDefault(); // prevents page jump
+    servicesMenu.classList.toggle("open");
+  });
+
+  // close when clicking outside
+  document.addEventListener("click", function (e) {
+    if (!servicesMenu.contains(e.target)) {
+      servicesMenu.classList.remove("open");
+    }
+  });
+
+  // optional: close on scroll
+  window.addEventListener("scroll", () => {
+    servicesMenu.classList.remove("open");
+  });
   /* ── Contact strip hover ripple ─────────────────────── */
   document.querySelectorAll('a.strip-item').forEach(item => {
     item.addEventListener('mouseenter', function () {
