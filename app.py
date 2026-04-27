@@ -4,6 +4,7 @@ from flask_login import LoginManager
 from flask_cors import CORS
 from models import db, User
 import cloudinary
+from routes.admin import init_cloudinary  # ADD THIS IMPORT
 
 def create_app():
     app = Flask(__name__)
@@ -41,6 +42,7 @@ def create_app():
         api_secret = os.environ.get('CLOUDINARY_API_SECRET'),
         secure = True,
     )
+    init_cloudinary()  # ADD THIS LINE
 
     db.init_app(app)
     CORS(app, resources={r"/api/*": {"origins": "*"}})
