@@ -85,6 +85,7 @@ def portfolio():
 
 
 # ── Upload (Cloudinary-first, local fallback) ─────────────────────────────────
+@admin_bp.route('/portfolio/upload', methods=['POST'])
 @login_required
 def upload_portfolio():
     current_app.logger.error(f"Hit upload route. Content-Length: {request.content_length}")
