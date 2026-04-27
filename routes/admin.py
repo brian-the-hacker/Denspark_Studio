@@ -85,12 +85,14 @@ def portfolio():
 
 
 # ── Upload (Cloudinary-first, local fallback) ─────────────────────────────────
-@admin_bp.route('/portfolio/upload', methods=['POST'])
 @login_required
 def upload_portfolio():
+    current_app.logger.error(f"Hit upload route. Content-Length: {request.content_length}")
+    current_app.logger.error(f"CLOUDINARY_CLOUD_NAME exists: {bool(os.environ.get('CLOUDINARY_CLOUD_NAME'))}")
+    
     if 'file' not in request.files:
+        current_app.logger.error(f"Keys in request.files: {list(request.files.keys())}")
         return jsonify({'error': 'No file part'}), 400
-
     file = request.files['file']
     if not file or file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
