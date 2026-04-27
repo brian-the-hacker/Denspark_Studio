@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify, current_app, redirect, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
-from models import db, Portfolio, Booking, Message, Payment, ChatConversation
+from models import db, Portfolio, Booking, Message, Payment
 import os
 import uuid
 
