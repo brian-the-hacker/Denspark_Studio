@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="Denspark Studio Video Production — Cinematic wedding films, event coverage, drone footage and brand videos in Machakos, Kenya.">
+  <title>Video Production | Denspark Studio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/public/portfolio.css">
+
+  <style>
+    /* ─────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────── */
+    :root {
+      --blue:       #1A56DB;
+      --blue-dark:  #1240A8;
+      --blue-light: #3B82F6;
+      --black:      #0A0A0A;
+      --navy:       #0F172A;
+      --white:      #FFFFFF;
+      --off-white:  #F9FAFB;
+      --gray-100:   #F3F4F6;
+      --gray-200:   #E5E7EB;
+      --gray-400:   #9CA3AF;
+      --gray-600:   #4B5563;
+      --gray-800:   #1F2937;
+
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body:    'DM Sans', system-ui, sans-serif;
+
+      --radius:     8px;
+      --radius-lg:  16px;
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-in-out:cubic-bezier(0.65, 0, 0.35, 1);
+      --shadow:     0 4px 24px rgba(0,0,0,0.08);
+      --shadow-lg:  0 12px 48px rgba(0,0,0,0.14);
+      --max-w:      1280px;
+      --nav-h:      72px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { font-family: var(--font-body); background: var(--white); color: var(--black); line-height: 1.65; overflow-x: hidden; }
+    img  { display: block; max-width: 100%; height: auto; }
+    a    { text-decoration: none; color: inherit; }
+    ul   { list-style: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+    /* ── Navbar (same as other pages) ── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--nav-h); background: transparent;
+      transition: background var(--transition), box-shadow var(--transition), height var(--transition);
+    }
+    .navbar.scrolled { background: var(--navy); box-shadow: 0 2px 20px rgba(0,0,0,0.25); height: 64px; }
+    .nav-container {
+      max-width: 1320px; margin: 0 auto; padding: 0 24px; height: 100%;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .logo-img { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; }
+    .logo-text-wrap { display: flex; flex-direction: column; line-height: 1; }
+    .logo-text { font-family: var(--font-display); font-size: 1rem; font-weight: 600; letter-spacing: 0.12em; color: var(--white); }
+    .logo-sub  { font-size: 0.6rem; letter-spacing: 0.25em; color: var(--blue-light); text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 6px; }
+    .nav-link {
+      font-size: 0.875rem; font-weight: 400; letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.85); padding: 8px 14px; border-radius: var(--radius);
+      transition: color var(--transition); position: relative;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: 4px; left: 14px; right: 14px;
+      height: 1.5px; background: var(--blue-light);
+      transform: scaleX(0); transition: transform var(--transition); border-radius: 2px;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--white); }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .btn-book {
+      background: var(--blue); color: var(--white); font-size: 0.85rem; font-weight: 500;
+      padding: 10px 22px; border-radius: var(--radius);
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .btn-book:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,86,219,0.4); }
+    .menu-toggle { display: none; flex-direction: column; gap: 5px; width: 30px; height: 30px; padding: 2px; justify-content: center; }
+    .menu-toggle span { display: block; height: 2px; background: var(--white); border-radius: 2px; transition: transform 0.3s var(--ease-out), opacity 0.3s; }
+    .menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .menu-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      display: none; position: absolute; top: 64px; left: 0; right: 0;
+      background: var(--navy); border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 1.5rem 2rem 2rem;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-nav-links li { border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .mobile-nav-links a { display: block; font-size: 0.95rem; font-weight: 500; color: rgba(255,255,255,0.8); padding: 0.85rem 0; }
+    .btn-book-mobile { display: inline-block; margin-top: 1.25rem; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white); background: var(--blue); padding: 0.7rem 1.4rem; border-radius: var(--radius); }
+    .mobile-info { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 1.25rem; font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+
+    /* ── Page Hero ── */
+    .page-hero {
+      position: relative; height: 75vh; min-height: 520px;
+      display: flex; align-items: flex-end; overflow: hidden;
+    }
+    .page-hero-bg {
+      position: absolute; inset: 0; background-size: cover; background-position: center 40%;
+      transform: scale(1.05); animation: heroZoom 8s var(--ease-out) forwards;
+    }
+    @keyframes heroZoom { to { transform: scale(1); } }
+    .page-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.88) 100%);
+    }
+    .page-hero-content {
+      position: relative; z-index: 2; max-width: var(--max-w); margin: 0 auto; width: 100%;
+      padding: 0 2rem 4.5rem;
+      animation: heroFadeUp 1s var(--ease-out) 0.3s both;
+    }
+    @keyframes heroFadeUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform:none; } }
+    .breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; font-weight: 500; color: rgba(255,255,255,0.55); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+    .breadcrumb a { color: rgba(255,255,255,0.55); transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--white); }
+    .bc-sep { color: rgba(255,255,255,0.3); }
+    .page-hero-title { font-family: var(--font-display); font-size: clamp(3rem,8vw,6rem); font-weight: 300; color: var(--white); line-height: 1; letter-spacing: -0.02em; margin-bottom: 1rem; }
+    .page-hero-title em { font-style: italic; color: var(--blue-light); }
+    .page-hero-sub { font-size: clamp(0.9rem,2vw,1.05rem); color: rgba(255,255,255,0.68); max-width: 520px; line-height: 1.7; }
+    .page-hero-scroll { position: absolute; bottom: 2rem; right: 2.5rem; display: flex; align-items: center; gap: 0.6rem; color: rgba(255,255,255,0.45); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; z-index: 2; animation: heroFadeUp 1s var(--ease-out) 0.7s both; }
+    .scroll-line { width: 40px; height: 1px; background: rgba(255,255,255,0.3); position: relative; overflow: hidden; }
+    .scroll-line::after { content: ''; position: absolute; inset: 0; background: var(--white); animation: scrollLine 1.8s var(--ease-in-out) infinite; }
+    @keyframes scrollLine { 0%{transform:translateX(-100%);} 50%{transform:translateX(0);} 100%{transform:translateX(100%);} }
+
+    /* ── Shared ── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 2rem; }
+    .reveal { opacity:0; transform: translateY(28px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); transition-delay: var(--delay,0s); }
+    .reveal.visible { opacity:1; transform: none; }
+    .section-eyebrow { display:inline-block; font-size:0.7rem; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; color:var(--blue); margin-bottom:0.75rem; }
+    .section-title { font-family:var(--font-display); font-size:clamp(2.2rem,5vw,3.5rem); font-weight:400; color:var(--black); line-height:1.1; letter-spacing:-0.02em; margin-bottom:0.75rem; }
+    .section-title em { font-style:italic; color:var(--blue); }
+    .section-sub { font-size:0.95rem; color:var(--gray-600); line-height:1.75; }
+
+    /* ── VIDEO SECTION ── */
+    .videos-section { padding: 80px 0 100px; }
+
+    /* Section header */
+    .videos-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap;
+    }
+    .videos-header-left { max-width: 560px; }
+
+    /* Filter bar */
+    .vp-filter-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;
+    }
+    .vp-filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .vp-filter {
+      font-size: 0.78rem; font-weight: 500;
+      padding: 7px 16px; border-radius: 24px;
+      border: 1.5px solid var(--gray-200);
+      background: var(--white); color: var(--gray-600);
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .vp-filter:hover { border-color: var(--blue); color: var(--blue); }
+    .vp-filter.active { background: var(--blue); border-color: var(--blue); color: var(--white); }
+    .vp-count { font-size: 0.78rem; color: var(--gray-400); white-space: nowrap; }
+
+    /* ── VIDEO GRID ── */
+    .vp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    /* Featured video — spans 2 columns */
+    .vp-card.featured {
+      grid-column: span 2;
+    }
+    .vp-card.featured .vp-thumb { aspect-ratio: 16/9; }
+
+    /* Card */
+    .vp-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 0.35s var(--ease-out), box-shadow 0.35s, border-color 0.25s;
+      cursor: pointer;
+    }
+    .vp-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+
+    /* Thumbnail */
+    .vp-thumb {
+      position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden;
+      background: var(--navy); flex-shrink: 0;
+    }
+    .vp-thumb img { width:100%; height:100%; object-fit:cover; transition: transform 0.6s var(--ease-out); }
+    .vp-card:hover .vp-thumb img { transform: scale(1.06); }
+
+    /* Overlay */
+    .vp-thumb-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0);
+      transition: background 0.3s;
+    }
+    .vp-card:hover .vp-thumb-overlay { background: rgba(0,0,0,0.3); }
+
+    /* Play button */
+    .vp-play {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%) scale(0.85);
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(12px);
+      border: 2px solid rgba(255,255,255,0.5);
+      display: flex; align-items: center; justify-content: center;
+      color: white; z-index: 2;
+      opacity: 0; transition: opacity 0.3s, transform 0.3s;
+    }
+    .vp-card:hover .vp-play { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+    .vp-play svg { margin-left: 4px; }
+
+    /* Featured badge */
+    .vp-featured-badge {
+      position: absolute; top: 12px; left: 12px; z-index: 3;
+      background: var(--blue); color: white;
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 4px;
+    }
+
+    /* Duration badge */
+    .vp-duration {
+      position: absolute; bottom: 10px; right: 10px; z-index: 3;
+      background: rgba(0,0,0,0.78); color: white;
+      font-size: 0.72rem; font-weight: 600;
+      padding: 3px 8px; border-radius: 4px;
+    }
+
+    /* Card body */
+    .vp-body { padding: 1.1rem 1.25rem 1.4rem; flex: 1; display: flex; flex-direction: column; }
+    .vp-cat {
+      display: inline-block; font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 0.5rem;
+    }
+    .vp-title {
+      font-family: var(--font-display); font-size: 1.15rem; font-weight: 600;
+      color: var(--black); line-height: 1.3; margin-bottom: 0.5rem;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .vp-card.featured .vp-title { font-size: 1.4rem; }
+    .vp-desc {
+      font-size: 0.84rem; color: var(--gray-600); line-height: 1.65; flex: 1;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+      margin-bottom: 0.9rem;
+    }
+    .vp-card.featured .vp-desc { -webkit-line-clamp: 4; }
+    .vp-footer {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding-top: 0.75rem; border-top: 1px solid var(--gray-100);
+    }
+    .vp-watch-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.78rem; font-weight: 600; color: var(--blue);
+      padding: 5px 12px; border-radius: 6px;
+      background: rgba(26,86,219,0.07);
+      transition: background 0.2s;
+    }
+    .vp-watch-btn:hover { background: rgba(26,86,219,0.14); }
+    .vp-yt-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.72rem; font-weight: 500; color: #ef4444;
+      transition: opacity 0.2s;
+    }
+    .vp-yt-link:hover { opacity: 0.75; }
+
+    /* ── Skeleton ── */
+    .vp-skeleton-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
+    }
+    .vp-skeleton-card { border-radius: var(--radius-lg); overflow: hidden; background: var(--gray-100); }
+    .vp-skeleton-thumb {
+      width:100%; aspect-ratio:16/9;
+      background: linear-gradient(90deg,#e5e7eb 25%,#f3f4f6 50%,#e5e7eb 75%);
+      background-size: 200% 100%; animation: shimmer 1.4s infinite;
+    }
+    .vp-skeleton-body { padding: 14px 16px 18px; display:flex; flex-direction:column; gap:8px; }
+    .vp-sk-tag   { width:60px; height:10px; border-radius:4px; background:linear-gradient(90deg,#e5e7eb 25%,#f3f4f6 50%,#e5e7eb 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; }
+    .vp-sk-title { width:80%; height:14px; border-radius:4px; background:linear-gradient(90deg,#e5e7eb 25%,#f3f4f6 50%,#e5e7eb 75%); background-size:200% 100%; animation:shimmer 1.4s infinite 0.1s; }
+    .vp-sk-desc  { width:95%; height:10px; border-radius:4px; background:linear-gradient(90deg,#e5e7eb 25%,#f3f4f6 50%,#e5e7eb 75%); background-size:200% 100%; animation:shimmer 1.4s infinite 0.2s; }
+    @keyframes shimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
+
+    /* ── Empty state ── */
+    .vp-empty {
+      grid-column: 1/-1; text-align: center; padding: 100px 24px;
+      color: var(--gray-400);
+    }
+    .vp-empty svg { margin: 0 auto 20px; opacity: 0.4; display: block; }
+    .vp-empty p { font-size: 1.05rem; margin-bottom: 8px; color: var(--gray-600); }
+    .vp-empty span { font-size: 0.88rem; }
+
+    /* ── VIDEO LIGHTBOX / PLAYER MODAL ── */
+    .vp-lightbox {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.92); align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .vp-lightbox.open {
+      display: flex;
+      animation: lbFadeIn 0.25s ease;
+    }
+    @keyframes lbFadeIn { from{opacity:0;} to{opacity:1;} }
+
+    .vp-lightbox-inner {
+      position: relative; width: 100%; max-width: 960px;
+      animation: lbSlideUp 0.3s var(--ease-out);
+    }
+    @keyframes lbSlideUp { from{opacity:0;transform:translateY(24px) scale(0.97);} to{opacity:1;transform:none;} }
+
+    .vp-lightbox-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; margin-bottom: 12px;
+    }
+    .vp-lightbox-title {
+      font-family: var(--font-display); font-size: 1.3rem; font-weight: 400;
+      color: var(--white); letter-spacing: -0.01em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .vp-lightbox-title em { font-style: italic; color: var(--blue-light); }
+
+    .vp-lightbox-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+    .vp-lb-yt-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #ef4444; color: white;
+      font-size: 0.78rem; font-weight: 600; padding: 7px 14px; border-radius: 6px;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .vp-lb-yt-btn:hover { background: #dc2626; }
+    .vp-lb-yt-btn svg { fill: white; }
+
+    .vp-lb-close {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: rgba(255,255,255,0.12); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; line-height: 1; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .vp-lb-close:hover { background: rgba(255,255,255,0.22); }
+
+    /* Embed wrapper — 16:9 */
+    .vp-embed-wrap {
+      position: relative; width: 100%; aspect-ratio: 16/9;
+      border-radius: var(--radius-lg); overflow: hidden; background: #000;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    }
+    .vp-embed-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+
+    /* Caption / description */
+    .vp-lightbox-desc {
+      margin-top: 14px; font-size: 0.88rem; color: rgba(255,255,255,0.55);
+      line-height: 1.65; max-height: 64px; overflow: hidden;
+    }
+
+    /* ── Marquee ── */
+    .marquee-wrap { overflow:hidden; background:var(--navy); border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); padding:1.1rem 0; }
+    .marquee-track { display:flex; overflow:hidden; }
+    .marquee-content { display:flex; align-items:center; gap:1rem; white-space:nowrap; animation:marquee 32s linear infinite; flex-shrink:0; }
+    .marquee-content span { font-family:var(--font-display); font-size:1rem; font-weight:300; color:rgba(255,255,255,0.45); letter-spacing:0.06em; font-style:italic; }
+    .marquee-content .dot { color:var(--blue); font-style:normal; }
+    @keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+    /* ── CTA Banner ── */
+    .cta-banner { background:var(--navy); padding:80px 0; }
+    .cta-inner { display:flex; align-items:center; justify-content:space-between; gap:2rem; padding:3rem 3.5rem; background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 100%); border-radius:var(--radius-lg); position:relative; overflow:hidden; }
+    .cta-inner::before { content:''; position:absolute; top:-60%; right:-10%; width:400px; height:400px; border-radius:50%; background:rgba(255,255,255,0.06); }
+    .cta-inner h2 { font-family:var(--font-display); font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:400; color:var(--white); margin-bottom:0.5rem; position:relative; z-index:1; }
+    .cta-inner p { font-size:0.95rem; color:rgba(255,255,255,0.72); max-width:440px; line-height:1.65; position:relative; z-index:1; }
+    .btn-cta {
+      display:inline-flex; align-items:center; gap:0.5rem;
+      background:var(--white); color:var(--blue);
+      font-size:0.85rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;
+      padding:0.85rem 2rem; border-radius:var(--radius); white-space:nowrap;
+      transition:background 0.25s, transform 0.2s; position:relative; z-index:1; flex-shrink:0;
+    }
+    .btn-cta:hover { background:var(--off-white); transform:translateY(-2px); }
+
+    /* ── Footer ── */
+    .footer { background:var(--black); color:rgba(255,255,255,0.6); padding-top:60px; }
+    .footer-top { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:2rem 3rem; padding-bottom:3rem; border-bottom:1px solid rgba(255,255,255,0.07); }
+    .footer-logo { font-family:var(--font-display); font-size:1.15rem; font-weight:600; color:var(--white); letter-spacing:0.08em; margin-bottom:0.85rem; }
+    .footer-logo span { color:var(--blue); }
+    .footer-brand p { font-size:0.85rem; line-height:1.7; margin-bottom:1.5rem; max-width:280px; color:rgba(255,255,255,0.45); }
+    .footer-social { display:flex; gap:0.75rem; }
+    .footer-social a { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.07); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.55); transition:background 0.25s,color 0.25s,transform 0.2s; }
+    .footer-social a:hover { background:var(--blue); color:var(--white); transform:translateY(-2px); }
+    .footer-social svg { width:16px; height:16px; }
+    .footer-col h4 { font-size:0.72rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); margin-bottom:1.1rem; }
+    .footer-col ul { display:flex; flex-direction:column; gap:0.6rem; }
+    .footer-col li, .footer-col a { font-size:0.85rem; color:rgba(255,255,255,0.45); transition:color 0.2s; }
+    .footer-col a:hover { color:var(--white); }
+    .footer-bottom { display:flex; align-items:center; justify-content:space-between; padding:1.25rem 0; font-size:0.78rem; color:rgba(255,255,255,0.3); gap:1rem; flex-wrap:wrap; }
+    .footer-legal { display:flex; gap:1.25rem; }
+    .footer-legal a { color:rgba(255,255,255,0.3); transition:color 0.2s; }
+    .footer-legal a:hover { color:rgba(255,255,255,0.6); }
+
+    /* ── Chat Widget ── */
+    .chat-widget { position:fixed; bottom:1.75rem; right:1.75rem; z-index:900; }
+    .chat-toggle-btn { width:54px; height:54px; border-radius:50%; background:var(--blue); color:var(--white); display:flex; align-items:center; justify-content:center; box-shadow:0 6px 20px rgba(26,86,219,0.4); transition:background 0.25s,transform 0.3s; position:relative; }
+    .chat-toggle-btn:hover { background:var(--blue-dark); transform:scale(1.08); }
+    .chat-toggle-btn svg { width:22px; height:22px; }
+    .chat-badge { position:absolute; top:-3px; right:-3px; width:20px; height:20px; background:#ef4444; border-radius:50%; font-size:0.65rem; font-weight:700; color:var(--white); display:flex; align-items:center; justify-content:center; border:2px solid var(--white); }
+    .chat-window { position:absolute; bottom:calc(100% + 14px); right:0; width:320px; background:var(--white); border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); overflow:hidden; display:none; flex-direction:column; }
+    .chat-window.open { display:flex; animation:chatOpen 0.3s var(--ease-out) both; }
+    @keyframes chatOpen { from{opacity:0;transform:scale(0.92) translateY(8px);} to{opacity:1;transform:scale(1) translateY(0);} }
+    .chat-header { background:var(--navy); padding:1rem 1.1rem; display:flex; align-items:center; justify-content:space-between; }
+    .chat-header-info { display:flex; align-items:center; gap:0.75rem; }
+    .chat-avatar { width:36px; height:36px; border-radius:50%; background:var(--blue); font-size:0.7rem; font-weight:700; color:var(--white); display:flex; align-items:center; justify-content:center; }
+    .chat-header h4 { font-size:0.88rem; font-weight:600; color:var(--white); margin-bottom:2px; }
+    .chat-status { font-size:0.72rem; color:rgba(255,255,255,0.5); display:flex; align-items:center; gap:0.35rem; }
+    .online-dot { width:7px; height:7px; border-radius:50%; background:#22c55e; animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+    .chat-close-btn { font-size:1.3rem; color:rgba(255,255,255,0.45); padding:0.2rem; transition:color 0.2s; }
+    .chat-close-btn:hover { color:var(--white); }
+    .chat-messages { padding:1.1rem; min-height:120px; max-height:240px; overflow-y:auto; display:flex; flex-direction:column; gap:0.75rem; background:var(--off-white); }
+    .chat-msg { font-size:0.84rem; line-height:1.55; padding:0.6rem 0.85rem; border-radius:var(--radius); max-width:85%; }
+    .chat-msg.received { background:var(--white); color:var(--gray-800); border:1px solid var(--gray-200); align-self:flex-start; border-bottom-left-radius:3px; }
+    .chat-msg.sent { background:var(--blue); color:var(--white); align-self:flex-end; border-bottom-right-radius:3px; }
+    .chat-input-row { display:flex; align-items:center; gap:0.5rem; padding:0.75rem 1rem; border-top:1px solid var(--gray-200); background:var(--white); }
+    #chatInput { flex:1; border:1px solid var(--gray-200); border-radius:20px; padding:0.5rem 0.9rem; font-size:0.84rem; font-family:var(--font-body); color:var(--black); outline:none; background:var(--gray-100); transition:border-color 0.2s; }
+    #chatInput:focus { border-color:var(--blue); }
+    #chatSend { width:34px; height:34px; border-radius:50%; background:var(--blue); color:var(--white); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background 0.25s,transform 0.2s; }
+    #chatSend:hover { background:var(--blue-dark); transform:scale(1.08); }
+
+    /* ── Responsive ── */
+    @media (max-width:1024px) {
+      .vp-grid { grid-template-columns: repeat(2,1fr); }
+      .vp-card.featured { grid-column: span 2; }
+      .vp-skeleton-grid { grid-template-columns: repeat(2,1fr); }
+      .footer-top { grid-template-columns:1fr 1fr; }
+      .footer-brand { grid-column:1/-1; }
+      .cta-inner { flex-direction:column; text-align:center; padding:2.5rem 2rem; }
+    }
+    @media (max-width:768px) {
+      .nav-links, .btn-book { display:none; }
+      .menu-toggle { display:flex; }
+      .page-hero { height:62vh; min-height:400px; }
+      .page-hero-content { padding:0 1.25rem 2.5rem; }
+      .page-hero-scroll { display:none; }
+      .vp-grid { grid-template-columns: 1fr; }
+      .vp-card.featured { grid-column:span 1; }
+      .vp-skeleton-grid { grid-template-columns:1fr; }
+      .footer-top { grid-template-columns:1fr; }
+      .footer-bottom { flex-direction:column; text-align:center; }
+      .vp-lightbox-header { flex-wrap:wrap; }
+    }
+    @media (max-width:480px) {
+      .vp-filter-bar { flex-direction:column; align-items:flex-start; }
+      .cta-inner { padding:2rem 1.25rem; }
+      .chat-widget { bottom:1rem; right:1rem; }
+      .chat-window { width:calc(100vw - 2rem); right:0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <img src="/static/uploads/DENSPARK STUDIOs wallpaper (1).png" alt="Denspark Studio Logo" class="logo-img">
+        <div class="logo-text-wrap">
+          <span class="logo-text">DENSPARK PHOTO</span>
+          <span class="logo-sub">STUDIO</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
+        <li><a href="/video-production" class="nav-link active">Videos</a></li>
+        <li><a href="/packages" class="nav-link">Packages</a></li>
+        <li><a href="/services" class="nav-link">Services</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+        <li><a href="/contact" class="nav-link">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="/contact" class="btn-book">Book Now</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul class="mobile-nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/portfolio">Portfolio</a></li>
+        <li><a href="/video-production">Videos</a></li>
+        <li><a href="/packages">Packages</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+      <a href="/contact" class="btn-book-mobile">Book a Session</a>
+      <div class="mobile-info">
+        <span>Machakos, Kenya</span>
+        <span>+254 710 468 300</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="page-hero">
+    <div class="page-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1578849278619-e73505e9610f?w=1920&q=85')"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span class="bc-sep">→</span>
+        <span>Video Production</span>
+      </div>
+      <h1 class="page-hero-title">Cinematic <em>Stories</em></h1>
+      <p class="page-hero-sub">
+        From wedding highlights to brand films — we craft cinematic videos that move people. 
+        Watch our work below, right here on the page.
+      </p>
+    </div>
+    <div class="page-hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </header>
+
+  <!-- Videos Section -->
+  <section class="videos-section">
+    <div class="container">
+
+      <div class="videos-header reveal">
+        <div class="videos-header-left">
+          <span class="section-eyebrow">Our Films</span>
+          <h2 class="section-title">Watch Our <em>Work</em></h2>
+          <p class="section-sub">Click any video to watch it here — no redirects. Hit the YouTube button inside the player if you want the full experience.</p>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="vp-filter-bar reveal" style="--delay:0.08s">
+        <div class="vp-filters" id="vpFilters">
+          <button class="vp-filter active" data-cat="all">All Videos</button>
+          <button class="vp-filter" data-cat="wedding">Weddings</button>
+          <button class="vp-filter" data-cat="event">Events</button>
+          <button class="vp-filter" data-cat="corporate">Corporate</button>
+          <button class="vp-filter" data-cat="portrait">Portrait</button>
+          <button class="vp-filter" data-cat="commercial">Commercial</button>
+          <button class="vp-filter" data-cat="graduation">Graduation</button>
+          <button class="vp-filter" data-cat="birthday">Birthday</button>
+          <button class="vp-filter" data-cat="maternity">Maternity</button>
+          <button class="vp-filter" data-cat="drone">Drone</button>
+          <button class="vp-filter" data-cat="live">Live Streaming</button>
+          <button class="vp-filter" data-cat="branding">Branding</button>
+        </div>
+        <span class="vp-count" id="vpCount"></span>
+      </div>
+
+      <!-- Grid — populated by JS -->
+      <div class="vp-grid" id="vpGrid">
+        <!-- Skeleton while loading -->
+        <div class="vp-skeleton-grid" id="vpSkeleton" style="grid-column:1/-1">
+          <div class="vp-skeleton-card"><div class="vp-skeleton-thumb"></div><div class="vp-skeleton-body"><div class="vp-sk-tag"></div><div class="vp-sk-title"></div><div class="vp-sk-desc"></div></div></div>
+          <div class="vp-skeleton-card"><div class="vp-skeleton-thumb"></div><div class="vp-skeleton-body"><div class="vp-sk-tag"></div><div class="vp-sk-title"></div><div class="vp-sk-desc"></div></div></div>
+          <div class="vp-skeleton-card"><div class="vp-skeleton-thumb"></div><div class="vp-skeleton-body"><div class="vp-sk-tag"></div><div class="vp-sk-title"></div><div class="vp-sk-desc"></div></div></div>
+          <div class="vp-skeleton-card"><div class="vp-skeleton-thumb"></div><div class="vp-skeleton-body"><div class="vp-sk-tag"></div><div class="vp-sk-title"></div><div class="vp-sk-desc"></div></div></div>
+          <div class="vp-skeleton-card"><div class="vp-skeleton-thumb"></div><div class="vp-skeleton-body"><div class="vp-sk-tag"></div><div class="vp-sk-title"></div><div class="vp-sk-desc"></div></div></div>
+          <div class="vp-skeleton-card"><div class="vp-skeleton-thumb"></div><div class="vp-skeleton-body"><div class="vp-sk-tag"></div><div class="vp-sk-title"></div><div class="vp-sk-desc"></div></div></div>
+        </div>
+      </div>
+
+      <!-- Empty -->
+      <div style="display:none" id="vpEmpty">
+        <div class="vp-empty">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="2" width="20" height="20" rx="2"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" opacity="0.3"/></svg>
+          <p>No videos in this category yet.</p>
+          <span>Check back soon — we're always filming.</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span>Wedding Films</span><span class="dot">·</span>
+        <span>Event Coverage</span><span class="dot">·</span>
+        <span>Drone Footage</span><span class="dot">·</span>
+        <span>Brand Videos</span><span class="dot">·</span>
+        <span>Live Streaming</span><span class="dot">·</span>
+        <span>Cinematic Edits</span><span class="dot">·</span>
+        <span>Colour Grading</span><span class="dot">·</span>
+        <span>Social Media Reels</span><span class="dot">·</span>
+        <span>Wedding Films</span><span class="dot">·</span>
+        <span>Event Coverage</span><span class="dot">·</span>
+        <span>Drone Footage</span><span class="dot">·</span>
+        <span>Brand Videos</span><span class="dot">·</span>
+        <span>Live Streaming</span><span class="dot">·</span>
+        <span>Cinematic Edits</span><span class="dot">·</span>
+        <span>Colour Grading</span><span class="dot">·</span>
+        <span>Social Media Reels</span><span class="dot">·</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-banner">
+    <div class="container">
+      <div class="cta-inner reveal">
+        <div>
+          <h2>Want a Film Like This?</h2>
+          <p>Let's talk about your project. Every great video starts with a conversation — reach out today.</p>
+        </div>
+        <a href="https://wa.me/254112865629?text=Hi%20Denspark%20Studio!%20I%27d%20love%20to%20discuss%20a%20video%20production%20project%20with%20you." class="btn-cta" target="_blank" rel="noopener">
+          Chat on WhatsApp →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">DENSPARK PHOTO <span>STUDIO</span></div>
+          <p>Professional photography and creative media services in Machakos, Kenya. Capturing moments that last forever.</p>
+          <div class="footer-social">
+            <a href="https://www.facebook.com/share/1BK8dk8VsJ/" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+            <a href="https://www.instagram.com/densparkstudio" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            <a href="https://youtube.com/@densparkfilmsmachakos6509" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+            <a href="https://www.tiktok.com/@densparkstudio300" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col"><h4>Navigate</h4><ul><li><a href="/">Home</a></li><li><a href="/portfolio">Portfolio</a></li><li><a href="/video-production">Videos</a></li><li><a href="/services">Services</a></li><li><a href="/packages">Packages</a></li><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li></ul></div>
+        <div class="footer-col"><h4>Video Services</h4><ul><li><a href="/services">Wedding Films</a></li><li><a href="/services">Event Coverage</a></li><li><a href="/services">Drone Footage</a></li><li><a href="/services">Live Streaming</a></li><li><a href="/services">Brand Videos</a></li></ul></div>
+        <div class="footer-col"><h4>Contact</h4><ul><li>Machakos Town, Kenya</li><li><a href="tel:+254710468300">+254 710 468 300</a></li><li><a href="https://wa.me/254112865629" target="_blank">WhatsApp Us</a></li><li><a href="mailto:densparkstudio@gmail.com">densparkstudio@gmail.com</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Denspark Studio. All rights reserved.</p>
+        <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Video Lightbox / Player -->
+  <div class="vp-lightbox" id="vpLightbox">
+    <div class="vp-lightbox-inner">
+      <div class="vp-lightbox-header">
+        <div class="vp-lightbox-title" id="vpLbTitle">Video</div>
+        <div class="vp-lightbox-controls">
+          <a href="#" id="vpLbYtBtn" class="vp-lb-yt-btn" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            Watch on YouTube
+          </a>
+          <button class="vp-lb-close" id="vpLbClose">×</button>
+        </div>
+      </div>
+      <div class="vp-embed-wrap">
+        <iframe id="vpIframe" src="" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+      </div>
+      <div class="vp-lightbox-desc" id="vpLbDesc"></div>
+    </div>
+  </div>
+
+  <!-- Chat Widget -->
+  <div class="chat-widget" id="chatWidget">
+    <div class="chat-window" id="chatWindow">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="chat-avatar">DS</div>
+          <div><h4>Denspark Studio</h4><span class="chat-status"><span class="online-dot"></span>Online</span></div>
+        </div>
+        <button class="chat-close-btn" id="chatClose">×</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg received">Hi! 👋 Like what you've seen? We'd love to film your story too!</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Type a message...">
+        <button id="chatSend"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+      </div>
+    </div>
+    <button class="chat-toggle-btn" id="chatToggle" aria-label="Chat with us">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="chat-badge">1</span>
+    </button>
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── Navbar ── */
+    const navbar     = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    window.addEventListener('scroll', () => {
+      if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    if (menuToggle && mobileMenu) {
+      menuToggle.addEventListener('click', () => {
+        const open = mobileMenu.classList.toggle('open');
+        menuToggle.classList.toggle('open', open);
+      });
+      document.addEventListener('click', (e) => {
+        if (navbar && !navbar.contains(e.target)) {
+          mobileMenu.classList.remove('open');
+          menuToggle.classList.remove('open');
+        }
+      });
+    }
+
+    /* ── Reveal ── */
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => revealObs.observe(el));
+
+    /* ── YouTube ID extractor ── */
+    function getYtId(url) {
+      const m = String(url).match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+      return m ? m[1] : null;
+    }
+
+    /* ── State ── */
+    let allVideos    = [];
+    let activeFilter = 'all';
+    const vpGrid     = document.getElementById('vpGrid');
+    const vpSkeleton = document.getElementById('vpSkeleton');
+    const vpEmpty    = document.getElementById('vpEmpty');
+    const vpCount    = document.getElementById('vpCount');
+
+    /* ── Fetch videos from API ── */
+    async function loadVideos() {
+      try {
+        const res  = await fetch('/api/videos');
+        if (!res.ok) throw new Error('Failed');
+        const data = await res.json();
+        allVideos  = data.videos || [];
+      } catch (e) {
+        console.warn('Using empty videos — API not connected yet');
+        allVideos = [];
+      }
+      hideSkeleton();
+      renderVideos(allVideos);
+    }
+
+    function hideSkeleton() {
+      if (vpSkeleton) vpSkeleton.style.display = 'none';
+    }
+
+    /* ── Render ── */
+    function renderVideos(videos) {
+      // Remove existing cards
+      vpGrid.querySelectorAll('.vp-card').forEach((c) => c.remove());
+
+      if (vpEmpty) vpEmpty.style.display = videos.length === 0 ? 'block' : 'none';
+      if (vpCount) vpCount.textContent = videos.length > 0 ? `${videos.length} video${videos.length !== 1 ? 's' : ''}` : '';
+
+      videos.forEach((video, idx) => {
+        const ytId = video.youtube_id || getYtId(video.url) || '';
+        const thumb = `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
+        const isFeatured = video.featured && idx === 0; // First featured video gets wide card
+
+        const card = document.createElement('div');
+        card.className = `vp-card reveal${isFeatured ? ' featured' : ''}`;
+        card.dataset.cat   = (video.category || '').toLowerCase();
+        card.dataset.ytId  = ytId;
+        card.dataset.url   = video.url || '';
+        card.dataset.title = video.title || '';
+        card.dataset.desc  = video.description || '';
+        card.style.cssText = `--delay:${(idx * 0.06).toFixed(2)}s`;
+
+        const catLabel = titleCase(video.category || 'Video');
+        const featBadge = video.featured ? '<span class="vp-featured-badge">Featured</span>' : '';
+        const durBadge  = video.duration  ? `<span class="vp-duration">${esc(video.duration)}</span>` : '';
+        const descText  = video.description ? `<p class="vp-desc">${esc(video.description)}</p>` : '';
+
+        card.innerHTML = `
+          <div class="vp-thumb">
+            <img src="${thumb}" alt="${esc(video.title)}" loading="lazy"
+                 onerror="this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'">
+            <div class="vp-thumb-overlay"></div>
+            <div class="vp-play">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            ${featBadge}
+            ${durBadge}
+          </div>
+          <div class="vp-body">
+            <span class="vp-cat">${esc(catLabel)}</span>
+            <h3 class="vp-title">${esc(video.title || 'Untitled')}</h3>
+            ${descText}
+            <div class="vp-footer">
+              <span class="vp-watch-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                Watch Now
+              </span>
+              <a href="${esc(video.url)}" class="vp-yt-link" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                YouTube
+              </a>
+            </div>
+          </div>`;
+
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.vp-yt-link')) return;
+          openPlayer(card);
+        });
+
+        vpGrid.appendChild(card);
+        revealObs.observe(card);
+      });
+    }
+
+    /* ── Filter ── */
+    document.querySelectorAll('.vp-filter').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.vp-filter').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.cat;
+
+        const filtered = activeFilter === 'all'
+          ? allVideos
+          : allVideos.filter((v) => (v.category || '').toLowerCase() === activeFilter);
+
+        renderVideos(filtered);
+      });
+    });
+
+    /* ── Lightbox player ── */
+    const lightbox = document.getElementById('vpLightbox');
+    const iframe   = document.getElementById('vpIframe');
+    const lbTitle  = document.getElementById('vpLbTitle');
+    const lbDesc   = document.getElementById('vpLbDesc');
+    const lbYtBtn  = document.getElementById('vpLbYtBtn');
+    const lbClose  = document.getElementById('vpLbClose');
+
+    function openPlayer(card) {
+      const ytId  = card.dataset.ytId;
+      const title = card.dataset.title;
+      const desc  = card.dataset.desc;
+      const url   = card.dataset.url;
+      if (!ytId) return;
+
+      lbTitle.textContent  = title || 'Video';
+      lbDesc.textContent   = desc || '';
+      lbYtBtn.href         = url || `https://www.youtube.com/watch?v=${ytId}`;
+      iframe.src           = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1`;
+
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePlayer() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+      iframe.src = '';
+    }
+
+    lbClose?.addEventListener('click', closePlayer);
+    lightbox?.addEventListener('click', (e) => {
+      if (e.target === lightbox) closePlayer();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) closePlayer();
+    });
+
+    /* ── Chat Widget ── */
+    const chatToggle = document.getElementById('chatToggle');
+    const chatWindow = document.getElementById('chatWindow');
+    const chatClose  = document.getElementById('chatClose');
+    const chatInput  = document.getElementById('chatInput');
+    const chatSend   = document.getElementById('chatSend');
+    const chatMsgs   = document.getElementById('chatMessages');
+    const chatBadge  = chatToggle?.querySelector('.chat-badge');
+
+    const replies = [
+      "We'd love to film for you! What kind of video are you thinking?",
+      "Great! Message us on WhatsApp — +254 112 865 629 — for fast replies 😊",
+      "We cover weddings, events, brands, drone and more. What's the occasion?",
+      "Check out our packages page for service levels and then let's chat!",
+    ];
+    let replyIdx = 0;
+
+    function toggleChat() {
+      chatWindow?.classList.toggle('open');
+      if (chatBadge) chatBadge.style.display = 'none';
+    }
+    function appendMsg(text, type) {
+      const div = document.createElement('div');
+      div.className = `chat-msg ${type}`;
+      div.textContent = text;
+      chatMsgs?.appendChild(div);
+      if (chatMsgs) chatMsgs.scrollTop = chatMsgs.scrollHeight;
+    }
+    function sendMsg() {
+      const text = chatInput?.value.trim();
+      if (!text) return;
+      appendMsg(text, 'sent');
+      chatInput.value = '';
+      setTimeout(() => appendMsg(replies[replyIdx++ % replies.length], 'received'), 800 + Math.random() * 400);
+    }
+
+    chatToggle?.addEventListener('click', toggleChat);
+    chatClose?.addEventListener('click',  toggleChat);
+    chatSend?.addEventListener('click',   sendMsg);
+    chatInput?.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMsg(); });
+
+    /* ── Utils ── */
+    function titleCase(s) { return String(s).replace(/\b\w/g, (c) => c.toUpperCase()); }
+    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    /* ── Boot ── */
+    loadVideos();
+
+  })();
+  </script>
+
+</body>
+</html>
