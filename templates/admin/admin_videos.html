@@ -1,0 +1,376 @@
+{% extends "admin/base.html" %}
+{% block title %}Video Manager — Denspark Admin{% endblock %}
+{% block page_title %}Videos{% endblock %}
+
+{% block content %}
+<div class="av-wrap">
+
+  <!-- Top bar -->
+  <div class="av-topbar">
+    <div class="av-topbar-left">
+      <h1 class="av-heading">Video Manager</h1>
+      <span class="av-count" id="avCount">{{ videos|length }} video{{ 's' if videos|length != 1 else '' }}</span>
+    </div>
+    <button class="av-btn-add" id="openAddModal">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Add Video
+    </button>
+  </div>
+
+  <!-- Filter + search -->
+  <div class="av-controls">
+    <div class="av-filters" id="avFilters">
+      <button class="av-filter active" data-cat="all">All</button>
+      <button class="av-filter" data-cat="wedding">Wedding</button>
+      <button class="av-filter" data-cat="event">Events</button>
+      <button class="av-filter" data-cat="corporate">Corporate</button>
+      <button class="av-filter" data-cat="portrait">Portrait</button>
+      <button class="av-filter" data-cat="commercial">Commercial</button>
+      <button class="av-filter" data-cat="graduation">Graduation</button>
+      <button class="av-filter" data-cat="birthday">Birthday</button>
+      <button class="av-filter" data-cat="maternity">Maternity</button>
+      <button class="av-filter" data-cat="drone">Drone</button>
+      <button class="av-filter" data-cat="live">Live Streaming</button>
+      <button class="av-filter" data-cat="branding">Branding</button>
+      <button class="av-filter" data-cat="other">Other</button>
+    </div>
+    <div class="av-search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="text" id="avSearch" placeholder="Search by title…" autocomplete="off">
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="av-grid" id="avGrid">
+    {% for video in videos %}
+    <div class="av-card"
+         data-id="{{ video.id }}"
+         data-cat="{{ video.category }}"
+         data-title="{{ video.title|lower }}">
+
+      <div class="av-card-thumb">
+        <!-- YouTube thumbnail auto-generated -->
+        <img
+          src="https://img.youtube.com/vi/{{ video.youtube_id }}/maxresdefault.jpg"
+          alt="{{ video.title }}"
+          loading="lazy"
+          onerror="this.src='https://img.youtube.com/vi/{{ video.youtube_id }}/hqdefault.jpg'">
+
+        <div class="av-play-btn" title="Preview">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+
+        {% if video.featured %}
+        <span class="av-featured-badge">Featured</span>
+        {% endif %}
+
+        <div class="av-card-actions">
+          <button class="av-action-btn av-edit-btn"
+                  data-id="{{ video.id }}"
+                  data-title="{{ video.title }}"
+                  data-desc="{{ video.description or '' }}"
+                  data-cat="{{ video.category }}"
+                  data-url="{{ video.url }}"
+                  data-featured="{{ video.featured|lower }}"
+                  title="Edit">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <button class="av-action-btn av-delete-btn"
+                  data-id="{{ video.id }}"
+                  data-title="{{ video.title }}"
+                  title="Delete">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14H6L5 6"/>
+              <path d="M10 11v6M14 11v6"/>
+              <path d="M9 6V4h6v2"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Duration badge if set -->
+        {% if video.duration %}
+        <span class="av-duration">{{ video.duration }}</span>
+        {% endif %}
+      </div>
+
+      <div class="av-card-body">
+        <span class="av-cat-tag av-cat-{{ video.category }}">{{ video.category|capitalize }}</span>
+        <h3 class="av-card-title">{{ video.title }}</h3>
+        {% if video.description %}
+        <p class="av-card-desc">{{ video.description[:80] }}{% if video.description|length > 80 %}…{% endif %}</p>
+        {% endif %}
+        <div class="av-card-meta">
+          <a href="{{ video.url }}" target="_blank" class="av-yt-link" rel="noopener">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            YouTube
+          </a>
+          <span class="av-card-date">{{ video.created_at.strftime('%b %d, %Y') }}</span>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="av-empty" id="avEmpty">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <rect x="2" y="2" width="20" height="20" rx="2"/>
+        <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" opacity="0.3"/>
+      </svg>
+      <p>No videos yet. Add your first one!</p>
+      <button class="av-btn-add" id="emptyAddBtn">Add a Video</button>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- No results -->
+  <div class="av-no-results" id="avNoResults" style="display:none">
+    <p>No videos match your search.</p>
+  </div>
+
+</div>
+
+<!-- ===================== ADD MODAL ===================== -->
+<div class="av-modal-overlay" id="addModal">
+  <div class="av-modal">
+    <div class="av-modal-header">
+      <h2>Add Video</h2>
+      <button class="av-modal-close" id="closeAddModal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <form id="addForm">
+      <!-- URL Input with live preview -->
+      <div class="av-url-field">
+        <label for="addUrl">
+          YouTube URL <span class="req">*</span>
+          <span class="av-url-hint">Paste any YouTube link — we handle the rest</span>
+        </label>
+        <div class="av-url-input-wrap">
+          <div class="av-url-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+          </div>
+          <input type="url" id="addUrl" name="url" placeholder="https://www.youtube.com/watch?v=..." required>
+        </div>
+
+        <!-- Live thumbnail preview -->
+        <div class="av-thumb-preview" id="addThumbPreview" style="display:none">
+          <div class="av-thumb-preview-img">
+            <img id="addThumbImg" src="" alt="Thumbnail preview">
+            <div class="av-thumb-play">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="av-thumb-info">
+            <span class="av-thumb-label">✓ Valid YouTube link</span>
+            <span class="av-thumb-id" id="addThumbId"></span>
+          </div>
+        </div>
+        <div class="av-url-error" id="addUrlError" style="display:none">
+          ✕ Couldn't detect a YouTube video ID. Check the link and try again.
+        </div>
+      </div>
+
+      <div class="av-form-grid">
+        <div class="av-field">
+          <label for="addTitle">Title <span class="req">*</span></label>
+          <input type="text" id="addTitle" name="title" placeholder="e.g. Dennis & Faith Wedding Highlight" required>
+        </div>
+        <div class="av-field">
+          <label for="addCategory">Category <span class="req">*</span></label>
+          <select id="addCategory" name="category" required>
+            <option value="">Select category</option>
+            <option value="wedding">Wedding</option>
+            <option value="event">Event</option>
+            <option value="corporate">Corporate</option>
+            <option value="portrait">Portrait / Studio</option>
+            <option value="commercial">Commercial Photography</option>
+            <option value="graduation">Graduation</option>
+            <option value="birthday">Birthday</option>
+            <option value="maternity">Maternity</option>
+            <option value="drone">Drone Services</option>
+            <option value="live">Live Streaming</option>
+            <option value="branding">Branding</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="av-field av-field-full">
+          <label for="addDesc">Description</label>
+          <textarea id="addDesc" name="description" rows="4"
+            placeholder="Tell viewers about this video — who it was for, where it was shot, what made it special…"></textarea>
+          <span class="av-char-count"><span id="addDescCount">0</span> / 500</span>
+        </div>
+        <div class="av-field">
+          <label for="addDuration">Duration <small>(optional)</small></label>
+          <input type="text" id="addDuration" name="duration" placeholder="e.g. 4:32">
+        </div>
+        <div class="av-field av-field-full">
+          <label class="av-checkbox-label">
+            <input type="checkbox" name="featured" id="addFeatured">
+            <span class="av-checkmark"></span>
+            Feature this video (shows prominently on the video page)
+          </label>
+        </div>
+      </div>
+
+      <div class="av-modal-footer">
+        <button type="button" class="av-btn-cancel" id="cancelAdd">Cancel</button>
+        <button type="submit" class="av-btn-submit" id="addSubmit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Video
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== EDIT MODAL ===================== -->
+<div class="av-modal-overlay" id="editModal">
+  <div class="av-modal av-modal-sm">
+    <div class="av-modal-header">
+      <h2>Edit Video</h2>
+      <button class="av-modal-close" id="closeEditModal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <form id="editForm">
+      <input type="hidden" id="editId" name="id">
+
+      <!-- Current thumbnail -->
+      <div class="av-edit-preview">
+        <img id="editThumbImg" src="" alt="Video thumbnail">
+        <div class="av-thumb-play">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+
+      <div class="av-url-field">
+        <label for="editUrl">YouTube URL <span class="req">*</span></label>
+        <div class="av-url-input-wrap">
+          <div class="av-url-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+          </div>
+          <input type="url" id="editUrl" name="url" required>
+        </div>
+      </div>
+
+      <div class="av-form-grid">
+        <div class="av-field">
+          <label for="editTitle">Title <span class="req">*</span></label>
+          <input type="text" id="editTitle" name="title" required>
+        </div>
+        <div class="av-field">
+          <label for="editCategory">Category <span class="req">*</span></label>
+          <select id="editCategory" name="category" required>
+            <option value="wedding">Wedding</option>
+            <option value="event">Event</option>
+            <option value="corporate">Corporate</option>
+            <option value="portrait">Portrait / Studio</option>
+            <option value="commercial">Commercial Photography</option>
+            <option value="graduation">Graduation</option>
+            <option value="birthday">Birthday</option>
+            <option value="maternity">Maternity</option>
+            <option value="drone">Drone Services</option>
+            <option value="live">Live Streaming</option>
+            <option value="branding">Branding</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="av-field av-field-full">
+          <label for="editDesc">Description</label>
+          <textarea id="editDesc" name="description" rows="4"></textarea>
+        </div>
+        <div class="av-field">
+          <label for="editDuration">Duration</label>
+          <input type="text" id="editDuration" name="duration" placeholder="e.g. 4:32">
+        </div>
+        <div class="av-field av-field-full">
+          <label class="av-checkbox-label">
+            <input type="checkbox" name="featured" id="editFeatured">
+            <span class="av-checkmark"></span>
+            Feature this video
+          </label>
+        </div>
+      </div>
+
+      <div class="av-modal-footer">
+        <button type="button" class="av-btn-cancel" id="cancelEdit">Cancel</button>
+        <button type="submit" class="av-btn-submit">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== DELETE CONFIRM ===================== -->
+<div class="av-modal-overlay" id="deleteModal">
+  <div class="av-modal av-modal-xs">
+    <div class="av-modal-header">
+      <h2>Delete Video</h2>
+      <button class="av-modal-close" id="closeDeleteModal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="av-delete-body">
+      <div class="av-delete-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <p>Delete <strong id="deleteVideoTitle"></strong>?</p>
+      <span>The YouTube link will be removed from your site. The video stays on YouTube.</span>
+    </div>
+    <div class="av-modal-footer">
+      <button type="button" class="av-btn-cancel" id="cancelDelete">Cancel</button>
+      <button type="button" class="av-btn-danger" id="confirmDelete">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Preview modal (watch video inside admin) -->
+<div class="av-modal-overlay" id="previewModal">
+  <div class="av-modal av-modal-preview">
+    <div class="av-modal-header">
+      <h2 id="previewTitle">Video Preview</h2>
+      <button class="av-modal-close" id="closePreviewModal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="av-preview-embed">
+      <iframe id="previewIframe" src="" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="av-toast" id="avToast"></div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/admin/videos/main.js"></script>
+{% endblock %}

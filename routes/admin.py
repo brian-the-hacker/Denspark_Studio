@@ -282,4 +282,8 @@ def settings():
     return render_template('admin/settings.html', current_user=current_user)
 
 
-    
+
+@admin_bp.route('/videos')
+@login_required
+def videos():
+    return render_template('admin/admin_videos.html', current_user=current_user)
