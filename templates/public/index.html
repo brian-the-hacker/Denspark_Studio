@@ -314,7 +314,40 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     transform: translateY(0);
   }
 }
+.service-img {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
 
+.service-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.service-card:hover .service-img img {
+  transform: scale(1.05);
+}
+
+.service-img .service-num {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.service-body {
+  padding: 1.25rem;
+}
 /* ── Hero ─────────────────────────────────────────────────────────── */
 .hero{position:relative;width:100%;height:100vh;min-height:560px;overflow:hidden}
 .hero-badge{position:absolute;top:calc(var(--nav-h) + 20px);left:24px;z-index:10;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);color:var(--white);font-size:.75rem;letter-spacing:.06em;padding:6px 14px;border-radius:100px;animation:fadeUp .6s 2.2s ease both}
@@ -863,74 +896,132 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
       </div>
       <div class="services-grid">
         <article class="service-card reveal" style="--delay:0s">
-          <div class="service-num" aria-hidden="true">01</div>
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>
-          <h3>Photography</h3>
-          <p>Professional photography for individuals and businesses. Studio and outdoor sessions including portraits, events, weddings, corporate headshots, and lifestyle shoots with expert posing and styling guidance.</p>
-          <a href="/services" class="service-link" aria-label="Learn more about Photography services">Learn More <span aria-hidden="true">→</span></a>
+          <div class="service-img">
+            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80" alt="Photography" loading="lazy">
+            <div class="service-num" aria-hidden="true">01</div>
+          </div>
+          <div class="service-body">
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>
+            <h3>Photography</h3>
+            <p>Professional photography for individuals and businesses. Studio and outdoor sessions including portraits, events, weddings, corporate headshots, and lifestyle shoots with expert posing and styling guidance.</p>
+            <a href="/services" class="service-link" aria-label="Learn more about Photography services">Learn More <span aria-hidden="true">→</span></a>
+          </div>
         </article>
+
         <article class="service-card reveal" style="--delay:0.1s">
-          <div class="service-num" aria-hidden="true">02</div>
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
-          <h3>Videography</h3>
-          <p>High-quality video production for weddings, birthdays, corporate events and promotional content. Smooth editing, professional color grading, and cinematic sound design included.</p>
-          <a href="/services" class="service-link" aria-label="Learn more about Videography services">Learn More <span aria-hidden="true">→</span></a>
+          <div class="service-img">
+            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80" alt="Videography" loading="lazy">
+            <div class="service-num" aria-hidden="true">02</div>
+          </div>
+          <div class="service-body">
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+            <h3>Videography</h3>
+            <p>High-quality video production for weddings, birthdays, corporate events and promotional content. Smooth editing, professional color grading, and cinematic sound design included.</p>
+            <a href="/services" class="service-link" aria-label="Learn more about Videography services">Learn More <span aria-hidden="true">→</span></a>
+          </div>
         </article>
+
         <article class="service-card reveal" style="--delay:0.2s">
-          <div class="service-num" aria-hidden="true">03</div>
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-          <h3>Graphic Design</h3>
-          <p>Visually compelling designs for your brand — posters, flyers, banners, business cards, logos, and social media content crafted to match your unique brand identity.</p>
-          <a href="/services" class="service-link" aria-label="Learn more about Graphic Design services">Learn More <span aria-hidden="true">→</span></a>
+          <div class="service-img">
+            <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400&q=80" alt="Graphic Design" loading="lazy">
+            <div class="service-num" aria-hidden="true">03</div>
+          </div>
+          <div class="service-body">
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+            <h3>Graphic Design</h3>
+            <p>Visually compelling designs for your brand — posters, flyers, banners, business cards, logos, and social media content crafted to match your unique brand identity.</p>
+            <a href="/services" class="service-link" aria-label="Learn more about Graphic Design services">Learn More <span aria-hidden="true">→</span></a>
+          </div>
         </article>
+
         <article class="service-card reveal" style="--delay:0.3s">
-          <div class="service-num" aria-hidden="true">04</div>
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <h3>Branding</h3>
-          <p>Build a strong, consistent visual identity. Logo creation, brand color palettes, typography systems, and complete brand guidelines to make you stand out across all platforms.</p>
-          <a href="/services" class="service-link" aria-label="Learn more about Branding services">Learn More <span aria-hidden="true">→</span></a>
+          <div class="service-img">
+            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&q=80" alt="Branding" loading="lazy">
+            <div class="service-num" aria-hidden="true">04</div>
+          </div>
+          <div class="service-body">
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <h3>Branding</h3>
+            <p>Build a strong, consistent visual identity. Logo creation, brand color palettes, typography systems, and complete brand guidelines to make you stand out across all platforms.</p>
+            <a href="/services" class="service-link" aria-label="Learn more about Branding services">Learn More <span aria-hidden="true">→</span></a>
+          </div>
         </article>
+
         <article class="service-card reveal" style="--delay:0.4s">
-          <div class="service-num" aria-hidden="true">05</div>
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg></div>
-          <h3>Printing</h3>
-          <p>Premium printing for all your visual needs — photo prints, frames, albums, photobooks, banners, branded merchandise, and custom items with a professional finish.</p>
-          <a href="/services" class="service-link" aria-label="Learn more about Printing services">Learn More <span aria-hidden="true">→</span></a>
+          <div class="service-img">
+            <img src="https://images.unsplash.com/photo-1585079542156-2755d9c8a094?w=400&q=80" alt="Printing" loading="lazy">
+            <div class="service-num" aria-hidden="true">05</div>
+          </div>
+          <div class="service-body">
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg></div>
+            <h3>Printing</h3>
+            <p>Premium printing for all your visual needs — photo prints, frames, albums, photobooks, banners, branded merchandise, and custom items with a professional finish.</p>
+            <a href="/services" class="service-link" aria-label="Learn more about Printing services">Learn More <span aria-hidden="true">→</span></a>
+          </div>
         </article>
+
         <article class="service-card reveal" style="--delay:0.5s">
-          <div class="service-num" aria-hidden="true">06</div>
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-          <h3>Event Coverage</h3>
-          <p>Complete photo and video coverage of weddings, graduations, birthdays, and corporate events — capturing every highlight and natural moment with care and precision.</p>
-          <a href="/services" class="service-link" aria-label="Learn more about Event Coverage services">Learn More <span aria-hidden="true">→</span></a>
+          <div class="service-img">
+            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&q=80" alt="Event Coverage" loading="lazy">
+            <div class="service-num" aria-hidden="true">06</div>
+          </div>
+          <div class="service-body">
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <h3>Event Coverage</h3>
+            <p>Complete photo and video coverage of weddings, graduations, birthdays, and corporate events — capturing every highlight and natural moment with care and precision.</p>
+            <a href="/services" class="service-link" aria-label="Learn more about Event Coverage services">Learn More <span aria-hidden="true">→</span></a>
+          </div>
         </article>
+
         <article class="service-card reveal" style="--delay:0.6s">
-          <div class="service-num" aria-hidden="true">07</div>
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
-          <h3>Social Media Management</h3>
-          <p>Grow your online presence with creative content strategy, page management, posting schedules, and engagement tactics for a consistent, high-quality brand image.</p>
-          <a href="/services" class="service-link" aria-label="Learn more about Social Media Management services">Learn More <span aria-hidden="true">→</span></a>
+          <div class="service-img">
+            <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&q=80" alt="Social Media Management" loading="lazy">
+            <div class="service-num" aria-hidden="true">07</div>
+          </div>
+          <div class="service-body">
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+            <h3>Social Media Management</h3>
+            <p>Grow your online presence with creative content strategy, page management, posting schedules, and engagement tactics for a consistent, high-quality brand image.</p>
+            <a href="/services" class="service-link" aria-label="Learn more about Social Media Management services">Learn More <span aria-hidden="true">→</span></a>
+          </div>
         </article>
+
         <article class="service-card reveal" style="--delay:0.7s">
-          <div class="service-num" aria-hidden="true">08</div>
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 7h.01"/><path d="M3.4 18a2 2 0 0 0 1.4.6h14.4a2 2 0 0 0 1.4-.6"/><path d="M17 7v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7"/><circle cx="12" cy="13" r="3"/></svg></div>
-          <h3>Drone Services</h3>
-          <p>Stunning aerial photography and 4K videography for real estate, weddings, and events. Certified drone pilots delivering breathtaking perspectives from above.</p>
-          <a href="/services" class="service-link" aria-label="Learn more about Drone Services">Learn More <span aria-hidden="true">→</span></a>
+          <div class="service-img">
+            <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=400&q=80" alt="Drone Services" loading="lazy">
+            <div class="service-num" aria-hidden="true">08</div>
+          </div>
+          <div class="service-body">
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 7h.01"/><path d="M3.4 18a2 2 0 0 0 1.4.6h14.4a2 2 0 0 0 1.4-.6"/><path d="M17 7v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7"/><circle cx="12" cy="13" r="3"/></svg></div>
+            <h3>Drone Services</h3>
+            <p>Stunning aerial photography and 4K videography for real estate, weddings, and events. Certified drone pilots delivering breathtaking perspectives from above.</p>
+            <a href="/services" class="service-link" aria-label="Learn more about Drone Services">Learn More <span aria-hidden="true">→</span></a>
+          </div>
         </article>
+
         <article class="service-card reveal" style="--delay:0.8s">
-          <div class="service-num" aria-hidden="true">09</div>
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-          <h3>Live Streaming</h3>
-          <p>Multi-camera HD live streaming for weddings, conferences, and events. Broadcast to YouTube, Facebook, or private links so remote guests never miss a moment.</p>
-          <a href="/services" class="service-link" aria-label="Learn more about Live Streaming services">Learn More <span aria-hidden="true">→</span></a>
+          <div class="service-img">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Live Streaming" loading="lazy">
+            <div class="service-num" aria-hidden="true">09</div>
+          </div>
+          <div class="service-body">
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            <h3>Live Streaming</h3>
+            <p>Multi-camera HD live streaming for weddings, conferences, and events. Broadcast to YouTube, Facebook, or private links so remote guests never miss a moment.</p>
+            <a href="/services" class="service-link" aria-label="Learn more about Live Streaming services">Learn More <span aria-hidden="true">→</span></a>
+          </div>
         </article>
+
         <article class="service-card reveal" style="--delay:0.9s">
-          <div class="service-num" aria-hidden="true">10</div>
-          <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
-          <h3>Other Services</h3>
-          <p>Photo &amp; video editing, retouching, content creation for marketing campaigns, and creative direction. Ask us about your custom project needs.</p>
-          <a href="/services" class="service-link" aria-label="Learn more about other services">Learn More <span aria-hidden="true">→</span></a>
+          <div class="service-img">
+            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&q=80" alt="Other Services" loading="lazy">
+            <div class="service-num" aria-hidden="true">10</div>
+          </div>
+          <div class="service-body">
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+            <h3>Other Services</h3>
+            <p>Photo &amp; video editing, retouching, content creation for marketing campaigns, and creative direction. Ask us about your custom project needs.</p>
+            <a href="/services" class="service-link" aria-label="Learn more about other services">Learn More <span aria-hidden="true">→</span></a>
         </article>
       </div>
     </div>
