@@ -52,6 +52,10 @@ def about():
 def contact():
     return render_template('public/contact.html')
 
+@public_bp.route('/packages')
+def packages():
+    return render_template('public/packages.html')
+
 
 # ── API: Portfolio ────────────────────────────────────────────────────────────
 @public_bp.route('/api/portfolio')
