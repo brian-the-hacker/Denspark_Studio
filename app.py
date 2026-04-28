@@ -11,13 +11,13 @@ import cloudinary
 limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["200 per day", "60 per hour"],
-    storage_uri="memory://",          # swap to Redis URI in prod if needed
+    storage_uri="memory://",
 )
 
 def create_app():
     app = Flask(__name__)
 
-    # ── SECRET_KEY — crash loudly if missing, never fall back to a weak default ──
+    # ── SECRET_KEY ────────────────────────────────────────────────────────────
     secret = os.environ.get('SECRET_KEY')
     if not secret or secret == 'dev-secret':
         raise RuntimeError(
@@ -43,14 +43,13 @@ def create_app():
 
     # ── Uploads ───────────────────────────────────────────────────────────────
     app.config['UPLOAD_FOLDER'] = '/tmp'
-    app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024   # 10 MB hard cap
+    app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
     app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'jpeg', 'png', 'webp', 'gif'}
 
     # ── Session cookie hardening ──────────────────────────────────────────────
     app.config['SESSION_COOKIE_HTTPONLY'] = True
     app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-    # Force Secure cookies in production (Railway always uses HTTPS)
-    app.config['SESSION_COOKIE_SECURE'] = os.environ.get('FLASK_ENV') != 'development'
+    app.config['SESSION_COOKIE_SECURE']   = os.environ.get('FLASK_ENV') != 'development'
     app.config['REMEMBER_COOKIE_HTTPONLY'] = True
     app.config['REMEMBER_COOKIE_SECURE']   = os.environ.get('FLASK_ENV') != 'development'
 
@@ -102,7 +101,6 @@ def create_app():
 
     @app.errorhandler(500)
     def internal_error(e):
-        # Never expose raw exception messages to the client
         app.logger.error(f'Internal error: {e}')
         return jsonify(error='An internal error occurred. Please try again later.'), 500
 
@@ -114,6 +112,10 @@ def create_app():
     app.register_blueprint(public_bp)
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(auth_bp, url_prefix='/auth')
+
+    # ── Auto-create any missing tables (safe — never drops existing ones) ─────
+    with app.app_context():
+        db.create_all()
 
     return app
 
