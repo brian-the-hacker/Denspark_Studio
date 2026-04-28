@@ -1,0 +1,37 @@
+# ── Secrets — NEVER commit these ─────────────────────────────────
+.env
+.env.local
+.env.production
+*.env
+
+# ── Python ────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+env/
+
+# ── Uploads (user files go to Cloudinary, not Git) ────────────────
+static/uploads/
+/tmp/
+
+# ── Database ──────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+
+# ── OS ────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── IDE ───────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp

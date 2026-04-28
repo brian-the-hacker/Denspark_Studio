@@ -25,3 +25,4 @@ SQLAlchemy==2.0.49
 typing_extensions==4.15.0
 urllib3==2.6.3
 Werkzeug==3.0.3
+flask-limiter==3.5.0
