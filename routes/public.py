@@ -1,25 +1,27 @@
 from flask import Blueprint, render_template, jsonify, request, current_app
 from models import db, Portfolio, Booking, Message
 from app import limiter
+from utils.email import send_booking_notification, send_contact_notification
 import re
 
 public_bp = Blueprint('public', __name__)
 
 # ── Constants ─────────────────────────────────────────────────────────────────
-
 MAX_NAME_LEN    = 100
 MAX_EMAIL_LEN   = 254
 MAX_PHONE_LEN   = 20
 MAX_SERVICE_LEN = 100
-MAX_MSG_LEN     = 2000    # cap free-text fields
+MAX_MSG_LEN     = 2000
 
 EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
 
+ALLOWED_SERVICES = {
+    'studio-portrait', 'wedding', 'event', 'video', 'commercial',
+    'birthday', 'maternity', 'graduation', 'passport', 'kids', 'family', 'other'
+}
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
-
 def _clean(value, max_len):
-    """Strip whitespace and hard-cap length."""
     return (value or '').strip()[:max_len]
 
 def _valid_email(email):
@@ -27,7 +29,6 @@ def _valid_email(email):
 
 
 # ── Public pages ──────────────────────────────────────────────────────────────
-
 @public_bp.route('/')
 def index():
     featured = Portfolio.query.filter_by(featured=True)\
@@ -52,8 +53,7 @@ def contact():
     return render_template('public/contact.html')
 
 
-# ── API: Portfolio items ───────────────────────────────────────────────────────
-
+# ── API: Portfolio ────────────────────────────────────────────────────────────
 @public_bp.route('/api/portfolio')
 @limiter.limit("60 per minute")
 def api_portfolio():
@@ -61,39 +61,30 @@ def api_portfolio():
         category = _clean(request.args.get('category', ''), 50).lower()
         featured = _clean(request.args.get('featured', ''), 10).lower()
         page     = max(1, int(request.args.get('page', 1)))
-        per_page = min(max(0, int(request.args.get('per_page', 0))), 100)  # cap at 100
+        per_page = min(max(0, int(request.args.get('per_page', 0))), 100)
 
         q = Portfolio.query.order_by(Portfolio.created_at.desc())
 
         if category and category != 'all':
             q = q.filter(Portfolio.category == category)
-
         if featured == 'true':
             q = q.filter(Portfolio.featured == True)
 
         if per_page > 0:
             paginated = q.paginate(page=page, per_page=per_page, error_out=False)
-            items     = paginated.items
-            total     = paginated.total
-            pages     = paginated.pages
+            items, total, pages = paginated.items, paginated.total, paginated.pages
         else:
             items = q.all()
-            total = len(items)
-            pages = 1
+            total, pages = len(items), 1
 
         def serialize(item):
             if item.cloudinary_url:
-                image_url = item.cloudinary_url.replace(
-                    '/upload/',
-                    '/upload/w_800,q_auto,f_auto/'
-                )
-                full_url = item.cloudinary_url
+                image_url = item.cloudinary_url.replace('/upload/', '/upload/w_800,q_auto,f_auto/')
+                full_url  = item.cloudinary_url
             elif item.file_path:
-                image_url = f"/static/uploads/{item.file_path}"
-                full_url  = image_url
+                image_url = full_url = f"/static/uploads/{item.file_path}"
             else:
-                image_url = "/static/img/placeholder.jpg"
-                full_url  = image_url
+                image_url = full_url = "/static/img/placeholder.jpg"
 
             return {
                 "id"            : item.id,
@@ -105,16 +96,9 @@ def api_portfolio():
                 "full_url"      : full_url,
                 "featured"      : item.featured,
                 "created_at"    : item.created_at.strftime("%Y-%m-%d"),
-                "size"          : "",
             }
 
-        return jsonify({
-            "items"   : [serialize(i) for i in items],
-            "total"   : total,
-            "page"    : page,
-            "pages"   : pages,
-            "per_page": per_page,
-        })
+        return jsonify({"items": [serialize(i) for i in items], "total": total, "page": page, "pages": pages, "per_page": per_page})
 
     except (ValueError, TypeError):
         return jsonify({"error": "Invalid query parameters", "items": []}), 400
@@ -123,21 +107,94 @@ def api_portfolio():
         return jsonify({"error": "Failed to load portfolio", "items": []}), 500
 
 
-# ── API: Contact form ─────────────────────────────────────────────────────────
+# ── API: Booking form ─────────────────────────────────────────────────────────
+@public_bp.route('/api/booking', methods=['POST'])
+@limiter.limit("5 per minute; 15 per hour")
+def api_booking():
+    try:
+        data = request.get_json(silent=True) or request.form
 
+        # Handle split first/last name from the form
+        first_name = _clean(data.get('first_name'), MAX_NAME_LEN)
+        last_name  = _clean(data.get('last_name'),  MAX_NAME_LEN)
+        # Also support combined 'name' field as fallback
+        name = f"{first_name} {last_name}".strip() or _clean(data.get('name'), MAX_NAME_LEN)
+
+        email   = _clean(data.get('email'),   MAX_EMAIL_LEN)
+        phone   = _clean(data.get('phone'),   MAX_PHONE_LEN)
+        service = _clean(data.get('service'), MAX_SERVICE_LEN)
+        date    = _clean(data.get('date'),    20)
+        message = _clean(data.get('message'), MAX_MSG_LEN)
+
+        # ── Validation ────────────────────────────────────────────────────────
+        errors = []
+        if not name:
+            errors.append('Full name is required.')
+        if not email:
+            errors.append('Email is required.')
+        elif not _valid_email(email):
+            errors.append('Please enter a valid email address.')
+        if not service:
+            errors.append('Please select a service.')
+        elif service not in ALLOWED_SERVICES:
+            errors.append('Invalid service selected.')
+        if not message:
+            errors.append('Please describe your project.')
+        elif len(message) < 10:
+            errors.append('Message is too short — please give us a bit more detail.')
+
+        if errors:
+            return jsonify({'error': ' '.join(errors)}), 400
+
+        # ── Save to DB ────────────────────────────────────────────────────────
+        full_message = message
+        if date:
+            full_message = f"[Preferred Date: {date}]\n\n{message}"
+
+        booking = Booking(
+            name    = name,
+            email   = email,
+            phone   = phone,
+            service = service,
+            message = full_message,
+            status  = 'pending',
+        )
+        db.session.add(booking)
+        db.session.commit()
+
+        # ── Send email notification (non-blocking — failure won't break form) ─
+        try:
+            send_booking_notification({
+                'name'   : name,
+                'email'  : email,
+                'phone'  : phone,
+                'service': service,
+                'date'   : date or 'Not specified',
+                'message': message,
+            })
+        except Exception as mail_err:
+            current_app.logger.error(f'Email notification error: {mail_err}')
+
+        return jsonify({'success': True, 'id': booking.id}), 201
+
+    except Exception as e:
+        current_app.logger.error(f"Booking error: {e}")
+        return jsonify({'error': 'Failed to submit booking. Please try again later.'}), 500
+
+
+# ── API: Contact form ─────────────────────────────────────────────────────────
 @public_bp.route('/api/contact', methods=['POST'])
-@limiter.limit("5 per minute; 20 per hour")   # spam protection
+@limiter.limit("5 per minute; 20 per hour")
 def api_contact():
     try:
         data = request.get_json(silent=True) or request.form
 
         name    = _clean(data.get('name'),    MAX_NAME_LEN)
         email   = _clean(data.get('email'),   MAX_EMAIL_LEN)
-        content = _clean(data.get('message'), MAX_MSG_LEN)
         phone   = _clean(data.get('phone'),   MAX_PHONE_LEN)
         service = _clean(data.get('service'), MAX_SERVICE_LEN)
+        content = _clean(data.get('message'), MAX_MSG_LEN)
 
-        # ── Validation ────────────────────────────────────────────────────────
         errors = []
         if not name:
             errors.append('Name is required.')
@@ -145,10 +202,8 @@ def api_contact():
             errors.append('Email is required.')
         elif not _valid_email(email):
             errors.append('Please enter a valid email address.')
-        if not content:
-            errors.append('Message is required.')
-        if len(content) < 10:
-            errors.append('Message is too short.')
+        if not content or len(content) < 10:
+            errors.append('Please enter a message (at least 10 characters).')
 
         if errors:
             return jsonify({'error': ' '.join(errors)}), 400
@@ -168,54 +223,20 @@ def api_contact():
         db.session.add(msg)
         db.session.commit()
 
+        # ── Email notification ────────────────────────────────────────────────
+        try:
+            send_contact_notification({
+                'name'   : name,
+                'email'  : email,
+                'phone'  : phone,
+                'service': service or 'General Inquiry',
+                'message': content,
+            })
+        except Exception as mail_err:
+            current_app.logger.error(f'Contact email error: {mail_err}')
+
         return jsonify({'success': True, 'message': 'Message sent successfully.'}), 201
 
     except Exception as e:
         current_app.logger.error(f"Contact form error: {e}")
         return jsonify({'error': 'Failed to send message. Please try again later.'}), 500
-
-
-# ── API: Booking ──────────────────────────────────────────────────────────────
-
-@public_bp.route('/api/booking', methods=['POST'])
-@limiter.limit("5 per minute; 15 per hour")   # spam protection
-def api_booking():
-    try:
-        data = request.get_json(silent=True) or request.form
-
-        name    = _clean(data.get('name'),    MAX_NAME_LEN)
-        email   = _clean(data.get('email'),   MAX_EMAIL_LEN)
-        service = _clean(data.get('service'), MAX_SERVICE_LEN)
-        phone   = _clean(data.get('phone'),   MAX_PHONE_LEN)
-        message = _clean(data.get('message'), MAX_MSG_LEN)
-
-        # ── Validation ────────────────────────────────────────────────────────
-        errors = []
-        if not name:
-            errors.append('Name is required.')
-        if not email:
-            errors.append('Email is required.')
-        elif not _valid_email(email):
-            errors.append('Please enter a valid email address.')
-        if not service:
-            errors.append('Service is required.')
-
-        if errors:
-            return jsonify({'error': ' '.join(errors)}), 400
-
-        booking = Booking(
-            name    = name,
-            email   = email,
-            phone   = phone,
-            service = service,
-            message = message,
-            status  = 'pending',
-        )
-        db.session.add(booking)
-        db.session.commit()
-
-        return jsonify({'success': True, 'id': booking.id}), 201
-
-    except Exception as e:
-        current_app.logger.error(f"Booking error: {e}")
-        return jsonify({'error': 'Failed to submit booking. Please try again later.'}), 500
