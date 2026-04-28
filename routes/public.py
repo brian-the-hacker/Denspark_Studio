@@ -57,6 +57,10 @@ def packages():
     return render_template('public/packages.html')
 
 
+@public_bp.route('/videos')
+def videos():
+    return render_template('public/video_production.html')    
+
 # ── API: Portfolio ────────────────────────────────────────────────────────────
 @public_bp.route('/api/portfolio')
 @limiter.limit("60 per minute")
