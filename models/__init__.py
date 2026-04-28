@@ -125,3 +125,20 @@ class Payment(db.Model):
 
     def __repr__(self):
         return f'<Payment {self.id}: {self.amount} KES — {self.status}>'
+    
+
+class Video(db.Model):
+    __tablename__ = 'videos'
+
+    id          = db.Column(db.Integer, primary_key=True)
+    title       = db.Column(db.String(255), nullable=False)
+    url         = db.Column(db.String(500), nullable=False)
+    youtube_id  = db.Column(db.String(20), nullable=False)
+    category    = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text, default='')
+    duration    = db.Column(db.String(20), default='')
+    featured    = db.Column(db.Boolean, default=False)
+    created_at  = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Video {self.id}: {self.title}>'

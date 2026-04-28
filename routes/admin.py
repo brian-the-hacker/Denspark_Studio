@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, request, jsonify, current_app, redirect, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
-from models import db, Portfolio, Booking, Message, Payment
+from models import db, Portfolio, Booking, Message, Payment, Video
 import os
 import uuid
-
+import re
 # ── Cloudinary ──────────────────────────────────────────────────────────────
 # pip install cloudinary
 import cloudinary
@@ -283,7 +283,76 @@ def settings():
 
 
 
+def extract_youtube_id(url):
+    patterns = [
+        r'(?:v=|\/)([0-9A-Za-z_-]{11})',
+        r'(?:youtu\.be\/)([0-9A-Za-z_-]{11})',
+        r'(?:embed\/)([0-9A-Za-z_-]{11})',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, url)
+        if match:
+            return match.group(1)
+    return None
+
+
 @admin_bp.route('/videos')
 @login_required
 def videos():
-    return render_template('admin/admin_videos.html', current_user=current_user)
+    videos = Video.query.order_by(Video.created_at.desc()).all()
+    return render_template('admin/admin_videos.html',
+                           videos=videos,
+                           current_user=current_user)
+
+
+@admin_bp.route('/videos/add', methods=['POST'])
+@login_required
+def add_video():
+    data = request.get_json()
+    youtube_id = extract_youtube_id(data.get('url', ''))
+    if not youtube_id:
+        return jsonify({'success': False, 'error': 'Invalid YouTube URL'}), 400
+
+    video = Video(
+        title=data['title'],
+        url=data['url'],
+        youtube_id=youtube_id,
+        category=data['category'],
+        description=data.get('description', ''),
+        duration=data.get('duration', ''),
+        featured=data.get('featured', False),
+    )
+    db.session.add(video)
+    db.session.commit()
+    return jsonify({'success': True, 'id': video.id})
+
+
+@admin_bp.route('/videos/edit/<int:video_id>', methods=['POST', 'PUT'])
+@login_required
+def edit_video(video_id):
+    video = Video.query.get_or_404(video_id)
+    data = request.get_json()
+
+    youtube_id = extract_youtube_id(data.get('url', ''))
+    if not youtube_id:
+        return jsonify({'success': False, 'error': 'Invalid YouTube URL'}), 400
+
+    video.title       = data['title']
+    video.url         = data['url']
+    video.youtube_id  = youtube_id
+    video.category    = data['category']
+    video.description = data.get('description', '')
+    video.duration    = data.get('duration', '')
+    video.featured    = data.get('featured', False)
+
+    db.session.commit()
+    return jsonify({'success': True})
+
+
+@admin_bp.route('/videos/delete/<int:video_id>', methods=['DELETE', 'POST'])
+@login_required
+def delete_video(video_id):
+    video = Video.query.get_or_404(video_id)
+    db.session.delete(video)
+    db.session.commit()
+    return jsonify({'success': True})
