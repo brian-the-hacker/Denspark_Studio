@@ -119,73 +119,76 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ── Form Validation & Submission ──────────────────── */
-  const form        = document.getElementById('contactForm');
-  const submitBtn   = document.getElementById('submitBtn');
-  const formSuccess = document.getElementById('formSuccess');
-  const charCount   = document.getElementById('charCount');
-  const messageEl   = document.getElementById('message');
-  const MAX_CHARS   = 500;
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-  // Character counter
-  if (messageEl && charCount) {
-    messageEl.addEventListener('input', () => {
-      const len = messageEl.value.length;
-      charCount.textContent = `${len} / ${MAX_CHARS}`;
-      charCount.classList.remove('near-limit', 'at-limit');
-      if (len >= MAX_CHARS)       charCount.classList.add('at-limit');
-      else if (len >= MAX_CHARS * 0.85) charCount.classList.add('near-limit');
-      if (len > MAX_CHARS) messageEl.value = messageEl.value.slice(0, MAX_CHARS);
-    });
-  }
+      const btn      = contactForm.querySelector('.btn-submit');
+      const origHTML = btn.innerHTML;
 
-  // Validation rules
-  const rules = {
-    first_name: { required: true, min: 2,  msg: 'Please enter your first name (min 2 characters).' },
-    last_name:  { required: true, min: 2,  msg: 'Please enter your last name (min 2 characters).' },
-    email:      { required: true, email: true, msg: 'Please enter a valid email address.' },
-    service:    { required: true, msg: 'Please select a service.' },
-    message:    { required: true, min: 10, msg: 'Please describe your project (min 10 characters).' },
-  };
+      // Remove any previous error
+      const prevErr = contactForm.querySelector('.form-submit-error');
+      if (prevErr) prevErr.remove();
 
-  const showError = (field, msg) => {
-    const input = document.getElementById(field);
-    const err   = document.getElementById(`err-${field}`);
-    if (input) input.classList.add('error');
-    if (err)   err.textContent = msg;
-  };
+      // Loading state
+      btn.classList.add('loading');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
 
-  const clearError = (field) => {
-    const input = document.getElementById(field);
-    const err   = document.getElementById(`err-${field}`);
-    if (input) input.classList.remove('error');
-    if (err)   err.textContent = '';
-  };
+      try {
+        const res = await fetch('/api/contact', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name:    contactForm.querySelector('#name').value.trim(),
+            phone:   contactForm.querySelector('#phone').value.trim(),
+            email:   contactForm.querySelector('#email').value.trim(),
+            service: contactForm.querySelector('#service').value,
+            message: contactForm.querySelector('#message').value.trim(),
+          }),
+        });
 
-  const isValidEmail = str => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str);
+        const data = await res.json();
 
-  const validateForm = () => {
-    let valid = true;
+        if (res.ok && data.success) {
+          // Success
+          btn.classList.remove('loading');
+          btn.classList.add('success');
+          btn.disabled = false;
+          btn.innerHTML = '✓ Message Sent!';
+          contactForm.reset();
+          setTimeout(() => {
+            btn.classList.remove('success');
+            btn.innerHTML = origHTML;
+          }, 4000);
 
-    Object.entries(rules).forEach(([field, rule]) => {
-      const el  = document.getElementById(field);
-      const val = el ? el.value.trim() : '';
+        } else {
+          // Server validation error — show message from backend
+          throw new Error(data.error || 'Something went wrong. Please try again.');
+        }
 
-      if (rule.required && !val) {
-        showError(field, rule.msg);
-        valid = false;
-      } else if (rule.min && val.length < rule.min) {
-        showError(field, rule.msg);
-        valid = false;
-      } else if (rule.email && !isValidEmail(val)) {
-        showError(field, rule.msg);
-        valid = false;
-      } else {
-        clearError(field);
+      } catch (err) {
+        btn.classList.remove('loading');
+        btn.classList.add('error');
+        btn.disabled = false;
+        btn.textContent = 'Failed — Try Again';
+
+        // Show error below button
+        const errEl = document.createElement('p');
+        errEl.className = 'form-submit-error';
+        errEl.style.cssText = 'color:#dc2626;font-size:0.83rem;margin-top:0.75rem;text-align:center;';
+        errEl.textContent = err.message || 'Network error. Please check your connection.';
+        btn.insertAdjacentElement('afterend', errEl);
+
+        setTimeout(() => {
+          btn.classList.remove('error');
+          btn.innerHTML = origHTML;
+          btn.disabled  = false;
+        }, 3000);
       }
     });
-
-    return valid;
-  };
+  }
 
   // Live clear errors on input
   Object.keys(rules).forEach(field => {
