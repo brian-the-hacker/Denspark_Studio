@@ -1607,22 +1607,69 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   if (contactForm) {
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn  = contactForm.querySelector('.btn-submit');
-      const html = btn.innerHTML;
+
+      const btn      = contactForm.querySelector('.btn-submit');
+      const origHTML = btn.innerHTML;
+
+      // Remove any previous error
+      const prevErr = contactForm.querySelector('.form-submit-error');
+      if (prevErr) prevErr.remove();
+
+      // Loading state
       btn.classList.add('loading');
+      btn.disabled = true;
       btn.textContent = 'Sending…';
+
       try {
-        const res = await fetch('/api/contact', { method: 'POST', body: new FormData(contactForm) });
-        if (res.ok) {
-          btn.classList.replace('loading','success');
-          btn.textContent = '✓ Message Sent!';
+        const res = await fetch('/api/contact', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name:    contactForm.querySelector('#name').value.trim(),
+            phone:   contactForm.querySelector('#phone').value.trim(),
+            email:   contactForm.querySelector('#email').value.trim(),
+            service: contactForm.querySelector('#service').value,
+            message: contactForm.querySelector('#message').value.trim(),
+          }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          // Success
+          btn.classList.remove('loading');
+          btn.classList.add('success');
+          btn.disabled = false;
+          btn.innerHTML = '✓ Message Sent!';
           contactForm.reset();
-          setTimeout(() => { btn.classList.remove('success'); btn.innerHTML = html; }, 4000);
-        } else throw new Error();
-      } catch {
+          setTimeout(() => {
+            btn.classList.remove('success');
+            btn.innerHTML = origHTML;
+          }, 4000);
+
+        } else {
+          // Server validation error — show message from backend
+          throw new Error(data.error || 'Something went wrong. Please try again.');
+        }
+
+      } catch (err) {
         btn.classList.remove('loading');
+        btn.classList.add('error');
+        btn.disabled = false;
         btn.textContent = 'Failed — Try Again';
-        setTimeout(() => { btn.innerHTML = html; }, 3000);
+
+        // Show error below button
+        const errEl = document.createElement('p');
+        errEl.className = 'form-submit-error';
+        errEl.style.cssText = 'color:#dc2626;font-size:0.83rem;margin-top:0.75rem;text-align:center;';
+        errEl.textContent = err.message || 'Network error. Please check your connection.';
+        btn.insertAdjacentElement('afterend', errEl);
+
+        setTimeout(() => {
+          btn.classList.remove('error');
+          btn.innerHTML = origHTML;
+          btn.disabled  = false;
+        }, 3000);
       }
     });
   }
