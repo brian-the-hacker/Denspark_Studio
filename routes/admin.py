@@ -234,12 +234,32 @@ def update_booking():
     return jsonify({'success': True})
 
 
-# ── Messages ──────────────────────────────────────────────────────────────────
 @admin_bp.route('/messages')
 @login_required
 def messages():
-    msgs = Message.query.order_by(Message.created_at.desc()).all()
+    msgs = Message.query.filter(
+        Message.sender_name  != None,
+        Message.sender_email != None,
+    ).order_by(Message.created_at.desc()).all()
     return render_template('admin/chat.html', messages=msgs, current_user=current_user)
+
+
+@admin_bp.route('/messages/<int:id>/read', methods=['POST'])
+@login_required
+def mark_message_read(id):
+    msg = Message.query.get_or_404(id)
+    msg.is_read = True
+    db.session.commit()
+    return jsonify({'success': True})
+
+
+@admin_bp.route('/messages/<int:id>/delete', methods=['DELETE'])
+@login_required
+def delete_message(id):
+    msg = Message.query.get_or_404(id)
+    db.session.delete(msg)
+    db.session.commit()
+    return jsonify({'success': True})
 
 
 # ── Payments ──────────────────────────────────────────────────────────────────
@@ -262,62 +282,4 @@ def settings():
     return render_template('admin/settings.html', current_user=current_user)
 
 
-@admin_bp.route('/messages/<int:id>/read', methods=['POST'])
-@login_required
-def mark_message_read(id):
-    msg = Message.query.get_or_404(id)
-    msg.is_read = True
-    db.session.commit()
-    return jsonify({'success': True})
- 
- 
-@admin_bp.route('/messages/<int:id>/delete', methods=['DELETE'])
-@login_required
-def delete_message(id):
-    msg = Message.query.get_or_404(id)
-    db.session.delete(msg)
-    db.session.commit()
-    return jsonify({'success': True})
- 
- 
-# ── Also update the existing messages() route to pass messages correctly ─────
-# Replace your current messages() route with this:
- 
-@admin_bp.route('/messages')
-@login_required
-def messages():
-    msgs = Message.query.filter(
-        Message.sender_name  != None,
-        Message.sender_email != None,
-    ).order_by(Message.created_at.desc()).all()
-    return render_template('admin/chat.html', messages=msgs, current_user=current_user)
-@admin_bp.route('/messages/<int:id>/read', methods=['POST'])
-@login_required
-def mark_message_read(id):
-    msg = Message.query.get_or_404(id)
-    msg.is_read = True
-    db.session.commit()
-    return jsonify({'success': True})
- 
- 
-@admin_bp.route('/messages/<int:id>/delete', methods=['DELETE'])
-@login_required
-def delete_message(id):
-    msg = Message.query.get_or_404(id)
-    db.session.delete(msg)
-    db.session.commit()
-    return jsonify({'success': True})
- 
- 
-# ── Also update the existing messages() route to pass messages correctly ─────
-# Replace your current messages() route with this:
- 
-@admin_bp.route('/messages')
-@login_required
-def messages():
-    msgs = Message.query.filter(
-        Message.sender_name  != None,
-        Message.sender_email != None,
-    ).order_by(Message.created_at.desc()).all()
-    return render_template('admin/chat.html', messages=msgs, current_user=current_user)
- 
+    
