@@ -77,7 +77,19 @@
     });
   }
 
-  
+  // Scroll
+  function onScroll() {
+    if (!navbar) return;
+    if (window.scrollY > 40) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // run once on load
+
   // Mobile toggle
   if (menuToggle && mobileMenu) {
     menuToggle.addEventListener('click', function () {
