@@ -71,65 +71,29 @@
   }
 
 
-  /**
- * services-carousel.js
- * Auto-sliding crossfade carousel for each .sv-block
- * Each carousel advances independently every 4 seconds.
- * Clicking a dot jumps to that slide and resets the timer.
- */
-
-  (function () {
-    const INTERVAL = 4000; // ms between slides
-
-    document.querySelectorAll('.sv-block').forEach(function (block) {
-      const slides = block.querySelectorAll('.sv-slide');
-      const dots   = block.querySelectorAll('.sv-dot-btn');
-      let current  = 0;
-      let timer    = null;
-
-      function goTo(index) {
-        slides[current].classList.remove('active');
-        dots[current].classList.remove('active');
-        current = (index + slides.length) % slides.length;
-        slides[current].classList.add('active');
-        dots[current].classList.add('active');
-      }
-
-      function next() {
-        goTo(current + 1);
-      }
-
-      function startTimer() {
-        clearInterval(timer);
-        timer = setInterval(next, INTERVAL);
-      }
-
-      // Dot click — jump to slide and reset timer
-      dots.forEach(function (dot) {
-        dot.addEventListener('click', function () {
-          goTo(parseInt(dot.dataset.index, 10));
-          startTimer();
-        });
-      });
-
-      // Click image to advance to next slide
-      block.querySelector('.sv-img-wrap').addEventListener('click', function () {
-        next();
-        startTimer();
-      });
-
-      // Pause on hover, resume on leave
-      block.addEventListener('mouseenter', function () {
-        clearInterval(timer);
-      });
-      block.addEventListener('mouseleave', function () {
-        startTimer();
-      });
-
-      startTimer();
-    });
-  })();
   
+  
+  const servicesMenu = document.getElementById("servicesMenu");
+  const servicesToggle = document.getElementById("servicesToggle");
+
+  // open/close on click
+  servicesToggle.addEventListener("click", function (e) {
+    e.preventDefault(); // prevents page jump
+    servicesMenu.classList.toggle("open");
+  });
+
+  // close when clicking outside
+  document.addEventListener("click", function (e) {
+    if (!servicesMenu.contains(e.target)) {
+      servicesMenu.classList.remove("open");
+    }
+  });
+
+  // optional: close on scroll
+  window.addEventListener("scroll", () => {
+    servicesMenu.classList.remove("open");
+  });
+  // Close mobile menu on outside click
   (function () {
     const menuToggle    = document.getElementById('menuToggle');
     const mobileMenu    = document.getElementById('mobileMenu');
