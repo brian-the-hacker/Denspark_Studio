@@ -1452,19 +1452,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     });
   }
 
-  // Mobile Services accordion — only active on mobile
-  const servicesToggle = /** @type {HTMLElement|null} */ (document.getElementById('servicesToggle'));
-  const servicesMenu   = /** @type {HTMLElement|null} */ (document.getElementById('servicesMenu'));
-  if (servicesToggle && servicesMenu) {
-    servicesToggle.addEventListener('click', function (e) {
-      if (window.innerWidth <= 768) {
-        e.preventDefault();
-        servicesMenu.classList.toggle('mobile-open');
-      }
-    });
-  }
- 
-
   
   /* ── Hero Slider ──────────────────────────────────────────────────── */
   const slides    = document.querySelectorAll('.slide');
