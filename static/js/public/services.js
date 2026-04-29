@@ -27,23 +27,57 @@
   }
 
   /* ── Navbar: scroll + mobile toggle ───────────────────────── */
-  const navbar     = document.getElementById('navbar');
   const menuToggle = document.getElementById('menuToggle');
   const mobileMenu = document.getElementById('mobileMenu');
-
-  // Scroll
-  function onScroll() {
-    if (!navbar) return;
-    if (window.scrollY > 40) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('open');
+      menuToggle.classList.toggle('open', open);
+      menuToggle.setAttribute('aria-expanded', String(open));
+      mobileMenu.setAttribute('aria-hidden', String(!open));
+    });
+    document.addEventListener('click', (e) => {
+      if (navbar && !navbar.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+      }
+    });
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll(); // run once on load
+  /* ── Desktop Services mega menu (click to open/close) ─── */
+  const desktopServicesMenu   = document.getElementById('desktopServicesMenu');
+  const desktopServicesToggle = document.getElementById('desktopServicesToggle');
+  if (desktopServicesMenu && desktopServicesToggle) {
+    desktopServicesToggle.addEventListener('click', (e) => {
+      // Only intercept on desktop; on mobile the element is hidden anyway
+      if (window.innerWidth > 768) {
+        e.preventDefault();
+        desktopServicesMenu.classList.toggle('open');
+      }
+    });
+    // Close when clicking anywhere outside
+    document.addEventListener('click', (e) => {
+      if (!desktopServicesMenu.contains(e.target)) {
+        desktopServicesMenu.classList.remove('open');
+      }
+    });
+    // Close on scroll
+    window.addEventListener('scroll', () => desktopServicesMenu.classList.remove('open'), { passive: true });
+  }
 
+  /* ── Mobile Services accordion ────────────────────────── */
+  const mobileServicesItem   = document.getElementById('mobileServicesItem');
+  const mobileServicesToggle = document.getElementById('mobileServicesToggle');
+  if (mobileServicesItem && mobileServicesToggle) {
+    mobileServicesToggle.addEventListener('click', () => {
+      const open = mobileServicesItem.classList.toggle('open');
+      mobileServicesToggle.setAttribute('aria-expanded', String(open));
+    });
+  }
+
+  
   // Mobile toggle
   if (menuToggle && mobileMenu) {
     menuToggle.addEventListener('click', function () {

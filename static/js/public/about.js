@@ -147,26 +147,55 @@
     closeMenu();
     if (chatIsOpen) toggleChat();
   });
-  const servicesMenu = document.getElementById("servicesMenu");
-  const servicesToggle = document.getElementById("servicesToggle");
+const menuToggle = document.getElementById('menuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('open');
+      menuToggle.classList.toggle('open', open);
+      menuToggle.setAttribute('aria-expanded', String(open));
+      mobileMenu.setAttribute('aria-hidden', String(!open));
+    });
+    document.addEventListener('click', (e) => {
+      if (navbar && !navbar.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
 
-  // open/close on click
-  servicesToggle.addEventListener("click", function (e) {
-    e.preventDefault(); // prevents page jump
-    servicesMenu.classList.toggle("open");
-  });
+  /* ── Desktop Services mega menu (click to open/close) ─── */
+  const desktopServicesMenu   = document.getElementById('desktopServicesMenu');
+  const desktopServicesToggle = document.getElementById('desktopServicesToggle');
+  if (desktopServicesMenu && desktopServicesToggle) {
+    desktopServicesToggle.addEventListener('click', (e) => {
+      // Only intercept on desktop; on mobile the element is hidden anyway
+      if (window.innerWidth > 768) {
+        e.preventDefault();
+        desktopServicesMenu.classList.toggle('open');
+      }
+    });
+    // Close when clicking anywhere outside
+    document.addEventListener('click', (e) => {
+      if (!desktopServicesMenu.contains(e.target)) {
+        desktopServicesMenu.classList.remove('open');
+      }
+    });
+    // Close on scroll
+    window.addEventListener('scroll', () => desktopServicesMenu.classList.remove('open'), { passive: true });
+  }
 
-  // close when clicking outside
-  document.addEventListener("click", function (e) {
-    if (!servicesMenu.contains(e.target)) {
-      servicesMenu.classList.remove("open");
-    }
-  });
-
-  // optional: close on scroll
-  window.addEventListener("scroll", () => {
-    servicesMenu.classList.remove("open");
-  });
+  /* ── Mobile Services accordion ────────────────────────── */
+  const mobileServicesItem   = document.getElementById('mobileServicesItem');
+  const mobileServicesToggle = document.getElementById('mobileServicesToggle');
+  if (mobileServicesItem && mobileServicesToggle) {
+    mobileServicesToggle.addEventListener('click', () => {
+      const open = mobileServicesItem.classList.toggle('open');
+      mobileServicesToggle.setAttribute('aria-expanded', String(open));
+    });
+  }
   /* ── Scroll Reveal ─────────────────────────────────────────── */
   if ('IntersectionObserver' in window) {
     var revealObs = new IntersectionObserver(function (entries) {
