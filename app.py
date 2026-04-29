@@ -77,7 +77,10 @@ def create_app():
 
     # CORS — locked to your actual domain
     allowed_origin = os.environ.get('ALLOWED_ORIGIN', 'https://denspark.studio')
-    CORS(app, resources={r"/api/*": {"origins": allowed_origin}})
+    CORS(app, resources={
+        r"/api/*":        {"origins": allowed_origin},
+        r"/admin/api/*":  {"origins": allowed_origin},
+    })
 
     # ── Login manager ─────────────────────────────────────────────────────────
     login_manager = LoginManager()
