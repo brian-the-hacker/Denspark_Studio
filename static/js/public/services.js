@@ -27,55 +27,9 @@
   }
 
   /* ── Navbar: scroll + mobile toggle ───────────────────────── */
+  const navbar     = document.getElementById('navbar');
   const menuToggle = document.getElementById('menuToggle');
   const mobileMenu = document.getElementById('mobileMenu');
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener('click', () => {
-      const open = mobileMenu.classList.toggle('open');
-      menuToggle.classList.toggle('open', open);
-      menuToggle.setAttribute('aria-expanded', String(open));
-      mobileMenu.setAttribute('aria-hidden', String(!open));
-    });
-    document.addEventListener('click', (e) => {
-      if (navbar && !navbar.contains(e.target)) {
-        mobileMenu.classList.remove('open');
-        menuToggle.classList.remove('open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        mobileMenu.setAttribute('aria-hidden', 'true');
-      }
-    });
-  }
-
-  /* ── Desktop Services mega menu (click to open/close) ─── */
-  const desktopServicesMenu   = document.getElementById('desktopServicesMenu');
-  const desktopServicesToggle = document.getElementById('desktopServicesToggle');
-  if (desktopServicesMenu && desktopServicesToggle) {
-    desktopServicesToggle.addEventListener('click', (e) => {
-      // Only intercept on desktop; on mobile the element is hidden anyway
-      if (window.innerWidth > 768) {
-        e.preventDefault();
-        desktopServicesMenu.classList.toggle('open');
-      }
-    });
-    // Close when clicking anywhere outside
-    document.addEventListener('click', (e) => {
-      if (!desktopServicesMenu.contains(e.target)) {
-        desktopServicesMenu.classList.remove('open');
-      }
-    });
-    // Close on scroll
-    window.addEventListener('scroll', () => desktopServicesMenu.classList.remove('open'), { passive: true });
-  }
-
-  /* ── Mobile Services accordion ────────────────────────── */
-  const mobileServicesItem   = document.getElementById('mobileServicesItem');
-  const mobileServicesToggle = document.getElementById('mobileServicesToggle');
-  if (mobileServicesItem && mobileServicesToggle) {
-    mobileServicesToggle.addEventListener('click', () => {
-      const open = mobileServicesItem.classList.toggle('open');
-      mobileServicesToggle.setAttribute('aria-expanded', String(open));
-    });
-  }
 
   // Scroll
   function onScroll() {
@@ -124,57 +78,57 @@
  * Clicking a dot jumps to that slide and resets the timer.
  */
 
-  (function () {
-    const INTERVAL = 4000; // ms between slides
+(function () {
+  const INTERVAL = 4000; // ms between slides
 
-    document.querySelectorAll('.sv-block').forEach(function (block) {
-      const slides = block.querySelectorAll('.sv-slide');
-      const dots   = block.querySelectorAll('.sv-dot-btn');
-      let current  = 0;
-      let timer    = null;
+  document.querySelectorAll('.sv-block').forEach(function (block) {
+    const slides = block.querySelectorAll('.sv-slide');
+    const dots   = block.querySelectorAll('.sv-dot-btn');
+    let current  = 0;
+    let timer    = null;
 
-      function goTo(index) {
-        slides[current].classList.remove('active');
-        dots[current].classList.remove('active');
-        current = (index + slides.length) % slides.length;
-        slides[current].classList.add('active');
-        dots[current].classList.add('active');
-      }
+    function goTo(index) {
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (index + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+    }
 
-      function next() {
-        goTo(current + 1);
-      }
+    function next() {
+      goTo(current + 1);
+    }
 
-      function startTimer() {
-        clearInterval(timer);
-        timer = setInterval(next, INTERVAL);
-      }
+    function startTimer() {
+      clearInterval(timer);
+      timer = setInterval(next, INTERVAL);
+    }
 
-      // Dot click — jump to slide and reset timer
-      dots.forEach(function (dot) {
-        dot.addEventListener('click', function () {
-          goTo(parseInt(dot.dataset.index, 10));
-          startTimer();
-        });
-      });
-
-      // Click image to advance to next slide
-      block.querySelector('.sv-img-wrap').addEventListener('click', function () {
-        next();
+    // Dot click — jump to slide and reset timer
+    dots.forEach(function (dot) {
+      dot.addEventListener('click', function () {
+        goTo(parseInt(dot.dataset.index, 10));
         startTimer();
       });
+    });
 
-      // Pause on hover, resume on leave
-      block.addEventListener('mouseenter', function () {
-        clearInterval(timer);
-      });
-      block.addEventListener('mouseleave', function () {
-        startTimer();
-      });
-
+    // Click image to advance to next slide
+    block.querySelector('.sv-img-wrap').addEventListener('click', function () {
+      next();
       startTimer();
     });
-  })();
+
+    // Pause on hover, resume on leave
+    block.addEventListener('mouseenter', function () {
+      clearInterval(timer);
+    });
+    block.addEventListener('mouseleave', function () {
+      startTimer();
+    });
+
+    startTimer();
+  });
+})();
   
   const servicesMenu = document.getElementById("servicesMenu");
   const servicesToggle = document.getElementById("servicesToggle");
