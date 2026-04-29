@@ -189,7 +189,7 @@
       submitBtn.textContent = 'Saving…';
 
       try {
-        const res = await fetch('/admin/api/videos', {
+        const res = await fetch('/admin/videos/add', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify(payload),
@@ -335,7 +335,7 @@
       };
 
       try {
-        const res = await fetch(`/admin/api/videos/${currentEditId}`, {
+        const res = await fetch(`/admin/videos/edit/${currentEditId}`, {
           method:  'PUT',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify(payload),
@@ -375,7 +375,7 @@
     if (!currentDeleteId) return;
 
     try {
-      const res = await fetch(`/admin/api/videos/${currentDeleteId}`, { method: 'DELETE' });
+      const res = await fetch(`/admin/videos/delete/${currentDeleteId}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Delete failed');
 
       closeModal('deleteModal');
