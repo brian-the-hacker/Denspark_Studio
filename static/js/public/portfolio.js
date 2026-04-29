@@ -59,6 +59,25 @@
   document.querySelectorAll('.reveal').forEach((el) => revealObs.observe(el));
   window.__revealObs = revealObs; // used by inline script for dynamic .pf-item elements
 
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('open');
+      menuToggle.classList.toggle('open', open);
+      menuToggle.setAttribute('aria-expanded', String(open));
+      mobileMenu.setAttribute('aria-hidden', String(!open));
+    });
+    document.addEventListener('click', (e) => {
+      if (navbar && !navbar.contains(e.target)) {
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+
   /* ====================================================
      4. ITEM REVEAL
      Called by inline script after it injects items.

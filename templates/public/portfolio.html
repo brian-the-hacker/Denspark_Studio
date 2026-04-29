@@ -211,11 +211,52 @@
         </button>
       </div>
     </div>
-    <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
       <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
-        <li><a href="/services">Services</a></li>
+
+        <!-- MOBILE SERVICES ACCORDION — id="mobileServicesItem" -->
+        <li class="mobile-services-item" id="mobileServicesItem">
+          <div class="mobile-services-toggle" id="mobileServicesToggle" role="button" aria-expanded="false">
+            Services
+            <span class="mobile-services-chevron"></span>
+          </div>
+          <div class="mobile-mega">
+            <div class="mega-grid">
+              <div class="mega-column">
+                <h4>Photography</h4>
+                <a href="/services#photography">Studio Portrait</a>
+                <a href="/services#photography">Wedding Coverage</a>
+                <a href="/services#events">Event Photography</a>
+                <a href="/services#branding">Commercial Photography</a>
+              </div>
+              <div class="mega-column">
+                <h4>Special Shoots</h4>
+                <a href="/services#photography">Birthday Photoshoot</a>
+                <a href="/services#photography">Maternity Photoshoot</a>
+                <a href="/services#photography">Graduation Photoshoot</a>
+                <a href="/services#photography">Kids Photoshoot</a>
+                <a href="/services#photography">Family Photoshoot</a>
+                <a href="/services#other-services">Passport Photos</a>
+              </div>
+              <div class="mega-column">
+                <h4>Video</h4>
+                <a href="/services#videography">Video Production</a>
+                <a href="/services#drone">Drone Services</a>
+                <a href="/services#livestream">Live Streaming</a>
+              </div>
+              <div class="mega-column">
+                <h4>Creative</h4>
+                <a href="/services#graphic-design">Graphic Design</a>
+                <a href="/services#branding">Branding</a>
+                <a href="/services#printing">Printing</a>
+                <a href="/services#social-media">Social Media</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
         <li><a href="/packages">Packages</a></li>
@@ -583,7 +624,8 @@
         });
       });
     }
-
+    
+    
     /* ── Filter ──────────────────────────────── */
     function applyFilter() {
       const filtered = activeFilter === 'all'
