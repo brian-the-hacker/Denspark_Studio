@@ -124,27 +124,190 @@
       box-shadow: 0 6px 20px rgba(26,86,219,0.4);
     }
 
-    .menu-toggle { display: none; flex-direction: column; gap: 5px; width: 30px; height: 30px; padding: 2px; justify-content: center; }
-    .menu-toggle span { display: block; height: 2px; background: var(--white); border-radius: 2px; transition: transform 0.3s var(--ease-out), opacity 0.3s; }
-    .menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .menu-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 7px;
+      border-radius: 7px;
+      transition: background var(--transition);
+    }
+    .menu-toggle:hover { background: rgba(255, 255, 255, 0.08); }
+    .menu-toggle span {
+      display: block; width: 22px; height: 2px;
+      background: #c8d9ee; border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .menu-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .menu-toggle.open span:nth-child(2) { opacity: 0; }
+    .menu-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
+    /* ── SERVICES MEGA MENU ──────────────────────────────────── */
+    .services-chevron {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-right: 1.5px solid #7fa3d4;
+      border-bottom: 1.5px solid #7fa3d4;
+      transform: rotate(45deg) translateY(-2px);
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+    .has-mega:hover .services-chevron,
+    .has-mega.open  .services-chevron {
+      transform: rotate(-135deg) translateY(2px);
+    }
+
+    .mega-menu {
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      background: #0e1f3d;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 22px;
+      width: 660px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+      pointer-events: none;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.55);
+    }
+
+    .mega-arrow {
+      position: absolute;
+      top: -7px; left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 13px; height: 13px;
+      background: #0e1f3d;
+      border-left: 1px solid rgba(255,255,255,0.1);
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .has-mega:hover .mega-menu,
+    .has-mega.open  .mega-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Hide desktop mega completely on mobile */
+    @media (max-width: 900px) {
+      .has-mega .mega-menu { display: none !important; }
+    }
+
+    .mega-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+    .mega-column h4 {
+      font-size: 10px; font-weight: 600; color: #4a90d9;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      margin: 0 0 10px; padding-bottom: 7px;
+      border-bottom: 1px solid rgba(74,144,217,0.2);
+    }
+    .mega-column a {
+      display: block; color: #a8c2e0; font-size: 12.5px;
+      padding: 4px 0; text-decoration: none;
+      transition: color 0.15s, padding-left 0.15s; line-height: 1.5;
+    }
+    .mega-column a:hover { color: #ffffff; padding-left: 6px; }
+    .mega-footer {
+      margin-top: 18px; padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      font-size: 10px; color: #3d6a9c;
+      letter-spacing: 1px; text-transform: uppercase; text-align: center;
+    }
+
+    /* ── Mobile menu ─────────────────────────────────────────── */
     .mobile-menu {
-      display: none; position: absolute; top: 64px; left: 0; right: 0;
-      background: var(--navy); border-top: 1px solid rgba(255,255,255,0.08);
-      padding: 1.5rem 2rem 2rem;
+      display: none;
+      background: #0a1628;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 0 20px 24px;
     }
     .mobile-menu.open { display: block; }
-    .mobile-nav-links li { border-bottom: 1px solid rgba(255,255,255,0.07); }
-    .mobile-nav-links a { display: block; font-size: 0.95rem; font-weight: 500; color: rgba(255,255,255,0.8); padding: 0.85rem 0; }
-    .mobile-nav-links a:hover { color: var(--white); }
-    .btn-book-mobile {
-      display: inline-block; margin-top: 1.25rem;
-      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--white); background: var(--blue); padding: 0.7rem 1.4rem; border-radius: var(--radius);
+
+    .mobile-nav-links { list-style: none; padding: 8px 0 0; margin: 0; }
+
+    .mobile-nav-links > li > a,
+    .mobile-services-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      color: #c8d9ee; font-size: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      text-decoration: none; cursor: pointer;
+      background: none; border-left: none; border-right: none; border-top: none;
+      width: 100%; font-family: inherit;
+      transition: color 0.2s;
     }
-    .mobile-info { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 1.25rem; font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+    .mobile-nav-links > li > a:hover,
+    .mobile-services-toggle:hover { color: #ffffff; }
+
+    .mobile-services-chevron {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-right: 2px solid #4a90d9;
+      border-bottom: 2px solid #4a90d9;
+      transform: rotate(45deg);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+    .mobile-services-toggle.open .mobile-services-chevron,
+    .mobile-services-item.open .mobile-services-chevron {
+      transform: rotate(-135deg);
+    }
+
+    /* Mobile mega accordion */
+    .mobile-mega {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      padding: 0 0 0 12px;
+      transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
+    }
+    .mobile-services-item.open .mobile-mega {
+      max-height: 900px;
+      opacity: 1;
+      padding: 8px 0 4px 12px;
+    }
+    .mobile-mega .mega-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .mobile-mega .mega-column h4 { font-size: 10px; }
+    .mobile-mega .mega-column a {
+      font-size: 12px; padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .mobile-mega .mega-column a:last-child { border-bottom: none; }
+
+    /* Mobile CTA */
+    .btn-book-mobile {
+      display: block; margin-top: 16px;
+      background: #2563b0; color: #ffffff;
+      text-align: center; padding: 13px; border-radius: 9px;
+      font-weight: 600; font-size: 14px; text-decoration: none;
+      letter-spacing: 0.5px; border: 1px solid rgba(255,255,255,0.15);
+      transition: background var(--transition);
+    }
+    .btn-book-mobile:hover { background: #1d50a0; }
+
+    .mobile-info {
+      display: flex; justify-content: space-between;
+      margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .mobile-info span { font-size: 11px; color: #3d6a9c; }
+
+    /* ── Responsive breakpoint ───────────────────────────────── */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .btn-book  { display: none; }
+      .menu-toggle { display: flex; }
+    }
 
     /* ─────────────────────────────────────────
        PAGE HERO
@@ -695,7 +858,7 @@
   <div class="cursor-follower" id="cursorFollower"></div>
 
   <!-- Navbar -->
-  <nav class="navbar" id="navbar">
+  <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
       <a href="/" class="logo">
         <img src="/static/uploads/DENSPARK-STUDIOs-wallpaper.webp" alt="Denspark Studio Logo" class="logo-img">
@@ -704,29 +867,117 @@
           <span class="logo-sub">STUDIO</span>
         </div>
       </a>
+
+      <!-- Desktop nav -->
       <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
-        <li><a href="/services" class="nav-link">Services</a></li>
-        <li><a href="/packages" class="nav-link active">Packages</a></li>
+
+        <li class="has-mega" id="desktopServicesMenu">
+          <a href="/services" class="nav-link" id="desktopServicesToggle">
+            Services
+            <span class="services-chevron"></span>
+          </a>
+          <div class="mega-menu">
+            <div class="mega-arrow"></div>
+            <div class="mega-grid">
+              <div class="mega-column">
+                <h4>Photography</h4>
+                <a href="/services#photography">Studio Portrait</a>
+                <a href="/services#photography">Wedding Coverage</a>
+                <a href="/services#events">Event Photography</a>
+                <a href="/services#branding">Commercial Photography</a>
+              </div>
+              <div class="mega-column">
+                <h4>Special Shoots</h4>
+                <a href="/services#photography">Birthday Photoshoot</a>
+                <a href="/services#photography">Maternity Photoshoot</a>
+                <a href="/services#photography">Graduation Photoshoot</a>
+                <a href="/services#photography">Kids Photoshoot</a>
+                <a href="/services#photography">Family Photoshoot</a>
+                <a href="/services#other-services">Passport Photos</a>
+              </div>
+              <div class="mega-column">
+                <h4>Video</h4>
+                <a href="/services#videography">Video Production</a>
+                <a href="/services#drone">Drone Services</a>
+                <a href="/services#livestream">Live Streaming</a>
+              </div>
+              <div class="mega-column">
+                <h4>Creative</h4>
+                <a href="/services#graphic-design">Graphic Design</a>
+                <a href="/services#branding">Branding</a>
+                <a href="/services#printing">Printing</a>
+                <a href="/services#social-media">Social Media</a>
+              </div>
+            </div>
+            <div class="mega-footer">Premium Studio Services &bull; Machakos, Kenya</div>
+          </div>
+        </li>
+
         <li><a href="/about" class="nav-link">About</a></li>
         <li><a href="/contact" class="nav-link">Contact</a></li>
+        <li><a href="/packages" class="nav-link">Packages</a></li>
+        <li><a href="/videos" class="nav-link">Video Production</a></li>
       </ul>
+
       <div class="nav-right">
         <a href="/contact" class="btn-book">Book Now</a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
     </div>
-    <div class="mobile-menu" id="mobileMenu">
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
       <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
-        <li><a href="/services">Services</a></li>
-        <li><a href="/packages">Packages</a></li>
+
+        <li class="mobile-services-item" id="mobileServicesItem">
+          <div class="mobile-services-toggle" id="mobileServicesToggle" role="button" aria-expanded="false">
+            Services
+            <span class="mobile-services-chevron"></span>
+          </div>
+          <div class="mobile-mega" id="mobileMega">
+            <div class="mega-grid">
+              <div class="mega-column">
+                <h4>Photography</h4>
+                <a href="/services#photography">Studio Portrait</a>
+                <a href="/services#photography">Wedding Coverage</a>
+                <a href="/services#events">Event Photography</a>
+                <a href="/services#branding">Commercial Photography</a>
+              </div>
+              <div class="mega-column">
+                <h4>Special Shoots</h4>
+                <a href="/services#photography">Birthday Photoshoot</a>
+                <a href="/services#photography">Maternity Photoshoot</a>
+                <a href="/services#photography">Graduation Photoshoot</a>
+                <a href="/services#photography">Kids Photoshoot</a>
+                <a href="/services#photography">Family Photoshoot</a>
+                <a href="/services#other-services">Passport Photos</a>
+              </div>
+              <div class="mega-column">
+                <h4>Video</h4>
+                <a href="/services#videography">Video Production</a>
+                <a href="/services#drone">Drone Services</a>
+                <a href="/services#livestream">Live Streaming</a>
+              </div>
+              <div class="mega-column">
+                <h4>Creative</h4>
+                <a href="/services#graphic-design">Graphic Design</a>
+                <a href="/services#branding">Branding</a>
+                <a href="/services#printing">Printing</a>
+                <a href="/services#social-media">Social Media</a>
+              </div>
+            </div>
+          </div>
+        </li>
+
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
+        <li><a href="/packages">Packages</a></li>
       </ul>
       <a href="/contact" class="btn-book-mobile">Book a Session</a>
       <div class="mobile-info">
@@ -1202,26 +1453,106 @@
     }
 
     /* ── Navbar ── */
-    const navbar     = document.getElementById('navbar');
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
+    /* ── Desktop Services: click to open ──────────────────── */
+    (function initNavbar() {
+      var navbar               = document.getElementById('navbar');
+      var menuToggle           = document.getElementById('menuToggle');
+      var mobileMenu           = document.getElementById('mobileMenu');
+      var desktopServicesMenu  = document.getElementById('desktopServicesMenu');  // the <li>
+      var desktopServicesToggle= document.getElementById('desktopServicesToggle');// the <a> inside it
+      var mobileServicesItem   = document.getElementById('mobileServicesItem');
+      var mobileServicesToggle = document.getElementById('mobileServicesToggle');
 
-    window.addEventListener('scroll', () => {
-      if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 60);
-    }, { passive: true });
+      /* ── Scroll: add .scrolled class ─────────────────────────── */
+      function onScroll() {
+        if (!navbar) return;
+        navbar.classList.toggle('scrolled', window.scrollY > 40);
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll(); // run once immediately
 
-    if (menuToggle && mobileMenu) {
-      menuToggle.addEventListener('click', () => {
-        const open = mobileMenu.classList.toggle('open');
-        menuToggle.classList.toggle('open', open);
-      });
-      document.addEventListener('click', (e) => {
+      /* ── Hamburger / mobile menu ─────────────────────────────── */
+      function openMobileMenu() {
+        if (!mobileMenu || !menuToggle) return;
+        mobileMenu.classList.add('open');
+        menuToggle.classList.add('open');
+        menuToggle.setAttribute('aria-expanded', 'true');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeMobileMenu() {
+        if (!mobileMenu || !menuToggle) return;
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+      }
+
+      if (menuToggle) {
+        menuToggle.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var isOpen = mobileMenu && mobileMenu.classList.contains('open');
+          isOpen ? closeMobileMenu() : openMobileMenu();
+        });
+      }
+
+      // Close mobile menu when any nav link inside it is tapped
+      if (mobileMenu) {
+        mobileMenu.querySelectorAll('a').forEach(function (link) {
+          link.addEventListener('click', closeMobileMenu);
+        });
+      }
+
+      /* ── Desktop mega-menu ───────────────────────────────────── */
+      // Toggle on click (not hover — hover is handled by pure CSS in services.css).
+      // The JS-driven .open class is for accessibility / click-to-open mode.
+      function closeMegaMenu() {
+        if (desktopServicesMenu) desktopServicesMenu.classList.remove('open');
+      }
+
+      if (desktopServicesToggle) {
+        desktopServicesToggle.addEventListener('click', function (e) {
+          if (window.innerWidth > 900) {
+            e.preventDefault();
+            e.stopPropagation(); // prevent the document click handler below
+            var isOpen = desktopServicesMenu && desktopServicesMenu.classList.contains('open');
+            isOpen ? closeMegaMenu() : desktopServicesMenu.classList.add('open');
+          }
+        });
+      }
+
+      /* ── Mobile services accordion ───────────────────────────── */
+      if (mobileServicesToggle && mobileServicesItem) {
+        mobileServicesToggle.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var isOpen = mobileServicesItem.classList.toggle('open');
+          mobileServicesToggle.setAttribute('aria-expanded', String(isOpen));
+        });
+      }
+
+      /* ── Outside click: close mega + mobile menu ─────────────── */
+      document.addEventListener('click', function (e) {
+        // Close desktop mega if click is outside the services <li>
+        if (desktopServicesMenu && !desktopServicesMenu.contains(e.target)) {
+          closeMegaMenu();
+        }
+        // Close mobile menu if click is outside the entire navbar
         if (navbar && !navbar.contains(e.target)) {
-          mobileMenu.classList.remove('open');
-          menuToggle.classList.remove('open');
+          closeMobileMenu();
         }
       });
-    }
+
+      /* ── Close on scroll (desktop mega only) ─────────────────── */
+      window.addEventListener('scroll', closeMegaMenu, { passive: true });
+
+      /* ── Escape key ──────────────────────────────────────────── */
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          closeMobileMenu();
+          closeMegaMenu();
+        }
+      });
+    }());
 
     /* ── Scroll Reveal ── */
     const revealObs = new IntersectionObserver((entries) => {

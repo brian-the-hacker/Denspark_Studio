@@ -20,37 +20,31 @@
   /* ====================================================
      2. NAVBAR
   ==================================================== */
-  (function () {
-    const navbar       = document.getElementById('navbar');
-    const menuToggle   = document.getElementById('menuToggle');
-    const mobileMenu   = document.getElementById('mobileMenu');
-    const servicesMenu = document.getElementById('servicesMenu');
-    const servicesToggle = document.getElementById('servicesToggle');
-    const srvToggle    = document.getElementById('mobileServicesToggle');
-    const mobileMega   = document.getElementById('mobileMega');
+  /* ── Desktop Services: click to open ──────────────────── */
+  (function initNavbar() {
+    var navbar               = document.getElementById('navbar');
+    var menuToggle           = document.getElementById('menuToggle');
+    var mobileMenu           = document.getElementById('mobileMenu');
+    var desktopServicesMenu  = document.getElementById('desktopServicesMenu');  // the <li>
+    var desktopServicesToggle= document.getElementById('desktopServicesToggle');// the <a> inside it
+    var mobileServicesItem   = document.getElementById('mobileServicesItem');
+    var mobileServicesToggle = document.getElementById('mobileServicesToggle');
 
-    /* ── Scroll ── */
+    /* ── Scroll: add .scrolled class ─────────────────────────── */
     function onScroll() {
       if (!navbar) return;
       navbar.classList.toggle('scrolled', window.scrollY > 40);
     }
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    onScroll(); // run once immediately
 
-    /* ── Hamburger toggle ── */
-    if (menuToggle && mobileMenu) {
-      menuToggle.addEventListener('click', function () {
-        const isOpen = mobileMenu.classList.toggle('open');
-        menuToggle.classList.toggle('open', isOpen);
-        menuToggle.setAttribute('aria-expanded', isOpen);
-        mobileMenu.setAttribute('aria-hidden', !isOpen);
-        if (navbar) navbar.classList.toggle('menu-open', isOpen);
-      });
-
-      // Close on mobile nav link click
-      mobileMenu.querySelectorAll('a').forEach(function (link) {
-        link.addEventListener('click', closeMobileMenu);
-      });
+    /* ── Hamburger / mobile menu ─────────────────────────────── */
+    function openMobileMenu() {
+      if (!mobileMenu || !menuToggle) return;
+      mobileMenu.classList.add('open');
+      menuToggle.classList.add('open');
+      menuToggle.setAttribute('aria-expanded', 'true');
+      mobileMenu.setAttribute('aria-hidden', 'false');
     }
 
     function closeMobileMenu() {
@@ -59,41 +53,73 @@
       menuToggle.classList.remove('open');
       menuToggle.setAttribute('aria-expanded', 'false');
       mobileMenu.setAttribute('aria-hidden', 'true');
-      if (navbar) navbar.classList.remove('menu-open');
     }
 
-    /* ── Desktop services dropdown ── */
-    if (servicesToggle && servicesMenu) {
-      servicesToggle.addEventListener('click', function (e) {
-        e.preventDefault();
-        servicesMenu.classList.toggle('open');
+    if (menuToggle) {
+      menuToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = mobileMenu && mobileMenu.classList.contains('open');
+        isOpen ? closeMobileMenu() : openMobileMenu();
       });
     }
 
-    /* ── Mobile services accordion ── */
-    if (srvToggle && mobileMega) {
-      srvToggle.addEventListener('click', function () {
-        const isOpen = mobileMega.classList.toggle('open');
-        srvToggle.classList.toggle('open', isOpen);
-        srvToggle.setAttribute('aria-expanded', isOpen);
+    // Close mobile menu when any nav link inside it is tapped
+    if (mobileMenu) {
+      mobileMenu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', closeMobileMenu);
       });
     }
 
-    /* ── Close everything on outside click ── */
+    /* ── Desktop mega-menu ───────────────────────────────────── */
+    // Toggle on click (not hover — hover is handled by pure CSS in services.css).
+    // The JS-driven .open class is for accessibility / click-to-open mode.
+    function closeMegaMenu() {
+      if (desktopServicesMenu) desktopServicesMenu.classList.remove('open');
+    }
+
+    if (desktopServicesToggle) {
+      desktopServicesToggle.addEventListener('click', function (e) {
+        if (window.innerWidth > 900) {
+          e.preventDefault();
+          e.stopPropagation(); // prevent the document click handler below
+          var isOpen = desktopServicesMenu && desktopServicesMenu.classList.contains('open');
+          isOpen ? closeMegaMenu() : desktopServicesMenu.classList.add('open');
+        }
+      });
+    }
+
+    /* ── Mobile services accordion ───────────────────────────── */
+    if (mobileServicesToggle && mobileServicesItem) {
+      mobileServicesToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = mobileServicesItem.classList.toggle('open');
+        mobileServicesToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+
+    /* ── Outside click: close mega + mobile menu ─────────────── */
     document.addEventListener('click', function (e) {
-      if (servicesMenu && !servicesMenu.contains(e.target)) {
-        servicesMenu.classList.remove('open');
+      // Close desktop mega if click is outside the services <li>
+      if (desktopServicesMenu && !desktopServicesMenu.contains(e.target)) {
+        closeMegaMenu();
       }
-      if (!e.target.closest('#navbar')) {
+      // Close mobile menu if click is outside the entire navbar
+      if (navbar && !navbar.contains(e.target)) {
         closeMobileMenu();
       }
     });
 
-    /* ── Close desktop dropdown on scroll ── */
-    window.addEventListener('scroll', function () {
-      if (servicesMenu) servicesMenu.classList.remove('open');
-    }, { passive: true });
-  })();
+    /* ── Close on scroll (desktop mega only) ─────────────────── */
+    window.addEventListener('scroll', closeMegaMenu, { passive: true });
+
+    /* ── Escape key ──────────────────────────────────────────── */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeMobileMenu();
+        closeMegaMenu();
+      }
+    });
+  }());
   /* ====================================================
      3. SCROLL REVEAL
      Exported as window.__revealObs so the inline
