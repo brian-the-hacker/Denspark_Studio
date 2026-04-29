@@ -41,35 +41,35 @@
 
   /* ── Desktop Services mega menu (click to open/close) ─── */
  (function () {
-    const menuToggle    = document.getElementById('menuToggle');
-    const mobileMenu    = document.getElementById('mobileMenu');
-    const srvToggle     = document.getElementById('mobileServicesToggle');
-    const mobileMega    = document.getElementById('mobileMega');
+  const menuToggle    = document.getElementById('menuToggle');
+  const mobileMenu    = document.getElementById('mobileMenu');
+  const srvToggle     = document.getElementById('mobileServicesToggle');
+  const mobileMega    = document.getElementById('mobileMega');
 
-    // Hamburger open/close
-    menuToggle.addEventListener('click', function () {
-      const isOpen = mobileMenu.classList.toggle('open');
-      menuToggle.classList.toggle('open', isOpen);
-      menuToggle.setAttribute('aria-expanded', isOpen);
-      mobileMenu.setAttribute('aria-hidden', !isOpen);
-    });
+  // Hamburger open/close
+  menuToggle.addEventListener('click', function () {
+    const isOpen = mobileMenu.classList.toggle('open');
+    menuToggle.classList.toggle('open', isOpen);
+    menuToggle.setAttribute('aria-expanded', isOpen);
+    mobileMenu.setAttribute('aria-hidden', !isOpen);
+  });
 
-    // Mobile services accordion
-    srvToggle.addEventListener('click', function () {
-      const isOpen = mobileMega.classList.toggle('open');
-      srvToggle.classList.toggle('open', isOpen);
-      srvToggle.setAttribute('aria-expanded', isOpen);
-    });
+  // Mobile services accordion
+  srvToggle.addEventListener('click', function () {
+    const isOpen = mobileMega.classList.toggle('open');
+    srvToggle.classList.toggle('open', isOpen);
+    srvToggle.setAttribute('aria-expanded', isOpen);
+  });
 
-    // Close mobile menu on outside click
-    document.addEventListener('click', function (e) {
-      if (!e.target.closest('#navbar')) {
-        mobileMenu.classList.remove('open');
-        menuToggle.classList.remove('open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-      }
-    });
-  })();
+  // Close mobile menu on outside click
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('#navbar')) {
+      mobileMenu.classList.remove('open');
+      menuToggle.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
   /* ====================================================
      3. SCROLL REVEAL
      Exported as window.__revealObs so the inline
