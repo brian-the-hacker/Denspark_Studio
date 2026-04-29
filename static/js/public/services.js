@@ -26,105 +26,80 @@
     });
   }
 
-  /* ── Navbar: scroll + mobile toggle ───────────────────────── */
-  const navbar     = document.getElementById('navbar');
-  const menuToggle = document.getElementById('menuToggle');
-  const mobileMenu = document.getElementById('mobileMenu');
-
-  // Scroll
-  function onScroll() {
-    if (!navbar) return;
-    if (window.scrollY > 40) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll(); // run once on load
-
-  // Mobile toggle
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener('click', function () {
-      const isOpen = mobileMenu.classList.contains('open');
-
-      if (isOpen) {
-        mobileMenu.classList.remove('open');
-        menuToggle.classList.remove('open');
-        navbar.classList.remove('menu-open');
-      } else {
-        mobileMenu.classList.add('open');
-        menuToggle.classList.add('open');
-        navbar.classList.add('menu-open');
-      }
-    });
-
-    // Close on mobile link click
-    mobileMenu.querySelectorAll('a').forEach(function (link) {
-      link.addEventListener('click', function () {
-        mobileMenu.classList.remove('open');
-        menuToggle.classList.remove('open');
-        navbar.classList.remove('menu-open');
-      });
-    });
-  }
-
-
-  
-  
-  const servicesMenu = document.getElementById("servicesMenu");
-  const servicesToggle = document.getElementById("servicesToggle");
-
-  // open/close on click
-  servicesToggle.addEventListener("click", function (e) {
-    e.preventDefault(); // prevents page jump
-    servicesMenu.classList.toggle("open");
-  });
-
-  // close when clicking outside
-  document.addEventListener("click", function (e) {
-    if (!servicesMenu.contains(e.target)) {
-      servicesMenu.classList.remove("open");
-    }
-  });
-
-  // optional: close on scroll
-  window.addEventListener("scroll", () => {
-    servicesMenu.classList.remove("open");
-  });
-  // Close mobile menu on outside click
   (function () {
-    const menuToggle    = document.getElementById('menuToggle');
-    const mobileMenu    = document.getElementById('mobileMenu');
-    const srvToggle     = document.getElementById('mobileServicesToggle');
-    const mobileMega    = document.getElementById('mobileMega');
+    const navbar       = document.getElementById('navbar');
+    const menuToggle   = document.getElementById('menuToggle');
+    const mobileMenu   = document.getElementById('mobileMenu');
+    const servicesMenu = document.getElementById('servicesMenu');
+    const servicesToggle = document.getElementById('servicesToggle');
+    const srvToggle    = document.getElementById('mobileServicesToggle');
+    const mobileMega   = document.getElementById('mobileMega');
 
-    // Hamburger open/close
-    menuToggle.addEventListener('click', function () {
-      const isOpen = mobileMenu.classList.toggle('open');
-      menuToggle.classList.toggle('open', isOpen);
-      menuToggle.setAttribute('aria-expanded', isOpen);
-      mobileMenu.setAttribute('aria-hidden', !isOpen);
-    });
+    /* ── Scroll ── */
+    function onScroll() {
+      if (!navbar) return;
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
-    // Mobile services accordion
-    srvToggle.addEventListener('click', function () {
-      const isOpen = mobileMega.classList.toggle('open');
-      srvToggle.classList.toggle('open', isOpen);
-      srvToggle.setAttribute('aria-expanded', isOpen);
-    });
+    /* ── Hamburger toggle ── */
+    if (menuToggle && mobileMenu) {
+      menuToggle.addEventListener('click', function () {
+        const isOpen = mobileMenu.classList.toggle('open');
+        menuToggle.classList.toggle('open', isOpen);
+        menuToggle.setAttribute('aria-expanded', isOpen);
+        mobileMenu.setAttribute('aria-hidden', !isOpen);
+        if (navbar) navbar.classList.toggle('menu-open', isOpen);
+      });
 
-    // Close mobile menu on outside click
+      // Close on mobile nav link click
+      mobileMenu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', closeMobileMenu);
+      });
+    }
+
+    function closeMobileMenu() {
+      if (!mobileMenu || !menuToggle) return;
+      mobileMenu.classList.remove('open');
+      menuToggle.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      if (navbar) navbar.classList.remove('menu-open');
+    }
+
+    /* ── Desktop services dropdown ── */
+    if (servicesToggle && servicesMenu) {
+      servicesToggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        servicesMenu.classList.toggle('open');
+      });
+    }
+
+    /* ── Mobile services accordion ── */
+    if (srvToggle && mobileMega) {
+      srvToggle.addEventListener('click', function () {
+        const isOpen = mobileMega.classList.toggle('open');
+        srvToggle.classList.toggle('open', isOpen);
+        srvToggle.setAttribute('aria-expanded', isOpen);
+      });
+    }
+
+    /* ── Close everything on outside click ── */
     document.addEventListener('click', function (e) {
+      if (servicesMenu && !servicesMenu.contains(e.target)) {
+        servicesMenu.classList.remove('open');
+      }
       if (!e.target.closest('#navbar')) {
-        mobileMenu.classList.remove('open');
-        menuToggle.classList.remove('open');
-        menuToggle.setAttribute('aria-expanded', 'false');
+        closeMobileMenu();
       }
     });
-  })();
 
+    /* ── Close desktop dropdown on scroll ── */
+    window.addEventListener('scroll', function () {
+      if (servicesMenu) servicesMenu.classList.remove('open');
+    }, { passive: true });
+  })();
   /* ── Scroll Reveal ─────────────────────────────────────────── */
   function initReveal() {
     const revealEls = document.querySelectorAll('.reveal');
