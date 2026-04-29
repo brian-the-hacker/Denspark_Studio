@@ -40,36 +40,36 @@
   }
 
   /* ── Desktop Services mega menu (click to open/close) ─── */
-  const desktopServicesMenu   = document.getElementById('desktopServicesMenu');
-  const desktopServicesToggle = document.getElementById('desktopServicesToggle');
-  if (desktopServicesMenu && desktopServicesToggle) {
-    desktopServicesToggle.addEventListener('click', (e) => {
-      // Only intercept on desktop; on mobile the element is hidden anyway
-      if (window.innerWidth > 768) {
-        e.preventDefault();
-        desktopServicesMenu.classList.toggle('open');
+ (function () {
+    const menuToggle    = document.getElementById('menuToggle');
+    const mobileMenu    = document.getElementById('mobileMenu');
+    const srvToggle     = document.getElementById('mobileServicesToggle');
+    const mobileMega    = document.getElementById('mobileMega');
+
+    // Hamburger open/close
+    menuToggle.addEventListener('click', function () {
+      const isOpen = mobileMenu.classList.toggle('open');
+      menuToggle.classList.toggle('open', isOpen);
+      menuToggle.setAttribute('aria-expanded', isOpen);
+      mobileMenu.setAttribute('aria-hidden', !isOpen);
+    });
+
+    // Mobile services accordion
+    srvToggle.addEventListener('click', function () {
+      const isOpen = mobileMega.classList.toggle('open');
+      srvToggle.classList.toggle('open', isOpen);
+      srvToggle.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Close mobile menu on outside click
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#navbar')) {
+        mobileMenu.classList.remove('open');
+        menuToggle.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
       }
     });
-    // Close when clicking anywhere outside
-    document.addEventListener('click', (e) => {
-      if (!desktopServicesMenu.contains(e.target)) {
-        desktopServicesMenu.classList.remove('open');
-      }
-    });
-    // Close on scroll
-    window.addEventListener('scroll', () => desktopServicesMenu.classList.remove('open'), { passive: true });
-  }
-
-  /* ── Mobile Services accordion ────────────────────────── */
-  const mobileServicesItem   = document.getElementById('mobileServicesItem');
-  const mobileServicesToggle = document.getElementById('mobileServicesToggle');
-  if (mobileServicesItem && mobileServicesToggle) {
-    mobileServicesToggle.addEventListener('click', () => {
-      const open = mobileServicesItem.classList.toggle('open');
-      mobileServicesToggle.setAttribute('aria-expanded', String(open));
-    });
-  }
-
+  })();
   /* ====================================================
      3. SCROLL REVEAL
      Exported as window.__revealObs so the inline
