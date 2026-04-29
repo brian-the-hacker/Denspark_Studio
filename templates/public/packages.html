@@ -124,131 +124,28 @@
       box-shadow: 0 6px 20px rgba(26,86,219,0.4);
     }
 
-   .has-mega{position:relative}
+    .menu-toggle { display: none; flex-direction: column; gap: 5px; width: 30px; height: 30px; padding: 2px; justify-content: center; }
+    .menu-toggle span { display: block; height: 2px; background: var(--white); border-radius: 2px; transition: transform 0.3s var(--ease-out), opacity 0.3s; }
+    .menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .menu-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-.mega-menu{
-  position:absolute;
-  top:100%;
-  left:0;
-  width:780px;
-  background:rgba(10,10,10,0.92);
-  backdrop-filter:blur(14px);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:var(--radius);
-  padding:2rem;
-  box-shadow:0 25px 60px rgba(0,0,0,0.4);
-  opacity:0;
-  visibility:hidden;
-  transform:translateY(12px);
-  transition:opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
-  z-index:9999;
-  pointer-events:none;
-}
+    .mobile-menu {
+      display: none; position: absolute; top: 64px; left: 0; right: 0;
+      background: var(--navy); border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 1.5rem 2rem 2rem;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-nav-links li { border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .mobile-nav-links a { display: block; font-size: 0.95rem; font-weight: 500; color: rgba(255,255,255,0.8); padding: 0.85rem 0; }
+    .mobile-nav-links a:hover { color: var(--white); }
+    .btn-book-mobile {
+      display: inline-block; margin-top: 1.25rem;
+      font-size: 0.85rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--white); background: var(--blue); padding: 0.7rem 1.4rem; border-radius: var(--radius);
+    }
+    .mobile-info { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 1.25rem; font-size: 0.78rem; color: rgba(255,255,255,0.4); }
 
-/* Desktop: show on hover OR when .open class is toggled by click */
-@media(hover:hover){
-  .has-mega:hover .mega-menu{
-    opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto;
-  }
-}
-.has-mega.open .mega-menu{
-  opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto;
-}
-
-.mega-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
-.mega-column h4{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#7eb4ff;margin-bottom:1rem}
-.mega-column a{display:inline-block;position:relative;font-size:.875rem;font-weight:400;letter-spacing:.04em;color:rgba(255,255,255,0.85);padding:6px 0;margin-bottom:6px;transition:color .25s ease}
-.mega-column a::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:1.5px;background:var(--blue-light);transform:scaleX(0);transform-origin:left;transition:transform .25s ease;border-radius:2px}
-.mega-column a:hover{color:var(--white)}
-.mega-column a:hover::after{transform:scaleX(1)}
-.mega-footer{margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);text-align:center;font-size:.75rem;color:rgba(255,255,255,.4);letter-spacing:.05em}
-
-
-/* ── Mobile Menu ───────────────────────────────────────── */
-.mobile-menu{
-  display:none;
-  position:absolute;
-  top:100%;left:0;right:0;
-  background:var(--navy);
-  padding:20px 24px 28px;
-  border-top:1px solid rgba(255,255,255,.08);
-}
-.mobile-menu.open{display:block;animation:slideDown .3s ease}
-@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-
-.mobile-nav-links{margin-bottom:20px}
-.mobile-nav-links li a{
-  display:block;
-  color:rgba(255,255,255,.85);
-  font-size:1rem;
-  padding:13px 0;
-  border-bottom:1px solid rgba(255,255,255,.06);
-  transition:color var(--t),padding-left var(--t);
-}
-.mobile-nav-links li a:hover{color:var(--white);padding-left:8px}
-
-/* Mobile Services toggle row */
-.mobile-services-toggle{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  color:rgba(255,255,255,.85);
-  font-size:1rem;
-  padding:13px 0;
-  border-bottom:1px solid rgba(255,255,255,.06);
-  cursor:pointer;
-  user-select:none;
-  transition:color var(--t);
-}
-.mobile-services-toggle:hover{color:var(--white)}
-.mobile-services-chevron{
-  width:8px;height:8px;
-  border-right:1.5px solid rgba(255,255,255,.6);
-  border-bottom:1.5px solid rgba(255,255,255,.6);
-  transform:rotate(45deg);
-  transition:transform .3s ease;
-  flex-shrink:0;
-}
-.mobile-services-item.open .mobile-services-chevron{
-  transform:rotate(-135deg);
-}
-
-/* Mobile mega dropdown */
-.mobile-mega{
-  max-height:0;
-  overflow:hidden;
-  opacity:0;
-  transition:max-height .35s ease, opacity .3s ease, padding .3s ease;
-  padding:0 0 0 12px;
-}
-.mobile-services-item.open .mobile-mega{
-  max-height:900px;
-  opacity:1;
-  padding:8px 0 4px 12px;
-}
-
-.mobile-mega .mega-column{margin-bottom:12px}
-.mobile-mega .mega-column h4{
-  font-size:.65rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-  color:#7eb4ff;margin-bottom:6px;padding-top:8px;
-  border-top:1px solid rgba(255,255,255,.06);
-}
-.mobile-mega .mega-column:first-child h4{border-top:none;padding-top:0}
-.mobile-mega .mega-column a{
-  display:block;
-  color:rgba(255,255,255,.75);
-  font-size:.88rem;
-  padding:6px 0;
-  border-bottom:1px solid rgba(255,255,255,.04);
-  transition:color var(--t),padding-left var(--t);
-}
-.mobile-mega .mega-column a:last-child{border-bottom:none}
-.mobile-mega .mega-column a:hover{color:var(--white);padding-left:6px}
-.mobile-mega .mega-footer{display:none}
-
-.btn-book-mobile{display:block;background:var(--blue);color:var(--white);text-align:center;padding:13px;border-radius:var(--radius);font-weight:500;margin-bottom:16px;transition:background var(--t)}
-.btn-book-mobile:hover{background:var(--blue-dark)}
-.mobile-info{display:flex;gap:20px;font-size:.8rem;color:var(--gray-400)}
     /* ─────────────────────────────────────────
        PAGE HERO
     ───────────────────────────────────────── */
@@ -798,7 +695,7 @@
   <div class="cursor-follower" id="cursorFollower"></div>
 
   <!-- Navbar -->
-   <nav class="navbar scrolled" id="navbar">
+  <nav class="navbar" id="navbar">
     <div class="nav-container">
       <a href="/" class="logo">
         <img src="/static/uploads/DENSPARK-STUDIOs-wallpaper.webp" alt="Denspark Studio Logo" class="logo-img">
@@ -807,115 +704,29 @@
           <span class="logo-sub">STUDIO</span>
         </div>
       </a>
-
-      <!-- Desktop nav -->
       <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
-
-        <!-- DESKTOP SERVICES MEGA MENU — id="desktopServicesMenu" -->
-        <li class="has-mega" id="desktopServicesMenu">
-          <a href="/services" class="nav-link" id="desktopServicesToggle">Services</a>
-          <div class="mega-menu">
-            <div class="mega-grid">
-              <div class="mega-column">
-                <h4>Photography</h4>
-                <a href="/services#photography">Studio Portrait</a>
-                <a href="/services#photography">Wedding Coverage</a>
-                <a href="/services#events">Event Photography</a>
-                <a href="/services#branding">Commercial Photography</a>
-              </div>
-              <div class="mega-column">
-                <h4>Special Shoots</h4>
-                <a href="/services#photography">Birthday Photoshoot</a>
-                <a href="/services#photography">Maternity Photoshoot</a>
-                <a href="/services#photography">Graduation Photoshoot</a>
-                <a href="/services#photography">Kids Photoshoot</a>
-                <a href="/services#photography">Family Photoshoot</a>
-                <a href="/services#other-services">Passport Photos</a>
-              </div>
-              <div class="mega-column">
-                <h4>Video</h4>
-                <a href="/services#videography">Video Production</a>
-                <a href="/services#drone">Drone Services</a>
-                <a href="/services#livestream">Live Streaming</a>
-              </div>
-              <div class="mega-column">
-                <h4>Creative</h4>
-                <a href="/services#graphic-design">Graphic Design</a>
-                <a href="/services#branding">Branding</a>
-                <a href="/services#printing">Printing</a>
-                <a href="/services#social-media">Social Media</a>
-              </div>
-            </div>
-            <div class="mega-footer">Premium Studio Services • Machakos, Kenya</div>
-          </div>
-        </li>
-
+        <li><a href="/services" class="nav-link">Services</a></li>
+        <li><a href="/packages" class="nav-link active">Packages</a></li>
         <li><a href="/about" class="nav-link">About</a></li>
         <li><a href="/contact" class="nav-link">Contact</a></li>
-        <li><a href="/packages" class="nav-link">Packages</a></li>
-        <li><a href="/videos" class="nav-link">Video Production</a></li>
       </ul>
-
       <div class="nav-right">
         <a href="/contact" class="btn-book">Book Now</a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
           <span></span><span></span><span></span>
         </button>
       </div>
     </div>
-
-    <!-- MOBILE MENU — services uses completely different IDs -->
-    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu" id="mobileMenu">
       <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
-
-        <!-- MOBILE SERVICES ACCORDION — id="mobileServicesItem" -->
-        <li class="mobile-services-item" id="mobileServicesItem">
-          <div class="mobile-services-toggle" id="mobileServicesToggle" role="button" aria-expanded="false">
-            Services
-            <span class="mobile-services-chevron"></span>
-          </div>
-          <div class="mobile-mega">
-            <div class="mega-grid">
-              <div class="mega-column">
-                <h4>Photography</h4>
-                <a href="/services#photography">Studio Portrait</a>
-                <a href="/services#photography">Wedding Coverage</a>
-                <a href="/services#events">Event Photography</a>
-                <a href="/services#branding">Commercial Photography</a>
-              </div>
-              <div class="mega-column">
-                <h4>Special Shoots</h4>
-                <a href="/services#photography">Birthday Photoshoot</a>
-                <a href="/services#photography">Maternity Photoshoot</a>
-                <a href="/services#photography">Graduation Photoshoot</a>
-                <a href="/services#photography">Kids Photoshoot</a>
-                <a href="/services#photography">Family Photoshoot</a>
-                <a href="/services#other-services">Passport Photos</a>
-              </div>
-              <div class="mega-column">
-                <h4>Video</h4>
-                <a href="/services#videography">Video Production</a>
-                <a href="/services#drone">Drone Services</a>
-                <a href="/services#livestream">Live Streaming</a>
-              </div>
-              <div class="mega-column">
-                <h4>Creative</h4>
-                <a href="/services#graphic-design">Graphic Design</a>
-                <a href="/services#branding">Branding</a>
-                <a href="/services#printing">Printing</a>
-                <a href="/services#social-media">Social Media</a>
-              </div>
-            </div>
-          </div>
-        </li>
-
+        <li><a href="/services">Services</a></li>
+        <li><a href="/packages">Packages</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
-        <li><a href="/packages">Packages</a></li>
       </ul>
       <a href="/contact" class="btn-book-mobile">Book a Session</a>
       <div class="mobile-info">
