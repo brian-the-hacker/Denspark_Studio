@@ -115,7 +115,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .pl-line span{display:block;height:100%;background:var(--blue-light);animation:lineLoad 1.8s .3s ease forwards;transform:translateX(-100%)}
 @keyframes lineLoad{to{transform:translateX(0)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-
 /* ── Navbar ────────────────────────────────────────────── */
 .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);background:transparent;transition:background var(--t) var(--ease),box-shadow var(--t) var(--ease),height var(--t) var(--ease)}
 .navbar.scrolled{background:var(--navy);box-shadow:0 2px 20px rgba(0,0,0,.25);height:64px}
@@ -140,7 +139,9 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .menu-toggle.open span:nth-child(3){transform:rotate(-45deg) translate(0,-6.5px)}
 
 /* ── Desktop Mega Menu ─────────────────────────────────── */
-.has-mega { position: relative; }
+.has-mega {
+  position: relative;
+}
 
 .mega-menu {
   position: absolute;
@@ -162,7 +163,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   pointer-events: none;
 }
 
-/* caret arrow pointing up to trigger */
 .mega-menu::before {
   content: '';
   position: absolute;
@@ -183,7 +183,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   pointer-events: auto;
 }
 
-/* chevron on the Services link */
 #desktopServicesToggle {
   display: flex;
   align-items: center;
@@ -260,19 +259,61 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   letter-spacing: .05em;
 }
 
-/* ── Mobile Services accordion ─────────────────────────── */
-.mobile-mega {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height .4s ease, opacity .35s ease, padding .3s ease;
-  padding: 0 0 0 12px;
+/* ── Mobile Menu ───────────────────────────────────────── */
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--navy);
+  padding: 20px 24px 28px;
+  border-top: 1px solid rgba(255, 255, 255, .08);
 }
 
-.mobile-services-item.open .mobile-mega {
-  max-height: 900px;
-  opacity: 1;
-  padding: 8px 0 4px 12px;
+.mobile-menu.open {
+  display: block;
+  animation: slideDown .3s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mobile-nav-links {
+  margin-bottom: 20px;
+}
+
+.mobile-nav-links li a {
+  display: block;
+  color: rgba(255, 255, 255, .85);
+  font-size: 1rem;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+  transition: color var(--t), padding-left var(--t);
+}
+
+.mobile-nav-links li a:hover {
+  color: var(--white);
+  padding-left: 8px;
+}
+
+.mobile-services-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, .85);
+  font-size: 1rem;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--t);
+}
+
+.mobile-services-toggle:hover {
+  color: var(--white);
 }
 
 .mobile-services-chevron {
@@ -289,7 +330,24 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   transform: rotate(-135deg);
 }
 
-.mobile-mega .mega-column { margin-bottom: 12px; }
+/* ── Mobile Mega accordion ─────────────────────────────── */
+.mobile-mega {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height .4s ease, opacity .35s ease, padding .3s ease;
+  padding: 0 0 0 12px;
+}
+
+.mobile-services-item.open .mobile-mega {
+  max-height: 900px;
+  opacity: 1;
+  padding: 8px 0 4px 12px;
+}
+
+.mobile-mega .mega-column {
+  margin-bottom: 12px;
+}
 
 .mobile-mega .mega-column h4 {
   font-size: .65rem;
@@ -302,7 +360,10 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   border-top: 1px solid rgba(255, 255, 255, .06);
 }
 
-.mobile-mega .mega-column:first-child h4 { border-top: none; padding-top: 0; }
+.mobile-mega .mega-column:first-child h4 {
+  border-top: none;
+  padding-top: 0;
+}
 
 .mobile-mega .mega-column a {
   display: block;
@@ -316,9 +377,35 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .mobile-mega .mega-column a:last-child { border-bottom: none; }
 .mobile-mega .mega-column a:hover { color: var(--white); padding-left: 6px; }
 .mobile-mega .mega-footer { display: none; }
-@media(max-width:768px){
-  /* replace display:none!important with this */
-  .mega-menu { visibility:hidden !important; opacity:0 !important; pointer-events:none !important; }
+
+.btn-book-mobile {
+  display: block;
+  background: var(--blue);
+  color: var(--white);
+  text-align: center;
+  padding: 13px;
+  border-radius: var(--radius);
+  font-weight: 500;
+  margin-bottom: 16px;
+  transition: background var(--t);
+}
+
+.btn-book-mobile:hover {
+  background: var(--blue-dark);
+}
+
+.mobile-info {
+  display: flex;
+  gap: 20px;
+  font-size: .8rem;
+  color: var(--gray-400);
+}
+
+/* ── Responsive ────────────────────────────────────────── */
+@media(max-width:768px) {
+  .nav-links, .btn-book { display: none; }
+  .menu-toggle { display: flex; }
+  .mega-menu { visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
 }
 /* ── Hero ──────────────────────────────────────────────── */
 .hero{position:relative;width:100%;height:100vh;min-height:560px;overflow:hidden}
