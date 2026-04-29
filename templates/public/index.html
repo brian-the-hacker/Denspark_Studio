@@ -162,7 +162,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   pointer-events: none;
 }
 
-/* caret arrow */
+/* caret arrow pointing up to trigger */
 .mega-menu::before {
   content: '';
   position: absolute;
@@ -176,7 +176,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   transform: rotate(45deg);
 }
 
-/* open state — toggled by JS click */
 .has-mega.open .mega-menu {
   opacity: 1;
   visibility: visible;
@@ -184,7 +183,34 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   pointer-events: auto;
 }
 
-.mega-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+/* chevron on the Services link */
+#desktopServicesToggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#desktopServicesToggle::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.6);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.has-mega.open #desktopServicesToggle::after {
+  transform: rotate(-135deg) translateY(2px);
+}
+
+.mega-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
 
 .mega-column h4 {
   font-size: .7rem;
@@ -234,88 +260,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   letter-spacing: .05em;
 }
 
-/* Services nav-link chevron */
-#desktopServicesToggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-#desktopServicesToggle::before {
-  content: '';
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-right: 1.5px solid rgba(255, 255, 255, 0.6);
-  border-bottom: 1.5px solid rgba(255, 255, 255, 0.6);
-  transform: rotate(45deg) translateY(-2px);
-  transition: transform 0.3s ease;
-  order: 2;
-  flex-shrink: 0;
-}
-
-.has-mega.open #desktopServicesToggle::before {
-  transform: rotate(-135deg) translateY(-2px);
-}
-
-/* ── Mobile Menu ───────────────────────────────────────── */
-.mobile-menu {
-  display: none;
-  position: absolute;
-  top: 100%; left: 0; right: 0;
-  background: var(--navy);
-  padding: 20px 24px 28px;
-  border-top: 1px solid rgba(255, 255, 255, .08);
-}
-
-.mobile-menu.open { display: block; animation: slideDown .3s ease; }
-
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.mobile-nav-links { margin-bottom: 20px; }
-
-.mobile-nav-links li a {
-  display: block;
-  color: rgba(255, 255, 255, .85);
-  font-size: 1rem;
-  padding: 13px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, .06);
-  transition: color var(--t), padding-left var(--t);
-}
-
-.mobile-nav-links li a:hover { color: var(--white); padding-left: 8px; }
-
-.mobile-services-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: rgba(255, 255, 255, .85);
-  font-size: 1rem;
-  padding: 13px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, .06);
-  cursor: pointer;
-  user-select: none;
-  transition: color var(--t);
-}
-
-.mobile-services-toggle:hover { color: var(--white); }
-
-.mobile-services-chevron {
-  width: 8px; height: 8px;
-  border-right: 1.5px solid rgba(255, 255, 255, .6);
-  border-bottom: 1.5px solid rgba(255, 255, 255, .6);
-  transform: rotate(45deg);
-  transition: transform .3s ease;
-  flex-shrink: 0;
-}
-
-.mobile-services-item.open .mobile-services-chevron {
-  transform: rotate(-135deg);
-}
-
+/* ── Mobile Services accordion ─────────────────────────── */
 .mobile-mega {
   max-height: 0;
   overflow: hidden;
@@ -328,6 +273,20 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   max-height: 900px;
   opacity: 1;
   padding: 8px 0 4px 12px;
+}
+
+.mobile-services-chevron {
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid rgba(255, 255, 255, .6);
+  border-bottom: 1.5px solid rgba(255, 255, 255, .6);
+  transform: rotate(45deg);
+  transition: transform .3s ease;
+  flex-shrink: 0;
+}
+
+.mobile-services-item.open .mobile-services-chevron {
+  transform: rotate(-135deg);
 }
 
 .mobile-mega .mega-column { margin-bottom: 12px; }
@@ -357,21 +316,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .mobile-mega .mega-column a:last-child { border-bottom: none; }
 .mobile-mega .mega-column a:hover { color: var(--white); padding-left: 6px; }
 .mobile-mega .mega-footer { display: none; }
-
-.btn-book-mobile {
-  display: block;
-  background: var(--blue);
-  color: var(--white);
-  text-align: center;
-  padding: 13px;
-  border-radius: var(--radius);
-  font-weight: 500;
-  margin-bottom: 16px;
-  transition: background var(--t);
-}
-
-.btn-book-mobile:hover { background: var(--blue-dark); }
-.mobile-info { display: flex; gap: 20px; font-size: .8rem; color: var(--gray-400); }
 
 /* ── Hero ──────────────────────────────────────────────── */
 .hero{position:relative;width:100%;height:100vh;min-height:560px;overflow:hidden}
@@ -1383,15 +1327,19 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 
   /* ── Mobile Menu toggle ────────────────────────────────── */
   (function () {
-    /* ── Scroll: add .scrolled to navbar ── */
+
+    /* ── Scroll fade (your original behaviour) ── */
     const navbar = document.getElementById('navbar');
-    const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 20);
+    function onScroll() {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    /* ── Desktop Services: click to open, click outside to close ── */
+    /* ── Desktop: click to open, grace period so panel stays open ── */
     const desktopItem   = document.getElementById('desktopServicesMenu');
     const desktopToggle = document.getElementById('desktopServicesToggle');
+    const megaPanel     = desktopItem.querySelector('.mega-menu');
 
     let closeTimer = null;
 
@@ -1401,34 +1349,41 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     }
 
     function scheduleClose() {
-      closeTimer = setTimeout(() => {
+      closeTimer = setTimeout(function () {
         desktopItem.classList.remove('open');
-      }, 180); // small grace period — moving mouse between trigger and panel won't close it
+      }, 200);
     }
 
-    // Click to toggle (your requested behaviour)
+    // Click the "Services" link to toggle open/close
     desktopToggle.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
       const isOpen = desktopItem.classList.toggle('open');
-      // if just opened, navigate on second click — handled by link href naturally
-      if (!isOpen) return;
+      if (!isOpen) clearTimeout(closeTimer);
     });
 
-    // Keep open while hovering the panel itself (so links inside are clickable)
-    desktopItem.querySelector('.mega-menu').addEventListener('mouseenter', () => clearTimeout(closeTimer));
-    desktopItem.querySelector('.mega-menu').addEventListener('mouseleave', scheduleClose);
+    // Moving into the panel keeps it open
+    megaPanel.addEventListener('mouseenter', function () {
+      clearTimeout(closeTimer);
+    });
+
+    // Moving out of the panel starts the grace-period close
+    megaPanel.addEventListener('mouseleave', scheduleClose);
 
     // Click anywhere outside closes it
     document.addEventListener('click', function (e) {
       if (!desktopItem.contains(e.target)) {
+        clearTimeout(closeTimer);
         desktopItem.classList.remove('open');
       }
     });
 
     // Escape key closes it
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') desktopItem.classList.remove('open');
+      if (e.key === 'Escape') {
+        clearTimeout(closeTimer);
+        desktopItem.classList.remove('open');
+      }
     });
 
     /* ── Mobile hamburger ── */
@@ -1459,6 +1414,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
         menuToggle.setAttribute('aria-expanded', 'false');
       }
     });
+
   })();
 
   /* ── Hero Slider ───────────────────────────────────────── */
