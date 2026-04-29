@@ -757,7 +757,7 @@
     /* ── Fetch videos from API ── */
     async function loadVideos() {
       try {
-        const res  = await fetch('/api/videos');
+        const res  = await fetch('/admin/api/videos');
         if (!res.ok) throw new Error('Failed');
         const data = await res.json();
         allVideos  = data.videos || [];
