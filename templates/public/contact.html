@@ -25,23 +25,26 @@
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
       <a href="/" class="logo">
-          <img src="/static/uploads/DENSPARK-STUDIOs-wallpaper.webp" alt="Denspark Studio Logo" class="logo-img">
-          <div class="logo-text-wrap">
-            <span class="logo-text">DENSPARK PHOTO</span>
-            <span class="logo-sub">STUDIO</span>
-          </div>
-        </a>
-         <ul class="nav-links" id="navLinks">
+        <img src="/static/uploads/DENSPARK-STUDIOs-wallpaper.webp" alt="Denspark Studio Logo" class="logo-img">
+        <div class="logo-text-wrap">
+          <span class="logo-text">DENSPARK PHOTO</span>
+          <span class="logo-sub">STUDIO</span>
+        </div>
+      </a>
+
+      <!-- Desktop nav -->
+      <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
 
-        <!-- SERVICES MEGA MENU -->
-        <li class="has-mega" id="servicesMenu">
-          <a href="/services" class="nav-link" id="servicesToggle">Services</a>
-
+        <li class="has-mega" id="desktopServicesMenu">
+          <a href="/services" class="nav-link" id="desktopServicesToggle">
+            Services
+            <span class="services-chevron"></span>
+          </a>
           <div class="mega-menu">
+            <div class="mega-arrow"></div>
             <div class="mega-grid">
-
               <div class="mega-column">
                 <h4>Photography</h4>
                 <a href="/services#photography">Studio Portrait</a>
@@ -49,7 +52,6 @@
                 <a href="/services#events">Event Photography</a>
                 <a href="/services#branding">Commercial Photography</a>
               </div>
-
               <div class="mega-column">
                 <h4>Special Shoots</h4>
                 <a href="/services#photography">Birthday Photoshoot</a>
@@ -59,14 +61,12 @@
                 <a href="/services#photography">Family Photoshoot</a>
                 <a href="/services#other-services">Passport Photos</a>
               </div>
-
               <div class="mega-column">
                 <h4>Video</h4>
                 <a href="/services#videography">Video Production</a>
                 <a href="/services#drone">Drone Services</a>
                 <a href="/services#livestream">Live Streaming</a>
               </div>
-
               <div class="mega-column">
                 <h4>Creative</h4>
                 <a href="/services#graphic-design">Graphic Design</a>
@@ -74,12 +74,8 @@
                 <a href="/services#printing">Printing</a>
                 <a href="/services#social-media">Social Media</a>
               </div>
-
             </div>
-
-            <div class="mega-footer">
-              Premium Studio Services • Machakos, Kenya
-            </div>
+            <div class="mega-footer">Premium Studio Services &bull; Machakos, Kenya</div>
           </div>
         </li>
 
@@ -88,27 +84,27 @@
         <li><a href="/packages" class="nav-link">Packages</a></li>
         <li><a href="/videos" class="nav-link">Video Production</a></li>
       </ul>
+
       <div class="nav-right">
-        <a href="#booking-form" class="btn-book">Book Now</a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
-          <span></span>
-          <span></span>
-          <span></span>
+        <a href="/contact" class="btn-book">Book Now</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
         </button>
       </div>
     </div>
+
+    <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
       <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
 
-        <!-- MOBILE SERVICES ACCORDION — id="mobileServicesItem" -->
         <li class="mobile-services-item" id="mobileServicesItem">
           <div class="mobile-services-toggle" id="mobileServicesToggle" role="button" aria-expanded="false">
             Services
             <span class="mobile-services-chevron"></span>
           </div>
-          <div class="mobile-mega">
+          <div class="mobile-mega" id="mobileMega">
             <div class="mega-grid">
               <div class="mega-column">
                 <h4>Photography</h4>
@@ -146,7 +142,7 @@
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
         <li><a href="/packages">Packages</a></li>
-        <li><a href="/videos" class="nav-link">Video Production</a></li>
+        <li><a href="/videos">Video Production</a></li>
       </ul>
       <a href="/contact" class="btn-book-mobile">Book a Session</a>
       <div class="mobile-info">
