@@ -12,24 +12,24 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://densparkstudio.com/">
 
-  <!-- ══ OPEN GRAPH (Facebook / WhatsApp / LinkedIn) ══════════════════ -->
+  <!-- ══ OPEN GRAPH ══════════════════════════════════════════════════ -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://densparkstudio.com/">
   <meta property="og:title" content="Denspark Studio | Photography & Creative Media — Machakos, Kenya">
-  <meta property="og:description" content="Professional photography, videography, drone services & graphic design in Machakos, Kenya. Capturing your precious moments with artistry and excellence.">
+  <meta property="og:description" content="Professional photography, videography, drone services & graphic design in Machakos, Kenya.">
   <meta property="og:image" content="https://densparkstudio.com/static/uploads/og-cover.webp">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="en_KE">
   <meta property="og:site_name" content="Denspark Studio">
 
-  <!-- ══ TWITTER / X CARD ════════════════════════════════════════════ -->
+  <!-- ══ TWITTER ════════════════════════════════════════════════════ -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Denspark Studio | Photography & Creative Media">
   <meta name="twitter:description" content="Professional photography, videography & creative media in Machakos, Kenya.">
   <meta name="twitter:image" content="https://densparkstudio.com/static/uploads/og-cover.webp">
 
-  <!-- ══ LOCAL BUSINESS SCHEMA (Google rich results) ═════════════════ -->
+  <!-- ══ LOCAL BUSINESS SCHEMA ════════════════════════════════════════ -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -60,30 +60,20 @@
   }
   </script>
 
-  <!-- ══ PERFORMANCE: Preconnect ══════════════════════════════════════ -->
+  <!-- ══ FONTS ═══════════════════════════════════════════════════════ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://res.cloudinary.com">
-
-  <!-- ══ FONTS: non-blocking ══════════════════════════════════════════ -->
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"
-        media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"></noscript>
 
-  <!-- ══ PERFORMANCE: Preload critical LCP image ═════════════════════ -->
   <link rel="preload" as="image" href="/static/uploads/1002946443.webp" fetchpriority="high">
-
-  <!-- ══ FAVICON (add real ones in /static/) ═════════════════════════ -->
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
 
   <style>
-/* ═══════════════════════════════════════════════════════════════════
-   DENSPARK STUDIO — Optimised Stylesheet
-   Performance: Critical CSS inlined, web-safe fallbacks, no layout shift
-   ═══════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   DENSPARK STUDIO — Stylesheet
+   ═══════════════════════════════════════════════════════════ */
 
-/* ── Variables ────────────────────────────────────────────────────── */
 :root {
   --blue:       #1A56DB;
   --blue-dark:  #1240A8;
@@ -108,17 +98,15 @@
   --nav-h:      72px;
 }
 
-/* ── Reset ────────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{font-family:var(--font-body);background:var(--white);color:var(--black);line-height:1.6;overflow-x:hidden}
-/* Prevent CLS: reserve space for images */
-img{display:block;max-width:100%;height:auto;aspect-ratio:attr(width)/attr(height)}
+img{display:block;max-width:100%;height:auto}
 a{text-decoration:none;color:inherit}
 ul{list-style:none}
 button{cursor:pointer;border:none;background:none;font-family:inherit}
 
-/* ── Preloader ────────────────────────────────────────────────────── */
+/* ── Preloader ─────────────────────────────────────────── */
 #preloader{position:fixed;inset:0;background:var(--navy);z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease}
 #preloader.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .pl-inner{text-align:center}
@@ -128,8 +116,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 @keyframes lineLoad{to{transform:translateX(0)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── Navbar ───────────────────────────────────────────────────────── */
-.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);background:transparent;transition:background var(--t) var(--ease),box-shadow var(--t) var(--ease),height var(--t) var(--ease);will-change:background}
+/* ── Navbar ────────────────────────────────────────────── */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav-h);background:transparent;transition:background var(--t) var(--ease),box-shadow var(--t) var(--ease),height var(--t) var(--ease)}
 .navbar.scrolled{background:var(--navy);box-shadow:0 2px 20px rgba(0,0,0,.25);height:64px}
 .nav-container{max-width:1320px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}
 .logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
@@ -150,211 +138,139 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .menu-toggle.open span:nth-child(1){transform:rotate(45deg) translate(0,6.5px)}
 .menu-toggle.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .menu-toggle.open span:nth-child(3){transform:rotate(-45deg) translate(0,-6.5px)}
-.mobile-menu{display:none;position:absolute;top:100%;left:0;right:0;background:var(--navy);padding:20px 24px 28px;border-top:1px solid rgba(255,255,255,.08)}
+
+/* ── Desktop Mega Menu ─────────────────────────────────── */
+.has-mega{position:relative}
+
+.mega-menu{
+  position:absolute;
+  top:100%;
+  left:0;
+  width:780px;
+  background:rgba(10,10,10,0.92);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:var(--radius);
+  padding:2rem;
+  box-shadow:0 25px 60px rgba(0,0,0,0.4);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(12px);
+  transition:opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+  z-index:9999;
+  pointer-events:none;
+}
+
+/* Desktop: show on hover OR when .open class is toggled by click */
+@media(hover:hover){
+  .has-mega:hover .mega-menu{
+    opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto;
+  }
+}
+.has-mega.open .mega-menu{
+  opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto;
+}
+
+.mega-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.mega-column h4{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#7eb4ff;margin-bottom:1rem}
+.mega-column a{display:inline-block;position:relative;font-size:.875rem;font-weight:400;letter-spacing:.04em;color:rgba(255,255,255,0.85);padding:6px 0;margin-bottom:6px;transition:color .25s ease}
+.mega-column a::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:1.5px;background:var(--blue-light);transform:scaleX(0);transform-origin:left;transition:transform .25s ease;border-radius:2px}
+.mega-column a:hover{color:var(--white)}
+.mega-column a:hover::after{transform:scaleX(1)}
+.mega-footer{margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);text-align:center;font-size:.75rem;color:rgba(255,255,255,.4);letter-spacing:.05em}
+
+/* ── Mobile Menu ───────────────────────────────────────── */
+.mobile-menu{
+  display:none;
+  position:absolute;
+  top:100%;left:0;right:0;
+  background:var(--navy);
+  padding:20px 24px 28px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
 .mobile-menu.open{display:block;animation:slideDown .3s ease}
 @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
 .mobile-nav-links{margin-bottom:20px}
-.mobile-nav-links li a{display:block;color:rgba(255,255,255,.85);font-size:1rem;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.06);transition:color var(--t),padding-left var(--t)}
+.mobile-nav-links li a{
+  display:block;
+  color:rgba(255,255,255,.85);
+  font-size:1rem;
+  padding:13px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  transition:color var(--t),padding-left var(--t);
+}
 .mobile-nav-links li a:hover{color:var(--white);padding-left:8px}
+
+/* Mobile Services toggle row */
+.mobile-services-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:rgba(255,255,255,.85);
+  font-size:1rem;
+  padding:13px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  cursor:pointer;
+  user-select:none;
+  transition:color var(--t);
+}
+.mobile-services-toggle:hover{color:var(--white)}
+.mobile-services-chevron{
+  width:8px;height:8px;
+  border-right:1.5px solid rgba(255,255,255,.6);
+  border-bottom:1.5px solid rgba(255,255,255,.6);
+  transform:rotate(45deg);
+  transition:transform .3s ease;
+  flex-shrink:0;
+}
+.mobile-services-item.open .mobile-services-chevron{
+  transform:rotate(-135deg);
+}
+
+/* Mobile mega dropdown */
+.mobile-mega{
+  max-height:0;
+  overflow:hidden;
+  opacity:0;
+  transition:max-height .35s ease, opacity .3s ease, padding .3s ease;
+  padding:0 0 0 12px;
+}
+.mobile-services-item.open .mobile-mega{
+  max-height:900px;
+  opacity:1;
+  padding:8px 0 4px 12px;
+}
+
+.mobile-mega .mega-column{margin-bottom:12px}
+.mobile-mega .mega-column h4{
+  font-size:.65rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:#7eb4ff;margin-bottom:6px;padding-top:8px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.mobile-mega .mega-column:first-child h4{border-top:none;padding-top:0}
+.mobile-mega .mega-column a{
+  display:block;
+  color:rgba(255,255,255,.75);
+  font-size:.88rem;
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  transition:color var(--t),padding-left var(--t);
+}
+.mobile-mega .mega-column a:last-child{border-bottom:none}
+.mobile-mega .mega-column a:hover{color:var(--white);padding-left:6px}
+.mobile-mega .mega-footer{display:none}
+
 .btn-book-mobile{display:block;background:var(--blue);color:var(--white);text-align:center;padding:13px;border-radius:var(--radius);font-weight:500;margin-bottom:16px;transition:background var(--t)}
 .btn-book-mobile:hover{background:var(--blue-dark)}
 .mobile-info{display:flex;gap:20px;font-size:.8rem;color:var(--gray-400)}
 
-/* ── SERVICES MEGA MENU (MATCH NEW NAV STYLE) ───────────── */
-
-.has-mega {
-  position: relative;
-}
-
-.mega-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-
-  width: 780px;
-
-  background: rgba(10, 10, 10, 0.92);
-  backdrop-filter: blur(14px);
-
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: var(--radius);
-
-  padding: 2rem;
-
-  box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(12px);
-  transition: all 0.25s ease;
-
-  z-index: 9999;
-}
-
-/* Show on hover */
-.has-mega:hover .mega-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-/* Grid */
-.mega-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-
-/* Section titles */
-.mega-column h4 {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-
-  color: #7eb4ff;
-  margin-bottom: 1rem;
-}
-
-/* Links (MATCH NAV STYLE EXACTLY) */
-.mega-column a {
-  display: inline-block;
-  position: relative;
-
-  font-size: 0.875rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-
-  color: rgba(255,255,255,0.85);
-
-  padding: 6px 0;
-  margin-bottom: 6px;
-
-  transition: color 0.25s ease;
-}
-
-/* underline effect like nav-link */
-.mega-column a::after {
-  content: '';
-  position: absolute;
-  bottom: 2px;
-  left: 0;
-  right: 0;
-
-  height: 1.5px;
-  background: var(--blue-light);
-
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.25s ease;
-  border-radius: 2px;
-}
-
-.mega-column a:hover {
-  color: var(--white);
-}
-
-.mega-column a:hover::after {
-  transform: scaleX(1);
-}
-
-/* Footer */
-.mega-footer {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-
-  border-top: 1px solid rgba(255,255,255,0.08);
-
-  text-align: center;
-  font-size: 0.75rem;
-
-  color: rgba(255,255,255,0.4);
-  letter-spacing: 0.05em;
-}
-
-/* ── MOBILE ───────────────────────────── */
-@media (max-width: 768px) {
-  .mega-menu {
-    position: static;
-    width: 100%;
-
-    background: transparent;
-    border: none;
-    box-shadow: none;
-
-    padding: 1rem 0;
-
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-  }
-
-  .mega-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .mega-footer {
-    display: none;
-  }
-}
-
-/* CLICK STATE */
-.has-mega.open .mega-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-/* keep hover for desktop */
-@media (hover: hover) {
-  .has-mega:hover .mega-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-}
-.service-img {
-  position: relative;
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  border-radius: 12px 12px 0 0;
-}
-
-.service-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.service-card:hover .service-img img {
-  transform: scale(1.05);
-}
-
-.service-img .service-num {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.service-body {
-  padding: 1.25rem;
-}
-/* ── Hero ─────────────────────────────────────────────────────────── */
+/* ── Hero ──────────────────────────────────────────────── */
 .hero{position:relative;width:100%;height:100vh;min-height:560px;overflow:hidden}
 .hero-badge{position:absolute;top:calc(var(--nav-h) + 20px);left:24px;z-index:10;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);color:var(--white);font-size:.75rem;letter-spacing:.06em;padding:6px 14px;border-radius:100px;animation:fadeUp .6s 2.2s ease both}
 .slider-track{position:relative;width:100%;height:100%}
 .slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;pointer-events:none}
 .slide.active{opacity:1;pointer-events:auto}
-/* PERF: use transform instead of background-position for parallax */
 .slide-bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.05);transition:transform 8s ease;will-change:transform;background-color:var(--navy)}
 .slide.active .slide-bg{transform:scale(1)}
 .slide-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,10,10,.65) 0%,rgba(15,23,42,.4) 60%,rgba(10,10,10,.2) 100%)}
@@ -382,17 +298,16 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,.5),transparent);animation:scrollPulse 2s infinite}
 @keyframes scrollPulse{0%,100%{height:40px;opacity:1}50%{height:20px;opacity:.4}}
 
-/* ── Marquee ──────────────────────────────────────────────────────── */
+/* ── Marquee ───────────────────────────────────────────── */
 .marquee-wrap{background:var(--navy);padding:14px 0;overflow:hidden;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
 .marquee-track{display:flex;overflow:hidden}
-/* PERF: use translate3d to stay on GPU compositor */
 .marquee-content{display:flex;align-items:center;white-space:nowrap;animation:marquee 28s linear infinite;will-change:transform}
 .marquee-content span{font-size:.78rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);padding:0 18px;transition:color var(--t)}
 .marquee-content .dot{color:var(--blue);padding:0;letter-spacing:0}
 .marquee-content span:not(.dot):hover{color:var(--white)}
 @keyframes marquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 
-/* ── Sections / Layout ────────────────────────────────────────────── */
+/* ── Layout ────────────────────────────────────────────── */
 .section{padding:clamp(60px,8vw,100px) 0}
 .container{max-width:1320px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
 .section-header{text-align:center;margin-bottom:clamp(40px,6vw,64px)}
@@ -401,11 +316,11 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .section-title em{font-style:italic;color:var(--blue)}
 .section-sub{font-size:1rem;color:var(--gray-600);max-width:540px;margin:0 auto;line-height:1.7}
 
-/* ── Scroll Reveal ────────────────────────────────────────────────── */
+/* ── Scroll Reveal ─────────────────────────────────────── */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
-/* ── Services ─────────────────────────────────────────────────────── */
+/* ── Services ──────────────────────────────────────────── */
 .services-section{background:var(--off-white)}
 .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
 .service-card{background:var(--white);border-radius:var(--radius-lg);padding:32px 28px;border:1px solid var(--gray-200);position:relative;overflow:hidden;transition:transform var(--t) var(--ease),box-shadow var(--t) var(--ease),border-color var(--t) var(--ease);transition-delay:var(--delay,0s)}
@@ -421,20 +336,23 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .service-card p{font-size:.9rem;color:var(--gray-600);line-height:1.65;margin-bottom:20px}
 .service-link{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:500;color:var(--blue);transition:gap var(--t)}
 .service-link:hover{gap:10px}
+.service-img{position:relative;width:100%;height:200px;overflow:hidden;border-radius:12px 12px 0 0}
+.service-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.service-card:hover .service-img img{transform:scale(1.05)}
+.service-img .service-num{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.5);color:#fff;padding:2px 8px;border-radius:6px;font-size:.75rem;font-weight:600}
+.service-body{padding:1.25rem}
 
-/* ── Portfolio ────────────────────────────────────────────────────── */
+/* ── Portfolio ─────────────────────────────────────────── */
 .portfolio-section{background:var(--white)}
 .portfolio-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px;justify-content:center}
 .filter-btn{font-size:.82rem;font-weight:500;padding:8px 18px;border-radius:100px;border:1.5px solid var(--gray-200);color:var(--gray-600);background:var(--white);cursor:pointer;transition:all var(--t);letter-spacing:.03em}
 .filter-btn:hover{border-color:var(--blue);color:var(--blue)}
 .filter-btn.active{background:var(--blue);border-color:var(--blue);color:var(--white)}
-/* PERF: contain layout to prevent full-page reflows */
 .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:260px;gap:16px;contain:layout}
 .portfolio-tall{grid-row:span 2}
 .portfolio-wide{grid-column:span 2}
 .portfolio-item{position:relative;border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;background:var(--gray-100)}
 .portfolio-img-wrap{width:100%;height:100%;overflow:hidden}
-/* PERF: use transform scale instead of width/height for hover */
 .portfolio-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;will-change:transform}
 .portfolio-item:hover .portfolio-img-wrap img{transform:scale(1.06)}
 .portfolio-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,.75) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px;opacity:0;transition:opacity var(--t)}
@@ -447,7 +365,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .btn-dark{background:var(--navy)!important}
 .btn-dark:hover{background:var(--black)!important;box-shadow:0 8px 24px rgba(0,0,0,.25)!important}
 
-/* ── Stats ────────────────────────────────────────────────────────── */
+/* ── Stats ─────────────────────────────────────────────── */
 .stats-bar{background:var(--navy);padding:48px 0}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
 .stat{display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -455,7 +373,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .stat-plus{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.4rem);color:var(--blue-light);font-weight:300;margin-left:2px}
 .stat-label{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-400);font-weight:400}
 
-/* ── About ────────────────────────────────────────────────────────── */
+/* ── About ─────────────────────────────────────────────── */
 .about-section{background:var(--white)}
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:start}
 .about-images{display:flex;flex-direction:column;gap:12px}
@@ -481,7 +399,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .about-feat{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--gray-800);background:var(--gray-100);padding:6px 12px;border-radius:100px}
 .feat-icon{color:var(--blue);font-weight:700}
 
-/* ── Testimonials ─────────────────────────────────────────────────── */
+/* ── Testimonials ──────────────────────────────────────── */
 .testimonials-section{background:var(--off-white)}
 .testimonials-slider{position:relative;overflow:hidden}
 .testimonials-track{display:flex;transition:transform .5s var(--ease)}
@@ -499,7 +417,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .t-dot{width:8px;height:8px;border-radius:50%;background:var(--gray-200);cursor:pointer;transition:background var(--t),transform var(--t);border:none}
 .t-dot.active{background:var(--blue);transform:scale(1.3)}
 
-/* ── Hours ────────────────────────────────────────────────────────── */
+/* ── Hours ─────────────────────────────────────────────── */
 .hours-section{background:var(--white)}
 .hours-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:center}
 .hours-content .section-title,.hours-content .eyebrow{text-align:left}
@@ -515,7 +433,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .hours-image img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
 .hours-image:hover img{transform:scale(1.04)}
 
-/* ── CTA Banner ───────────────────────────────────────────────────── */
+/* ── CTA ───────────────────────────────────────────────── */
 .cta-banner{background:var(--navy);padding:60px 0;position:relative;overflow:hidden}
 .cta-banner::before{content:'';position:absolute;top:-50%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(26,86,219,.2) 0%,transparent 70%);pointer-events:none}
 .cta-inner{display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap}
@@ -524,7 +442,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .btn-white{background:var(--white)!important;color:var(--navy)!important;font-weight:600}
 .btn-white:hover{background:var(--gray-100)!important;box-shadow:0 8px 24px rgba(0,0,0,.25)!important}
 
-/* ── Contact ──────────────────────────────────────────────────────── */
+/* ── Contact ───────────────────────────────────────────── */
 .contact-section{background:var(--off-white)}
 .contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(40px,6vw,72px);align-items:start}
 .contact-info>p{color:var(--gray-600);line-height:1.7;margin-bottom:28px}
@@ -552,7 +470,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .btn-submit:disabled,.btn-submit.loading{opacity:.7;pointer-events:none}
 .btn-submit.success{background:#059669}
 
-/* ── Footer ───────────────────────────────────────────────────────── */
+/* ── Footer ────────────────────────────────────────────── */
 .footer{background:var(--navy);color:var(--white);padding-top:64px}
 .footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:clamp(28px,4vw,56px);padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.08)}
 .footer-logo{font-family:var(--font-display);font-size:1.15rem;font-weight:600;letter-spacing:.1em;margin-bottom:12px}
@@ -571,7 +489,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .footer-legal a{color:rgba(255,255,255,.35);transition:color var(--t)}
 .footer-legal a:hover{color:rgba(255,255,255,.7)}
 
-/* ── Lightbox ─────────────────────────────────────────────────────── */
+/* ── Lightbox ──────────────────────────────────────────── */
 .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:9000;display:none;align-items:center;justify-content:center}
 .lightbox.open{display:flex;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -584,7 +502,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .lb-prev{left:16px}
 .lb-next{right:16px}
 
-/* ── Chat ─────────────────────────────────────────────────────────── */
+/* ── Chat ──────────────────────────────────────────────── */
 .chat-widget{position:fixed;bottom:24px;right:24px;z-index:5000;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
 .chat-toggle-btn{width:56px;height:56px;border-radius:50%;background:var(--blue);color:var(--white);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(26,86,219,.4);transition:transform var(--t),box-shadow var(--t);position:relative}
 .chat-toggle-btn svg{width:24px;height:24px}
@@ -613,16 +531,15 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .chat-input-row button{width:36px;height:36px;border-radius:50%;background:var(--blue);color:var(--white);display:flex;align-items:center;justify-content:center;transition:background var(--t);flex-shrink:0}
 .chat-input-row button:hover{background:var(--blue-dark)}
 
-/* ── Utility ──────────────────────────────────────────────────────── */
+/* ── Utility ───────────────────────────────────────────── */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-/* PERF: reduce-motion support */
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   .marquee-content{animation:none}
   html{scroll-behavior:auto}
 }
 
-/* ── Responsive ───────────────────────────────────────────────────── */
+/* ── Responsive ────────────────────────────────────────── */
 @media(max-width:1080px){
   .portfolio-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:240px}
   .portfolio-wide{grid-column:span 2}
@@ -645,6 +562,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   .portfolio-tall{grid-row:span 1}
   .portfolio-wide{grid-column:span 2}
   .form-row{grid-template-columns:1fr}
+  /* hide desktop mega on mobile */
+  .mega-menu{display:none!important}
 }
 @media(max-width:540px){
   .portfolio-grid{grid-template-columns:1fr;grid-auto-rows:220px}
@@ -661,8 +580,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 </head>
 <body>
 
-
-
   <!-- Navigation -->
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
@@ -673,17 +590,17 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
           <span class="logo-sub">STUDIO</span>
         </div>
       </a>
+
+      <!-- Desktop nav -->
       <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
 
-        <!-- SERVICES MEGA MENU -->
-        <li class="has-mega" id="servicesMenu">
-          <a href="/services" class="nav-link" id="servicesToggle">Services</a>
-
+        <!-- DESKTOP SERVICES MEGA MENU — id="desktopServicesMenu" -->
+        <li class="has-mega" id="desktopServicesMenu">
+          <a href="/services" class="nav-link" id="desktopServicesToggle">Services</a>
           <div class="mega-menu">
             <div class="mega-grid">
-
               <div class="mega-column">
                 <h4>Photography</h4>
                 <a href="/services#photography">Studio Portrait</a>
@@ -691,7 +608,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
                 <a href="/services#events">Event Photography</a>
                 <a href="/services#branding">Commercial Photography</a>
               </div>
-
               <div class="mega-column">
                 <h4>Special Shoots</h4>
                 <a href="/services#photography">Birthday Photoshoot</a>
@@ -701,14 +617,12 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
                 <a href="/services#photography">Family Photoshoot</a>
                 <a href="/services#other-services">Passport Photos</a>
               </div>
-
               <div class="mega-column">
                 <h4>Video</h4>
                 <a href="/services#videography">Video Production</a>
                 <a href="/services#drone">Drone Services</a>
                 <a href="/services#livestream">Live Streaming</a>
               </div>
-
               <div class="mega-column">
                 <h4>Creative</h4>
                 <a href="/services#graphic-design">Graphic Design</a>
@@ -716,12 +630,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
                 <a href="/services#printing">Printing</a>
                 <a href="/services#social-media">Social Media</a>
               </div>
-
             </div>
-
-            <div class="mega-footer">
-              Premium Studio Services • Machakos, Kenya
-            </div>
+            <div class="mega-footer">Premium Studio Services • Machakos, Kenya</div>
           </div>
         </li>
 
@@ -730,26 +640,29 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
         <li><a href="/packages" class="nav-link">Packages</a></li>
         <li><a href="/videos" class="nav-link">Video Production</a></li>
       </ul>
+
       <div class="nav-right">
         <a href="/contact" class="btn-book">Book Now</a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
-          <span></span>
-          <span></span>
-          <span></span>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
         </button>
       </div>
     </div>
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
+
+    <!-- MOBILE MENU — services uses completely different IDs -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
       <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
-        <li class="has-mega" id="servicesMenu">
-          <a href="/services" class="nav-link" id="servicesToggle">Services</a>
 
-          <div class="mega-menu">
+        <!-- MOBILE SERVICES ACCORDION — id="mobileServicesItem" -->
+        <li class="mobile-services-item" id="mobileServicesItem">
+          <div class="mobile-services-toggle" id="mobileServicesToggle" role="button" aria-expanded="false">
+            Services
+            <span class="mobile-services-chevron"></span>
+          </div>
+          <div class="mobile-mega">
             <div class="mega-grid">
-
               <div class="mega-column">
                 <h4>Photography</h4>
                 <a href="/services#photography">Studio Portrait</a>
@@ -757,7 +670,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
                 <a href="/services#events">Event Photography</a>
                 <a href="/services#branding">Commercial Photography</a>
               </div>
-
               <div class="mega-column">
                 <h4>Special Shoots</h4>
                 <a href="/services#photography">Birthday Photoshoot</a>
@@ -767,14 +679,12 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
                 <a href="/services#photography">Family Photoshoot</a>
                 <a href="/services#other-services">Passport Photos</a>
               </div>
-
               <div class="mega-column">
                 <h4>Video</h4>
                 <a href="/services#videography">Video Production</a>
                 <a href="/services#drone">Drone Services</a>
                 <a href="/services#livestream">Live Streaming</a>
               </div>
-
               <div class="mega-column">
                 <h4>Creative</h4>
                 <a href="/services#graphic-design">Graphic Design</a>
@@ -782,15 +692,10 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
                 <a href="/services#printing">Printing</a>
                 <a href="/services#social-media">Social Media</a>
               </div>
-
-            </div>
-
-            <div class="mega-footer">
-              Premium Studio Services • Machakos, Kenya
             </div>
           </div>
         </li>
-        <li><a href="/services">Services</a></li>
+
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
         <li><a href="/packages">Packages</a></li>
@@ -798,7 +703,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
       <a href="/contact" class="btn-book-mobile">Book a Session</a>
       <div class="mobile-info">
         <span>Machakos, Kenya</span>
-        <span>+254 700 000 000</span>
+        <span>+254 710 468 300</span>
       </div>
     </div>
   </nav>
@@ -806,110 +711,99 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   <!-- Hero Slider -->
   <section class="hero" id="hero" aria-label="Featured photography showcase">
     <div class="hero-badge" aria-hidden="true">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
       Machakos, Kenya
     </div>
-
-    <div class="slider-track" id="sliderTrack" role="list" aria-label="Image slides">
-      <div class="slide active" role="listitem" aria-label="Slide 1: Live Streaming Services">
-        <div class="slide-bg" style="background-image:url('/static/uploads/1002946443.webp')" role="img" aria-label="Professional live stream production setup"></div>
-        <div class="slide-overlay" aria-hidden="true"></div>
+    <div class="slider-track" id="sliderTrack">
+      <div class="slide active">
+        <div class="slide-bg" style="background-image:url('/static/uploads/1002946443.webp')"></div>
+        <div class="slide-overlay"></div>
         <div class="slide-content">
           <span class="slide-tag">Live Stream</span>
           <h1 class="slide-title">Seamless<br><em>Live Streaming</em></h1>
-          <p class="slide-desc">Broadcast your event to the world in real-time with crystal-clear quality and zero hassle.</p>
+          <p class="slide-desc">Broadcast your event to the world in real-time with crystal-clear quality.</p>
           <div class="slide-buttons">
             <a href="/portfolio" class="btn-primary">See Live Demos</a>
             <a href="/contact" class="btn-ghost">Stream Your Event</a>
           </div>
         </div>
       </div>
-
-      <div class="slide" role="listitem" aria-label="Slide 2: Portrait Photography">
-        <div class="slide-bg" style="background-image:url('/static/uploads/DSC_65351.webp')" role="img" aria-label="Professional portrait photography"></div>
-        <div class="slide-overlay" aria-hidden="true"></div>
+      <div class="slide">
+        <div class="slide-bg" style="background-image:url('/static/uploads/DSC_65351.webp')"></div>
+        <div class="slide-overlay"></div>
         <div class="slide-content">
           <span class="slide-tag">Portraits</span>
           <h2 class="slide-title">Professional<br><em>Portraits</em></h2>
-          <p class="slide-desc">Express your personality through stunning portraits that showcase your authentic self.</p>
+          <p class="slide-desc">Express your personality through stunning portraits.</p>
           <div class="slide-buttons">
             <a href="/services" class="btn-primary">Book Session</a>
             <a href="/portfolio" class="btn-ghost">View Portfolio</a>
           </div>
         </div>
       </div>
-
-      <div class="slide" role="listitem" aria-label="Slide 3: Event Coverage">
-        <div class="slide-bg" style="background-image:url('/static/uploads/DNS_9739k.webp')" role="img" aria-label="Corporate event photography"></div>
-        <div class="slide-overlay" aria-hidden="true"></div>
+      <div class="slide">
+        <div class="slide-bg" style="background-image:url('/static/uploads/DNS_9739k.webp')"></div>
+        <div class="slide-overlay"></div>
         <div class="slide-content">
           <span class="slide-tag">Events</span>
           <h2 class="slide-title">Corporate &<br><em>Private Events</em></h2>
-          <p class="slide-desc">From conferences to celebrations, we document every important detail with precision.</p>
+          <p class="slide-desc">From conferences to celebrations, every detail captured.</p>
           <div class="slide-buttons">
             <a href="/portfolio" class="btn-primary">See Events</a>
             <a href="/contact" class="btn-ghost">Get Quote</a>
           </div>
         </div>
       </div>
-
-      <div class="slide" role="listitem" aria-label="Slide 5: Maternity & Children's Photography">
-        <div class="slide-bg" style="background-image:url('/static/uploads/DNS_3538.webp')" role="img" aria-label="Pregnant mother with baby clothes on hanging line"></div>
-        <div class="slide-overlay" aria-hidden="true"></div>
+      <div class="slide">
+        <div class="slide-bg" style="background-image:url('/static/uploads/DNS_3538.webp')"></div>
+        <div class="slide-overlay"></div>
         <div class="slide-content">
           <span class="slide-tag">Maternity</span>
           <h2 class="slide-title">Tender<br><em>Beginnings</em></h2>
-          <p class="slide-desc">Celebrate the wait and the wonder — intimate maternity sessions capturing love before it arrives.</p>
+          <p class="slide-desc">Intimate maternity sessions capturing love before it arrives.</p>
           <div class="slide-buttons">
             <a href="/contact" class="btn-primary">Book Maternity Shoot</a>
             <a href="/portfolio" class="btn-ghost">View Moments</a>
           </div>
         </div>
       </div>
-
-      <div class="slide" role="listitem" aria-label="Slide 4: Aerial Drone Services">
-        <div class="slide-bg" style="background-image:url('/static/uploads/drone.webp')" role="img" aria-label="Cinematic aerial drone footage"></div>
-        <div class="slide-overlay" aria-hidden="true"></div>
+      <div class="slide">
+        <div class="slide-bg" style="background-image:url('/static/uploads/drone.webp')"></div>
+        <div class="slide-overlay"></div>
         <div class="slide-content">
           <span class="slide-tag">Drone</span>
           <h2 class="slide-title">Cinematic<br><em>Aerial Footage</em></h2>
-          <p class="slide-desc">Every angle, every sweep, every reveal — capture your story from breathtaking new heights in 4K.</p>
+          <p class="slide-desc">Capture your story from breathtaking heights in 4K.</p>
           <div class="slide-buttons">
             <a href="/contact" class="btn-primary">Get a Quote</a>
             <a href="/portfolio" class="btn-ghost">Watch Showreel</a>
           </div>
         </div>
       </div>
-
-      <div class="slide" role="listitem" aria-label="Slide 5: Fashion & Editorial">
-        <div class="slide-bg" style="background-image:url('/static/uploads/sadfghf.webp')" role="img" aria-label="Fashion editorial photography"></div>
-        <div class="slide-overlay" aria-hidden="true"></div>
+      <div class="slide">
+        <div class="slide-bg" style="background-image:url('/static/uploads/sadfghf.webp')"></div>
+        <div class="slide-overlay"></div>
         <div class="slide-content">
           <span class="slide-tag">Fashion</span>
           <h2 class="slide-title">Fashion &<br><em>Editorial</em></h2>
-          <p class="slide-desc">High-end photography that makes brands and models stand out with bold, creative vision.</p>
+          <p class="slide-desc">Bold, creative vision for brands and models.</p>
           <div class="slide-buttons">
             <a href="/services" class="btn-primary">Learn More</a>
             <a href="/contact" class="btn-ghost">Contact Us</a>
-            <a href="/packages" class="btn-ghost">View Packages</a>
           </div>
         </div>
       </div>
     </div>
-
     <button class="slider-btn slider-prev" id="prevBtn" aria-label="Previous slide">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <button class="slider-btn slider-next" id="nextBtn" aria-label="Next slide">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>
     </button>
-
-    <div class="slider-dots" id="sliderDots" role="tablist" aria-label="Slide navigation"></div>
-
-    <div class="slide-counter" id="slideCounter" aria-live="polite" aria-atomic="true">
-      <span class="current">01</span><span class="sep" aria-hidden="true">/</span><span class="total">05</span>
+    <div class="slider-dots" id="sliderDots"></div>
+    <div class="slide-counter" id="slideCounter">
+      <span class="current">01</span><span>/</span><span class="total">06</span>
     </div>
-
     <div class="hero-scroll-hint" aria-hidden="true">
       <div class="scroll-line"></div>
       <span>Scroll</span>
@@ -933,168 +827,126 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   </div>
 
   <!-- Services Section -->
-  <section class="section services-section" id="services" aria-labelledby="services-heading">
+  <section class="section services-section" id="services">
     <div class="container">
       <div class="section-header reveal">
         <span class="eyebrow">What We Offer</span>
-        <h2 class="section-title" id="services-heading">Our <em>Services</em></h2>
-        <p class="section-sub">At Denspark Studio, we offer a complete range of creative services designed to capture moments, build brands, and deliver high-quality visual content tailored to every client.</p>
+        <h2 class="section-title">Our <em>Services</em></h2>
+        <p class="section-sub">A complete range of creative services designed to capture moments, build brands, and deliver high-quality visual content.</p>
       </div>
       <div class="services-grid">
         <article class="service-card reveal" style="--delay:0s">
-          <div class="service-img">
-            <img src="static/uploads/portfolio/DNS_5726.jpg" alt="Photography" loading="lazy">
-            <div class="service-num" aria-hidden="true">01</div>
-          </div>
+          <div class="service-img"><img src="static/uploads/portfolio/DNS_5726.jpg" alt="Photography" loading="lazy"><div class="service-num">01</div></div>
           <div class="service-body">
-            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>
             <h3>Photography</h3>
-            <p>Professional photography for individuals and businesses. Studio and outdoor sessions including portraits, events, weddings, corporate headshots, and lifestyle shoots with expert posing and styling guidance.</p>
-            <a href="/services" class="service-link" aria-label="Learn more about Photography services">Learn More <span aria-hidden="true">→</span></a>
+            <p>Professional photography for individuals and businesses. Studio and outdoor sessions with expert posing and styling guidance.</p>
+            <a href="/services" class="service-link">Learn More →</a>
           </div>
         </article>
-
         <article class="service-card reveal" style="--delay:0.1s">
-          <div class="service-img">
-            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80" alt="Videography" loading="lazy">
-            <div class="service-num" aria-hidden="true">02</div>
-          </div>
+          <div class="service-img"><img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&q=80" alt="Videography" loading="lazy"><div class="service-num">02</div></div>
           <div class="service-body">
-            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
             <h3>Videography</h3>
-            <p>High-quality video production for weddings, birthdays, corporate events and promotional content. Smooth editing, professional color grading, and cinematic sound design included.</p>
-            <a href="/services" class="service-link" aria-label="Learn more about Videography services">Learn More <span aria-hidden="true">→</span></a>
+            <p>High-quality video production with smooth editing, color grading, and cinematic sound design.</p>
+            <a href="/services" class="service-link">Learn More →</a>
           </div>
         </article>
-
         <article class="service-card reveal" style="--delay:0.2s">
-          <div class="service-img">
-            <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400&q=80" alt="Graphic Design" loading="lazy">
-            <div class="service-num" aria-hidden="true">03</div>
-          </div>
+          <div class="service-img"><img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400&q=80" alt="Graphic Design" loading="lazy"><div class="service-num">03</div></div>
           <div class="service-body">
-            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
             <h3>Graphic Design</h3>
-            <p>Visually compelling designs for your brand — posters, flyers, banners, business cards, logos, and social media content crafted to match your unique brand identity.</p>
-            <a href="/services" class="service-link" aria-label="Learn more about Graphic Design services">Learn More <span aria-hidden="true">→</span></a>
+            <p>Logos, posters, flyers, business cards, and social media content crafted to match your brand.</p>
+            <a href="/services" class="service-link">Learn More →</a>
           </div>
         </article>
-
         <article class="service-card reveal" style="--delay:0.3s">
-          <div class="service-img">
-            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&q=80" alt="Branding" loading="lazy">
-            <div class="service-num" aria-hidden="true">04</div>
-          </div>
+          <div class="service-img"><img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&q=80" alt="Branding" loading="lazy"><div class="service-num">04</div></div>
           <div class="service-body">
-            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
             <h3>Branding</h3>
-            <p>Build a strong, consistent visual identity. Logo creation, brand color palettes, typography systems, and complete brand guidelines to make you stand out across all platforms.</p>
-            <a href="/services" class="service-link" aria-label="Learn more about Branding services">Learn More <span aria-hidden="true">→</span></a>
+            <p>Logo creation, color palettes, typography systems, and complete brand guidelines.</p>
+            <a href="/services" class="service-link">Learn More →</a>
           </div>
         </article>
-
         <article class="service-card reveal" style="--delay:0.4s">
-          <div class="service-img">
-            <img src="https://images.unsplash.com/photo-1585079542156-2755d9c8a094?w=400&q=80" alt="Printing" loading="lazy">
-            <div class="service-num" aria-hidden="true">05</div>
-          </div>
+          <div class="service-img"><img src="https://images.unsplash.com/photo-1585079542156-2755d9c8a094?w=400&q=80" alt="Printing" loading="lazy"><div class="service-num">05</div></div>
           <div class="service-body">
-            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg></div>
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg></div>
             <h3>Printing</h3>
-            <p>Premium printing for all your visual needs — photo prints, frames, albums, photobooks, banners, branded merchandise, and custom items with a professional finish.</p>
-            <a href="/services" class="service-link" aria-label="Learn more about Printing services">Learn More <span aria-hidden="true">→</span></a>
+            <p>Photo prints, frames, albums, banners, branded merchandise with premium finish.</p>
+            <a href="/services" class="service-link">Learn More →</a>
           </div>
         </article>
-
         <article class="service-card reveal" style="--delay:0.5s">
-          <div class="service-img">
-            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&q=80" alt="Event Coverage" loading="lazy">
-            <div class="service-num" aria-hidden="true">06</div>
-          </div>
+          <div class="service-img"><img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&q=80" alt="Event Coverage" loading="lazy"><div class="service-num">06</div></div>
           <div class="service-body">
-            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
             <h3>Event Coverage</h3>
-            <p>Complete photo and video coverage of weddings, graduations, birthdays, and corporate events — capturing every highlight and natural moment with care and precision.</p>
-            <a href="/services" class="service-link" aria-label="Learn more about Event Coverage services">Learn More <span aria-hidden="true">→</span></a>
+            <p>Complete photo and video coverage of weddings, graduations, birthdays, and corporate events.</p>
+            <a href="/services" class="service-link">Learn More →</a>
           </div>
         </article>
-
         <article class="service-card reveal" style="--delay:0.6s">
-          <div class="service-img">
-            <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&q=80" alt="Social Media Management" loading="lazy">
-            <div class="service-num" aria-hidden="true">07</div>
-          </div>
+          <div class="service-img"><img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400&q=80" alt="Social Media" loading="lazy"><div class="service-num">07</div></div>
           <div class="service-body">
-            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
             <h3>Social Media Management</h3>
-            <p>Grow your online presence with creative content strategy, page management, posting schedules, and engagement tactics for a consistent, high-quality brand image.</p>
-            <a href="/services" class="service-link" aria-label="Learn more about Social Media Management services">Learn More <span aria-hidden="true">→</span></a>
+            <p>Creative content strategy, page management, and engagement tactics for consistent brand growth.</p>
+            <a href="/services" class="service-link">Learn More →</a>
           </div>
         </article>
-
         <article class="service-card reveal" style="--delay:0.7s">
-          <div class="service-img">
-            <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=400&q=80" alt="Drone Services" loading="lazy">
-            <div class="service-num" aria-hidden="true">08</div>
-          </div>
+          <div class="service-img"><img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=400&q=80" alt="Drone Services" loading="lazy"><div class="service-num">08</div></div>
           <div class="service-body">
-            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 7h.01"/><path d="M3.4 18a2 2 0 0 0 1.4.6h14.4a2 2 0 0 0 1.4-.6"/><path d="M17 7v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7"/><circle cx="12" cy="13" r="3"/></svg></div>
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 7h.01"/><path d="M3.4 18a2 2 0 0 0 1.4.6h14.4a2 2 0 0 0 1.4-.6"/><path d="M17 7v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7"/><circle cx="12" cy="13" r="3"/></svg></div>
             <h3>Drone Services</h3>
-            <p>Stunning aerial photography and 4K videography for real estate, weddings, and events. Certified drone pilots delivering breathtaking perspectives from above.</p>
-            <a href="/services" class="service-link" aria-label="Learn more about Drone Services">Learn More <span aria-hidden="true">→</span></a>
+            <p>4K aerial photography and videography by certified pilots for real estate, weddings, and events.</p>
+            <a href="/services" class="service-link">Learn More →</a>
           </div>
         </article>
-
         <article class="service-card reveal" style="--delay:0.8s">
-          <div class="service-img">
-            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Live Streaming" loading="lazy">
-            <div class="service-num" aria-hidden="true">09</div>
-          </div>
+          <div class="service-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Live Streaming" loading="lazy"><div class="service-num">09</div></div>
           <div class="service-body">
-            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
             <h3>Live Streaming</h3>
-            <p>Multi-camera HD live streaming for weddings, conferences, and events. Broadcast to YouTube, Facebook, or private links so remote guests never miss a moment.</p>
-            <a href="/services" class="service-link" aria-label="Learn more about Live Streaming services">Learn More <span aria-hidden="true">→</span></a>
+            <p>Multi-camera HD live streaming for weddings, conferences, and events on YouTube, Facebook, or custom links.</p>
+            <a href="/services" class="service-link">Learn More →</a>
           </div>
         </article>
-
         <article class="service-card reveal" style="--delay:0.9s">
-          <div class="service-img">
-            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&q=80" alt="Other Services" loading="lazy">
-            <div class="service-num" aria-hidden="true">10</div>
-          </div>
+          <div class="service-img"><img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&q=80" alt="Other Services" loading="lazy"><div class="service-num">10</div></div>
           <div class="service-body">
-            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+            <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
             <h3>Other Services</h3>
-            <p>Photo &amp; video editing, retouching, content creation for marketing campaigns, and creative direction. Ask us about your custom project needs.</p>
-            <a href="/services" class="service-link" aria-label="Learn more about other services">Learn More <span aria-hidden="true">→</span></a>
+            <p>Photo &amp; video editing, retouching, content creation for campaigns, and creative direction.</p>
+            <a href="/services" class="service-link">Learn More →</a>
+          </div>
         </article>
       </div>
     </div>
   </section>
 
   <!-- Portfolio Section -->
-  <section class="section portfolio-section" id="portfolio" aria-labelledby="portfolio-heading">
+  <section class="section portfolio-section" id="portfolio">
     <div class="container">
       <div class="section-header reveal">
         <span class="eyebrow">Our Work</span>
-        <h2 class="section-title" id="portfolio-heading">Featured <em>Portfolio</em></h2>
+        <h2 class="section-title">Featured <em>Portfolio</em></h2>
         <p class="section-sub">A glimpse into our creative journey. Every image tells a unique story.</p>
       </div>
-      <div class="portfolio-filters reveal" role="group" aria-label="Filter portfolio by category">
+      <div class="portfolio-filters reveal">
         <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
         <button class="filter-btn" data-filter="portraits" aria-pressed="false">Portraits</button>
         <button class="filter-btn" data-filter="events" aria-pressed="false">Events</button>
         <button class="filter-btn" data-filter="weddings" aria-pressed="false">Weddings</button>
         <button class="filter-btn" data-filter="commercial" aria-pressed="false">Commercial</button>
       </div>
-
-      <div class="portfolio-grid" id="homePortfolioGrid" aria-live="polite" aria-label="Portfolio gallery">
-        <div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF;font-size:.9rem" role="status">
-          Loading portfolio…
-        </div>
+      <div class="portfolio-grid" id="homePortfolioGrid">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF;font-size:.9rem">Loading portfolio…</div>
       </div>
-
       <div class="section-cta reveal">
         <a href="/portfolio" class="btn-primary btn-dark">View All Work →</a>
       </div>
@@ -1102,51 +954,48 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   </section>
 
   <!-- Stats Bar -->
-  <div class="stats-bar" aria-label="Studio statistics">
+  <div class="stats-bar">
     <div class="container">
       <div class="stats-grid">
-        <div class="stat reveal"><span class="stat-num" data-target="10">0</span><span class="stat-plus" aria-hidden="true">+</span><span class="stat-label">Years Experience</span></div>
-        <div class="stat reveal"><span class="stat-num" data-target="1200">0</span><span class="stat-plus" aria-hidden="true">+</span><span class="stat-label">Happy Clients</span></div>
-        <div class="stat reveal"><span class="stat-num" data-target="1000">0</span><span class="stat-plus" aria-hidden="true">+</span><span class="stat-label">Projects Done</span></div>
-        <div class="stat reveal"><span class="stat-num" data-target="50">0</span><span class="stat-plus" aria-hidden="true">+</span><span class="stat-label">Awards Won</span></div>
+        <div class="stat reveal"><span class="stat-num" data-target="10">0</span><span class="stat-plus">+</span><span class="stat-label">Years Experience</span></div>
+        <div class="stat reveal"><span class="stat-num" data-target="1200">0</span><span class="stat-plus">+</span><span class="stat-label">Happy Clients</span></div>
+        <div class="stat reveal"><span class="stat-num" data-target="1000">0</span><span class="stat-plus">+</span><span class="stat-label">Projects Done</span></div>
+        <div class="stat reveal"><span class="stat-num" data-target="50">0</span><span class="stat-plus">+</span><span class="stat-label">Awards Won</span></div>
       </div>
     </div>
   </div>
 
   <!-- About Section -->
-  <section class="section about-section" id="about" aria-labelledby="about-heading">
+  <section class="section about-section" id="about">
     <div class="container">
       <div class="about-grid">
         <div class="about-images reveal">
           <div class="about-img-main">
-            <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80&auto=format&fit=crop"
-                 alt="Denspark Studio photography workspace" loading="lazy" width="800" height="600">
+            <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80" alt="Denspark Studio workspace" loading="lazy">
           </div>
           <div class="about-img-grid">
-            <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80&auto=format&fit=crop"
-                 alt="Professional camera equipment" loading="lazy" width="400" height="300">
-            <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=400&q=80&auto=format&fit=crop"
-                 alt="Photographer at work during session" loading="lazy" width="400" height="300">
+            <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" alt="Camera equipment" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=400&q=80" alt="Photographer at work" loading="lazy">
           </div>
         </div>
         <div class="about-content reveal">
           <span class="eyebrow">About Us</span>
-          <h2 class="section-title" id="about-heading">Creativity Meets <em>Excellence</em></h2>
-          <p class="about-intro">Denspark Studio is Machakos's premier photography and creative media studio. We're passionate about capturing life's precious moments and transforming them into visual masterpieces.</p>
+          <h2 class="section-title">Creativity Meets <em>Excellence</em></h2>
+          <p class="about-intro">Denspark Studio is Machakos's premier photography and creative media studio — passionate about capturing life's precious moments and transforming them into visual masterpieces.</p>
           <div class="about-points">
-            <div class="about-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div><h3>Creative Direction, Not Just Shooting</h3><p>Every shoot is planned and guided — from poses to styling and concepts — so clients don't feel lost in front of the camera. We create complete visual stories.</p></div></div>
-            <div class="about-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><div><h3>All-in-One Visual Solution</h3><p>Photography, videography, drone services, editing &amp; printing — everything in one place. Easier, faster, and more consistent for clients.</p></div></div>
-            <div class="about-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M23 12h-6m-6 0H1"/></svg></div><div><h3>Modern, High-End Editing</h3><p>Clean, sharp, and cinematic editing — premium-quality results that stand out on social media and in print, without the over-edited look.</p></div></div>
+            <div class="about-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div><h4>Creative Direction, Not Just Shooting</h4><p>Every shoot is planned and guided — from poses to styling — so clients don't feel lost in front of the camera.</p></div></div>
+            <div class="about-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><div><h4>All-in-One Visual Solution</h4><p>Photography, videography, drone, editing &amp; printing — everything in one place for consistent results.</p></div></div>
+            <div class="about-point"><div class="point-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M23 12h-6m-6 0H1"/></svg></div><div><h4>Modern, High-End Editing</h4><p>Clean, sharp, and cinematic results that stand out on social media and in print.</p></div></div>
           </div>
           <div class="about-footer-note">
             <strong>Local Understanding with Professional Standards</strong>
-            <p>We understand the Machakos market while delivering work that meets modern, international visual standards.</p>
+            <p>We understand the Machakos market while delivering work that meets modern international visual standards.</p>
           </div>
           <div class="about-features">
-            <div class="about-feat"><span class="feat-icon" aria-hidden="true">✓</span><span>Professional Equipment</span></div>
-            <div class="about-feat"><span class="feat-icon" aria-hidden="true">✓</span><span>Skilled Photographers</span></div>
-            <div class="about-feat"><span class="feat-icon" aria-hidden="true">✓</span><span>Fast Turnaround</span></div>
-            <div class="about-feat"><span class="feat-icon" aria-hidden="true">✓</span><span>Affordable Pricing</span></div>
+            <div class="about-feat"><span class="feat-icon">✓</span><span>Professional Equipment</span></div>
+            <div class="about-feat"><span class="feat-icon">✓</span><span>Skilled Photographers</span></div>
+            <div class="about-feat"><span class="feat-icon">✓</span><span>Fast Turnaround</span></div>
+            <div class="about-feat"><span class="feat-icon">✓</span><span>Affordable Pricing</span></div>
           </div>
           <a href="/about" class="btn-primary">Learn More About Us →</a>
         </div>
@@ -1155,74 +1004,73 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   </section>
 
   <!-- Testimonials -->
-  <section class="section testimonials-section" aria-labelledby="testimonials-heading">
+  <section class="section testimonials-section">
     <div class="container">
       <div class="section-header reveal">
         <span class="eyebrow">Testimonials</span>
-        <h2 class="section-title" id="testimonials-heading">What Our <em>Clients Say</em></h2>
+        <h2 class="section-title">What Our <em>Clients Say</em></h2>
       </div>
-      <div class="testimonials-slider reveal" aria-roledescription="carousel" aria-label="Client testimonials">
+      <div class="testimonials-slider reveal">
         <div class="testimonials-track" id="testimonialsTrack">
-          <div class="testimonial-card" role="group" aria-roledescription="slide" aria-label="Testimonial 1 of 3">
-            <div class="quote-mark" aria-hidden="true">"</div>
-            <p>Denspark Studio captured our wedding beautifully! Every photo tells a story and we couldn't be happier with the results. Highly recommended for anyone looking for quality photography.</p>
+          <div class="testimonial-card">
+            <div class="quote-mark">"</div>
+            <p>Denspark Studio captured our wedding beautifully! Every photo tells a story and we couldn't be happier.</p>
             <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80&auto=format&fit=crop" alt="Sarah Muthoni" loading="lazy" width="50" height="50">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Sarah Muthoni" loading="lazy">
               <div><strong>Sarah Muthoni</strong><span>Wedding Client</span></div>
             </div>
           </div>
-          <div class="testimonial-card" role="group" aria-roledescription="slide" aria-label="Testimonial 2 of 3">
-            <div class="quote-mark" aria-hidden="true">"</div>
-            <p>Professional, creative, and punctual! They covered our corporate event flawlessly. The team understood exactly what we needed and delivered beyond expectations.</p>
+          <div class="testimonial-card">
+            <div class="quote-mark">"</div>
+            <p>Professional, creative, and punctual! They covered our corporate event flawlessly and delivered beyond expectations.</p>
             <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80&auto=format&fit=crop" alt="James Odhiambo" loading="lazy" width="50" height="50">
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="James Odhiambo" loading="lazy">
               <div><strong>James Odhiambo</strong><span>Corporate Client</span></div>
             </div>
           </div>
-          <div class="testimonial-card" role="group" aria-roledescription="slide" aria-label="Testimonial 3 of 3">
-            <div class="quote-mark" aria-hidden="true">"</div>
-            <p>The portrait session was amazing! They made me feel comfortable and the photos turned out stunning. Perfect for my professional profile and personal memories.</p>
+          <div class="testimonial-card">
+            <div class="quote-mark">"</div>
+            <p>The portrait session was amazing! They made me feel comfortable and the photos turned out stunning.</p>
             <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80&auto=format&fit=crop" alt="Grace Wanjiku" loading="lazy" width="50" height="50">
+              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Grace Wanjiku" loading="lazy">
               <div><strong>Grace Wanjiku</strong><span>Portrait Client</span></div>
             </div>
           </div>
         </div>
         <div class="testimonials-controls">
-          <button class="t-btn t-prev" id="tPrev" aria-label="Previous testimonial"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-          <div class="t-dots" id="tDots" role="tablist" aria-label="Testimonial navigation"></div>
-          <button class="t-btn t-next" id="tNext" aria-label="Next testimonial"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+          <button class="t-btn" id="tPrev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+          <div class="t-dots" id="tDots"></div>
+          <button class="t-btn" id="tNext"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Hours Section -->
-  <section class="section hours-section" id="hours" aria-labelledby="hours-heading">
+  <!-- Hours -->
+  <section class="section hours-section" id="hours">
     <div class="container">
       <div class="hours-grid">
         <div class="hours-content reveal">
           <span class="eyebrow">Visit Us</span>
-          <h2 class="section-title" id="hours-heading">Business <em>Hours</em></h2>
-          <p>We're open seven days a week to serve you. Walk-ins are welcome, but we recommend booking an appointment for studio sessions to guarantee your slot.</p>
+          <h2 class="section-title">Business <em>Hours</em></h2>
+          <p>Open seven days a week. Walk-ins welcome, but we recommend booking for studio sessions.</p>
           <div class="hours-list">
             <div class="hours-item"><span>Monday – Thursday</span><span>8:30 AM – 8:00 PM</span></div>
             <div class="hours-item"><span>Friday</span><span>9:00 AM – 8:00 PM</span></div>
             <div class="hours-item"><span>Saturday</span><span>8:30 AM – 8:00 PM</span></div>
             <div class="hours-item"><span>Sunday</span><span>8:00 AM – 8:00 PM</span></div>
           </div>
-          <div class="open-badge"><span class="open-dot" aria-hidden="true"></span>Open Today</div>
+          <div class="open-badge"><span class="open-dot"></span>Open Today</div>
         </div>
         <div class="hours-image reveal">
-          <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80&auto=format&fit=crop"
-               alt="Denspark Studio interior" loading="lazy" width="800" height="600">
+          <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80" alt="Denspark Studio interior" loading="lazy">
         </div>
       </div>
     </div>
   </section>
 
   <!-- CTA Banner -->
-  <section class="cta-banner" aria-label="Book a session call to action">
+  <section class="cta-banner">
     <div class="container">
       <div class="cta-inner reveal">
         <div>
@@ -1234,42 +1082,42 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section class="section contact-section" id="contact" aria-labelledby="contact-heading">
+  <!-- Contact -->
+  <section class="section contact-section" id="contact">
     <div class="container">
       <div class="section-header reveal">
         <span class="eyebrow">Contact</span>
-        <h2 class="section-title" id="contact-heading">Let's <em>Connect</em></h2>
+        <h2 class="section-title">Let's <em>Connect</em></h2>
       </div>
       <div class="contact-grid">
         <div class="contact-info reveal">
-          <p>Have questions or ready to book? Reach out to us through any of these channels and we'll get back to you quickly.</p>
+          <p>Have questions or ready to book? Reach out and we'll get back to you quickly.</p>
           <div class="contact-details">
             <div class="contact-item">
-              <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+              <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
               <div><strong>Location</strong><p>Machakos Town, Kenya</p></div>
             </div>
             <div class="contact-item">
-              <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+              <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
               <div><strong>Phone</strong><a href="tel:+254710468300">+254 710 468 300</a></div>
             </div>
             <div class="contact-item">
-              <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+              <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
               <div><strong>Email</strong><a href="mailto:densparkstudio@gmail.com">densparkstudio@gmail.com</a></div>
             </div>
           </div>
-          <div class="social-links" aria-label="Social media links">
-            <a href="https://www.facebook.com/share/1BK8dk8VsJ/" class="social-link" aria-label="Denspark Studio on Facebook" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-            <a href="https://www.instagram.com/densparkstudio?igsh=MTRqdXpjd241dzMzMg==" class="social-link" aria-label="Denspark Studio on Instagram" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-            <a href="https://youtube.com/@densparkfilmsmachakos6509?si=b-HHFd-jDE5Z76mQ" class="social-link" aria-label="Denspark Studio on YouTube" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-            <a href="https://www.tiktok.com/@densparkstudio300?_r=1&_t=ZS-95khoiW18dB" class="social-link" aria-label="Denspark Studio on TikTok" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/></svg></a>
+          <div class="social-links">
+            <a href="https://www.facebook.com/share/1BK8dk8VsJ/" class="social-link" aria-label="Facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+            <a href="https://www.instagram.com/densparkstudio" class="social-link" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            <a href="https://youtube.com/@densparkfilmsmachakos6509" class="social-link" aria-label="YouTube" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+            <a href="https://www.tiktok.com/@densparkstudio300" class="social-link" aria-label="TikTok" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-6.13 6.3 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/></svg></a>
           </div>
         </div>
         <div class="contact-form-wrap reveal">
-          <form class="contact-form" id="contactForm" novalidate aria-label="Contact form">
+          <form class="contact-form" id="contactForm" novalidate>
             <div class="form-row">
               <div class="form-group">
-                <label for="name">Full Name <span aria-hidden="true">*</span></label>
+                <label for="name">Full Name *</label>
                 <input type="text" id="name" name="name" placeholder="Your name" required autocomplete="name">
               </div>
               <div class="form-group">
@@ -1278,37 +1126,34 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
               </div>
             </div>
             <div class="form-group">
-              <label for="email">Email Address <span aria-hidden="true">*</span></label>
+              <label for="email">Email Address *</label>
               <input type="email" id="email" name="email" placeholder="Your email address" required autocomplete="email">
             </div>
             <div class="form-group">
               <label for="service">Service Interested In</label>
-              <select id="service" name="service" required>
+              <select id="service" name="service">
                 <option value="">Select a service</option>
-
                 <option value="studio-portrait">Studio Portrait</option>
                 <option value="wedding">Wedding Coverage</option>
                 <option value="event">Event Photography</option>
                 <option value="video">Video Production</option>
                 <option value="commercial">Commercial Photography</option>
-
                 <option value="birthday">Birthday Photoshoot</option>
                 <option value="maternity">Maternity Photoshoot</option>
                 <option value="graduation">Graduation Photoshoot</option>
                 <option value="passport">Passport Photos</option>
                 <option value="kids">Kids Photoshoot</option>
                 <option value="family">Family Photoshoot</option>
-
                 <option value="other">Other</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="message">Message <span aria-hidden="true">*</span></label>
-              <textarea id="message" name="message" rows="5" placeholder="Tell us about your project or inquiry…" required></textarea>
+              <label for="message">Message *</label>
+              <textarea id="message" name="message" rows="5" placeholder="Tell us about your project…" required></textarea>
             </div>
             <button type="submit" class="btn-submit">
               Send Message
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </button>
           </form>
         </div>
@@ -1317,17 +1162,17 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   </section>
 
   <!-- Footer -->
-  <footer class="footer" aria-label="Site footer">
+  <footer class="footer">
     <div class="container">
       <div class="footer-top">
         <div class="footer-brand">
           <div class="footer-logo">DENSPARK PHOTO <span>STUDIO</span></div>
-          <p>Professional photography and creative media services in Machakos, Kenya. Capturing moments that last forever.</p>
-          <div class="footer-social" aria-label="Social media">
-            <a href="https://www.facebook.com/share/1BK8dk8VsJ/" aria-label="Facebook" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-            <a href="https://www.instagram.com/densparkstudio?igsh=MTRqdXpjd241dzMzMg==" aria-label="Instagram" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-            <a href="https://youtube.com/@densparkfilmsmachakos6509?si=b-HHFd-jDE5Z76mQ" aria-label="YouTube" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-            <a href="https://www.tiktok.com/@densparkstudio300?_r=1&_t=ZS-95khoiW18dB" aria-label="TikTok" rel="noopener noreferrer" target="_blank"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/></svg></a>
+          <p>Professional photography and creative media services in Machakos, Kenya.</p>
+          <div class="footer-social">
+            <a href="https://www.facebook.com/share/1BK8dk8VsJ/" aria-label="Facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+            <a href="https://www.instagram.com/densparkstudio" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            <a href="https://youtube.com/@densparkfilmsmachakos6509" aria-label="YouTube" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+            <a href="https://www.tiktok.com/@densparkstudio300" aria-label="TikTok" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-6.13 6.3 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.2 8.2 0 0 0 4.78 1.52V6.82a4.85 4.85 0 0 1-1.01-.13z"/></svg></a>
           </div>
         </div>
         <div class="footer-col">
@@ -1372,54 +1217,48 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   </footer>
 
   <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image lightbox">
-    <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox">×</button>
-    <div class="lightbox-img-wrap">
-      <img src="" alt="" id="lightboxImg">
-    </div>
-    <button class="lightbox-nav lb-prev" id="lbPrev" aria-label="Previous image"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-    <button class="lightbox-nav lb-next" id="lbNext" aria-label="Next image"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">×</button>
+    <div class="lightbox-img-wrap"><img src="" alt="" id="lightboxImg"></div>
+    <button class="lightbox-nav lb-prev" id="lbPrev" aria-label="Previous"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <button class="lightbox-nav lb-next" id="lbNext" aria-label="Next"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
   </div>
 
   <!-- Chat Widget -->
-  <div class="chat-widget" id="chatWidget" aria-label="Live chat">
-    <div class="chat-window" id="chatWindow" role="dialog" aria-label="Chat with Denspark Studio">
+  <div class="chat-widget" id="chatWidget">
+    <div class="chat-window" id="chatWindow" role="dialog">
       <div class="chat-header">
         <div class="chat-header-info">
-          <div class="chat-avatar" aria-hidden="true">DS</div>
-          <div>
-            <h4>Denspark Studio</h4>
-            <span class="chat-status"><span class="online-dot" aria-hidden="true"></span>Online</span>
-          </div>
+          <div class="chat-avatar">DS</div>
+          <div><h4>Denspark Studio</h4><span class="chat-status"><span class="online-dot"></span>Online</span></div>
         </div>
-        <button class="chat-close-btn" id="chatClose" aria-label="Close chat">×</button>
+        <button class="chat-close-btn" id="chatClose">×</button>
       </div>
-      <div class="chat-messages" id="chatMessages" aria-live="polite">
+      <div class="chat-messages" id="chatMessages">
         <div class="chat-msg received">Hi there! 👋 Welcome to Denspark Studio. How can we help you today?</div>
       </div>
       <div class="chat-input-row">
-        <input type="text" id="chatInput" placeholder="Type a message…" aria-label="Chat message input">
-        <button id="chatSend" aria-label="Send message"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+        <input type="text" id="chatInput" placeholder="Type a message…">
+        <button id="chatSend"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
       </div>
     </div>
-    <button class="chat-toggle-btn" id="chatToggle" aria-label="Open chat with Denspark Studio">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <span class="chat-badge" aria-label="1 new message">1</span>
+    <button class="chat-toggle-btn" id="chatToggle" aria-label="Open chat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="chat-badge">1</span>
     </button>
   </div>
 
-  <!-- ══ ALL JS — Deferred, single block ══════════════════════════════ -->
   <script>
 (function () {
   'use strict';
 
-  /* ── Preloader ────────────────────────────────────────────────────── */
+  /* ── Preloader ─────────────────────────────────────────── */
   const preloader = document.getElementById('preloader');
   if (preloader) {
     window.addEventListener('load', () => setTimeout(() => preloader.classList.add('hidden'), 1600));
   }
 
-  /* ── Navbar ───────────────────────────────────────────────────────── */
+  /* ── Navbar scroll ─────────────────────────────────────── */
   const navbar = document.getElementById('navbar');
   let ticking = false;
   window.addEventListener('scroll', () => {
@@ -1432,7 +1271,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     }
   }, { passive: true });
 
-  /* ── Mobile Menu ──────────────────────────────────────────────────── */
+  /* ── Mobile Menu toggle ────────────────────────────────── */
   const menuToggle = document.getElementById('menuToggle');
   const mobileMenu = document.getElementById('mobileMenu');
   if (menuToggle && mobileMenu) {
@@ -1452,28 +1291,58 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     });
   }
 
-  
-  /* ── Hero Slider ──────────────────────────────────────────────────── */
-  const slides    = document.querySelectorAll('.slide');
-  const dotsWrap  = document.getElementById('sliderDots');
-  const prevBtn   = document.getElementById('prevBtn');
-  const nextBtn   = document.getElementById('nextBtn');
-  const curEl     = document.querySelector('.slide-counter .current');
-  let cur = 0, timer = null;
+  /* ── Desktop Services mega menu (click to open/close) ─── */
+  const desktopServicesMenu   = document.getElementById('desktopServicesMenu');
+  const desktopServicesToggle = document.getElementById('desktopServicesToggle');
+  if (desktopServicesMenu && desktopServicesToggle) {
+    desktopServicesToggle.addEventListener('click', (e) => {
+      // Only intercept on desktop; on mobile the element is hidden anyway
+      if (window.innerWidth > 768) {
+        e.preventDefault();
+        desktopServicesMenu.classList.toggle('open');
+      }
+    });
+    // Close when clicking anywhere outside
+    document.addEventListener('click', (e) => {
+      if (!desktopServicesMenu.contains(e.target)) {
+        desktopServicesMenu.classList.remove('open');
+      }
+    });
+    // Close on scroll
+    window.addEventListener('scroll', () => desktopServicesMenu.classList.remove('open'), { passive: true });
+  }
+
+  /* ── Mobile Services accordion ────────────────────────── */
+  const mobileServicesItem   = document.getElementById('mobileServicesItem');
+  const mobileServicesToggle = document.getElementById('mobileServicesToggle');
+  if (mobileServicesItem && mobileServicesToggle) {
+    mobileServicesToggle.addEventListener('click', () => {
+      const open = mobileServicesItem.classList.toggle('open');
+      mobileServicesToggle.setAttribute('aria-expanded', String(open));
+    });
+  }
+
+  /* ── Hero Slider ───────────────────────────────────────── */
+  const slides   = document.querySelectorAll('.slide');
+  const dotsWrap = document.getElementById('sliderDots');
+  const prevBtn  = document.getElementById('prevBtn');
+  const nextBtn  = document.getElementById('nextBtn');
+  const curEl    = document.querySelector('.slide-counter .current');
+  let cur = 0, sliderTimer = null;
   const DELAY = 5500;
 
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
   function goTo(idx) {
     slides[cur].classList.remove('active');
-    dotsWrap && dotsWrap.querySelectorAll('.slider-dot')[cur].classList.remove('active');
+    if (dotsWrap) dotsWrap.querySelectorAll('.slider-dot')[cur].classList.remove('active');
     cur = (idx + slides.length) % slides.length;
     slides[cur].classList.add('active');
-    dotsWrap && dotsWrap.querySelectorAll('.slider-dot')[cur].classList.add('active');
+    if (dotsWrap) dotsWrap.querySelectorAll('.slider-dot')[cur].classList.add('active');
     if (curEl) curEl.textContent = pad(cur + 1);
   }
 
-  function autoPlay() { clearInterval(timer); timer = setInterval(() => goTo(cur + 1), DELAY); }
+  function autoPlay() { clearInterval(sliderTimer); sliderTimer = setInterval(() => goTo(cur + 1), DELAY); }
 
   if (slides.length) {
     const totEl = document.querySelector('.slide-counter .total');
@@ -1482,7 +1351,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
       slides.forEach((_, i) => {
         const d = document.createElement('button');
         d.className = 'slider-dot' + (i === 0 ? ' active' : '');
-        d.setAttribute('role', 'tab');
         d.setAttribute('aria-label', 'Go to slide ' + (i + 1));
         d.addEventListener('click', () => { goTo(i); autoPlay(); });
         dotsWrap.appendChild(d);
@@ -1490,7 +1358,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     }
     prevBtn && prevBtn.addEventListener('click', () => { goTo(cur - 1); autoPlay(); });
     nextBtn && nextBtn.addEventListener('click', () => { goTo(cur + 1); autoPlay(); });
-
     const heroEl = document.getElementById('hero');
     if (heroEl) {
       let tx = 0;
@@ -1499,14 +1366,13 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
         const d = tx - e.changedTouches[0].clientX;
         if (Math.abs(d) > 40) { goTo(d > 0 ? cur + 1 : cur - 1); autoPlay(); }
       }, { passive: true });
-      heroEl.addEventListener('mouseenter', () => clearInterval(timer));
+      heroEl.addEventListener('mouseenter', () => clearInterval(sliderTimer));
       heroEl.addEventListener('mouseleave', autoPlay);
     }
     autoPlay();
   }
 
-
-  /* ── Testimonials ─────────────────────────────────────────────────── */
+  /* ── Testimonials ──────────────────────────────────────── */
   const tTrack = document.getElementById('testimonialsTrack');
   const tDots  = document.getElementById('tDots');
   const tPrev  = document.getElementById('tPrev');
@@ -1516,7 +1382,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 
   function goT(idx) {
     tCur = (idx + tCards.length) % tCards.length;
-    if (tTrack) tTrack.style.transform = `translateX(-${tCur * 100}%)`;
+    if (tTrack) tTrack.style.transform = 'translateX(-' + (tCur * 100) + '%)';
     if (tDots) tDots.querySelectorAll('.t-dot').forEach((d, i) => d.classList.toggle('active', i === tCur));
   }
 
@@ -1525,7 +1391,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
       tCards.forEach((_, i) => {
         const d = document.createElement('button');
         d.className = 't-dot' + (i === 0 ? ' active' : '');
-        d.setAttribute('role', 'tab');
         d.setAttribute('aria-label', 'Testimonial ' + (i + 1));
         d.addEventListener('click', () => goT(i));
         tDots.appendChild(d);
@@ -1543,27 +1408,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
       }, { passive: true });
     }
   }
-  const servicesMenu = document.getElementById("servicesMenu");
-  const servicesToggle = document.getElementById("servicesToggle");
 
-  // open/close on click
-  servicesToggle.addEventListener("click", function (e) {
-    e.preventDefault(); // prevents page jump
-    servicesMenu.classList.toggle("open");
-  });
-
-  // close when clicking outside
-  document.addEventListener("click", function (e) {
-    if (!servicesMenu.contains(e.target)) {
-      servicesMenu.classList.remove("open");
-    }
-  });
-
-  // optional: close on scroll
-  window.addEventListener("scroll", () => {
-    servicesMenu.classList.remove("open");
-  });
-  /* ── Intersection: Scroll Reveal ─────────────────────────────────── */
+  /* ── Scroll Reveal ─────────────────────────────────────── */
   const revIO = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting) {
@@ -1575,16 +1421,13 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach((el) => revIO.observe(el));
 
-  /* ── Intersection: Counter Animation ─────────────────────────────── */
+  /* ── Counter Animation ─────────────────────────────────── */
   const cntIO = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
-      const el = e.target;
-      const target = parseInt(el.dataset.target, 10);
-      const start = performance.now();
+      const el = e.target, target = parseInt(el.dataset.target, 10), start = performance.now();
       (function tick(now) {
-        const p = Math.min((now - start) / 1800, 1);
-        const ease = 1 - Math.pow(1 - p, 3);
+        const p = Math.min((now - start) / 1800, 1), ease = 1 - Math.pow(1 - p, 3);
         el.textContent = Math.round(ease * target).toLocaleString();
         if (p < 1) requestAnimationFrame(tick);
       })(start);
@@ -1593,7 +1436,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   }, { threshold: 0.3 });
   document.querySelectorAll('.stat-num[data-target]').forEach((el) => cntIO.observe(el));
 
-  /* ── Portfolio: Load + Filter ─────────────────────────────────────── */
+  /* ── Portfolio Load + Filter ───────────────────────────── */
   const grid    = document.getElementById('homePortfolioGrid');
   const fBtns   = document.querySelectorAll('.filter-btn');
   const sizeMap = ['','','portfolio-tall','','portfolio-wide','','','portfolio-tall','portfolio-wide',''];
@@ -1607,49 +1450,31 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
       allItems   = data.items || [];
       renderGrid(allItems);
     } catch (err) {
-      console.warn('Portfolio load error:', err);
-      if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF" role="status">Could not load portfolio.</div>';
+      if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF">Could not load portfolio.</div>';
     }
   }
 
-  function esc(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
   function renderGrid(items) {
     if (!grid) return;
     visItems = items;
-    if (!items.length) {
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF" role="status">No items found.</div>';
-      return;
-    }
+    if (!items.length) { grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF">No items found.</div>'; return; }
     grid.innerHTML = '';
     items.forEach((item, i) => {
-      const sz   = sizeMap[i % sizeMap.length];
-      const cat  = (item.category || 'general').toLowerCase();
-      const div  = document.createElement('div');
+      const sz  = sizeMap[i % sizeMap.length];
+      const cat = (item.category || 'general').toLowerCase();
+      const div = document.createElement('div');
       div.className        = 'portfolio-item reveal' + (sz ? ' ' + sz : '');
       div.dataset.category = cat;
       div.setAttribute('role', 'button');
       div.setAttribute('tabindex', '0');
-      div.setAttribute('aria-label', `View ${esc(item.title || 'photo')}`);
-      div.innerHTML = `
-        <div class="portfolio-img-wrap">
-          <img src="${esc(item.image_url||'')}" alt="${esc(item.title||'Portfolio image')}" loading="lazy"
-               width="800" height="600"
-               onerror="this.closest('.portfolio-item').style.display='none'">
-        </div>
-        <div class="portfolio-overlay" aria-hidden="true">
-          <span class="portfolio-cat">${esc(item.category_label||cat)}</span>
-          <h3 style="font-family:var(--font-display);font-size:1.15rem;font-weight:400;color:#fff;margin-bottom:10px">${esc(item.title||'Untitled')}</h3>
-          <a href="/portfolio" class="portfolio-view" tabindex="-1">View all →</a>
-        </div>`;
-      const open = () => { if (event && event.target.tagName === 'A') return; openLB(i); };
-      div.addEventListener('click', open);
+      div.setAttribute('aria-label', 'View ' + esc(item.title || 'photo'));
+      div.innerHTML = `<div class="portfolio-img-wrap"><img src="${esc(item.image_url||'')}" alt="${esc(item.title||'')}" loading="lazy" onerror="this.closest('.portfolio-item').style.display='none'"></div><div class="portfolio-overlay"><span class="portfolio-cat">${esc(item.category_label||cat)}</span><h3 style="font-family:var(--font-display);font-size:1.15rem;font-weight:400;color:#fff;margin-bottom:10px">${esc(item.title||'Untitled')}</h3><a href="/portfolio" class="portfolio-view" tabindex="-1">View all →</a></div>`;
+      div.addEventListener('click', () => openLB(i));
       div.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLB(i); } });
       grid.appendChild(div);
       revIO.observe(div);
-      // stagger reveal
       requestAnimationFrame(() => setTimeout(() => div.classList.add('visible'), i * 55));
     });
   }
@@ -1657,8 +1482,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   fBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       fBtns.forEach((b) => { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed','true');
+      btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
       const f = btn.dataset.filter;
       renderGrid(f === 'all' ? allItems : allItems.filter((it) => (it.category||'').toLowerCase() === f));
     });
@@ -1666,45 +1490,34 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 
   loadPortfolio();
 
-  /* ── Lightbox ─────────────────────────────────────────────────────── */
-  const lb     = document.getElementById('lightbox');
-  const lbImg  = document.getElementById('lightboxImg');
-  const lbCls  = document.getElementById('lightboxClose');
-  const lbPrv  = document.getElementById('lbPrev');
-  const lbNxt  = document.getElementById('lbNext');
+  /* ── Lightbox ──────────────────────────────────────────── */
+  const lb    = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightboxImg');
+  const lbCls = document.getElementById('lightboxClose');
+  const lbPrv = document.getElementById('lbPrev');
+  const lbNxt = document.getElementById('lbNext');
   let lbIdx = 0;
 
-  function openLB(idx) {
-    lbIdx = idx; showLB();
-    lb && lb.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    lbCls && lbCls.focus();
-  }
-  function closeLB() {
-    lb && lb.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  function showLB() {
+  function openLB(idx) { lbIdx = idx; showLB(); lb && lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeLB()   { lb && lb.classList.remove('open'); document.body.style.overflow = ''; }
+  function showLB()    {
     const it = visItems[lbIdx]; if (!it) return;
-    if (lbImg) {
-      lbImg.style.opacity = '0';
-      setTimeout(() => { lbImg.src = it.full_url || it.image_url || ''; lbImg.alt = it.title || ''; lbImg.style.opacity = '1'; }, 140);
-    }
+    if (lbImg) { lbImg.style.opacity = '0'; setTimeout(() => { lbImg.src = it.full_url || it.image_url || ''; lbImg.alt = it.title || ''; lbImg.style.opacity = '1'; }, 140); }
   }
   function lbGo(d) { lbIdx = (lbIdx + d + visItems.length) % visItems.length; showLB(); }
 
-  lbCls  && lbCls.addEventListener('click', closeLB);
-  lbPrv  && lbPrv.addEventListener('click', () => lbGo(-1));
-  lbNxt  && lbNxt.addEventListener('click', () => lbGo(1));
-  lb     && lb.addEventListener('click', (e) => { if (e.target === lb) closeLB(); });
+  lbCls && lbCls.addEventListener('click', closeLB);
+  lbPrv && lbPrv.addEventListener('click', () => lbGo(-1));
+  lbNxt && lbNxt.addEventListener('click', () => lbGo(1));
+  lb    && lb.addEventListener('click', (e) => { if (e.target === lb) closeLB(); });
   document.addEventListener('keydown', (e) => {
     if (!lb || !lb.classList.contains('open')) return;
-    if (e.key === 'Escape')    closeLB();
+    if (e.key === 'Escape') closeLB();
     if (e.key === 'ArrowLeft') lbGo(-1);
-    if (e.key === 'ArrowRight')lbGo(1);
+    if (e.key === 'ArrowRight') lbGo(1);
   });
 
-  /* ── Chat ─────────────────────────────────────────────────────────── */
+  /* ── Chat ──────────────────────────────────────────────── */
   const chatToggle = document.getElementById('chatToggle');
   const chatWindow = document.getElementById('chatWindow');
   const chatClose  = document.getElementById('chatClose');
@@ -1712,7 +1525,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   const chatSend   = document.getElementById('chatSend');
   const chatMsgs   = document.getElementById('chatMessages');
   const badge      = chatToggle && chatToggle.querySelector('.chat-badge');
-  const replies = [
+  const replies    = [
     "Thanks for reaching out! What service are you interested in?",
     "Great question! Call us at +254 710 468 300 for detailed pricing.",
     "We cover Machakos and surrounding counties. Book early to secure your date!",
@@ -1724,7 +1537,6 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   function toggleChat() {
     const open = chatWindow && chatWindow.classList.toggle('open');
     if (open && badge) badge.style.display = 'none';
-    chatWindow && chatWindow.setAttribute('aria-hidden', open ? 'false' : 'true');
   }
   function appendMsg(text, type) {
     const d = document.createElement('div');
@@ -1745,27 +1557,19 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   chatSend   && chatSend.addEventListener('click', sendMsg);
   chatInput  && chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMsg(); });
 
-  /* ── Contact Form ─────────────────────────────────────────────────── */
+  /* ── Contact Form ──────────────────────────────────────── */
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const btn      = contactForm.querySelector('.btn-submit');
+      const btn = contactForm.querySelector('.btn-submit');
       const origHTML = btn.innerHTML;
-
-      // Remove any previous error
       const prevErr = contactForm.querySelector('.form-submit-error');
       if (prevErr) prevErr.remove();
-
-      // Loading state
-      btn.classList.add('loading');
-      btn.disabled = true;
-      btn.textContent = 'Sending…';
-
+      btn.classList.add('loading'); btn.disabled = true; btn.textContent = 'Sending…';
       try {
         const res = await fetch('/api/contact', {
-          method:  'POST',
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             name:    contactForm.querySelector('#name').value.trim(),
@@ -1775,74 +1579,40 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
             message: contactForm.querySelector('#message').value.trim(),
           }),
         });
-
         const data = await res.json();
-
         if (res.ok && data.success) {
-          // Success
-          btn.classList.remove('loading');
-          btn.classList.add('success');
-          btn.disabled = false;
-          btn.innerHTML = '✓ Message Sent!';
+          btn.classList.remove('loading'); btn.classList.add('success'); btn.disabled = false; btn.innerHTML = '✓ Message Sent!';
           contactForm.reset();
-          setTimeout(() => {
-            btn.classList.remove('success');
-            btn.innerHTML = origHTML;
-          }, 4000);
-
+          setTimeout(() => { btn.classList.remove('success'); btn.innerHTML = origHTML; }, 4000);
         } else {
-          // Server validation error — show message from backend
-          throw new Error(data.error || 'Something went wrong. Please try again.');
+          throw new Error(data.error || 'Something went wrong.');
         }
-
       } catch (err) {
-        btn.classList.remove('loading');
-        btn.classList.add('error');
-        btn.disabled = false;
-        btn.textContent = 'Failed — Try Again';
-
-        // Show error below button
+        btn.classList.remove('loading'); btn.disabled = false; btn.textContent = 'Failed — Try Again';
         const errEl = document.createElement('p');
         errEl.className = 'form-submit-error';
-        errEl.style.cssText = 'color:#dc2626;font-size:0.83rem;margin-top:0.75rem;text-align:center;';
+        errEl.style.cssText = 'color:#dc2626;font-size:.83rem;margin-top:.75rem;text-align:center;';
         errEl.textContent = err.message || 'Network error. Please check your connection.';
         btn.insertAdjacentElement('afterend', errEl);
-
-        setTimeout(() => {
-          btn.classList.remove('error');
-          btn.innerHTML = origHTML;
-          btn.disabled  = false;
-        }, 3000);
+        setTimeout(() => { btn.innerHTML = origHTML; btn.disabled = false; }, 3000);
       }
     });
   }
 
-  /* ── Active Nav on Scroll ─────────────────────────────────────────── */
+  /* ── Active Nav on Scroll ──────────────────────────────── */
   const navLinks = document.querySelectorAll('.nav-link');
-  new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        navLinks.forEach((l) => {
-          const match = l.getAttribute('href') === '/' + e.target.id ||
-                        (l.getAttribute('href') === '/' && e.target.id === 'hero');
-          l.classList.toggle('active', match);
-          l.setAttribute('aria-current', match ? 'page' : 'false');
-        });
-      }
-    });
-  }, { threshold: 0.35 }).observe ? document.querySelectorAll('section[id]').forEach((s) => {
+  document.querySelectorAll('section[id]').forEach((s) => {
     new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) navLinks.forEach((l) => {
-          const match = l.getAttribute('href') === '/' + e.target.id ||
-                        (l.getAttribute('href') === '/' && e.target.id === 'hero');
+          const match = l.getAttribute('href') === '/' + e.target.id || (l.getAttribute('href') === '/' && e.target.id === 'hero');
           l.classList.toggle('active', match);
         });
       });
     }, { threshold: 0.35 }).observe(s);
-  }) : null;
+  });
 
-  /* ── Smooth Scroll for anchor links ──────────────────────────────── */
+  /* ── Smooth Scroll ─────────────────────────────────────── */
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', (e) => {
       const t = document.querySelector(a.getAttribute('href'));
