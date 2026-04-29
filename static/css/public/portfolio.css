@@ -122,107 +122,45 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .menu-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(0, -6.5px); }
 
 /* Mega Menu */
-.has-mega {
-  position: relative;
+.has-mega{position:relative}
+
+.mega-menu{
+  position:absolute;
+  top:100%;
+  left:0;
+  width:780px;
+  background:rgba(10,10,10,0.92);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:var(--radius);
+  padding:2rem;
+  box-shadow:0 25px 60px rgba(0,0,0,0.4);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(12px);
+  transition:opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+  z-index:9999;
+  pointer-events:none;
 }
 
-.mega-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 780px;
-  background: rgba(10, 10, 10, 0.92);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: var(--radius);
-  padding: 2rem;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(12px);
-  transition: all 0.25s ease;
-  z-index: 9999;
-}
-.has-mega:hover .mega-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-.mega-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-.mega-column h4 {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #7eb4ff;
-  margin-bottom: 1rem;
-}
-.mega-column a {
-  display: inline-block;
-  position: relative;
-  font-size: 0.875rem;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.85);
-  padding: 6px 0;
-  margin-bottom: 6px;
-  transition: color 0.25s ease;
-}
-.mega-column a::after {
-  content: '';
-  position: absolute;
-  bottom: 2px;
-  left: 0;
-  right: 0;
-  height: 1.5px;
-  background: var(--blue-light);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.25s ease;
-  border-radius: 2px;
-}
-.mega-column a:hover { color: var(--white); }
-.mega-column a:hover::after { transform: scaleX(1); }
-.mega-footer {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  text-align: center;
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.4);
-  letter-spacing: 0.05em;
-}
-.has-mega.open .mega-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-@media (hover: hover) {
-  .has-mega:hover .mega-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+/* Desktop: show on hover OR when .open class is toggled by click */
+@media(hover:hover){
+  .has-mega:hover .mega-menu{
+    opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto;
   }
 }
-@media (max-width: 768px) {
-  .mega-menu {
-    position: static;
-    width: 100%;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    padding: 1rem 0;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-  }
-  .mega-grid { grid-template-columns: 1fr; gap: 1rem; }
-  .mega-footer { display: none; }
+.has-mega.open .mega-menu{
+  opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto;
 }
+
+.mega-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.mega-column h4{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#7eb4ff;margin-bottom:1rem}
+.mega-column a{display:inline-block;position:relative;font-size:.875rem;font-weight:400;letter-spacing:.04em;color:rgba(255,255,255,0.85);padding:6px 0;margin-bottom:6px;transition:color .25s ease}
+.mega-column a::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:1.5px;background:var(--blue-light);transform:scaleX(0);transform-origin:left;transition:transform .25s ease;border-radius:2px}
+.mega-column a:hover{color:var(--white)}
+.mega-column a:hover::after{transform:scaleX(1)}
+.mega-footer{margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);text-align:center;font-size:.75rem;color:rgba(255,255,255,.4);letter-spacing:.05em}
+
 
 /* ── Mobile Menu ───────────────────────────────────────── */
 .mobile-menu{
