@@ -71,7 +71,6 @@
   }
 
 
-
   /**
  * services-carousel.js
  * Auto-sliding crossfade carousel for each .sv-block
@@ -111,6 +110,12 @@
           goTo(parseInt(dot.dataset.index, 10));
           startTimer();
         });
+      });
+
+      // Click image to advance to next slide
+      block.querySelector('.sv-img-wrap').addEventListener('click', function () {
+        next();
+        startTimer();
       });
 
       // Pause on hover, resume on leave
