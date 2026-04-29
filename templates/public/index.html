@@ -273,97 +273,25 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 }
 
 /* ── MOBILE ───────────────────────────── */
-/* ── MOBILE SERVICES ACCORDION ───────────────────────────
-   Add these rules to your existing CSS.
-   Desktop hover behaviour is completely untouched.
-──────────────────────────────────────────────────────── */
-
 @media (max-width: 768px) {
-
-  /* Hide mega menu by default on mobile — override the static/visible rules */
   .mega-menu {
     position: static;
     width: 100%;
+
     background: transparent;
     border: none;
     box-shadow: none;
-    backdrop-filter: none;
-    padding: 0;
 
-    /* collapsed */
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
+    padding: 1rem 0;
 
-    /* smooth open/close */
-    transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
-
-    /* reset desktop show-on-hover */
+    opacity: 1;
     visibility: visible;
     transform: none;
   }
 
-  /* Open state — toggled by JS */
-  .has-mega.mobile-open .mega-menu {
-    max-height: 800px;   /* tall enough for all content */
-    opacity: 1;
-    padding: 0.75rem 0 0.5rem 0.75rem;
-  }
-
-  /* Services link: show a chevron arrow */
-  #servicesToggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  #servicesToggle::after {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-right: 1.5px solid rgba(255,255,255,0.6);
-    border-bottom: 1.5px solid rgba(255,255,255,0.6);
-    transform: rotate(45deg);
-    transition: transform 0.3s ease;
-    margin-left: 8px;
-    flex-shrink: 0;
-  }
-
-  /* Rotate chevron when open */
-  .has-mega.mobile-open #servicesToggle::after {
-    transform: rotate(-135deg);
-  }
-
-  /* Stack columns vertically */
   .mega-grid {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  /* Column headings */
-  .mega-column h4 {
-    font-size: 0.65rem;
-    margin-bottom: 0.5rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .mega-column:first-child h4 {
-    border-top: none;
-    padding-top: 0;
-  }
-
-  /* Links inside accordion */
-  .mega-column a {
-    display: block;
-    padding: 7px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 0.88rem;
-  }
-
-  .mega-column a:last-child {
-    border-bottom: none;
+    gap: 1rem;
   }
 
   .mega-footer {
