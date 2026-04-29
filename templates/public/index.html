@@ -1432,70 +1432,36 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     }, { passive: true });
 
     /* ── Desktop Services: click to open ──────────────────── */
-    const desktopItem   = document.getElementById('desktopServicesMenu');
-    const desktopToggle = document.getElementById('desktopServicesToggle');
-    const megaPanel     = desktopItem ? desktopItem.querySelector('.mega-menu') : null;
-    let closeTimer      = null;
+    (function () {
+      const menuToggle    = document.getElementById('menuToggle');
+      const mobileMenu    = document.getElementById('mobileMenu');
+      const srvToggle     = document.getElementById('mobileServicesToggle');
+      const mobileMega    = document.getElementById('mobileMega');
 
-    if (desktopItem && desktopToggle && megaPanel) {
-      desktopToggle.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        const isOpen = desktopItem.classList.toggle('open');
-        if (!isOpen) clearTimeout(closeTimer);
-      });
-
-      megaPanel.addEventListener('mouseenter', () => clearTimeout(closeTimer));
-      megaPanel.addEventListener('mouseleave', () => {
-        closeTimer = setTimeout(() => desktopItem.classList.remove('open'), 200);
-      });
-
-      document.addEventListener('click', function (e) {
-        if (!desktopItem.contains(e.target)) {
-          clearTimeout(closeTimer);
-          desktopItem.classList.remove('open');
-        }
-      });
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-          clearTimeout(closeTimer);
-          desktopItem.classList.remove('open');
-        }
-      });
-    }
-
-    /* ── Mobile hamburger ──────────────────────────────────── */
-    const menuToggle = document.getElementById('menuToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-
-    if (menuToggle && mobileMenu) {
+      // Hamburger open/close
       menuToggle.addEventListener('click', function () {
         const isOpen = mobileMenu.classList.toggle('open');
         menuToggle.classList.toggle('open', isOpen);
-        menuToggle.setAttribute('aria-expanded', String(isOpen));
-        mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+        menuToggle.setAttribute('aria-expanded', isOpen);
+        mobileMenu.setAttribute('aria-hidden', !isOpen);
       });
 
+      // Mobile services accordion
+      srvToggle.addEventListener('click', function () {
+        const isOpen = mobileMega.classList.toggle('open');
+        srvToggle.classList.toggle('open', isOpen);
+        srvToggle.setAttribute('aria-expanded', isOpen);
+      });
+
+      // Close mobile menu on outside click
       document.addEventListener('click', function (e) {
-        if (mobileMenu.classList.contains('open') && navbar && !navbar.contains(e.target)) {
+        if (!e.target.closest('#navbar')) {
           mobileMenu.classList.remove('open');
           menuToggle.classList.remove('open');
           menuToggle.setAttribute('aria-expanded', 'false');
         }
       });
-    }
-
-    /* ── Mobile Services accordion ─────────────────────────── */
-    const mobileServicesItem   = document.getElementById('mobileServicesItem');
-    const mobileServicesToggle = document.getElementById('mobileServicesToggle');
-
-    if (mobileServicesItem && mobileServicesToggle) {
-      mobileServicesToggle.addEventListener('click', function () {
-        const isOpen = mobileServicesItem.classList.toggle('open');
-        mobileServicesToggle.setAttribute('aria-expanded', String(isOpen));
-      });
-    }
+    })();
 
     /* ── Hero Slider ───────────────────────────────────────── */
     const slides   = document.querySelectorAll('.slide');
