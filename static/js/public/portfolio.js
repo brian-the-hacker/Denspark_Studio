@@ -39,6 +39,37 @@
     });
   }
 
+  /* ── Desktop Services mega menu (click to open/close) ─── */
+  const desktopServicesMenu   = document.getElementById('desktopServicesMenu');
+  const desktopServicesToggle = document.getElementById('desktopServicesToggle');
+  if (desktopServicesMenu && desktopServicesToggle) {
+    desktopServicesToggle.addEventListener('click', (e) => {
+      // Only intercept on desktop; on mobile the element is hidden anyway
+      if (window.innerWidth > 768) {
+        e.preventDefault();
+        desktopServicesMenu.classList.toggle('open');
+      }
+    });
+    // Close when clicking anywhere outside
+    document.addEventListener('click', (e) => {
+      if (!desktopServicesMenu.contains(e.target)) {
+        desktopServicesMenu.classList.remove('open');
+      }
+    });
+    // Close on scroll
+    window.addEventListener('scroll', () => desktopServicesMenu.classList.remove('open'), { passive: true });
+  }
+
+  /* ── Mobile Services accordion ────────────────────────── */
+  const mobileServicesItem   = document.getElementById('mobileServicesItem');
+  const mobileServicesToggle = document.getElementById('mobileServicesToggle');
+  if (mobileServicesItem && mobileServicesToggle) {
+    mobileServicesToggle.addEventListener('click', () => {
+      const open = mobileServicesItem.classList.toggle('open');
+      mobileServicesToggle.setAttribute('aria-expanded', String(open));
+    });
+  }
+
   /* ====================================================
      3. SCROLL REVEAL
      Exported as window.__revealObs so the inline
