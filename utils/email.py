@@ -1,6 +1,6 @@
 """
 utils/email.py — Email notifications for Denspark Studio
-Uses Gmail SMTP (free). Set GMAIL_USER and GMAIL_APP_PASSWORD in your .env
+Uses Gmail SMTP (free). Set GMAIL_APP_PASSWORD and ADMIN_EMAIL in your env.
 """
 
 import smtplib
@@ -24,23 +24,20 @@ def send_booking_notification(booking_data: dict) -> bool:
         return False
 
     try:
-        name      = booking_data.get('name', 'Unknown')
-        email     = booking_data.get('email', 'N/A')
-        phone     = booking_data.get('phone', 'N/A')
-        service   = booking_data.get('service', 'N/A')
-        date      = booking_data.get('date', 'Not specified')
-        message   = booking_data.get('message', 'No message provided')
-
-        # Format service name nicely
+        name          = booking_data.get('name', 'Unknown')
+        email         = booking_data.get('email', 'N/A')
+        phone         = booking_data.get('phone', 'N/A')
+        service       = booking_data.get('service', 'N/A')
+        date          = booking_data.get('date', 'Not specified')
+        message       = booking_data.get('message', 'No message provided')
         service_label = service.replace('-', ' ').title()
 
-        # WhatsApp link for quick reply
+        # WhatsApp link
         wa_number = phone.replace('+', '').replace(' ', '').replace('-', '')
         if wa_number.startswith('0'):
             wa_number = '254' + wa_number[1:]
         wa_link = f"https://wa.me/{wa_number}"
 
-        # Build HTML email
         html = f"""
         <!DOCTYPE html>
         <html>
@@ -59,11 +56,10 @@ def send_booking_notification(booking_data: dict) -> bool:
             .field-label {{ font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #999; margin-bottom: 4px; }}
             .field-value {{ font-size: 15px; color: #111; font-weight: 500; }}
             .message-box {{ background: #f8f8f6; border-left: 3px solid #1a56db; padding: 16px; border-radius: 4px; font-size: 14px; color: #444; line-height: 1.6; }}
-            .actions {{ margin-top: 28px; display: flex; gap: 12px; }}
-            .btn {{ display: inline-block; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none; text-align: center; }}
+            .actions {{ margin-top: 28px; }}
+            .btn {{ display: inline-block; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none; margin-right: 10px; }}
             .btn-whatsapp {{ background: #25D366; color: #ffffff; }}
             .btn-email {{ background: #1a56db; color: #ffffff; }}
-            .btn-dashboard {{ background: #f0f0f0; color: #333; }}
             .footer {{ background: #f8f8f6; padding: 16px 32px; font-size: 12px; color: #999; text-align: center; }}
           </style>
         </head>
@@ -75,46 +71,23 @@ def send_booking_notification(booking_data: dict) -> bool:
             </div>
             <div class="body">
               <span class="badge">New Request</span>
-
-              <div class="field">
-                <div class="field-label">Client Name</div>
-                <div class="field-value">{name}</div>
-              </div>
-              <div class="field">
-                <div class="field-label">Email Address</div>
-                <div class="field-value">{email}</div>
-              </div>
-              <div class="field">
-                <div class="field-label">Phone Number</div>
-                <div class="field-value">{phone}</div>
-              </div>
-              <div class="field">
-                <div class="field-label">Service Requested</div>
-                <div class="field-value">{service_label}</div>
-              </div>
-              <div class="field">
-                <div class="field-label">Preferred Date</div>
-                <div class="field-value">{date}</div>
-              </div>
-              <div class="field">
-                <div class="field-label">Message</div>
-                <div class="message-box">{message}</div>
-              </div>
-
+              <div class="field"><div class="field-label">Client Name</div><div class="field-value">{name}</div></div>
+              <div class="field"><div class="field-label">Email Address</div><div class="field-value">{email}</div></div>
+              <div class="field"><div class="field-label">Phone Number</div><div class="field-value">{phone}</div></div>
+              <div class="field"><div class="field-label">Service Requested</div><div class="field-value">{service_label}</div></div>
+              <div class="field"><div class="field-label">Preferred Date</div><div class="field-value">{date}</div></div>
+              <div class="field"><div class="field-label">Message</div><div class="message-box">{message}</div></div>
               <div class="actions">
                 <a href="{wa_link}" class="btn btn-whatsapp">💬 WhatsApp {name.split()[0]}</a>
                 <a href="mailto:{email}" class="btn btn-email">✉️ Email {name.split()[0]}</a>
               </div>
             </div>
-            <div class="footer">
-              Denspark Studio Admin · This is an automated notification
-            </div>
+            <div class="footer">Denspark Studio Admin · This is an automated notification</div>
           </div>
         </body>
         </html>
         """
 
-        # Plain text fallback
         plain = f"""
 New Booking Request — Denspark Studio
 
@@ -137,9 +110,7 @@ Reply via Email:    {email}
         msg['From']    = gmail_user
         msg['To']      = admin_email
 
-        msg.attach(MIMEText(plain, 'plain'))
-        plain = f"New message from {name} ({email})\nPhone: {phone}\nService: {service}\n\n{message}"
-        msg.attach(MIMEText(plain, 'plain'))
+        msg.attach(MIMEText(plain, 'plain'))  # plain FIRST, html SECOND
         msg.attach(MIMEText(html, 'html'))
 
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
@@ -157,6 +128,7 @@ Reply via Email:    {email}
 def send_contact_notification(contact_data: dict) -> bool:
     """
     Send an email to admin when a contact form message is submitted.
+    Returns True on success, False on failure.
     """
     gmail_user     = os.environ.get('GMAIL_USER') or os.environ.get('ADMIN_EMAIL')
     gmail_password = os.environ.get('GMAIL_APP_PASSWORD', '').replace(' ', '')
@@ -173,6 +145,7 @@ def send_contact_notification(contact_data: dict) -> bool:
         service = contact_data.get('service', 'General Inquiry')
         message = contact_data.get('message', '')
 
+        # WhatsApp link
         wa_number = phone.replace('+', '').replace(' ', '').replace('-', '')
         if wa_number.startswith('0'):
             wa_number = '254' + wa_number[1:]
@@ -224,17 +197,35 @@ def send_contact_notification(contact_data: dict) -> bool:
         </html>
         """
 
+        plain = f"""
+New Contact Message — Denspark Studio
+
+Name:    {name}
+Email:   {email}
+Phone:   {phone}
+Service: {service}
+
+Message:
+{message}
+
+---
+Reply via WhatsApp: {wa_link}
+Reply via Email:    {email}
+        """.strip()
+
         msg = MIMEMultipart('alternative')
         msg['Subject'] = f"💬 New Message from {name}"
         msg['From']    = gmail_user
         msg['To']      = admin_email
 
+        msg.attach(MIMEText(plain, 'plain'))  # plain FIRST, html SECOND
         msg.attach(MIMEText(html, 'html'))
 
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
             server.login(gmail_user, gmail_password)
             server.sendmail(gmail_user, admin_email, msg.as_string())
 
+        current_app.logger.info(f'Contact notification sent from {name}')
         return True
 
     except Exception as e:
