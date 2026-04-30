@@ -15,8 +15,8 @@ def send_booking_notification(booking_data: dict) -> bool:
     Send an email to the admin when a new booking request is submitted.
     Returns True on success, False on failure.
     """
-    gmail_user     = os.environ.get('GMAIL_USER')
-    gmail_password = os.environ.get('GMAIL_APP_PASSWORD')
+    gmail_user     = os.environ.get('GMAIL_USER') or os.environ.get('ADMIN_EMAIL')
+    gmail_password = os.environ.get('GMAIL_APP_PASSWORD', '').replace(' ', '')
     admin_email    = os.environ.get('ADMIN_EMAIL', 'brianshiru563@gmail.com')
 
     if not gmail_user or not gmail_password:
@@ -138,7 +138,9 @@ Reply via Email:    {email}
         msg['To']      = admin_email
 
         msg.attach(MIMEText(plain, 'plain'))
-        msg.attach(MIMEText(html,  'html'))
+        plain = f"New message from {name} ({email})\nPhone: {phone}\nService: {service}\n\n{message}"
+        msg.attach(MIMEText(plain, 'plain'))
+        msg.attach(MIMEText(html, 'html'))
 
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
             server.login(gmail_user, gmail_password)
@@ -156,8 +158,8 @@ def send_contact_notification(contact_data: dict) -> bool:
     """
     Send an email to admin when a contact form message is submitted.
     """
-    gmail_user     = os.environ.get('GMAIL_USER')
-    gmail_password = os.environ.get('GMAIL_APP_PASSWORD')
+    gmail_user     = os.environ.get('GMAIL_USER') or os.environ.get('ADMIN_EMAIL')
+    gmail_password = os.environ.get('GMAIL_APP_PASSWORD', '').replace(' ', '')
     admin_email    = os.environ.get('ADMIN_EMAIL', 'brianshiru563@gmail.com')
 
     if not gmail_user or not gmail_password:
