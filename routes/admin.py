@@ -586,3 +586,19 @@ def analytics():
 @login_required
 def settings():
     return render_template('admin/settings.html', current_user=current_user)
+@admin_bp.route('/test-email')
+@login_required
+def test_email():
+    from utils.email import _send
+    import os
+    
+    gmail_user     = os.environ.get('GMAIL_USER') or os.environ.get('ADMIN_EMAIL')
+    gmail_password = os.environ.get('GMAIL_APP_PASSWORD', '').replace(' ', '')
+    admin_email    = os.environ.get('ADMIN_EMAIL')
+
+    return jsonify({
+        'gmail_user':     gmail_user,
+        'gmail_password': '✓ set' if gmail_password else '✗ MISSING',
+        'admin_email':    admin_email,
+        'password_len':   len(gmail_password),
+    })
