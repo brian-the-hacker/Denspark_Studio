@@ -4,6 +4,7 @@ from flask_login import LoginManager
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_migrate import Migrate
 from models import db, User
 import cloudinary
 
@@ -73,6 +74,7 @@ def create_app():
 
     # ── Extensions ────────────────────────────────────────────────────────────
     db.init_app(app)
+    Migrate(app, db)        # ← Flask-Migrate replaces db.create_all()
     limiter.init_app(app)
 
     # CORS — locked to your actual domain
@@ -115,10 +117,6 @@ def create_app():
     app.register_blueprint(public_bp)
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(auth_bp, url_prefix='/auth')
-
-    # ── Auto-create any missing tables (safe — never drops existing ones) ─────
-    with app.app_context():
-        db.create_all()
 
     return app
 
