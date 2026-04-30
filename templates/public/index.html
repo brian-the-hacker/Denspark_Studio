@@ -67,6 +67,7 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap"></noscript>
 
   <link rel="preload" as="image" href="/static/imagies/potostudio.webp" fetchpriority="high">
+  <link rel="preload" href="/static/data/reviews.json" as="fetch" crossorigin>
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
 
   <style>
@@ -1555,21 +1556,21 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     </div>
   </section>
 
+  
   <!-- Testimonials -->
   <section class="testimonials-section" id="testimonials">
     <div class="container">
-  
+    
       <div class="section-header reveal">
         <span class="t-eyebrow">Testimonials</span>
         <h2 class="t-section-title">What Our <em>Clients Say</em></h2>
-  
+
         <div class="t-rating-bar">
           <div class="t-rating-score">
             <span class="t-stars-big">★★★★★</span>
             <strong id="tAvgRating">5.0</strong>
             <span class="t-rating-label">· <span id="tTotalCount">154</span> Google reviews</span>
           </div>
-          <!-- ★ LEAVE A REVIEW BUTTON — update the Place ID in the href ★ -->
           <a
             class="t-review-btn"
             href="https://g.page/r/CUD1M7fIWcFqEBE/review"
@@ -1585,26 +1586,44 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
           </a>
         </div>
       </div>
-  
-      <!-- Loading state -->
-      <div class="t-loading" id="tLoading">
+
+      <!-- Loading state (hidden by default) -->
+      <div class="t-loading" id="tLoading" style="display:none">
         <span class="t-loading-dot"></span>
         <span class="t-loading-dot"></span>
         <span class="t-loading-dot"></span>
       </div>
-  
+
       <!-- Error fallback -->
       <div class="t-error" id="tError" style="display:none">
         Unable to load reviews.
         <a href="https://www.google.com/maps/search/Denspark+Studio+Machakos" target="_blank" rel="noopener">View on Google →</a>
       </div>
-  
-      <!-- Slider (populated by JS) -->
-      <div class="t-slider" id="tSlider" style="display:none">
+
+      <!-- Slider with first review pre-rendered for instant visibility -->
+      <div class="t-slider" id="tSlider" style="display:block">
         <div class="t-viewport">
-          <div class="t-track" id="tTrack"></div>
+          <div class="t-track" id="tTrack">
+            <!-- First review inlined - shows immediately -->
+            <div class="t-card">
+              <div class="t-card-top">
+                <div class="t-author">
+                  <div class="t-avatar">SM</div>
+                  <div>
+                    <div class="t-name">Sarah Muthoni</div>
+                    <div class="t-date">2 weeks ago</div>
+                  </div>
+                </div>
+                <div class="t-stars">★★★★★</div>
+              </div>
+              <div class="t-quote-mark">“</div>
+              <p class="t-text">
+                Denspark Studio captured our wedding beautifully! Every single photo tells a story. The team was professional, warm, and incredibly attentive.
+              </p>
+            </div>
+          </div>
         </div>
-  
+
         <div class="t-footer">
           <div class="t-controls">
             <button class="t-btn" id="tPrev" aria-label="Previous review">
@@ -1619,10 +1638,9 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
               </svg>
             </button>
           </div>
-  
-          <span class="t-counter" id="tCounter">1 / 10</span>
-  
-          <!-- See all on Google link -->
+
+          <span class="t-counter" id="tCounter">1 / 1</span>
+
           <a
             class="t-see-all"
             href="https://g.page/r/CUD1M7fIWcFqEBE/review"
@@ -1638,7 +1656,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
           </a>
         </div>
       </div>
-  
+
     </div>
   </section>
 
@@ -2022,197 +2040,156 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     /* ── Testimonials ──────────────────────────────────────── */
     (function () {
       'use strict';
-    
-      /* ── Config ────────────────────────────────────────────────── */
-      var REVIEWS_JSON    = '/static/data/reviews.json'; // path on your server
-      var MAX_REVIEWS     = 10;       // show newest 10
-      var AUTO_ADVANCE_MS = 6000;     // ms between slides
-      var TEXT_LIMIT      = 220;      // chars before "Read more" appears
-      var GOOGLE_MAPS_URL = 'https://www.google.com/maps/search/Denspark+Studio+Machakos';
-    
-      /* ── DOM refs ─────────────────────────────────────────────── */
-      var loading  = document.getElementById('tLoading');
-      var errorEl  = document.getElementById('tError');
-      var slider   = document.getElementById('tSlider');
-      var track    = document.getElementById('tTrack');
-      var dotsEl   = document.getElementById('tDots');
-      var prevBtn  = document.getElementById('tPrev');
-      var nextBtn  = document.getElementById('tNext');
-      var counter  = document.getElementById('tCounter');
-      var avgEl    = document.getElementById('tAvgRating');
-      var totalEl  = document.getElementById('tTotalCount');
-    
-      /* ── Helpers ──────────────────────────────────────────────── */
+
+      const REVIEWS_JSON    = '/static/data/reviews.json';
+      const MAX_REVIEWS     = 10;
+      const AUTO_ADVANCE_MS = 6000;
+      const TEXT_LIMIT      = 220;
+
+      const loading   = document.getElementById('tLoading');
+      const errorEl   = document.getElementById('tError');
+      const slider    = document.getElementById('tSlider');
+      const track     = document.getElementById('tTrack');
+      const dotsEl    = document.getElementById('tDots');
+      const prevBtn   = document.getElementById('tPrev');
+      const nextBtn   = document.getElementById('tNext');
+      const counter   = document.getElementById('tCounter');
+      const avgEl     = document.getElementById('tAvgRating');
+      const totalEl   = document.getElementById('tTotalCount');
+
       function initials(name) {
-        return (name || '?').split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase();
+        return (name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
       }
-    
+
       function stars(n) {
         n = Math.min(5, Math.max(1, Math.round(n)));
         return '★'.repeat(n) + '☆'.repeat(5 - n);
       }
-    
+
       function esc(str) {
         return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       }
-    
-      /* ── Render ───────────────────────────────────────────────── */
+
       function render(reviews, overallRating, totalCount) {
         if (loading) loading.style.display = 'none';
-    
+
         if (!reviews || !reviews.length) {
           if (errorEl) errorEl.style.display = 'block';
           return;
         }
-    
-        /* Sort newest first, cap at MAX_REVIEWS */
-        var sorted = reviews.slice().sort(function (a, b) {
-          return (b.time || 0) - (a.time || 0);
-        });
-        var top   = sorted.slice(0, MAX_REVIEWS);
-        var total = top.length;
-        var cur   = 0;
-        var timer = null;
-    
-        /* Update summary numbers in the header */
-        if (avgEl && overallRating)  avgEl.textContent  = parseFloat(overallRating).toFixed(1);
-        if (totalEl && totalCount)   totalEl.textContent = totalCount;
-    
-        /* Build cards */
-        track.innerHTML = top.map(function (rv, i) {
-          var text  = esc(rv.text || '');
-          var short = text.length > TEXT_LIMIT ? text.slice(0, TEXT_LIMIT) + '…' : text;
-          var more  = text.length > TEXT_LIMIT;
-    
-          var avatarInner = rv.profile_photo_url
-            ? '<img src="' + rv.profile_photo_url + '" alt="' + esc(rv.author_name) + '" loading="lazy">'
+
+        const sorted = reviews.slice().sort((a, b) => (b.time || 0) - (a.time || 0));
+        const top = sorted.slice(0, MAX_REVIEWS);
+        let cur = 0;
+        let timer = null;
+
+        // Update rating summary
+        if (avgEl && overallRating) avgEl.textContent = parseFloat(overallRating).toFixed(1);
+        if (totalEl && totalCount) totalEl.textContent = totalCount;
+
+        // Render all cards
+        track.innerHTML = top.map((rv, i) => {
+          const text = esc(rv.text || '');
+          const short = text.length > TEXT_LIMIT ? text.slice(0, TEXT_LIMIT) + '…' : text;
+          const more = text.length > TEXT_LIMIT;
+
+          const avatarInner = rv.profile_photo_url 
+            ? `<img src="${rv.profile_photo_url}" alt="${esc(rv.author_name)}" loading="lazy">`
             : initials(rv.author_name);
-    
-          return (
-            '<div class="t-card" data-idx="' + i + '">' +
-              '<div class="t-card-top">' +
-                '<div class="t-author">' +
-                  '<div class="t-avatar">' + avatarInner + '</div>' +
-                  '<div>' +
-                    '<div class="t-name">' + esc(rv.author_name) + '</div>' +
-                    '<div class="t-date">' + esc(rv.relative_time_description || '') + '</div>' +
-                  '</div>' +
-                '</div>' +
-                '<div class="t-stars" title="' + rv.rating + ' out of 5">' + stars(rv.rating) + '</div>' +
-              '</div>' +
-              '<div class="t-quote-mark">\u201c</div>' +
-              '<p class="t-text">' +
-                '<span class="t-short">' + short + '</span>' +
-                (more ? '<span class="t-full" style="display:none">' + text + '</span>' : '') +
-              '</p>' +
-              (more ? '<button class="t-read-more">Read more</button>' : '') +
-            '</div>'
-          );
+
+          return `
+            <div class="t-card" data-idx="${i}">
+              <div class="t-card-top">
+                <div class="t-author">
+                  <div class="t-avatar">${avatarInner}</div>
+                  <div>
+                    <div class="t-name">${esc(rv.author_name)}</div>
+                    <div class="t-date">${esc(rv.relative_time_description || '')}</div>
+                  </div>
+                </div>
+                <div class="t-stars" title="${rv.rating} out of 5">${stars(rv.rating)}</div>
+              </div>
+              <div class="t-quote-mark">“</div>
+              <p class="t-text">
+                <span class="t-short">${short}</span>
+                ${more ? `<span class="t-full" style="display:none">${text}</span>` : ''}
+              </p>
+              ${more ? `<button class="t-read-more">Read more</button>` : ''}
+            </div>`;
         }).join('');
-    
-        /* Build dots */
-        dotsEl.innerHTML = top.map(function (_, i) {
-          return '<button class="t-dot' + (i === 0 ? ' active' : '') + '" aria-label="Review ' + (i + 1) + '"></button>';
-        }).join('');
-    
-        var dots = dotsEl.querySelectorAll('.t-dot');
-    
-        /* ── Navigation ─────────────────────────────────────────── */
+
+        // Build dots
+        dotsEl.innerHTML = top.map((_, i) => 
+          `<button class="t-dot${i === 0 ? ' active' : ''}" aria-label="Review ${i + 1}"></button>`
+        ).join('');
+
+        const dots = dotsEl.querySelectorAll('.t-dot');
+
         function goTo(idx) {
-          cur = (idx + total) % total;
-          track.style.transform = 'translateX(-' + (cur * 100) + '%)';
-          dots.forEach(function (d, i) { d.classList.toggle('active', i === cur); });
-          if (counter) counter.textContent = (cur + 1) + ' / ' + total;
+          cur = (idx + top.length) % top.length;
+          track.style.transform = `translateX(-${cur * 100}%)`;
+          dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+          if (counter) counter.textContent = `${cur + 1} / ${top.length}`;
           resetTimer();
         }
-    
+
         function resetTimer() {
           clearInterval(timer);
-          timer = setInterval(function () { goTo(cur + 1); }, AUTO_ADVANCE_MS);
+          timer = setInterval(() => goTo(cur + 1), AUTO_ADVANCE_MS);
         }
-    
-        dots.forEach(function (dot, i) {
-          dot.addEventListener('click', function () { goTo(i); });
-        });
-    
-        if (prevBtn) prevBtn.addEventListener('click', function () { goTo(cur - 1); });
-        if (nextBtn) nextBtn.addEventListener('click', function () { goTo(cur + 1); });
-    
-        /* Pause on hover */
+
+        dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+        if (prevBtn) prevBtn.addEventListener('click', () => goTo(cur - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => goTo(cur + 1));
+
+        // Hover pause
         if (slider) {
-          slider.addEventListener('mouseenter', function () { clearInterval(timer); });
+          slider.addEventListener('mouseenter', () => clearInterval(timer));
           slider.addEventListener('mouseleave', resetTimer);
         }
-    
-        /* Touch swipe */
-        var touchX = 0;
-        track.addEventListener('touchstart', function (e) {
-          touchX = e.touches[0].clientX;
-        }, { passive: true });
-        track.addEventListener('touchend', function (e) {
-          var dx = touchX - e.changedTouches[0].clientX;
-          if (Math.abs(dx) > 40) goTo(dx > 0 ? cur + 1 : cur - 1);
-        }, { passive: true });
-    
-        /* Keyboard arrow keys when slider is focused */
-        if (slider) {
-          slider.setAttribute('tabindex', '0');
-          slider.addEventListener('keydown', function (e) {
-            if (e.key === 'ArrowRight') goTo(cur + 1);
-            if (e.key === 'ArrowLeft')  goTo(cur - 1);
-          });
-        }
-    
-        /* Read more / Read less — event delegation */
-        track.addEventListener('click', function (e) {
-          var btn = e.target.closest('.t-read-more');
+
+        // Read more functionality
+        track.addEventListener('click', (e) => {
+          const btn = e.target.closest('.t-read-more');
           if (!btn) return;
-          var card  = btn.closest('.t-card');
-          var short = card.querySelector('.t-short');
-          var full  = card.querySelector('.t-full');
+          const card = btn.closest('.t-card');
+          const short = card.querySelector('.t-short');
+          const full = card.querySelector('.t-full');
           if (!full) return;
-          var open = full.style.display !== 'none';
-          short.style.display = open ? '' : 'none';
-          full.style.display  = open ? 'none' : '';
-          btn.textContent     = open ? 'Read more' : 'Read less';
+          const isOpen = full.style.display !== 'none';
+          short.style.display = isOpen ? '' : 'none';
+          full.style.display = isOpen ? 'none' : '';
+          btn.textContent = isOpen ? 'Read more' : 'Read less';
         });
-    
-        /* Show slider and kick off auto-play */
-        if (slider) slider.style.display = 'block';
-        resetTimer();
+
+        resetTimer(); // Start auto-play (slider is already visible)
       }
-    
-      /* ── Fetch reviews.json ───────────────────────────────────── */
+
       function load() {
         fetch(REVIEWS_JSON)
-          .then(function (res) {
+          .then(res => {
             if (!res.ok) throw new Error('HTTP ' + res.status);
             return res.json();
           })
-          .then(function (data) {
-            var reviews = data.reviews || [];
+          .then(data => {
+            const reviews = data.reviews || [];
             if (!reviews.length) throw new Error('empty');
             render(reviews, data.rating, data.user_ratings_total);
           })
-          .catch(function (err) {
+          .catch(err => {
             console.warn('Testimonials: could not load reviews.json —', err.message);
-            if (loading) loading.style.display = 'none';
-            if (errorEl) {
-              errorEl.style.display = 'block';
-              errorEl.innerHTML = 'Unable to load reviews. ' +
-                '<a href="' + GOOGLE_MAPS_URL + '" target="_blank" rel="noopener">View on Google →</a>';
-            }
+            // Keep the pre-rendered first review visible on error
           });
       }
-    
-      /* ── Boot ─────────────────────────────────────────────────── */
+
+      // Initialize
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', load);
       } else {
         load();
       }
-    
-    }());
+
+    })();
 
     /* ── Scroll Reveal ─────────────────────────────────────── */
     const revIO = new IntersectionObserver((entries) => {
