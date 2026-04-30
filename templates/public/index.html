@@ -895,10 +895,12 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   <!-- Hero Slider -->
   <section class="hero" id="hero" aria-label="Featured photography showcase">
     <div class="hero-badge" aria-hidden="true">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
       Machakos, Kenya
     </div>
     <div class="slider-track" id="sliderTrack">
+
+      <!-- 1. STUDIO -->
       <div class="slide active">
         <div class="slide-bg" style="background-image:url('/uploads/potostudio.webp')"></div>
         <div class="slide-overlay"></div>
@@ -912,19 +914,23 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
           </div>
         </div>
       </div>
+
+      <!-- 2. FASHION -->
       <div class="slide">
         <div class="slide-bg" style="background-image:url('/static/uploads/sadfghf.webp')"></div>
         <div class="slide-overlay"></div>
         <div class="slide-content">
-          <span class="slide-tag">Kids Photography</span>
-          <h2 class="slide-title">Playful &<br><em>Memorable</em></h2>
-          <p class="slide-desc">Fun, candid moments that capture their joy and personality at every age.</p>
+          <span class="slide-tag">Fashion</span>
+          <h2 class="slide-title">Fashion &<br><em>Editorial</em></h2>
+          <p class="slide-desc">Bold, creative vision for brands and models.</p>
           <div class="slide-buttons">
-            <a href="/portfolio?category=kids" class="btn-primary">View Kids Gallery</a>
-            <a href="/contact" class="btn-ghost">Book A Session</a>
+            <a href="/services" class="btn-primary">Learn More</a>
+            <a href="/contact" class="btn-ghost">Contact Us</a>
           </div>
         </div>
       </div>
+
+      <!-- 3. TENDER - Maternity -->
       <div class="slide">
         <div class="slide-bg" style="background-image:url('/static/uploads/DNS_3538.webp')"></div>
         <div class="slide-overlay"></div>
@@ -938,44 +944,38 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
           </div>
         </div>
       </div>
+
+      <!-- 4. CORPORATE -->
       <div class="slide">
         <div class="slide-bg" style="background-image:url('/static/uploads/DNS_9739k.webp')"></div>
         <div class="slide-overlay"></div>
         <div class="slide-content">
-          <span class="slide-tag">Events</span>
-          <h2 class="slide-title">Corporate &<br><em>Private Events</em></h2>
-          <p class="slide-desc">From conferences to celebrations, every detail captured.</p>
+          <span class="slide-tag">Corporate</span>
+          <h2 class="slide-title">Corporate &<br><em>Events</em></h2>
+          <p class="slide-desc">From conferences to celebrations, every detail captured professionally.</p>
           <div class="slide-buttons">
-            <a href="/portfolio" class="btn-primary">See Events</a>
-            <a href="/contact" class="btn-ghost">Get Quote</a>
-          </div>
-        </div>
-      </div><div class="slide">
-        <div class="slide-bg" style="background-image:url('/static/uploads/DNS_9739k.webp')"></div>
-        <div class="slide-overlay"></div>
-        <div class="slide-content">
-          <span class="slide-tag">Events</span>
-          <h2 class="slide-title">Corporate &<br><em>Private Events</em></h2>
-          <p class="slide-desc">From conferences to celebrations, every detail captured.</p>
-          <div class="slide-buttons">
-            <a href="/portfolio" class="btn-primary">See Events</a>
+            <a href="/portfolio?category=corporate" class="btn-primary">See Corporate Work</a>
             <a href="/contact" class="btn-ghost">Get Quote</a>
           </div>
         </div>
       </div>
+
+      <!-- 5. PROFESSIONALS -->
       <div class="slide">
         <div class="slide-bg" style="background-image:url('/static/uploads/DSC_65351.webp')"></div>
         <div class="slide-overlay"></div>
         <div class="slide-content">
-          <span class="slide-tag">Portraits</span>
-          <h2 class="slide-title">Professional<br><em>Portraits</em></h2>
-          <p class="slide-desc">Express your personality through stunning portraits.</p>
+          <span class="slide-tag">Professionals</span>
+          <h2 class="slide-title">Professional<br><em>Headshots</em></h2>
+          <p class="slide-desc">Polished portraits for LinkedIn, websites, and personal branding.</p>
           <div class="slide-buttons">
-            <a href="/services" class="btn-primary">Book Session</a>
+            <a href="/services" class="btn-primary">Book Headshots</a>
             <a href="/portfolio" class="btn-ghost">View Portfolio</a>
           </div>
         </div>
       </div>
+
+      <!-- 6. CINEMATIC -->
       <div class="slide">
         <div class="slide-bg" style="background-image:url('/static/uploads/drone.webp')"></div>
         <div class="slide-overlay"></div>
@@ -989,7 +989,9 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
           </div>
         </div>
       </div>
-      <div class="slide active">
+
+      <!-- 7. LIVE STREAM -->
+      <div class="slide">
         <div class="slide-bg" style="background-image:url('/static/uploads/1002946443.webp')"></div>
         <div class="slide-overlay"></div>
         <div class="slide-content">
@@ -1002,6 +1004,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
           </div>
         </div>
       </div>
+
     </div>
     <button class="slider-btn slider-prev" id="prevBtn" aria-label="Previous slide">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 18l-6-6 6-6"/></svg>
@@ -1011,7 +1014,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     </button>
     <div class="slider-dots" id="sliderDots"></div>
     <div class="slide-counter" id="slideCounter">
-      <span class="current">01</span><span>/</span><span class="total">06</span>
+      <span class="current">01</span><span>/</span><span class="total">07</span>
     </div>
     <div class="hero-scroll-hint" aria-hidden="true">
       <div class="scroll-line"></div>
