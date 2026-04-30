@@ -58,10 +58,16 @@ class Booking(db.Model):
     phone      = db.Column(db.String(20))
     service    = db.Column(db.String(100), nullable=False)
     message    = db.Column(db.Text)
-    status     = db.Column(db.String(20), default='pending')  # pending | approved | rejected
+    status     = db.Column(db.String(20), default='pending')  # pending|confirmed|completed|cancelled
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Payments linked to this booking
+    # Admin-fillable fields (null for public submissions until admin updates)
+    date       = db.Column(db.String(20))
+    time       = db.Column(db.String(20))
+    location   = db.Column(db.String(200))
+    amount     = db.Column(db.Integer)
+    notes      = db.Column(db.Text)
+
     payments   = db.relationship('Payment', backref='booking', lazy=True)
 
     def __repr__(self):

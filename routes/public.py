@@ -164,7 +164,8 @@ def api_booking():
             email   = email,
             phone   = phone,
             service = service,
-            message = full_message,
+            message = message,
+            date    = date or None,   # save as its own field
             status  = 'pending',
         )
         db.session.add(booking)
