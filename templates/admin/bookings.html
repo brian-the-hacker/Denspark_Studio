@@ -3,7 +3,7 @@
 {% block page_title %}Bookings{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="/static/css/admin/booking/main.css">
+<link rel="stylesheet" href="/static/css/admin/bookings.css">
 {% endblock %}
 
 {% block content %}
@@ -15,10 +15,7 @@
     <p class="page-sub">Manage and track all client sessions</p>
   </div>
   <button class="btn btn-primary" id="newBookingBtn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <rect x="3" y="4" width="18" height="18" rx="2"/>
-      <path d="M16 2v4M8 2v4M3 10h18M12 14v4M10 16h4"/>
-    </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4M10 16h4"/></svg>
     New Booking
   </button>
 </div>
@@ -26,9 +23,7 @@
 <!-- Stat Cards -->
 <div class="bk-stats">
   <div class="bk-stat">
-    <div class="bk-stat-icon total">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-    </div>
+    <div class="bk-stat-icon total"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
     <div class="bk-stat-body">
       <span class="bk-stat-num">{{ stats.total if stats else '24' }}</span>
       <span class="bk-stat-label">Total Bookings</span>
@@ -36,9 +31,7 @@
     <span class="bk-stat-trend up">+3 this week</span>
   </div>
   <div class="bk-stat">
-    <div class="bk-stat-icon pending">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-    </div>
+    <div class="bk-stat-icon pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
     <div class="bk-stat-body">
       <span class="bk-stat-num">{{ stats.pending if stats else '8' }}</span>
       <span class="bk-stat-label">Pending</span>
@@ -46,9 +39,7 @@
     <span class="bk-stat-trend neutral">Awaiting action</span>
   </div>
   <div class="bk-stat">
-    <div class="bk-stat-icon confirmed">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-    </div>
+    <div class="bk-stat-icon confirmed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
     <div class="bk-stat-body">
       <span class="bk-stat-num">{{ stats.confirmed if stats else '12' }}</span>
       <span class="bk-stat-label">Confirmed</span>
@@ -56,9 +47,7 @@
     <span class="bk-stat-trend up">All set</span>
   </div>
   <div class="bk-stat">
-    <div class="bk-stat-icon completed">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.66 0 3.21.45 4.54 1.23"/></svg>
-    </div>
+    <div class="bk-stat-icon completed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></div>
     <div class="bk-stat-body">
       <span class="bk-stat-num">{{ stats.completed if stats else '4' }}</span>
       <span class="bk-stat-label">Completed</span>
@@ -67,7 +56,7 @@
   </div>
 </div>
 
-<!-- Filter + Search Bar -->
+<!-- Toolbar -->
 <div class="bk-toolbar">
   <div class="bk-filters" id="bkFilters">
     <button class="bk-filter active" data-filter="all">All</button>
@@ -80,16 +69,17 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="bkSearch" placeholder="Search client, service…" autocomplete="off">
   </div>
-  <input type="date" class="bk-date-input" id="bkDate" title="Filter by date">
+  <input type="date" class="bk-date-input" id="bkDate">
 </div>
 
-<!-- Table Card -->
+<!-- Table -->
 <div class="bk-card">
   <div class="bk-table-wrap">
     <table class="bk-table" id="bkTable">
       <thead>
         <tr>
           <th><input type="checkbox" id="selectAll" class="bk-check"></th>
+          <th></th><!-- chevron col -->
           <th>Client</th>
           <th>Service</th>
           <th>Date &amp; Time</th>
@@ -100,99 +90,145 @@
         </tr>
       </thead>
       <tbody>
-        {% if bookings %}
-          {% for booking in bookings %}
-          <tr data-status="{{ booking.status }}" data-id="{{ booking.id }}">
-            <td><input type="checkbox" class="bk-check row-check"></td>
-            <td>
-              <div class="bk-client">
-                <div class="bk-avatar">{{ booking.name[0].upper() }}</div>
-                <div class="bk-client-info">
-                  <span class="bk-name">{{ booking.name }}</span>
-                  <span class="bk-email">{{ booking.email }}</span>
+
+        {# ── macro to render one booking row group ── #}
+        {% macro booking_rows(b) %}
+        {# Main row #}
+        <tr class="bk-row" data-status="{{ b.status }}" data-id="{{ b.id }}">
+          <td><input type="checkbox" class="bk-check row-check"></td>
+          <td>
+            <span class="bk-chevron">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </td>
+          <td>
+            <div class="bk-client">
+              <div class="bk-avatar">{{ b.name[0].upper() }}</div>
+              <div class="bk-client-info">
+                <span class="bk-name">{{ b.name }}</span>
+                <span class="bk-email">{{ b.email }}</span>
+              </div>
+            </div>
+          </td>
+          <td class="bk-service">{{ b.service | replace('-',' ') | title }}</td>
+          <td>
+            <div class="bk-datetime">
+              <span class="bk-date">{{ b.date or '—' }}</span>
+              <span class="bk-time">{{ b.time or '—' }}</span>
+            </div>
+          </td>
+          <td class="bk-location">{{ b.location or '—' }}</td>
+          <td><span class="bk-amount">{% if b.amount %}KES {{ '{:,}'.format(b.amount) }}{% else %}—{% endif %}</span></td>
+          <td><span class="bk-badge {{ b.status }}">{{ b.status | title }}</span></td>
+          <td>
+            <div class="bk-actions">
+              <button class="bk-action edit-btn" title="Edit" data-action="edit">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+              {% if b.status == 'pending' %}
+              <button class="bk-action confirm confirm-btn" title="Confirm" data-action="confirm" data-name="{{ b.name }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </button>
+              {% elif b.status == 'completed' %}
+              <button class="bk-action invoice" title="Invoice" data-action="invoice">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </button>
+              {% else %}
+              <button class="bk-action cancel cancel-btn" title="Cancel" data-action="cancel" data-name="{{ b.name }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+              </button>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+
+        {# View detail drop-down #}
+        <tr class="bk-detail-row" data-for="{{ b.id }}">
+          <td colspan="9">
+            <div class="bk-detail-inner">
+              <div class="bk-detail-section">
+                <span class="bk-detail-title">Client</span>
+                <div class="bk-detail-field"><span class="bk-detail-label">Full name</span><span class="bk-detail-value">{{ b.name }}</span></div>
+                <div class="bk-detail-field"><span class="bk-detail-label">Email</span><span class="bk-detail-value">{{ b.email }}</span></div>
+                <div class="bk-detail-field"><span class="bk-detail-label">Phone</span><span class="bk-detail-value">{{ b.phone or '—' }}</span></div>
+              </div>
+              <div class="bk-detail-section">
+                <span class="bk-detail-title">Session</span>
+                <div class="bk-detail-field"><span class="bk-detail-label">Service</span><span class="bk-detail-value">{{ b.service | replace('-',' ') | title }}</span></div>
+                <div class="bk-detail-field"><span class="bk-detail-label">Date</span><span class="bk-detail-value">{{ b.date or '—' }}</span></div>
+                <div class="bk-detail-field"><span class="bk-detail-label">Time</span><span class="bk-detail-value">{{ b.time or '—' }}</span></div>
+                <div class="bk-detail-field"><span class="bk-detail-label">Location</span><span class="bk-detail-value">{{ b.location or '—' }}</span></div>
+              </div>
+              <div class="bk-detail-section">
+                <span class="bk-detail-title">Payment</span>
+                <div class="bk-detail-field"><span class="bk-detail-label">Amount</span><span class="bk-detail-value">{% if b.amount %}KES {{ '{:,}'.format(b.amount) }}{% else %}—{% endif %}</span></div>
+                <div class="bk-detail-field"><span class="bk-detail-label">Status</span><span class="bk-badge {{ b.status }}" style="margin-top:2px">{{ b.status | title }}</span></div>
+                <div class="bk-detail-field"><span class="bk-detail-label">Booked on</span><span class="bk-detail-value">{{ b.created_at.strftime('%b %d, %Y') if b.created_at else '—' }}</span></div>
+              </div>
+              {% if b.notes %}
+              <div class="bk-detail-section bk-detail-notes">
+                <span class="bk-detail-title">Notes from client</span>
+                <div class="bk-detail-notes-text">{{ b.notes }}</div>
+              </div>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+
+        {# Inline edit drop-down #}
+        <tr class="bk-edit-row" data-for="{{ b.id }}">
+          <td colspan="9">
+            <div class="bk-edit-inner">
+              <form class="bk-edit-form" data-id="{{ b.id }}" action="/admin/bookings/{{ b.id }}/update" method="POST">
+                {% if csrf_token is defined %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endif %}
+                <div class="bk-edit-grid">
+                  <div class="bk-edit-field"><label>Name</label><input type="text" name="name" value="{{ b.name }}" required></div>
+                  <div class="bk-edit-field"><label>Email</label><input type="email" name="email" value="{{ b.email }}" required></div>
+                  <div class="bk-edit-field"><label>Phone</label><input type="tel" name="phone" value="{{ b.phone or '' }}"></div>
+                  <div class="bk-edit-field"><label>Service</label>
+                    <select name="service">
+                      {% for svc in ['Portrait Session','Wedding Coverage','Event Photography','Product Shoot','Video Production','Family Portrait','Graduation','Corporate'] %}
+                      <option value="{{ svc }}" {% if b.service == svc %}selected{% endif %}>{{ svc }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="bk-edit-field"><label>Date</label><input type="date" name="date" value="{{ b.date or '' }}"></div>
+                  <div class="bk-edit-field"><label>Time</label><input type="time" name="time" value="{{ b.time or '' }}"></div>
+                  <div class="bk-edit-field"><label>Location</label><input type="text" name="location" value="{{ b.location or '' }}"></div>
+                  <div class="bk-edit-field"><label>Amount (KES)</label><input type="number" name="amount" value="{{ b.amount or '' }}" min="0"></div>
+                  <div class="bk-edit-field"><label>Status</label>
+                    <select name="status">
+                      {% for s in ['pending','confirmed','completed','cancelled'] %}
+                      <option value="{{ s }}" {% if b.status == s %}selected{% endif %}>{{ s | title }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="bk-edit-field span-3"><label>Notes</label><textarea name="notes">{{ b.notes or '' }}</textarea></div>
                 </div>
-              </div>
-            </td>
-            <td class="bk-service">{{ booking.service | replace('-', ' ') | title }}</td>
-            <td>
-              <div class="bk-datetime">
-                <span class="bk-date">{{ booking.date or '—' }}</span>
-                <span class="bk-time">{{ booking.time or '—' }}</span>
-              </div>
-            </td>
-            <td class="bk-location">{{ booking.location or '—' }}</td>
-            <td>
-              <span class="bk-amount">{% if booking.amount %}KES {{ '{:,}'.format(booking.amount) }}{% else %}—{% endif %}</span>
-            </td>
-            <td><span class="bk-badge {{ booking.status }}">{{ booking.status | title }}</span></td>
-            <td>
-              <div class="bk-actions">
-                <button class="bk-action" title="View" data-action="view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-                <button class="bk-action" title="Edit" data-action="edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                {% if booking.status == 'pending' %}
-                <button class="bk-action confirm" title="Confirm" data-action="confirm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></button>
-                {% elif booking.status == 'completed' %}
-                <button class="bk-action invoice" title="Invoice" data-action="invoice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button>
-                {% else %}
-                <button class="bk-action cancel" title="Cancel" data-action="cancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg></button>
-                {% endif %}
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
+                <div class="bk-edit-actions">
+                  <button type="submit" class="bk-edit-save">Save Changes</button>
+                  <button type="button" class="bk-edit-discard edit-discard">Discard</button>
+                </div>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endmacro %}
+
+        {% if bookings %}
+          {% for b in bookings %}{{ booking_rows(b) }}{% endfor %}
         {% else %}
-          <!-- Sample data when no bookings -->
-          <tr data-status="pending" data-id="1">
-            <td><input type="checkbox" class="bk-check row-check"></td>
-            <td><div class="bk-client"><div class="bk-avatar">J</div><div class="bk-client-info"><span class="bk-name">John Kamau</span><span class="bk-email">john@email.com</span></div></div></td>
-            <td class="bk-service">Portrait Session</td>
-            <td><div class="bk-datetime"><span class="bk-date">Apr 25, 2024</span><span class="bk-time">10:00 AM</span></div></td>
-            <td class="bk-location">Studio</td>
-            <td><span class="bk-amount">KES 5,000</span></td>
-            <td><span class="bk-badge pending">Pending</span></td>
-            <td><div class="bk-actions"><button class="bk-action" title="View" data-action="view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="bk-action" title="Edit" data-action="edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="bk-action confirm" title="Confirm" data-action="confirm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></button></div></td>
-          </tr>
-          <tr data-status="confirmed" data-id="2">
-            <td><input type="checkbox" class="bk-check row-check"></td>
-            <td><div class="bk-client"><div class="bk-avatar">M</div><div class="bk-client-info"><span class="bk-name">Mary Wanjiku</span><span class="bk-email">mary@email.com</span></div></div></td>
-            <td class="bk-service">Wedding Coverage</td>
-            <td><div class="bk-datetime"><span class="bk-date">Apr 28, 2024</span><span class="bk-time">8:00 AM</span></div></td>
-            <td class="bk-location">Safari Park Hotel</td>
-            <td><span class="bk-amount">KES 45,000</span></td>
-            <td><span class="bk-badge confirmed">Confirmed</span></td>
-            <td><div class="bk-actions"><button class="bk-action" title="View" data-action="view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="bk-action" title="Edit" data-action="edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="bk-action cancel" title="Cancel" data-action="cancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg></button></div></td>
-          </tr>
-          <tr data-status="confirmed" data-id="3">
-            <td><input type="checkbox" class="bk-check row-check"></td>
-            <td><div class="bk-client"><div class="bk-avatar">P</div><div class="bk-client-info"><span class="bk-name">Peter Ochieng</span><span class="bk-email">peter@email.com</span></div></div></td>
-            <td class="bk-service">Product Shoot</td>
-            <td><div class="bk-datetime"><span class="bk-date">Apr 30, 2024</span><span class="bk-time">2:00 PM</span></div></td>
-            <td class="bk-location">Studio</td>
-            <td><span class="bk-amount">KES 15,000</span></td>
-            <td><span class="bk-badge confirmed">Confirmed</span></td>
-            <td><div class="bk-actions"><button class="bk-action" title="View" data-action="view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="bk-action" title="Edit" data-action="edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="bk-action cancel" title="Cancel" data-action="cancel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg></button></div></td>
-          </tr>
-          <tr data-status="completed" data-id="4">
-            <td><input type="checkbox" class="bk-check row-check"></td>
-            <td><div class="bk-client"><div class="bk-avatar">S</div><div class="bk-client-info"><span class="bk-name">Sarah Njeri</span><span class="bk-email">sarah@email.com</span></div></div></td>
-            <td class="bk-service">Family Portrait</td>
-            <td><div class="bk-datetime"><span class="bk-date">Apr 20, 2024</span><span class="bk-time">4:00 PM</span></div></td>
-            <td class="bk-location">Uhuru Gardens</td>
-            <td><span class="bk-amount">KES 8,000</span></td>
-            <td><span class="bk-badge completed">Completed</span></td>
-            <td><div class="bk-actions"><button class="bk-action" title="View" data-action="view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="bk-action invoice" title="Invoice" data-action="invoice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></button></div></td>
-          </tr>
-          <tr data-status="cancelled" data-id="5">
-            <td><input type="checkbox" class="bk-check row-check"></td>
-            <td><div class="bk-client"><div class="bk-avatar">A</div><div class="bk-client-info"><span class="bk-name">Alex Muthoni</span><span class="bk-email">alex@email.com</span></div></div></td>
-            <td class="bk-service">Event Photography</td>
-            <td><div class="bk-datetime"><span class="bk-date">Apr 18, 2024</span><span class="bk-time">12:00 PM</span></div></td>
-            <td class="bk-location">Nairobi CBD</td>
-            <td><span class="bk-amount">KES 20,000</span></td>
-            <td><span class="bk-badge cancelled">Cancelled</span></td>
-            <td><div class="bk-actions"><button class="bk-action" title="View" data-action="view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div></td>
-          </tr>
+          {# ── Static sample data ── #}
+          {% set samples = [
+            {'id':1,'name':'John Kamau',  'email':'john@email.com', 'phone':'+254 712 345 678','service':'Portrait Session','date':'Apr 25, 2024','time':'10:00 AM','location':'Studio','amount':5000,'status':'pending','notes':'Prefer natural light. Bring props.'},
+            {'id':2,'name':'Mary Wanjiku','email':'mary@email.com', 'phone':'+254 720 111 222','service':'Wedding Coverage','date':'Apr 28, 2024','time':'8:00 AM', 'location':'Safari Park Hotel','amount':45000,'status':'confirmed','notes':'Full day coverage, 2 photographers.'},
+            {'id':3,'name':'Peter Ochieng','email':'peter@email.com','phone':'+254 733 444 555','service':'Product Shoot','date':'Apr 30, 2024','time':'2:00 PM','location':'Studio','amount':15000,'status':'confirmed','notes':None},
+            {'id':4,'name':'Sarah Njeri', 'email':'sarah@email.com','phone':'+254 700 999 888','service':'Family Portrait','date':'Apr 20, 2024','time':'4:00 PM','location':'Uhuru Gardens','amount':8000,'status':'completed','notes':'Outdoor golden-hour session.'},
+            {'id':5,'name':'Alex Muthoni','email':'alex@email.com', 'phone':'+254 711 777 666','service':'Event Photography','date':'Apr 18, 2024','time':'12:00 PM','location':'Nairobi CBD','amount':20000,'status':'cancelled','notes':None}
+          ] %}
+          {% for b in samples %}{{ booking_rows(b) }}{% endfor %}
         {% endif %}
+
       </tbody>
     </table>
   </div>
@@ -201,22 +237,18 @@
   <div class="bk-pagination">
     <span class="bk-pag-info">Showing 1–{{ bookings|length if bookings else '5' }} of {{ total_bookings if total_bookings else '24' }} bookings</span>
     <div class="bk-pag-controls">
-      <button class="bk-pag-btn" disabled>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
+      <button class="bk-pag-btn" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
       <button class="bk-pag-btn active">1</button>
       <button class="bk-pag-btn">2</button>
       <button class="bk-pag-btn">3</button>
       <span class="bk-pag-ellipsis">…</span>
       <button class="bk-pag-btn">6</button>
-      <button class="bk-pag-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
+      <button class="bk-pag-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
     </div>
   </div>
 </div>
 
-<!-- ========== NEW BOOKING MODAL ========== -->
+<!-- ===== NEW BOOKING MODAL ===== -->
 <div class="bk-modal-overlay" id="bookingModal">
   <div class="bk-modal">
     <div class="bk-modal-header">
@@ -228,87 +260,48 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
     </div>
-
     <div class="bk-modal-body">
-      <form id="bookingForm" action="{{ url_for('admin.create_booking') if url_for is defined else '/admin/bookings/create' }}" method="POST">
+      <form id="bookingForm" action="/admin/bookings/create" method="POST">
         {% if csrf_token is defined %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endif %}
-
         <div class="bk-form-section">
           <span class="bk-form-section-label">Client Details</span>
           <div class="bk-form-row">
-            <div class="bk-field">
-              <label for="clientName">Full Name <span class="req">*</span></label>
-              <input type="text" name="name" id="clientName" placeholder="e.g. Jane Wanjiru" required>
-            </div>
-            <div class="bk-field">
-              <label for="clientEmail">Email <span class="req">*</span></label>
-              <input type="email" name="email" id="clientEmail" placeholder="jane@email.com" required>
-            </div>
+            <div class="bk-field"><label>Full Name <span class="req">*</span></label><input type="text" name="name" placeholder="e.g. Jane Wanjiru" required></div>
+            <div class="bk-field"><label>Email <span class="req">*</span></label><input type="email" name="email" placeholder="jane@email.com" required></div>
           </div>
           <div class="bk-form-row">
-            <div class="bk-field">
-              <label for="clientPhone">Phone <span class="req">*</span></label>
-              <input type="tel" name="phone" id="clientPhone" placeholder="+254 7XX XXX XXX" required>
-            </div>
-            <div class="bk-field">
-              <label for="bookingService">Service <span class="req">*</span></label>
-              <select name="service" id="bookingService" required>
+            <div class="bk-field"><label>Phone <span class="req">*</span></label><input type="tel" name="phone" placeholder="+254 7XX XXX XXX" required></div>
+            <div class="bk-field"><label>Service <span class="req">*</span></label>
+              <select name="service" required>
                 <option value="">Select service…</option>
-                <option value="Portrait Session">Portrait Session</option>
-                <option value="Wedding Coverage">Wedding Coverage</option>
-                <option value="Event Photography">Event Photography</option>
-                <option value="Product Shoot">Product Shoot</option>
-                <option value="Video Production">Video Production</option>
-                <option value="Family Portrait">Family Portrait</option>
-                <option value="Graduation">Graduation</option>
-                <option value="Corporate">Corporate</option>
+                <option>Portrait Session</option><option>Wedding Coverage</option>
+                <option>Event Photography</option><option>Product Shoot</option>
+                <option>Video Production</option><option>Family Portrait</option>
+                <option>Graduation</option><option>Corporate</option>
               </select>
             </div>
           </div>
         </div>
-
         <div class="bk-form-section">
           <span class="bk-form-section-label">Session Details</span>
           <div class="bk-form-row">
-            <div class="bk-field">
-              <label for="bookingDate">Date <span class="req">*</span></label>
-              <input type="date" name="date" id="bookingDate" required>
-            </div>
-            <div class="bk-field">
-              <label for="bookingTime">Time <span class="req">*</span></label>
-              <input type="time" name="time" id="bookingTime" required>
-            </div>
+            <div class="bk-field"><label>Date <span class="req">*</span></label><input type="date" name="date" required></div>
+            <div class="bk-field"><label>Time <span class="req">*</span></label><input type="time" name="time" required></div>
           </div>
-          <div class="bk-field">
-            <label for="bookingLocation">Location</label>
-            <input type="text" name="location" id="bookingLocation" placeholder="Studio, or specify a venue">
-          </div>
+          <div class="bk-field"><label>Location</label><input type="text" name="location" placeholder="Studio, or specify a venue"></div>
         </div>
-
         <div class="bk-form-section">
           <span class="bk-form-section-label">Booking Info</span>
           <div class="bk-form-row">
-            <div class="bk-field">
-              <label for="bookingAmount">Amount (KES)</label>
-              <input type="number" name="amount" id="bookingAmount" min="0" placeholder="0">
-            </div>
-            <div class="bk-field">
-              <label for="bookingStatus">Status</label>
-              <select name="status" id="bookingStatus">
-                <option value="pending">Pending</option>
-                <option value="confirmed">Confirmed</option>
-              </select>
+            <div class="bk-field"><label>Amount (KES)</label><input type="number" name="amount" min="0" placeholder="0"></div>
+            <div class="bk-field"><label>Status</label>
+              <select name="status"><option value="pending">Pending</option><option value="confirmed">Confirmed</option></select>
             </div>
           </div>
-          <div class="bk-field">
-            <label for="bookingNotes">Notes</label>
-            <textarea name="notes" id="bookingNotes" rows="3" placeholder="Special requirements, shoot style preferences…"></textarea>
-          </div>
+          <div class="bk-field"><label>Notes</label><textarea name="notes" rows="3" placeholder="Special requirements, shoot style preferences…"></textarea></div>
         </div>
-
       </form>
     </div>
-
     <div class="bk-modal-footer">
       <button class="btn btn-secondary" id="cancelModal">Cancel</button>
       <button class="btn btn-primary" id="saveBooking">
@@ -319,8 +312,23 @@
   </div>
 </div>
 
+<!-- ===== CONFIRM POPOVER ===== -->
+<div class="bk-confirm-overlay" id="confirmOverlay">
+  <div class="bk-confirm-box">
+    <div class="bk-confirm-icon" id="confirmIcon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="confirmIconSvg"></svg>
+    </div>
+    <h3 id="confirmTitle">Confirm Booking</h3>
+    <p id="confirmMsg">Are you sure?</p>
+    <div class="bk-confirm-btns">
+      <button class="bk-confirm-no" id="confirmNo">Cancel</button>
+      <button class="bk-confirm-yes" id="confirmYes">Yes, confirm</button>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
-<script src="/static/js/admin/booking/main.js"></script>
+<script src="/static/js/admin/bookings.js"></script>
 {% endblock %}
