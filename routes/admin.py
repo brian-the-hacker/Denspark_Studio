@@ -509,7 +509,25 @@ def update_booking():
     db.session.commit()
     return jsonify({'success': True})
 
-
+@admin_bp.route('/bookings/create', methods=['POST'])
+@login_required
+def create_booking():
+    data = request.form
+    booking = Booking(
+        name     = data.get('name'),
+        email    = data.get('email'),
+        phone    = data.get('phone'),
+        service  = data.get('service'),
+        date     = data.get('date'),
+        time     = data.get('time'),
+        location = data.get('location'),
+        amount   = data.get('amount') or None,
+        notes    = data.get('notes'),
+        status   = data.get('status', 'pending'),
+    )
+    db.session.add(booking)
+    db.session.commit()
+    return redirect(url_for('admin.bookings'))
 # ─────────────────────────────────────────────────────────────────────────────
 # ADMIN — MESSAGES
 # ─────────────────────────────────────────────────────────────────────────────
