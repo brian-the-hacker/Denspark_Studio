@@ -487,8 +487,17 @@ def delete_video(video_id):
 @admin_bp.route('/bookings')
 @login_required
 def bookings():
-    all_bookings = Booking.query.order_by(Booking.created_at.desc()).all()
-    return render_template('admin/bookings.html', bookings=all_bookings, current_user=current_user)
+    bookings = Booking.query.order_by(Booking.id.desc()).all()
+    stats = {
+        'total':     Booking.query.count(),
+        'pending':   Booking.query.filter_by(status='pending').count(),
+        'confirmed': Booking.query.filter_by(status='confirmed').count(),
+        'completed': Booking.query.filter_by(status='completed').count(),
+    }
+    return render_template('admin/bookings.html',
+                           bookings=bookings,
+                           stats=stats,
+                           total_bookings=stats['total'])
 
 
 @admin_bp.route('/bookings/update', methods=['POST'])
@@ -533,20 +542,6 @@ def delete_message(id):
     return jsonify({'success': True})
 
 
-@admin_bp.route('/bookings')
-@login_required
-def bookings():
-    bookings = Booking.query.order_by(Booking.id.desc()).all()
-    stats = {
-        'total':     Booking.query.count(),
-        'pending':   Booking.query.filter_by(status='pending').count(),
-        'confirmed': Booking.query.filter_by(status='confirmed').count(),
-        'completed': Booking.query.filter_by(status='completed').count(),
-    }
-    return render_template('admin/bookings.html',
-                           bookings=bookings,
-                           stats=stats,
-                           total_bookings=stats['total'])
 
 # ─────────────────────────────────────────────────────────────────────────────
 # ADMIN — PAYMENTS
