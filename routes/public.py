@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify, request, current_app
+from flask import Blueprint, render_template, jsonify, send_from_directory, request, current_app
 from models import db, Portfolio, Booking, Message
 from app import limiter
 from utils.email import send_booking_notification, send_contact_notification
@@ -248,3 +248,21 @@ def api_contact():
     except Exception as e:
         current_app.logger.error(f"Contact form error: {e}")
         return jsonify({'error': 'Failed to send message. Please try again later.'}), 500
+    
+# ── API: Google Reviews (example) ─────────────────────────────────────────this will be offline
+#@public_bp.route('/api/reviews')
+#def reviews():
+#    import requests, os
+#    r = requests.get(
+#        'https://maps.googleapis.com/maps/api/place/details/json',
+#        params={
+#           'place_id': 'YOUR_ChIJ_HERE',
+#            'key': os.getenv('GOOGLE_PLACES_KEY'),
+#           'fields': 'reviews,rating,user_ratings_total'
+#       }
+#   )
+#   return jsonify(r.json().get('result', {}))
+
+@public_bp.route('/api/reviews')
+def get_reviews():
+    return send_from_directory('static/data', 'reviews.json')

@@ -1,0 +1,86 @@
+{
+  "rating": 4.9,
+  "user_ratings_total": 84,
+  "reviews": [
+    {
+      "author_name": "Sarah Muthoni",
+      "rating": 5,
+      "relative_time_description": "2 weeks ago",
+      "time": 1716000000,
+      "text": "Denspark Studio captured our wedding beautifully! Every single photo tells a story. The team was professional, warm, and incredibly attentive. We couldn't be happier with the results.",
+      "profile_photo_url": null
+    },
+    {
+      "author_name": "James Odhiambo",
+      "rating": 5,
+      "relative_time_description": "1 month ago",
+      "time": 1713000000,
+      "text": "Professional, creative, and punctual! They covered our corporate event flawlessly and delivered beyond expectations. The editing was top-notch and turnaround was fast.",
+      "profile_photo_url": null
+    },
+    {
+      "author_name": "Grace Wanjiku",
+      "rating": 5,
+      "relative_time_description": "3 weeks ago",
+      "time": 1715500000,
+      "text": "The portrait session was amazing! They made me feel completely comfortable and the photos turned out absolutely stunning. I've already recommended them to all my friends.",
+      "profile_photo_url": null
+    },
+    {
+      "author_name": "Kevin Mutua",
+      "rating": 5,
+      "relative_time_description": "2 months ago",
+      "time": 1710000000,
+      "text": "Best studio in Machakos, no debate. The drone footage from our event was cinematic-level quality. Guests kept asking who the videographer was!",
+      "profile_photo_url": null
+    },
+    {
+      "author_name": "Mercy Ndungu",
+      "rating": 5,
+      "relative_time_description": "1 month ago",
+      "time": 1712500000,
+      "text": "My graduation shoot was everything I dreamed of. They had great outfit options and the makeup artist was fantastic. Photos were delivered same day — incredible service.",
+      "profile_photo_url": null
+    },
+    {
+      "author_name": "Brian Kioko",
+      "rating": 4,
+      "relative_time_description": "5 weeks ago",
+      "time": 1714000000,
+      "text": "Very talented team. The branding package they created for my business looks so professional. Logo, business cards, social media graphics — all consistent and sharp.",
+      "profile_photo_url": null
+    },
+    {
+      "author_name": "Esther Kamau",
+      "rating": 5,
+      "relative_time_description": "3 months ago",
+      "time": 1707000000,
+      "text": "Hired them for my daughter's birthday photoshoot. They were so patient with the kids and the results were magical. Every parent at the party was asking for their contact.",
+      "profile_photo_url": null
+    },
+    {
+      "author_name": "Peter Musyoka",
+      "rating": 5,
+      "relative_time_description": "6 weeks ago",
+      "time": 1713500000,
+      "text": "The live streaming setup for our church service was flawless. Multiple cameras, clean audio, graphics on screen — it felt like a professional broadcast. Highly recommend!",
+      "profile_photo_url": null
+    },
+    {
+      "author_name": "Anita Njeri",
+      "rating": 5,
+      "relative_time_description": "2 months ago",
+      "time": 1709000000,
+      "text": "My maternity shoot photos are absolute treasures. The team was so thoughtful with the lighting and poses. I felt beautiful and the photos show it. Worth every shilling.",
+      "profile_photo_url": null
+    },
+    {
+      "author_name": "David Nzomo",
+      "rating": 5,
+      "relative_time_description": "1 week ago",
+      "time": 1716500000,
+      "text": "Booked them last minute for a product shoot and they delivered exceptionally. Clean backgrounds, perfect lighting, fast delivery. Our online store looks so much better now.",
+      "profile_photo_url": null
+    }
+  ]
+}

@@ -580,23 +580,360 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .about-feat{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--gray-800);background:var(--gray-100);padding:6px 12px;border-radius:100px}
 .feat-icon{color:var(--blue);font-weight:700}
 
-/* ── Testimonials ──────────────────────────────────────── */
-.testimonials-section{background:var(--off-white)}
-.testimonials-slider{position:relative;overflow:hidden}
-.testimonials-track{display:flex;transition:transform .5s var(--ease)}
-.testimonial-card{min-width:100%;background:var(--white);border-radius:var(--radius-lg);padding:clamp(28px,4vw,48px);border:1px solid var(--gray-200);position:relative}
-.quote-mark{font-family:var(--font-display);font-size:5rem;line-height:.6;color:var(--blue);opacity:.15;margin-bottom:12px}
-.testimonial-card p{font-size:1.05rem;color:var(--gray-600);line-height:1.75;margin-bottom:24px;font-style:italic;font-family:var(--font-display)}
-.testimonial-author{display:flex;align-items:center;gap:14px}
-.testimonial-author img{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid var(--gray-200);background:var(--gray-100)}
-.testimonial-author strong{display:block;font-size:.9rem;font-weight:600;color:var(--black)}
-.testimonial-author span{font-size:.78rem;color:var(--gray-400)}
-.testimonials-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:28px}
-.t-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--gray-200);display:flex;align-items:center;justify-content:center;color:var(--gray-600);transition:all var(--t)}
-.t-btn:hover{background:var(--blue);border-color:var(--blue);color:var(--white)}
-.t-dots{display:flex;gap:8px}
-.t-dot{width:8px;height:8px;border-radius:50%;background:var(--gray-200);cursor:pointer;transition:background var(--t),transform var(--t);border:none}
-.t-dot.active{background:var(--blue);transform:scale(1.3)}
+/* ================================================================
+   DENSPARK STUDIO — testimonials.css
+   Add this to your services.css or include as a separate file.
+   ================================================================ */
+
+/* ── Section wrapper ─────────────────────────────────────── */
+.testimonials-section {
+  padding: 100px 0;
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonials-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.t-eyebrow {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--blue-primary);
+  margin-bottom: 0.6rem;
+}
+
+.t-section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 400;
+  color: var(--black);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.25rem;
+}
+
+.t-section-title em {
+  font-style: italic;
+  color: var(--blue-primary);
+}
+
+/* ── Rating bar (stars + Leave a review button) ──────────── */
+.t-rating-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.t-rating-score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--mid-gray);
+}
+
+.t-stars-big {
+  color: #F59E0B;
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+}
+
+.t-rating-score strong {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.t-rating-label {
+  font-size: 0.88rem;
+  color: var(--mid-gray);
+}
+
+/* ── Leave a Review button ───────────────────────────────── */
+.t-review-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--blue-primary);
+  border: 1.5px solid var(--blue-primary);
+  border-radius: var(--radius);
+  padding: 0.55rem 1.1rem;
+  background: transparent;
+  text-decoration: none;
+  transition: background 0.22s ease, color 0.22s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.t-review-btn:hover {
+  background: var(--blue-primary);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* ── Loading dots ────────────────────────────────────────── */
+.t-loading {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 4rem 0;
+}
+
+.t-loading-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue-primary);
+  animation: tPulse 1.2s ease-in-out infinite;
+}
+
+.t-loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.t-loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes tPulse {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.85); }
+  40%            { opacity: 1;   transform: scale(1); }
+}
+
+/* ── Error state ─────────────────────────────────────────── */
+.t-error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: var(--mid-gray);
+}
+
+.t-error a {
+  color: var(--blue-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-left: 4px;
+}
+
+/* ── Slider ──────────────────────────────────────────────── */
+.t-slider {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.t-viewport {
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.t-track {
+  display: flex;
+  transition: transform 0.48s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* ── Review Card ─────────────────────────────────────────── */
+.t-card {
+  min-width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+  padding: 2rem 2rem 1.75rem;
+}
+
+.t-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+  gap: 1rem;
+}
+
+.t-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.t-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #eef3ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--blue-primary);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.t-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.t-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--black);
+  margin: 0 0 3px;
+}
+
+.t-date {
+  font-size: 0.78rem;
+  color: var(--mid-gray);
+}
+
+.t-stars {
+  color: #F59E0B;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+}
+
+.t-quote-mark {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  color: var(--blue-primary);
+  opacity: 0.15;
+  line-height: 0.85;
+  margin-bottom: 0.3rem;
+  user-select: none;
+}
+
+.t-text {
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+  line-height: 1.78;
+  margin: 0;
+}
+
+.t-read-more {
+  background: none;
+  border: none;
+  color: var(--blue-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 0.45rem;
+  font-family: var(--font-body);
+  transition: color 0.2s;
+}
+
+.t-read-more:hover { color: var(--blue-hover); }
+
+/* ── Footer (controls + links) ───────────────────────────── */
+.t-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.t-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.t-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--mid-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.t-btn:hover {
+  background: var(--blue-primary);
+  border-color: var(--blue-primary);
+  color: #ffffff;
+}
+
+.t-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.t-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s, transform 0.25s, border-color 0.25s;
+}
+
+.t-dot.active {
+  background: var(--blue-primary);
+  border-color: var(--blue-primary);
+  transform: scale(1.3);
+}
+
+.t-counter {
+  font-size: 0.8rem;
+  color: var(--mid-gray);
+}
+
+.t-see-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--mid-gray);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 14px;
+  background: #ffffff;
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.t-see-all:hover {
+  color: var(--blue-primary);
+  border-color: var(--blue-primary);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .testimonials-section { padding: 70px 0; }
+  .t-card { padding: 1.5rem; }
+  .t-rating-bar { flex-direction: column; gap: 0.75rem; }
+  .t-footer { justify-content: center; }
+  .t-counter { display: none; }
+}
+
+@media (max-width: 480px) {
+  .t-see-all span { display: none; }
+}
 
 /* ── Hours ─────────────────────────────────────────────── */
 .hours-section{background:var(--white)}
@@ -1216,47 +1553,92 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   </section>
 
   <!-- Testimonials -->
-  <section class="section testimonials-section">
+  <section class="testimonials-section" id="testimonials">
     <div class="container">
+  
       <div class="section-header reveal">
-        <span class="eyebrow">Testimonials</span>
-        <h2 class="section-title">What Our <em>Clients Say</em></h2>
-      </div>
-      <div class="testimonials-slider reveal">
-        <div class="testimonials-track" id="testimonialsTrack">
-          <div class="testimonial-card">
-            <div class="quote-mark">"</div>
-            <p>Denspark Studio captured our wedding beautifully! Every photo tells a story and we couldn't be happier.</p>
-            <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Sarah Muthoni" loading="lazy">
-              <div><strong>Sarah Muthoni</strong><span>Wedding Client</span></div>
-            </div>
+        <span class="t-eyebrow">Testimonials</span>
+        <h2 class="t-section-title">What Our <em>Clients Say</em></h2>
+  
+        <div class="t-rating-bar">
+          <div class="t-rating-score">
+            <span class="t-stars-big">★★★★★</span>
+            <strong id="tAvgRating">4.9</strong>
+            <span class="t-rating-label">· <span id="tTotalCount">84</span> Google reviews</span>
           </div>
-          <div class="testimonial-card">
-            <div class="quote-mark">"</div>
-            <p>Professional, creative, and punctual! They covered our corporate event flawlessly and delivered beyond expectations.</p>
-            <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="James Odhiambo" loading="lazy">
-              <div><strong>James Odhiambo</strong><span>Corporate Client</span></div>
-            </div>
-          </div>
-          <div class="testimonial-card">
-            <div class="quote-mark">"</div>
-            <p>The portrait session was amazing! They made me feel comfortable and the photos turned out stunning.</p>
-            <div class="testimonial-author">
-              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Grace Wanjiku" loading="lazy">
-              <div><strong>Grace Wanjiku</strong><span>Portrait Client</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonials-controls">
-          <button class="t-btn" id="tPrev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-          <div class="t-dots" id="tDots"></div>
-          <button class="t-btn" id="tNext"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+          <!-- ★ LEAVE A REVIEW BUTTON — update the Place ID in the href ★ -->
+          <a
+            class="t-review-btn"
+            href="https://search.google.com/local/writereview?placeid=ChIJXXXXXXXXXXXX"
+            target="_blank"
+            rel="noopener"
+            aria-label="Leave a review on Google"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            Leave a Review
+          </a>
         </div>
       </div>
+  
+      <!-- Loading state -->
+      <div class="t-loading" id="tLoading">
+        <span class="t-loading-dot"></span>
+        <span class="t-loading-dot"></span>
+        <span class="t-loading-dot"></span>
+      </div>
+  
+      <!-- Error fallback -->
+      <div class="t-error" id="tError" style="display:none">
+        Unable to load reviews.
+        <a href="https://www.google.com/maps/search/Denspark+Studio+Machakos" target="_blank" rel="noopener">View on Google →</a>
+      </div>
+  
+      <!-- Slider (populated by JS) -->
+      <div class="t-slider" id="tSlider" style="display:none">
+        <div class="t-viewport">
+          <div class="t-track" id="tTrack"></div>
+        </div>
+  
+        <div class="t-footer">
+          <div class="t-controls">
+            <button class="t-btn" id="tPrev" aria-label="Previous review">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <div class="t-dots" id="tDots"></div>
+            <button class="t-btn" id="tNext" aria-label="Next review">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+  
+          <span class="t-counter" id="tCounter">1 / 10</span>
+  
+          <!-- See all on Google link -->
+          <a
+            class="t-see-all"
+            href="https://www.google.com/maps/search/Denspark+Studio+Machakos"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            See all on Google
+          </a>
+        </div>
+      </div>
+  
     </div>
   </section>
+
 
   <!-- Hours -->
   <section class="section hours-section" id="hours">
@@ -1635,41 +2017,199 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
     }
 
     /* ── Testimonials ──────────────────────────────────────── */
-    const tTrack = document.getElementById('testimonialsTrack');
-    const tDots  = document.getElementById('tDots');
-    const tPrev  = document.getElementById('tPrev');
-    const tNext  = document.getElementById('tNext');
-    const tCards = tTrack ? tTrack.querySelectorAll('.testimonial-card') : [];
-    let tCur = 0;
-
-    function goT(idx) {
-      tCur = (idx + tCards.length) % tCards.length;
-      if (tTrack) tTrack.style.transform = 'translateX(-' + (tCur * 100) + '%)';
-      if (tDots) tDots.querySelectorAll('.t-dot').forEach((d, i) => d.classList.toggle('active', i === tCur));
-    }
-
-    if (tCards.length) {
-      if (tDots) {
-        tCards.forEach((_, i) => {
-          const d = document.createElement('button');
-          d.className = 't-dot' + (i === 0 ? ' active' : '');
-          d.setAttribute('aria-label', 'Testimonial ' + (i + 1));
-          d.addEventListener('click', () => goT(i));
-          tDots.appendChild(d);
+    (function () {
+      'use strict';
+    
+      /* ── Config ────────────────────────────────────────────────── */
+      var REVIEWS_JSON    = '/static/data/reviews.json'; // path on your server
+      var MAX_REVIEWS     = 10;       // show newest 10
+      var AUTO_ADVANCE_MS = 6000;     // ms between slides
+      var TEXT_LIMIT      = 220;      // chars before "Read more" appears
+      var GOOGLE_MAPS_URL = 'https://www.google.com/maps/search/Denspark+Studio+Machakos';
+    
+      /* ── DOM refs ─────────────────────────────────────────────── */
+      var loading  = document.getElementById('tLoading');
+      var errorEl  = document.getElementById('tError');
+      var slider   = document.getElementById('tSlider');
+      var track    = document.getElementById('tTrack');
+      var dotsEl   = document.getElementById('tDots');
+      var prevBtn  = document.getElementById('tPrev');
+      var nextBtn  = document.getElementById('tNext');
+      var counter  = document.getElementById('tCounter');
+      var avgEl    = document.getElementById('tAvgRating');
+      var totalEl  = document.getElementById('tTotalCount');
+    
+      /* ── Helpers ──────────────────────────────────────────────── */
+      function initials(name) {
+        return (name || '?').split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2).toUpperCase();
+      }
+    
+      function stars(n) {
+        n = Math.min(5, Math.max(1, Math.round(n)));
+        return '★'.repeat(n) + '☆'.repeat(5 - n);
+      }
+    
+      function esc(str) {
+        return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+    
+      /* ── Render ───────────────────────────────────────────────── */
+      function render(reviews, overallRating, totalCount) {
+        if (loading) loading.style.display = 'none';
+    
+        if (!reviews || !reviews.length) {
+          if (errorEl) errorEl.style.display = 'block';
+          return;
+        }
+    
+        /* Sort newest first, cap at MAX_REVIEWS */
+        var sorted = reviews.slice().sort(function (a, b) {
+          return (b.time || 0) - (a.time || 0);
         });
-      }
-      tPrev && tPrev.addEventListener('click', () => goT(tCur - 1));
-      tNext && tNext.addEventListener('click', () => goT(tCur + 1));
-      setInterval(() => goT(tCur + 1), 6000);
-      if (tTrack) {
-        let tx = 0;
-        tTrack.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; }, { passive: true });
-        tTrack.addEventListener('touchend', (e) => {
-          const d = tx - e.changedTouches[0].clientX;
-          if (Math.abs(d) > 40) goT(d > 0 ? tCur + 1 : tCur - 1);
+        var top   = sorted.slice(0, MAX_REVIEWS);
+        var total = top.length;
+        var cur   = 0;
+        var timer = null;
+    
+        /* Update summary numbers in the header */
+        if (avgEl && overallRating)  avgEl.textContent  = parseFloat(overallRating).toFixed(1);
+        if (totalEl && totalCount)   totalEl.textContent = totalCount;
+    
+        /* Build cards */
+        track.innerHTML = top.map(function (rv, i) {
+          var text  = esc(rv.text || '');
+          var short = text.length > TEXT_LIMIT ? text.slice(0, TEXT_LIMIT) + '…' : text;
+          var more  = text.length > TEXT_LIMIT;
+    
+          var avatarInner = rv.profile_photo_url
+            ? '<img src="' + rv.profile_photo_url + '" alt="' + esc(rv.author_name) + '" loading="lazy">'
+            : initials(rv.author_name);
+    
+          return (
+            '<div class="t-card" data-idx="' + i + '">' +
+              '<div class="t-card-top">' +
+                '<div class="t-author">' +
+                  '<div class="t-avatar">' + avatarInner + '</div>' +
+                  '<div>' +
+                    '<div class="t-name">' + esc(rv.author_name) + '</div>' +
+                    '<div class="t-date">' + esc(rv.relative_time_description || '') + '</div>' +
+                  '</div>' +
+                '</div>' +
+                '<div class="t-stars" title="' + rv.rating + ' out of 5">' + stars(rv.rating) + '</div>' +
+              '</div>' +
+              '<div class="t-quote-mark">\u201c</div>' +
+              '<p class="t-text">' +
+                '<span class="t-short">' + short + '</span>' +
+                (more ? '<span class="t-full" style="display:none">' + text + '</span>' : '') +
+              '</p>' +
+              (more ? '<button class="t-read-more">Read more</button>' : '') +
+            '</div>'
+          );
+        }).join('');
+    
+        /* Build dots */
+        dotsEl.innerHTML = top.map(function (_, i) {
+          return '<button class="t-dot' + (i === 0 ? ' active' : '') + '" aria-label="Review ' + (i + 1) + '"></button>';
+        }).join('');
+    
+        var dots = dotsEl.querySelectorAll('.t-dot');
+    
+        /* ── Navigation ─────────────────────────────────────────── */
+        function goTo(idx) {
+          cur = (idx + total) % total;
+          track.style.transform = 'translateX(-' + (cur * 100) + '%)';
+          dots.forEach(function (d, i) { d.classList.toggle('active', i === cur); });
+          if (counter) counter.textContent = (cur + 1) + ' / ' + total;
+          resetTimer();
+        }
+    
+        function resetTimer() {
+          clearInterval(timer);
+          timer = setInterval(function () { goTo(cur + 1); }, AUTO_ADVANCE_MS);
+        }
+    
+        dots.forEach(function (dot, i) {
+          dot.addEventListener('click', function () { goTo(i); });
+        });
+    
+        if (prevBtn) prevBtn.addEventListener('click', function () { goTo(cur - 1); });
+        if (nextBtn) nextBtn.addEventListener('click', function () { goTo(cur + 1); });
+    
+        /* Pause on hover */
+        if (slider) {
+          slider.addEventListener('mouseenter', function () { clearInterval(timer); });
+          slider.addEventListener('mouseleave', resetTimer);
+        }
+    
+        /* Touch swipe */
+        var touchX = 0;
+        track.addEventListener('touchstart', function (e) {
+          touchX = e.touches[0].clientX;
         }, { passive: true });
+        track.addEventListener('touchend', function (e) {
+          var dx = touchX - e.changedTouches[0].clientX;
+          if (Math.abs(dx) > 40) goTo(dx > 0 ? cur + 1 : cur - 1);
+        }, { passive: true });
+    
+        /* Keyboard arrow keys when slider is focused */
+        if (slider) {
+          slider.setAttribute('tabindex', '0');
+          slider.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight') goTo(cur + 1);
+            if (e.key === 'ArrowLeft')  goTo(cur - 1);
+          });
+        }
+    
+        /* Read more / Read less — event delegation */
+        track.addEventListener('click', function (e) {
+          var btn = e.target.closest('.t-read-more');
+          if (!btn) return;
+          var card  = btn.closest('.t-card');
+          var short = card.querySelector('.t-short');
+          var full  = card.querySelector('.t-full');
+          if (!full) return;
+          var open = full.style.display !== 'none';
+          short.style.display = open ? '' : 'none';
+          full.style.display  = open ? 'none' : '';
+          btn.textContent     = open ? 'Read more' : 'Read less';
+        });
+    
+        /* Show slider and kick off auto-play */
+        if (slider) slider.style.display = 'block';
+        resetTimer();
       }
-    }
+    
+      /* ── Fetch reviews.json ───────────────────────────────────── */
+      function load() {
+        fetch(REVIEWS_JSON)
+          .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(function (data) {
+            var reviews = data.reviews || [];
+            if (!reviews.length) throw new Error('empty');
+            render(reviews, data.rating, data.user_ratings_total);
+          })
+          .catch(function (err) {
+            console.warn('Testimonials: could not load reviews.json —', err.message);
+            if (loading) loading.style.display = 'none';
+            if (errorEl) {
+              errorEl.style.display = 'block';
+              errorEl.innerHTML = 'Unable to load reviews. ' +
+                '<a href="' + GOOGLE_MAPS_URL + '" target="_blank" rel="noopener">View on Google →</a>';
+            }
+          });
+      }
+    
+      /* ── Boot ─────────────────────────────────────────────────── */
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', load);
+      } else {
+        load();
+      }
+    
+    }());
 
     /* ── Scroll Reveal ─────────────────────────────────────── */
     const revIO = new IntersectionObserver((entries) => {
