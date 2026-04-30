@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => preloader.classList.add('hidden'), 3000);
   }
 
-
   /* ── Custom Cursor ─────────────────────────────────── */
   const cursor   = document.getElementById('cursor');
   const follower = document.getElementById('cursorFollower');
@@ -37,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     animFollower();
 
-    // Hover effect on interactive elements
     const hoverEls = document.querySelectorAll(
       'a, button, input, select, textarea, .faq-question, .strip-item'
     );
@@ -47,26 +45,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-
-  /* ── Desktop Services: click to open ──────────────────── */
+  /* ── Navbar ─────────────────────────────────────────── */
   (function initNavbar() {
-    var navbar               = document.getElementById('navbar');
-    var menuToggle           = document.getElementById('menuToggle');
-    var mobileMenu           = document.getElementById('mobileMenu');
-    var desktopServicesMenu  = document.getElementById('desktopServicesMenu');  // the <li>
-    var desktopServicesToggle= document.getElementById('desktopServicesToggle');// the <a> inside it
-    var mobileServicesItem   = document.getElementById('mobileServicesItem');
-    var mobileServicesToggle = document.getElementById('mobileServicesToggle');
+    var navbar                = document.getElementById('navbar');
+    var menuToggle            = document.getElementById('menuToggle');
+    var mobileMenu            = document.getElementById('mobileMenu');
+    var desktopServicesMenu   = document.getElementById('desktopServicesMenu');
+    var desktopServicesToggle = document.getElementById('desktopServicesToggle');
+    var mobileServicesItem    = document.getElementById('mobileServicesItem');
+    var mobileServicesToggle  = document.getElementById('mobileServicesToggle');
 
-    /* ── Scroll: add .scrolled class ─────────────────────────── */
     function onScroll() {
       if (!navbar) return;
       navbar.classList.toggle('scrolled', window.scrollY > 40);
     }
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll(); // run once immediately
+    onScroll();
 
-    /* ── Hamburger / mobile menu ─────────────────────────────── */
     function openMobileMenu() {
       if (!mobileMenu || !menuToggle) return;
       mobileMenu.classList.add('open');
@@ -91,16 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Close mobile menu when any nav link inside it is tapped
     if (mobileMenu) {
       mobileMenu.querySelectorAll('a').forEach(function (link) {
         link.addEventListener('click', closeMobileMenu);
       });
     }
 
-    /* ── Desktop mega-menu ───────────────────────────────────── */
-    // Toggle on click (not hover — hover is handled by pure CSS in services.css).
-    // The JS-driven .open class is for accessibility / click-to-open mode.
     function closeMegaMenu() {
       if (desktopServicesMenu) desktopServicesMenu.classList.remove('open');
     }
@@ -109,14 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
       desktopServicesToggle.addEventListener('click', function (e) {
         if (window.innerWidth > 900) {
           e.preventDefault();
-          e.stopPropagation(); // prevent the document click handler below
+          e.stopPropagation();
           var isOpen = desktopServicesMenu && desktopServicesMenu.classList.contains('open');
           isOpen ? closeMegaMenu() : desktopServicesMenu.classList.add('open');
         }
       });
     }
 
-    /* ── Mobile services accordion ───────────────────────────── */
     if (mobileServicesToggle && mobileServicesItem) {
       mobileServicesToggle.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -125,22 +115,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    /* ── Outside click: close mega + mobile menu ─────────────── */
     document.addEventListener('click', function (e) {
-      // Close desktop mega if click is outside the services <li>
       if (desktopServicesMenu && !desktopServicesMenu.contains(e.target)) {
         closeMegaMenu();
       }
-      // Close mobile menu if click is outside the entire navbar
       if (navbar && !navbar.contains(e.target)) {
         closeMobileMenu();
       }
     });
 
-    /* ── Close on scroll (desktop mega only) ─────────────────── */
     window.addEventListener('scroll', closeMegaMenu, { passive: true });
 
-    /* ── Escape key ──────────────────────────────────────────── */
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         closeMobileMenu();
@@ -148,7 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }());
-
 
   /* ── Scroll Reveal ─────────────────────────────────── */
   const revealEls = document.querySelectorAll('.reveal');
@@ -164,10 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
     revealEls.forEach(el => ro.observe(el));
   }
 
-
   /* ── FAQ Accordion ─────────────────────────────────── */
   const faqItems = document.querySelectorAll('.faq-item');
-
   faqItems.forEach(item => {
     const btn    = item.querySelector('.faq-question');
     const answer = item.querySelector('.faq-answer');
@@ -175,23 +157,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btn.addEventListener('click', () => {
       const isOpen = item.classList.contains('open');
-
-      // Close all others
       faqItems.forEach(other => {
         if (other !== item) {
           other.classList.remove('open');
           other.querySelector('.faq-question')?.setAttribute('aria-expanded', 'false');
         }
       });
-
-      // Toggle this one
       item.classList.toggle('open', !isOpen);
       btn.setAttribute('aria-expanded', String(!isOpen));
     });
   });
 
-
-  /* ── Form Validation & Submission ──────────────────── */
+  /* ── Contact Form ───────────────────────────────────── */
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
     contactForm.addEventListener('submit', async (e) => {
@@ -200,11 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const btn      = contactForm.querySelector('.btn-submit');
       const origHTML = btn.innerHTML;
 
-      // Remove any previous error
       const prevErr = contactForm.querySelector('.form-submit-error');
       if (prevErr) prevErr.remove();
 
-      // Loading state
       btn.classList.add('loading');
       btn.disabled = true;
       btn.textContent = 'Sending…';
@@ -225,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await res.json();
 
         if (res.ok && data.success) {
-          // Success
           btn.classList.remove('loading');
           btn.classList.add('success');
           btn.disabled = false;
@@ -235,9 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.classList.remove('success');
             btn.innerHTML = origHTML;
           }, 4000);
-
         } else {
-          // Server validation error — show message from backend
           throw new Error(data.error || 'Something went wrong. Please try again.');
         }
 
@@ -247,7 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.disabled = false;
         btn.textContent = 'Failed — Try Again';
 
-        // Show error below button
         const errEl = document.createElement('p');
         errEl.className = 'form-submit-error';
         errEl.style.cssText = 'color:#dc2626;font-size:0.83rem;margin-top:0.75rem;text-align:center;';
@@ -263,83 +234,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Live clear errors on input
-  Object.keys(rules).forEach(field => {
-    const el = document.getElementById(field);
-    el?.addEventListener('input', () => clearError(field));
-    el?.addEventListener('change', () => clearError(field));
-  });
-
-  // Submit
-  if (form && submitBtn) {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!validateForm()) return;
-
-      // Loading state
-      submitBtn.classList.add('loading');
-      submitBtn.disabled = true;
-
-      // Simulate API call (replace with real fetch to /api/contact)
-      await new Promise(resolve => setTimeout(resolve, 1800));
-
-      // Success
-      submitBtn.classList.remove('loading');
-      submitBtn.style.display = 'none';
-      if (formSuccess) {
-        formSuccess.style.display = 'flex';
-      }
-      form.querySelectorAll('input, select, textarea').forEach(el => el.disabled = true);
-
-      // Reset after 6s
-      setTimeout(() => {
-        form.reset();
-        form.querySelectorAll('input, select, textarea').forEach(el => el.disabled = false);
-        if (formSuccess) formSuccess.style.display = 'none';
-        submitBtn.style.display = '';
-        submitBtn.disabled = false;
-        if (charCount) charCount.textContent = `0 / ${MAX_CHARS}`;
-      }, 6000);
-    });
-  }
-
-
-  /* ── Input focus label lift ─────────────────────────── */
-  // Add filled class for styling if needed
-  document.querySelectorAll('input, select, textarea').forEach(el => {
-    const update = () => el.closest('.form-group')?.classList.toggle('filled', el.value.length > 0);
-    el.addEventListener('input', update);
-    el.addEventListener('change', update);
-    update();
-  });
-
-
-  /* ── Smooth scroll for "Book Now" anchor ────────────── */
-  document.querySelectorAll('a[href="#booking-form"]').forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const target = document.getElementById('booking-form');
-      if (target) {
-        const offset = 90;
-        const top = target.getBoundingClientRect().top + window.scrollY - offset;
-        window.scrollTo({ top, behavior: 'smooth' });
-      }
-    });
-  });
-
-
-
-  /* ── Booking Form ──────────────────────────────────────── */
+  /* ── Booking Form ───────────────────────────────────── */
   const bookingForm = document.getElementById('bookingForm');
   if (bookingForm) {
     bookingForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = bookingForm.querySelector('.btn-submit');
+      const btn     = bookingForm.querySelector('.btn-submit');
       const btnText = btn.querySelector('.btn-text');
       const origText = btnText.textContent;
+
       const prevErr = bookingForm.querySelector('.form-submit-error');
       if (prevErr) prevErr.remove();
-      btn.classList.add('loading'); btn.disabled = true; btnText.textContent = 'Sending…';
+
+      btn.classList.add('loading');
+      btn.disabled = true;
+      btnText.textContent = 'Sending…';
+
       try {
         const res = await fetch('/api/booking', {
           method: 'POST',
@@ -354,9 +264,13 @@ document.addEventListener('DOMContentLoaded', () => {
             message:    bookingForm.querySelector('#message').value.trim(),
           }),
         });
+
         const data = await res.json();
+
         if (res.ok && data.success) {
-          btn.classList.remove('loading'); btn.classList.add('success'); btn.disabled = false;
+          btn.classList.remove('loading');
+          btn.classList.add('success');
+          btn.disabled = false;
           btnText.textContent = '✓ Booking Sent!';
           bookingForm.reset();
           document.getElementById('formSuccess')?.classList.add('visible');
@@ -368,60 +282,73 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           throw new Error(data.error || 'Something went wrong.');
         }
+
       } catch (err) {
-        btn.classList.remove('loading'); btn.disabled = false;
+        btn.classList.remove('loading');
+        btn.disabled = false;
         btnText.textContent = 'Failed — Try Again';
+
         const errEl = document.createElement('p');
         errEl.className = 'form-submit-error';
         errEl.style.cssText = 'color:#dc2626;font-size:.83rem;margin-top:.75rem;text-align:center;';
         errEl.textContent = err.message || 'Network error. Please check your connection.';
         btn.insertAdjacentElement('afterend', errEl);
-        setTimeout(() => { btnText.textContent = origText; btn.disabled = false; }, 3000);
+
+        setTimeout(() => {
+          btnText.textContent = origText;
+          btn.disabled = false;
+        }, 3000);
       }
     });
   }
 
-  /* ── Map Section Reveal ─────────────────────────────── */
-  const mapSection = document.querySelector('.map-section');
-  if (mapSection) {
-    const mo = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('in-view');
-          mo.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    mo.observe(mapSection);
+  /* ── Input focus label lift ─────────────────────────── */
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    const update = () => el.closest('.form-group')?.classList.toggle('filled', el.value.length > 0);
+    el.addEventListener('input', update);
+    el.addEventListener('change', update);
+    update();
+  });
+
+  /* ── Smooth scroll for "Book Now" anchor ────────────── */
+  document.querySelectorAll('a[href="#booking-form"]').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.getElementById('booking-form');
+      if (target) {
+        const top = target.getBoundingClientRect().top + window.scrollY - 90;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  /* ── Services dropdown ──────────────────────────────── */
+  const servicesMenu   = document.getElementById('servicesMenu');
+  const servicesToggle = document.getElementById('servicesToggle');
+
+  if (servicesMenu && servicesToggle) {
+    servicesToggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      servicesMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!servicesMenu.contains(e.target)) {
+        servicesMenu.classList.remove('open');
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+      servicesMenu.classList.remove('open');
+    });
   }
 
-  const servicesMenu = document.getElementById("servicesMenu");
-  const servicesToggle = document.getElementById("servicesToggle");
-
-  // open/close on click
-  servicesToggle.addEventListener("click", function (e) {
-    e.preventDefault(); // prevents page jump
-    servicesMenu.classList.toggle("open");
-  });
-
-  // close when clicking outside
-  document.addEventListener("click", function (e) {
-    if (!servicesMenu.contains(e.target)) {
-      servicesMenu.classList.remove("open");
-    }
-  });
-
-  // optional: close on scroll
-  window.addEventListener("scroll", () => {
-    servicesMenu.classList.remove("open");
-  });
-  /* ── Contact strip hover ripple ─────────────────────── */
+  /* ── Contact strip hover ────────────────────────────── */
   document.querySelectorAll('a.strip-item').forEach(item => {
     item.addEventListener('mouseenter', function () {
       this.style.transition = 'background 0.25s ease';
     });
   });
-
 
   /* ── Marquee pause on hover ─────────────────────────── */
   const marqueeWrap = document.querySelector('.marquee-wrap');
@@ -437,7 +364,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
 
   /* ── Footer social hover ────────────────────────────── */
   document.querySelectorAll('.footer-social a, .social-links a').forEach(a => {
