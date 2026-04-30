@@ -328,6 +328,59 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
+
+  /* ── Booking Form ──────────────────────────────────────── */
+  const bookingForm = document.getElementById('bookingForm');
+  if (bookingForm) {
+    bookingForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = bookingForm.querySelector('.btn-submit');
+      const btnText = btn.querySelector('.btn-text');
+      const origText = btnText.textContent;
+      const prevErr = bookingForm.querySelector('.form-submit-error');
+      if (prevErr) prevErr.remove();
+      btn.classList.add('loading'); btn.disabled = true; btnText.textContent = 'Sending…';
+      try {
+        const res = await fetch('/api/booking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            first_name: bookingForm.querySelector('#first_name').value.trim(),
+            last_name:  bookingForm.querySelector('#last_name').value.trim(),
+            email:      bookingForm.querySelector('#email').value.trim(),
+            phone:      bookingForm.querySelector('#phone').value.trim(),
+            service:    bookingForm.querySelector('#service').value,
+            date:       bookingForm.querySelector('#date').value.trim(),
+            message:    bookingForm.querySelector('#message').value.trim(),
+          }),
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          btn.classList.remove('loading'); btn.classList.add('success'); btn.disabled = false;
+          btnText.textContent = '✓ Booking Sent!';
+          bookingForm.reset();
+          document.getElementById('formSuccess')?.classList.add('visible');
+          setTimeout(() => {
+            btn.classList.remove('success');
+            btnText.textContent = origText;
+            document.getElementById('formSuccess')?.classList.remove('visible');
+          }, 4000);
+        } else {
+          throw new Error(data.error || 'Something went wrong.');
+        }
+      } catch (err) {
+        btn.classList.remove('loading'); btn.disabled = false;
+        btnText.textContent = 'Failed — Try Again';
+        const errEl = document.createElement('p');
+        errEl.className = 'form-submit-error';
+        errEl.style.cssText = 'color:#dc2626;font-size:.83rem;margin-top:.75rem;text-align:center;';
+        errEl.textContent = err.message || 'Network error. Please check your connection.';
+        btn.insertAdjacentElement('afterend', errEl);
+        setTimeout(() => { btnText.textContent = origText; btn.disabled = false; }, 3000);
+      }
+    });
+  }
+
   /* ── Map Section Reveal ─────────────────────────────── */
   const mapSection = document.querySelector('.map-section');
   if (mapSection) {
