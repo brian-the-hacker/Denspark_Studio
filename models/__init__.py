@@ -40,7 +40,29 @@ class Portfolio(db.Model):
         return f'<Portfolio {self.id}: {self.title}>'
 
 
+class Booking(db.Model):
+    __tablename__ = 'bookings'
 
+    id         = db.Column(db.Integer, primary_key=True)
+    name       = db.Column(db.String(100), nullable=False)
+    email      = db.Column(db.String(120), nullable=False)
+    phone      = db.Column(db.String(20))
+    service    = db.Column(db.String(100), nullable=False)
+    message    = db.Column(db.Text)
+    status     = db.Column(db.String(20), default='pending')  # pending|confirmed|completed|cancelled
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Admin-fillable after public submission
+    date       = db.Column(db.String(20))
+    time       = db.Column(db.String(20))
+    location   = db.Column(db.String(200))
+    amount     = db.Column(db.Integer)
+    notes      = db.Column(db.Text)
+
+    payments   = db.relationship('Payment', backref='booking', lazy=True)
+
+    def __repr__(self):
+        return f'<Booking {self.id}: {self.name} — {self.service}>'
 
 
 class Conversation(db.Model):
