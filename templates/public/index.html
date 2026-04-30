@@ -670,18 +670,19 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.05em;
-  color: var(--blue-primary);
+  color: #ffffff;                        /* ← white text */
   border: 1.5px solid var(--blue-primary);
   border-radius: var(--radius);
   padding: 0.55rem 1.1rem;
-  background: transparent;
+  background: var(--blue-primary);       /* ← solid blue */
   text-decoration: none;
   transition: background 0.22s ease, color 0.22s ease, transform 0.15s ease;
   white-space: nowrap;
 }
 
 .t-review-btn:hover {
-  background: var(--blue-primary);
+  background: var(--blue-hover);         /* ← darker blue on hover */
+  border-color: var(--blue-hover);
   color: #ffffff;
   transform: translateY(-1px);
 }
@@ -908,18 +909,20 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
   align-items: center;
   gap: 6px;
   font-size: 0.8rem;
-  color: var(--mid-gray);
-  border: 1px solid var(--border);
+  font-weight: 600;
+  color: #ffffff;                        /* ← white text */
+  border: 1px solid var(--blue-primary);
   border-radius: 6px;
   padding: 7px 14px;
-  background: #ffffff;
+  background: var(--blue-primary);       /* ← solid blue */
   text-decoration: none;
-  transition: color 0.2s, border-color 0.2s;
+  transition: background 0.2s, border-color 0.2s;
 }
 
 .t-see-all:hover {
-  color: var(--blue-primary);
-  border-color: var(--blue-primary);
+  background: var(--blue-hover);
+  border-color: var(--blue-hover);
+  color: #ffffff;
 }
 
 /* ── Responsive ──────────────────────────────────────────── */
