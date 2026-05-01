@@ -3,7 +3,7 @@
 {% block page_title %}Bookings{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="/static/css/admin/bookings.css">
+<link rel="stylesheet" href="/static/css/admin/booking/main.css">
 {% endblock %}
 
 {% block content %}
@@ -218,15 +218,9 @@
         {% if bookings %}
           {% for b in bookings %}{{ booking_rows(b) }}{% endfor %}
         {% else %}
-          {# ── Static sample data ── #}
-          {% set samples = [
-            {'id':1,'name':'John Kamau',  'email':'john@email.com', 'phone':'+254 712 345 678','service':'Portrait Session','date':'Apr 25, 2024','time':'10:00 AM','location':'Studio','amount':5000,'status':'pending','notes':'Prefer natural light. Bring props.'},
-            {'id':2,'name':'Mary Wanjiku','email':'mary@email.com', 'phone':'+254 720 111 222','service':'Wedding Coverage','date':'Apr 28, 2024','time':'8:00 AM', 'location':'Safari Park Hotel','amount':45000,'status':'confirmed','notes':'Full day coverage, 2 photographers.'},
-            {'id':3,'name':'Peter Ochieng','email':'peter@email.com','phone':'+254 733 444 555','service':'Product Shoot','date':'Apr 30, 2024','time':'2:00 PM','location':'Studio','amount':15000,'status':'confirmed','notes':None},
-            {'id':4,'name':'Sarah Njeri', 'email':'sarah@email.com','phone':'+254 700 999 888','service':'Family Portrait','date':'Apr 20, 2024','time':'4:00 PM','location':'Uhuru Gardens','amount':8000,'status':'completed','notes':'Outdoor golden-hour session.'},
-            {'id':5,'name':'Alex Muthoni','email':'alex@email.com', 'phone':'+254 711 777 666','service':'Event Photography','date':'Apr 18, 2024','time':'12:00 PM','location':'Nairobi CBD','amount':20000,'status':'cancelled','notes':None}
-          ] %}
-          {% for b in samples %}{{ booking_rows(b) }}{% endfor %}
+          <tr class="bk-empty-row">
+            <td colspan="9">No bookings found. Create your first booking using the button above.</td>
+          </tr>
         {% endif %}
 
       </tbody>
