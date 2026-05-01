@@ -18,8 +18,7 @@
   let confirmCtx   = null;
 
   /* ── NEW: unseen booking tracking ── */
-  const SEEN_KEY   = 'bk_seen_ids';
-  const REDIR_KEY  = 'bk_confirm_flash';
+  const SEEN_KEY = 'bk_seen_ids';
 
   function getSeenIds() {
     try { return new Set(JSON.parse(localStorage.getItem(SEEN_KEY) || '[]')); }
@@ -104,39 +103,6 @@
   function getCsrf() {
     const el = document.querySelector('input[name="csrf_token"]');
     return el ? el.value : '';
-  }
-
-  /* ================================================================
-     FLASH BANNER (shown after page redirect on confirm)
-  ================================================================ */
-  function checkConfirmFlash() {
-    const msg = sessionStorage.getItem(REDIR_KEY);
-    if (!msg) return;
-    sessionStorage.removeItem(REDIR_KEY);
-    showFlashBanner(msg);
-  }
-
-  function showFlashBanner(msg) {
-    const banner = document.createElement('div');
-    banner.className = 'bk-flash-banner';
-    banner.innerHTML = `
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-        <polyline points="22 4 12 14.01 9 11.01"/>
-      </svg>
-      <span>${esc(msg)}</span>
-      <button class="bk-flash-close" onclick="this.parentNode.remove()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
-      </button>`;
-    document.body.prepend(banner);
-    // Animate in
-    requestAnimationFrame(() => banner.classList.add('visible'));
-    setTimeout(() => {
-      banner.classList.remove('visible');
-      banner.addEventListener('transitionend', () => banner.remove(), { once: true });
-    }, 5000);
   }
 
   /* ================================================================
@@ -484,14 +450,6 @@
       .then(() => {
         const verb = type === 'confirm' ? 'confirmed' : 'cancelled';
         toast(`Booking ${verb} for ${name}.`, type === 'confirm' ? 'success' : 'warning');
-
-        /* ── INSTANT REDIRECT to dashboard after confirm ── */
-        if (type === 'confirm') {
-          sessionStorage.setItem(REDIR_KEY, `Booking for ${name} confirmed successfully!`);
-          setTimeout(() => {
-            window.location.href = '/admin/dashboard';
-          }, 800);
-        }
       })
       .catch(() => {
         toast('Action failed — please refresh and try again.', 'error');
@@ -767,6 +725,5 @@
   /* ── Init ── */
   applyFilters();
   applyUnseenHighlights();
-  checkConfirmFlash();
 
 })();
