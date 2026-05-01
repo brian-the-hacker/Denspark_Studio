@@ -21,8 +21,9 @@ class User(UserMixin, db.Model):
     id            = db.Column(db.Integer, primary_key=True)
     username      = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
-    avatar        = db.Column(db.String(200), nullable=True)   # filename e.g. 'avatar_1.jpg'
-    created_at    = db.Column(db.DateTime, default=datetime.utcnow)
+    role          = db.Column(db.String(20), default='admin')
+    avatar        = db.Column(db.String(200), nullable=True)
+    created_at    = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -37,11 +38,13 @@ class Portfolio(db.Model):
     title          = db.Column(db.String(100), nullable=False)
     description    = db.Column(db.Text)
     file_path      = db.Column(db.String(200), nullable=False, default='')
-    category       = db.Column(db.String(50), default='general')
-    featured       = db.Column(db.Boolean, default=False)
-    cloudinary_url = db.Column(db.String(500), nullable=True)  # full https URL
-    cloudinary_id  = db.Column(db.String(200), nullable=True)  # public_id for deletion
-    created_at     = db.Column(db.DateTime, default=datetime.utcnow)
+    # index=True — filtered on every public portfolio page load
+    category       = db.Column(db.String(50), default='general', index=True)
+    # index=True — homepage queries filter_by(featured=True)
+    featured       = db.Column(db.Boolean, default=False, index=True)
+    cloudinary_url = db.Column(db.String(500), nullable=True)
+    cloudinary_id  = db.Column(db.String(200), nullable=True)
+    created_at     = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
     def __repr__(self):
         return f'<Portfolio {self.id}: {self.title}>'
@@ -58,14 +61,17 @@ class Booking(db.Model):
     phone      = db.Column(db.String(20))
     service    = db.Column(db.String(100), nullable=False)
     message    = db.Column(db.Text)
-    status     = db.Column(db.String(20), default='pending')  # pending|confirmed|completed|cancelled
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    # index=True — dashboard and bookings page filter by status constantly
+    status     = db.Column(db.String(20), default='pending', index=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
-    # Admin-fillable fields (null for public submissions until admin updates)
+    # Admin-fillable fields
     date       = db.Column(db.String(20))
     time       = db.Column(db.String(20))
     location   = db.Column(db.String(200))
-    amount     = db.Column(db.Integer)
+    # FIX: was Integer — silently truncated decimals (e.g. 1500.50 → 1500)
+    # Numeric(10, 2) stores exact decimal values, safe for KES amounts
+    amount     = db.Column(db.Numeric(10, 2), nullable=True)
     notes      = db.Column(db.Text)
 
     payments   = db.relationship('Payment', backref='booking', lazy=True)
@@ -74,8 +80,7 @@ class Booking(db.Model):
         return f'<Booking {self.id}: {self.name} — {self.service}>'
 
 
-# ── Contact Message (from the website contact form) ───────────────────────────
-# This is what admin.py queries with Message.query.filter_by(is_read=False)
+# ── Contact Message ───────────────────────────────────────────────────────────
 
 class Message(db.Model):
     __tablename__ = 'messages'
@@ -84,8 +89,9 @@ class Message(db.Model):
     sender_name  = db.Column(db.String(100), nullable=False)
     sender_email = db.Column(db.String(100), nullable=False)
     content      = db.Column(db.Text, nullable=False)
-    is_read      = db.Column(db.Boolean, default=False, nullable=False)
-    created_at   = db.Column(db.DateTime, default=datetime.utcnow)
+    # index=True — dashboard queries filter_by(is_read=False) on every load
+    is_read      = db.Column(db.Boolean, default=False, nullable=False, index=True)
+    created_at   = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
     def __repr__(self):
         return f'<Message {self.id}: {self.sender_name} — read={self.is_read}>'
@@ -95,8 +101,7 @@ class Message(db.Model):
         db.session.commit()
 
 
-# ── Live Chat (separate from contact-form messages) ───────────────────────────
-# Renamed to ChatConversation / ChatMessage to avoid any class-name collision.
+# ── Live Chat ─────────────────────────────────────────────────────────────────
 
 class ChatConversation(db.Model):
     __tablename__ = 'chat_conversations'
@@ -104,8 +109,8 @@ class ChatConversation(db.Model):
     id             = db.Column(db.Integer, primary_key=True)
     client_name    = db.Column(db.String(100), nullable=False, default='Guest')
     client_contact = db.Column(db.String(100), default='')
-    user_session   = db.Column(db.String(100), nullable=True)   # anonymous session id
-    created_at     = db.Column(db.DateTime, default=datetime.utcnow)
+    user_session   = db.Column(db.String(100), nullable=True)
+    created_at     = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     updated_at     = db.Column(db.DateTime, default=datetime.utcnow,
                                onupdate=datetime.utcnow)
 
@@ -126,10 +131,11 @@ class ChatMessage(db.Model):
     id              = db.Column(db.Integer, primary_key=True)
     conversation_id = db.Column(db.Integer, db.ForeignKey('chat_conversations.id'),
                                 nullable=False)
-    sender          = db.Column(db.String(50), nullable=False)  # 'admin' | 'client'
+    sender          = db.Column(db.String(50), nullable=False)
     message         = db.Column(db.Text, nullable=False)
-    timestamp       = db.Column(db.DateTime, default=datetime.utcnow)
-    is_read         = db.Column(db.Boolean, default=False, nullable=False)
+    timestamp       = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    # index=True — admin chat panel queries unread messages
+    is_read         = db.Column(db.Boolean, default=False, nullable=False, index=True)
 
     def __repr__(self):
         return f'<ChatMessage {self.id}: {self.sender} — {self.message[:50]}>'
@@ -142,15 +148,21 @@ class Payment(db.Model):
 
     id             = db.Column(db.Integer, primary_key=True)
     booking_id     = db.Column(db.Integer, db.ForeignKey('bookings.id'), nullable=True)
-    amount         = db.Column(db.Float, nullable=False)
+    # FIX: was Float — floats are imprecise for money (e.g. 1500.1 + 1500.2 ≠ 3000.3)
+    # Numeric(10, 2) is exact
+    amount         = db.Column(db.Numeric(10, 2), nullable=False)
     currency       = db.Column(db.String(10), default='KES')
-    payment_method = db.Column(db.String(50))   # 'stripe' | 'mpesa'
-    transaction_id = db.Column(db.String(100))
-    status         = db.Column(db.String(20), default='pending')  # pending | completed | failed
-    created_at     = db.Column(db.DateTime, default=datetime.utcnow)
+    payment_method = db.Column(db.String(50))
+    transaction_id = db.Column(db.String(100), unique=True, nullable=True)
+    # index=True — dashboard SUM query and filter_by(status='completed')
+    status         = db.Column(db.String(20), default='pending', index=True)
+    created_at     = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
     def __repr__(self):
         return f'<Payment {self.id}: {self.amount} {self.currency} — {self.status}>'
+
+
+# ── Video ─────────────────────────────────────────────────────────────────────
 
 class Video(db.Model):
     __tablename__ = 'videos'
@@ -159,8 +171,13 @@ class Video(db.Model):
     title       = db.Column(db.String(255), nullable=False)
     url         = db.Column(db.String(500), nullable=False)
     youtube_id  = db.Column(db.String(20), nullable=False)
-    category    = db.Column(db.String(50), nullable=False)
+    # index=True — public video page filters by category
+    category    = db.Column(db.String(50), nullable=False, index=True)
     description = db.Column(db.Text, default='')
     duration    = db.Column(db.String(20), default='')
-    featured    = db.Column(db.Boolean, default=False)
-    created_at  = db.Column(db.DateTime, default=datetime.utcnow)
+    # index=True — featured videos are ordered/filtered on every page load
+    featured    = db.Column(db.Boolean, default=False, index=True)
+    created_at  = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+
+    def __repr__(self):
+        return f'<Video {self.id}: {self.title}>'
