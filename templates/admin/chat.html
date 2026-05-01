@@ -8,18 +8,6 @@
 
 {% block content %}
 
-{# ── Sample data fallback ── #}
-{% if not messages %}
-{% set messages = [
-  {'id':1,'sender_name':'Grace Akinyi','sender_email':'grace@email.com','phone':'+254 711 234 567','service':'Wedding Coverage','content':'Hello! I am getting married on June 14th at Villa Rosa Kempinski and would love to discuss your wedding photography packages. We are expecting about 200 guests and would need full-day coverage from 8am. Please let me know your availability and pricing.','created_at_str':'2 min ago','created_at_day':'Today','is_read':False},
-  {'id':2,'sender_name':'Brian Omondi','sender_email':'brian@company.co.ke','phone':'+254 722 876 543','service':'Corporate','content':'We are looking for a photographer for our annual company retreat in Naivasha next month. About 50 staff members. Would need half-day coverage and product shots of our new merchandise line.','created_at_str':'1 hr ago','created_at_day':'Today','is_read':False},
-  {'id':3,'sender_name':'Esther Mwangi','sender_email':'esther@gmail.com','phone':'+254 700 111 222','service':'Portrait Session','content':'Hi there, I saw your work on Instagram and I absolutely love the quality. I would like to book a portrait session for my professional headshots. I am a lawyer and need clean, corporate-style photos for my firm website.','created_at_str':'3 hrs ago','created_at_day':'Today','is_read':False},
-  {'id':4,'sender_name':'Kevin Njoroge','sender_email':'kevin@startup.io','phone':'+254 733 555 444','service':'Product Shoot','content':'We have a new line of skincare products launching next month and need professional product photography. About 30 different products, various angles. Do you have a studio setup for this?','created_at_str':'Yesterday','created_at_day':'Apr 30','is_read':True},
-  {'id':5,'sender_name':'Amina Hassan','sender_email':'amina.h@gmail.com','phone':'+254 712 999 888','service':'Graduation','content':'My daughter is graduating from the University of Nairobi on May 20th and we would love to have a professional photographer capture this special moment. We would also want a studio session before the ceremony.','created_at_str':'2 days ago','created_at_day':'Apr 29','is_read':True},
-  {'id':6,'sender_name':'David Kipchoge','sender_email':'david.k@email.com','phone':None,'service':'Event Photography','content':'I am organizing a charity gala on May 25th at the Sarova Stanley. We need an experienced event photographer who can capture key moments throughout the evening. The event runs from 6pm to 11pm.','created_at_str':'3 days ago','created_at_day':'Apr 28','is_read':True}
-] %}
-{% endif %}
-
 {% set unread_count = messages | selectattr('is_read', 'equalto', False) | list | length %}
 
 <div class="ms-layout">
@@ -55,13 +43,13 @@
            data-phone="{{ msg.phone or '' }}"
            data-service="{{ msg.service or '' }}"
            data-content="{{ msg.content }}"
-           data-time="{{ msg.created_at_str if msg.created_at_str is defined else (msg.created_at.strftime('%d %b %Y, %H:%M') if msg.created_at is defined else '') }}"
-           data-day="{{ msg.created_at_day if msg.created_at_day is defined else '' }}">
+           data-time="{{ msg.created_at.strftime('%d %b %Y, %H:%M') }}"
+           data-day="{{ msg.created_at.strftime('%d %b') }}">
         <div class="ms-item-avatar {% if msg.is_read %}dim{% endif %}">{{ msg.sender_name[0].upper() }}</div>
         <div class="ms-item-body">
           <div class="ms-item-row">
             <span class="ms-item-name">{{ msg.sender_name }}</span>
-            <span class="ms-item-time">{{ msg.created_at_day if msg.created_at_day is defined else (msg.created_at.strftime('%d %b') if msg.created_at is defined else '') }}</span>
+            <span class="ms-item-time">{{ msg.created_at.strftime('%d %b') }}</span>
           </div>
           {% if msg.service %}
           <span class="ms-item-tag">{{ msg.service }}</span>
