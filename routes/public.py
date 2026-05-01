@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify, send_from_directory, request, current_app
 from models import db, Portfolio, Booking, Message
-from app import limiter
+from extensions import limiter
 from utils.email import send_booking_notification, send_contact_notification
 import re
 
@@ -195,6 +195,9 @@ def api_booking():
 @public_bp.route('/api/contact', methods=['POST'])
 @limiter.limit("5 per minute; 20 per hour")
 def api_contact():
+    print("HEADERS:", request.headers)
+    print("JSON:", request.get_json(silent=True))
+    print("FORM:", request.form)
     try:
         data = request.get_json(silent=True) or request.form
 

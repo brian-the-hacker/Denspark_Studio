@@ -1,135 +1,112 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-
 import os
 from flask import Flask, jsonify
-from flask_login import LoginManager
 from flask_cors import CORS
-from flask_wtf.csrf import CSRFProtect
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 from flask_migrate import Migrate
-from models import db, User
 import cloudinary
 
-# ── Limiter (shared across blueprints) ───────────────────────────────────────
-limiter = Limiter(
-    key_func=get_remote_address,
-    default_limits=["200 per day", "60 per hour"],
-    storage_uri="memory://",
-)
-csrf = CSRFProtect()
+from models import User
+from extensions import db, login_manager, csrf, limiter
+
 
 def create_app():
     app = Flask(__name__)
 
-    # ── SECRET_KEY ────────────────────────────────────────────────────────────
-    secret = os.environ.get('SECRET_KEY')
-    if not secret or secret == 'dev-secret':
-        raise RuntimeError(
-            'SECRET_KEY is missing or still set to the default. '
-            'Set a strong random value in your .env / Railway Variables.'
-        )
-    app.config['SECRET_KEY'] = secret
+    # ── SECURITY ─────────────────────────────
+    secret = os.environ.get("SECRET_KEY")
+    if not secret:
+        raise RuntimeError("SECRET_KEY missing")
 
-    # ── Database ──────────────────────────────────────────────────────────────
-    db_url = os.environ.get('DATABASE_URL')
+    app.config["SECRET_KEY"] = secret
+
+    # ── DATABASE ─────────────────────────────
+    db_url = os.environ.get("DATABASE_URL")
     if not db_url:
-        raise RuntimeError('DATABASE_URL not set in environment variables.')
+        raise RuntimeError("DATABASE_URL missing")
 
-    if db_url.startswith('mysql://'):
-        db_url = db_url.replace('mysql://', 'mysql+pymysql://', 1)
+    if db_url.startswith("mysql://"):
+        db_url = db_url.replace("mysql://", "mysql+pymysql://", 1)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-        'pool_pre_ping': True,
-        'pool_recycle': 280,
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+        "pool_pre_ping": True,
+        "pool_recycle": 280,
     }
 
-    # ── Uploads ───────────────────────────────────────────────────────────────
-    app.config['UPLOAD_FOLDER'] = '/tmp'
-    app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
-    app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'jpeg', 'png', 'webp', 'gif'}
+    # ── FILE UPLOADS ─────────────────────────
+    app.config["UPLOAD_FOLDER"] = "/tmp"
+    app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 
-    # ── Session cookie hardening ──────────────────────────────────────────────
-    app.config['SESSION_COOKIE_HTTPONLY'] = True
-    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-    app.config['SESSION_COOKIE_SECURE']   = os.environ.get('FLASK_ENV') != 'development'
-    app.config['REMEMBER_COOKIE_HTTPONLY'] = True
-    app.config['REMEMBER_COOKIE_SECURE']   = os.environ.get('FLASK_ENV') != 'development'
+    # ── COOKIE SECURITY ──────────────────────
+    is_dev = os.environ.get("FLASK_ENV") == "development"
 
-    # ── Cloudinary ────────────────────────────────────────────────────────────
-    cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME')
-    api_key    = os.environ.get('CLOUDINARY_API_KEY')
-    api_secret = os.environ.get('CLOUDINARY_API_SECRET')
-
-    if not all([cloud_name, api_key, api_secret]):
-        raise RuntimeError(
-            'Cloudinary credentials missing. Set CLOUDINARY_CLOUD_NAME, '
-            'CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET in your environment.'
-        )
-
-    cloudinary.config(
-        cloud_name = cloud_name,
-        api_key    = api_key,
-        api_secret = api_secret,
-        secure     = True,
+    app.config.update(
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE="Lax",
+        SESSION_COOKIE_SECURE=not is_dev,
+        REMEMBER_COOKIE_HTTPONLY=True,
+        REMEMBER_COOKIE_SECURE=not is_dev,
     )
 
-    # ── Extensions ────────────────────────────────────────────────────────────
+    # ── CLOUDINARY ───────────────────────────
+    cloudinary.config(
+        cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+        api_key=os.environ.get("CLOUDINARY_API_KEY"),
+        api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
+        secure=True,
+    )
+
+    # ── INIT EXTENSIONS ──────────────────────
     db.init_app(app)
-    Migrate(app, db)        # ← Flask-Migrate replaces db.create_all()
-    limiter.init_app(app)
-
-    # CORS — locked to your actual domain
-    allowed_origin = os.environ.get('ALLOWED_ORIGIN', 'https://denspark.studio')
-    CORS(app, resources={
-        r"/api/*":        {"origins": allowed_origin},
-        r"/admin/api/*":  {"origins": allowed_origin},
-    })
-
-    # ── Login manager ─────────────────────────────────────────────────────────
-    login_manager = LoginManager()
     login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
-    login_manager.login_message = 'Please log in to access the admin panel.'
-    login_manager.login_message_category = 'warning'
+    csrf.init_app(app)
+    limiter.init_app(app)
+    Migrate(app, db)
+
+    # ── LOGIN MANAGER ────────────────────────
+    login_manager.login_view = "auth.login"
 
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    # ── Global error handlers ─────────────────────────────────────────────────
-    @app.errorhandler(429)
-    def rate_limit_exceeded(e):
-        return jsonify(error='Too many requests. Please slow down and try again later.'), 429
+    # ── CORS ─────────────────────────────────
+    allowed_origin = os.environ.get("ALLOWED_ORIGIN", "https://denspark.studio")
 
-    @app.errorhandler(413)
-    def file_too_large(e):
-        return jsonify(error='File is too large. Maximum size is 10 MB.'), 413
+    CORS(app, resources={
+        r"/api/*": {"origins": allowed_origin},
+        r"/admin/api/*": {"origins": allowed_origin},
+    })
+
+    # ── ERROR HANDLERS ───────────────────────
+    @app.errorhandler(429)
+    def rate_limit(e):
+        return jsonify(error="Too many requests"), 429
 
     @app.errorhandler(500)
-    def internal_error(e):
-        app.logger.error(f'Internal error: {e}')
-        return jsonify(error='An internal error occurred. Please try again later.'), 500
+    def server_error(e):
+        app.logger.error(str(e))
+        return jsonify(error="Server error"), 500
 
-    # ── Blueprints ────────────────────────────────────────────────────────────
+    # ── BLUEPRINTS (IMPORT INSIDE FUNCTION = FIX CIRCULAR IMPORT) ──
     from routes.public import public_bp
     from routes.admin import admin_bp
     from routes.auth import auth_bp
 
     app.register_blueprint(public_bp)
-    app.register_blueprint(admin_bp, url_prefix='/admin')
-    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(admin_bp, url_prefix="/admin")
+    app.register_blueprint(auth_bp, url_prefix="/auth")
 
     return app
 
 
 app = create_app()
 
-if __name__ == '__main__':
-    port  = int(os.environ.get('PORT', 5000))
-    debug = os.environ.get('FLASK_ENV') == 'development'
-    app.run(debug=debug, host='0.0.0.0', port=port)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    debug = os.environ.get("FLASK_ENV") == "development"
+    app.run(host="0.0.0.0", port=port, debug=debug)
