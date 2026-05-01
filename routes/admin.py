@@ -1,11 +1,13 @@
 """
 admin.py — Denspark Studio admin blueprint.
-Includes:
-  - Admin panel routes (login-protected)
-  - Public API routes for portfolio and videos (/api/*)
+All admin routes are protected by both @login_required and @admin_required.
+Public API routes (/api/*) are unprotected by design.
 """
 
-from flask import Blueprint, render_template, request, jsonify, current_app, redirect, url_for
+from datetime import datetime
+from functools import wraps
+from flask import (Blueprint, render_template, request, jsonify,
+                   current_app, redirect, url_for, abort)
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from models import db, Portfolio, Booking, Message, Payment, Video
@@ -13,35 +15,34 @@ import os
 import uuid
 import re
 
-# ── Cloudinary ──────────────────────────────────────────────────────────────
 import cloudinary
 import cloudinary.uploader
-
-def init_cloudinary():
-    """Call this once in your app factory / create_app()."""
-    cloudinary.config(
-        cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME'),
-        api_key    = os.environ.get('CLOUDINARY_API_KEY'),
-        api_secret = os.environ.get('CLOUDINARY_API_SECRET'),
-        secure     = True
-    )
-# ────────────────────────────────────────────────────────────────────────────
 
 admin_bp = Blueprint('admin', __name__)
 
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'webp', 'gif'}
+
+
+# ── Decorators ────────────────────────────────────────────────────────────────
+
+def admin_required(f):
+    """Enforce is_admin=True. Always stack BELOW @login_required."""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not current_user.is_authenticated or not current_user.is_admin:
+            abort(403)
+        return f(*args, **kwargs)
+    return decorated
+
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# UTILITY
-# ─────────────────────────────────────────────────────────────────────────────
-
 def extract_youtube_id(url):
-    """Extract 11-char YouTube video ID from any YouTube URL format."""
     patterns = [
         r'(?:v=|\/)([0-9A-Za-z_-]{11})',
         r'(?:youtu\.be\/)([0-9A-Za-z_-]{11})',
@@ -56,24 +57,17 @@ def extract_youtube_id(url):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PUBLIC API — /api/*
-# These routes are NOT login-protected — they serve the public-facing pages.
+# PUBLIC API — /api/*  (no auth — served to public pages)
 # ─────────────────────────────────────────────────────────────────────────────
 
 @admin_bp.route('/api/portfolio')
 def api_portfolio():
-    """
-    Public API: GET /api/portfolio
-    Returns all portfolio items as JSON for the public portfolio page.
-    Optionally filter by ?category=weddings&featured=true
-    """
-    query = Portfolio.query
-
+    query    = Portfolio.query
     category = request.args.get('category', '').strip().lower()
+    featured = request.args.get('featured', '').strip().lower()
+
     if category and category != 'all':
         query = query.filter(Portfolio.category.ilike(category))
-
-    featured = request.args.get('featured', '').strip().lower()
     if featured == 'true':
         query = query.filter(Portfolio.featured == True)
 
@@ -84,21 +78,19 @@ def api_portfolio():
         'total':   len(items),
         'items': [
             {
-                'id':            item.id,
-                'title':         item.title,
-                'description':   item.description or '',
-                'category':      item.category,
+                'id':             item.id,
+                'title':          item.title,
+                'description':    item.description or '',
+                'category':       item.category,
                 'category_label': item.category.replace('-', ' ').title(),
-                'featured':      item.featured,
-                # Full-resolution URL (Cloudinary or local)
-                'image_url':     item.cloudinary_url or (
+                'featured':       item.featured,
+                'image_url':      item.cloudinary_url or (
                     f'/static/uploads/{item.file_path}' if item.file_path else ''
                 ),
-                # For lightbox: serve full-res from Cloudinary
-                'full_url':      item.cloudinary_url or (
+                'full_url':       item.cloudinary_url or (
                     f'/static/uploads/{item.file_path}' if item.file_path else ''
                 ),
-                'created_at':    item.created_at.strftime('%Y-%m-%d'),
+                'created_at':     item.created_at.strftime('%Y-%m-%d'),
             }
             for item in items
         ]
@@ -107,44 +99,33 @@ def api_portfolio():
 
 @admin_bp.route('/api/videos')
 def api_videos():
-    """
-    Public API: GET /api/videos
-    Returns all videos as JSON for the public video production page.
-    Optionally filter by ?category=wedding&featured=true
-    """
-    query = Video.query
-
+    query    = Video.query
     category = request.args.get('category', '').strip().lower()
+    featured = request.args.get('featured', '').strip().lower()
+
     if category and category != 'all':
         query = query.filter(Video.category.ilike(category))
-
-    featured = request.args.get('featured', '').strip().lower()
     if featured == 'true':
         query = query.filter(Video.featured == True)
 
-    # Featured videos first, then newest
-    videos = query.order_by(
-        Video.featured.desc(),
-        Video.created_at.desc()
-    ).all()
+    videos = query.order_by(Video.featured.desc(), Video.created_at.desc()).all()
 
     return jsonify({
         'success': True,
         'total':   len(videos),
         'videos': [
             {
-                'id':          v.id,
-                'title':       v.title,
-                'url':         v.url,
-                'youtube_id':  v.youtube_id,
-                'category':    v.category,
+                'id':             v.id,
+                'title':          v.title,
+                'url':            v.url,
+                'youtube_id':     v.youtube_id,
+                'category':       v.category,
                 'category_label': v.category.replace('-', ' ').title(),
-                'description': v.description or '',
-                'duration':    v.duration or '',
-                'featured':    v.featured,
-                # Thumbnail URLs — maxresdefault falls back to hqdefault in the browser
-                'thumbnail':   f'https://img.youtube.com/vi/{v.youtube_id}/maxresdefault.jpg',
-                'created_at':  v.created_at.strftime('%Y-%m-%d'),
+                'description':    v.description or '',
+                'duration':       v.duration or '',
+                'featured':       v.featured,
+                'thumbnail':      f'https://img.youtube.com/vi/{v.youtube_id}/maxresdefault.jpg',
+                'created_at':     v.created_at.strftime('%Y-%m-%d'),
             }
             for v in videos
         ]
@@ -153,8 +134,9 @@ def api_videos():
 
 @admin_bp.route('/api/videos/<int:video_id>')
 def api_video_single(video_id):
-    """Public API: GET /api/videos/<id> — single video detail."""
-    v = Video.query.get_or_404(video_id)
+    v = db.session.get(Video, video_id)
+    if not v:
+        abort(404)
     return jsonify({
         'success':     True,
         'id':          v.id,
@@ -171,58 +153,40 @@ def api_video_single(video_id):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PUBLIC PAGE ROUTES
+# PUBLIC PAGES (no auth)
 # ─────────────────────────────────────────────────────────────────────────────
 
 @admin_bp.route('/video-production')
 def video_production():
-    """Public video production page — renders the template, JS fetches /api/videos."""
     return render_template('public/video_production.html')
 
 
 @admin_bp.route('/packages')
 def packages():
-    """Public packages page."""
     return render_template('public/packages.html')
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# ADMIN DASHBOARD
+# ADMIN — DASHBOARD
 # ─────────────────────────────────────────────────────────────────────────────
 
 @admin_bp.route('/dashboard')
 @login_required
+@admin_required
 def dashboard():
     total_bookings   = Booking.query.count()
     pending_bookings = Booking.query.filter_by(status='pending').count()
     total_uploads    = Portfolio.query.count()
+    total_messages   = Message.query.count()
+    unread_messages  = Message.query.filter_by(is_read=False).count()
+    total_videos     = Video.query.count()
 
-    try:
-        recent_messages = Message.query.order_by(Message.created_at.desc()).limit(5).all()
-        total_messages  = Message.query.count()
-    except Exception:
-        recent_messages = []
-        total_messages  = 0
+    recent_messages = Message.query.order_by(Message.created_at.desc()).limit(5).all()
+    recent_bookings = Booking.query.order_by(Booking.created_at.desc()).limit(5).all()
+    recent_payments = Payment.query.order_by(Payment.created_at.desc()).limit(5).all()
 
-    unread_messages = Message.query.filter_by(is_read=False).count()
-
-    try:
-        completed_payments = Payment.query.filter_by(status='completed').all()
-        total_revenue = sum(p.amount for p in completed_payments)
-    except Exception:
-        total_revenue = 0
-
-    try:
-        recent_bookings = Booking.query.order_by(Booking.created_at.desc()).limit(5).all()
-    except Exception:
-        recent_bookings = []
-
-    try:
-        recent_payments = Payment.query.order_by(Payment.created_at.desc()).limit(5).all()
-    except Exception:
-        recent_payments = []
-
-    total_videos = Video.query.count()
+    completed_payments = Payment.query.filter_by(status='completed').all()
+    total_revenue = sum(p.amount for p in completed_payments)
 
     return render_template('admin/dashboard.html',
         total_bookings   = total_bookings,
@@ -245,6 +209,7 @@ def dashboard():
 
 @admin_bp.route('/portfolio')
 @login_required
+@admin_required
 def portfolio():
     items = Portfolio.query.order_by(Portfolio.created_at.desc()).all()
     return render_template('admin/portfolio.html', items=items, current_user=current_user)
@@ -252,6 +217,7 @@ def portfolio():
 
 @admin_bp.route('/portfolio/upload', methods=['POST'])
 @login_required
+@admin_required
 def upload_portfolio():
     current_app.logger.info(f"Upload hit. Content-Length: {request.content_length}")
 
@@ -275,7 +241,6 @@ def upload_portfolio():
     cloudinary_id  = None
     local_filename = None
 
-    # Try Cloudinary first
     if os.environ.get('CLOUDINARY_CLOUD_NAME'):
         try:
             result = cloudinary.uploader.upload(
@@ -293,7 +258,6 @@ def upload_portfolio():
         except Exception as e:
             current_app.logger.warning(f'Cloudinary upload failed, falling back: {e}')
 
-    # Fallback: local disk
     if not cloudinary_url:
         local_filename = secure_filename(f"{uuid.uuid4().hex}_{file.filename}")
         upload_folder  = current_app.config.get('UPLOAD_FOLDER', 'static/uploads')
@@ -323,22 +287,23 @@ def upload_portfolio():
 
 @admin_bp.route('/portfolio/edit/<int:id>', methods=['POST'])
 @login_required
+@admin_required
 def edit_portfolio(id):
-    item = Portfolio.query.get_or_404(id)
+    item = db.session.get(Portfolio, id)
+    if not item:
+        abort(404)
     data = request.get_json(silent=True) or {}
 
     title    = data.get('title', '').strip()
     category = data.get('category', '').strip()
-    desc     = data.get('description', '').strip()
-    featured = bool(data.get('featured', False))
 
     if not title or not category:
         return jsonify({'error': 'Title and category are required'}), 400
 
     item.title       = title
     item.category    = category
-    item.description = desc
-    item.featured    = featured
+    item.description = data.get('description', '').strip()
+    item.featured    = bool(data.get('featured', False))
     db.session.commit()
 
     return jsonify({'success': True})
@@ -346,8 +311,11 @@ def edit_portfolio(id):
 
 @admin_bp.route('/portfolio/delete/<int:id>', methods=['DELETE'])
 @login_required
+@admin_required
 def delete_portfolio(id):
-    item = Portfolio.query.get_or_404(id)
+    item = db.session.get(Portfolio, id)
+    if not item:
+        abort(404)
 
     if getattr(item, 'cloudinary_id', None):
         try:
@@ -377,15 +345,16 @@ def delete_portfolio(id):
 
 @admin_bp.route('/videos')
 @login_required
+@admin_required
 def videos():
     all_videos = Video.query.order_by(Video.created_at.desc()).all()
     return render_template('admin/admin_videos.html',
-                           videos=all_videos,
-                           current_user=current_user)
+                           videos=all_videos, current_user=current_user)
 
 
 @admin_bp.route('/videos/add', methods=['POST'])
 @login_required
+@admin_required
 def add_video():
     data = request.get_json(silent=True) or {}
 
@@ -395,7 +364,7 @@ def add_video():
 
     youtube_id = extract_youtube_id(url)
     if not youtube_id:
-        return jsonify({'success': False, 'error': 'Could not detect a valid YouTube video ID from that URL'}), 400
+        return jsonify({'success': False, 'error': 'Could not detect a valid YouTube video ID'}), 400
 
     title    = data.get('title', '').strip()
     category = data.get('category', '').strip()
@@ -415,24 +384,27 @@ def add_video():
     db.session.commit()
 
     return jsonify({
-        'success':    True,
-        'id':         video.id,
-        'youtube_id': youtube_id,
-        'thumbnail':  f'https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg',
-        'title':      video.title,
-        'category':   video.category,
-        'description':video.description,
-        'duration':   video.duration,
-        'featured':   video.featured,
-        'url':        video.url,
+        'success':     True,
+        'id':          video.id,
+        'youtube_id':  youtube_id,
+        'thumbnail':   f'https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg',
+        'title':       video.title,
+        'category':    video.category,
+        'description': video.description,
+        'duration':    video.duration,
+        'featured':    video.featured,
+        'url':         video.url,
     }), 201
 
 
 @admin_bp.route('/videos/edit/<int:video_id>', methods=['POST', 'PUT'])
 @login_required
+@admin_required
 def edit_video(video_id):
-    video = Video.query.get_or_404(video_id)
-    data  = request.get_json(silent=True) or {}
+    video = db.session.get(Video, video_id)
+    if not video:
+        abort(404)
+    data = request.get_json(silent=True) or {}
 
     url = data.get('url', '').strip()
     if not url:
@@ -454,30 +426,33 @@ def edit_video(video_id):
     video.description = data.get('description', '').strip()
     video.duration    = data.get('duration', '').strip()
     video.featured    = bool(data.get('featured', False))
-
     db.session.commit()
 
     return jsonify({
-        'success':    True,
-        'id':         video.id,
-        'youtube_id': youtube_id,
-        'thumbnail':  f'https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg',
-        'title':      video.title,
-        'category':   video.category,
-        'description':video.description,
-        'duration':   video.duration,
-        'featured':   video.featured,
-        'url':        video.url,
+        'success':     True,
+        'id':          video.id,
+        'youtube_id':  youtube_id,
+        'thumbnail':   f'https://img.youtube.com/vi/{youtube_id}/maxresdefault.jpg',
+        'title':       video.title,
+        'category':    video.category,
+        'description': video.description,
+        'duration':    video.duration,
+        'featured':    video.featured,
+        'url':         video.url,
     })
 
 
 @admin_bp.route('/videos/delete/<int:video_id>', methods=['DELETE', 'POST'])
 @login_required
+@admin_required
 def delete_video(video_id):
-    video = Video.query.get_or_404(video_id)
+    video = db.session.get(Video, video_id)
+    if not video:
+        abort(404)
+    title = video.title
     db.session.delete(video)
     db.session.commit()
-    return jsonify({'success': True, 'message': f'Video "{video.title}" deleted.'})
+    return jsonify({'success': True, 'message': f'Video "{title}" deleted.'})
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -486,8 +461,9 @@ def delete_video(video_id):
 
 @admin_bp.route('/bookings')
 @login_required
+@admin_required
 def bookings():
-    bookings = Booking.query.order_by(Booking.id.desc()).all()
+    all_bookings = Booking.query.order_by(Booking.id.desc()).all()
     stats = {
         'total':     Booking.query.count(),
         'pending':   Booking.query.filter_by(status='pending').count(),
@@ -495,14 +471,14 @@ def bookings():
         'completed': Booking.query.filter_by(status='completed').count(),
     }
     return render_template('admin/bookings.html',
-                           bookings=bookings,
+                           bookings=all_bookings,
                            stats=stats,
                            total_bookings=stats['total'])
- 
- 
-# ── Create booking (AJAX) ───────────────────────────────────────
+
+
 @admin_bp.route('/bookings/create', methods=['POST'])
 @login_required
+@admin_required
 def create_booking():
     data = request.form
     booking = Booking(
@@ -535,15 +511,17 @@ def create_booking():
             'status':   booking.status,
         }
     })
- 
- 
-# ── Full inline-edit save ───────────────────────────────────────
+
+
 @admin_bp.route('/bookings/<int:booking_id>/update', methods=['POST'])
 @login_required
+@admin_required
 def update_booking(booking_id):
-    booking = Booking.query.get_or_404(booking_id)
+    booking = db.session.get(Booking, booking_id)
+    if not booking:
+        abort(404)
     f = request.form
- 
+
     booking.name     = f.get('name',     booking.name)
     booking.email    = f.get('email',    booking.email)
     booking.phone    = f.get('phone',    booking.phone)
@@ -553,48 +531,57 @@ def update_booking(booking_id):
     booking.location = f.get('location', booking.location)
     booking.notes    = f.get('notes',    booking.notes)
     booking.status   = f.get('status',   booking.status)
- 
+
     raw_amount = f.get('amount', '')
     booking.amount = float(raw_amount) if raw_amount else None
- 
+
     db.session.commit()
     return jsonify({'success': True})
- 
- 
-# ── Confirm a pending booking ───────────────────────────────────
+
+
 @admin_bp.route('/bookings/<int:booking_id>/confirm', methods=['POST'])
 @login_required
+@admin_required
 def confirm_booking(booking_id):
-    booking = Booking.query.get_or_404(booking_id)
+    booking = db.session.get(Booking, booking_id)
+    if not booking:
+        abort(404)
     booking.status = 'confirmed'
     db.session.commit()
     return jsonify({'success': True, 'status': 'confirmed'})
- 
- 
-# ── Cancel a booking ────────────────────────────────────────────
+
+
 @admin_bp.route('/bookings/<int:booking_id>/cancel', methods=['POST'])
 @login_required
+@admin_required
 def cancel_booking(booking_id):
-    booking = Booking.query.get_or_404(booking_id)
+    booking = db.session.get(Booking, booking_id)
+    if not booking:
+        abort(404)
     booking.status = 'cancelled'
     db.session.commit()
     return jsonify({'success': True, 'status': 'cancelled'})
- 
- 
-# ── Delete a booking ────────────────────────────────────────────
+
+
 @admin_bp.route('/bookings/<int:booking_id>/delete', methods=['POST'])
 @login_required
+@admin_required
 def delete_booking(booking_id):
-    booking = Booking.query.get_or_404(booking_id)
+    booking = db.session.get(Booking, booking_id)
+    if not booking:
+        abort(404)
     db.session.delete(booking)
     db.session.commit()
     return jsonify({'success': True})
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # ADMIN — MESSAGES
 # ─────────────────────────────────────────────────────────────────────────────
 
 @admin_bp.route('/messages')
 @login_required
+@admin_required
 def messages():
     msgs = Message.query.filter(
         Message.sender_name  != None,
@@ -605,8 +592,11 @@ def messages():
 
 @admin_bp.route('/messages/<int:id>/read', methods=['POST'])
 @login_required
+@admin_required
 def mark_message_read(id):
-    msg = Message.query.get_or_404(id)
+    msg = db.session.get(Message, id)
+    if not msg:
+        abort(404)
     msg.is_read = True
     db.session.commit()
     return jsonify({'success': True})
@@ -614,12 +604,14 @@ def mark_message_read(id):
 
 @admin_bp.route('/messages/<int:id>/delete', methods=['DELETE'])
 @login_required
+@admin_required
 def delete_message(id):
-    msg = Message.query.get_or_404(id)
+    msg = db.session.get(Message, id)
+    if not msg:
+        abort(404)
     db.session.delete(msg)
     db.session.commit()
     return jsonify({'success': True})
-
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -628,6 +620,7 @@ def delete_message(id):
 
 @admin_bp.route('/payments')
 @login_required
+@admin_required
 def payments():
     pmts = Payment.query.order_by(Payment.created_at.desc()).all()
     return render_template('admin/payments.html', payments=pmts, current_user=current_user)
@@ -639,11 +632,13 @@ def payments():
 
 @admin_bp.route('/analytics')
 @login_required
+@admin_required
 def analytics():
     return render_template('admin/analytics.html', current_user=current_user)
 
 
 @admin_bp.route('/settings')
 @login_required
+@admin_required
 def settings():
     return render_template('admin/settings.html', current_user=current_user)

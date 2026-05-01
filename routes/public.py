@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify, send_from_directory, request, current_app
 from models import db, Portfolio, Booking, Message
-from extensions import limiter
+from extensions import limiter, csrf
 from utils.email import send_booking_notification, send_contact_notification
 import re
 
@@ -56,10 +56,10 @@ def contact():
 def packages():
     return render_template('public/packages.html')
 
-
 @public_bp.route('/videos')
 def videos():
-    return render_template('public/video_production.html')    
+    return render_template('public/video_production.html')
+
 
 # ── API: Portfolio ────────────────────────────────────────────────────────────
 @public_bp.route('/api/portfolio')
@@ -106,7 +106,13 @@ def api_portfolio():
                 "created_at"    : item.created_at.strftime("%Y-%m-%d"),
             }
 
-        return jsonify({"items": [serialize(i) for i in items], "total": total, "page": page, "pages": pages, "per_page": per_page})
+        return jsonify({
+            "items"   : [serialize(i) for i in items],
+            "total"   : total,
+            "page"    : page,
+            "pages"   : pages,
+            "per_page": per_page,
+        })
 
     except (ValueError, TypeError):
         return jsonify({"error": "Invalid query parameters", "items": []}), 400
@@ -116,16 +122,16 @@ def api_portfolio():
 
 
 # ── API: Booking form ─────────────────────────────────────────────────────────
+# Route first, then csrf.exempt, then limiter — this order is required.
 @public_bp.route('/api/booking', methods=['POST'])
+@csrf.exempt
 @limiter.limit("5 per minute; 15 per hour")
 def api_booking():
     try:
         data = request.get_json(silent=True) or request.form
 
-        # Handle split first/last name from the form
         first_name = _clean(data.get('first_name'), MAX_NAME_LEN)
         last_name  = _clean(data.get('last_name'),  MAX_NAME_LEN)
-        # Also support combined 'name' field as fallback
         name = f"{first_name} {last_name}".strip() or _clean(data.get('name'), MAX_NAME_LEN)
 
         email   = _clean(data.get('email'),   MAX_EMAIL_LEN)
@@ -134,7 +140,6 @@ def api_booking():
         date    = _clean(data.get('date'),    20)
         message = _clean(data.get('message'), MAX_MSG_LEN)
 
-        # ── Validation ────────────────────────────────────────────────────────
         errors = []
         if not name:
             errors.append('Full name is required.')
@@ -154,24 +159,21 @@ def api_booking():
         if errors:
             return jsonify({'error': ' '.join(errors)}), 400
 
-        # ── Save to DB ────────────────────────────────────────────────────────
-        full_message = message
-        if date:
-            full_message = f"[Preferred Date: {date}]\n\n{message}"
+        # Embed preferred date into the saved message
+        full_message = f"[Preferred Date: {date}]\n\n{message}" if date else message
 
         booking = Booking(
             name    = name,
             email   = email,
             phone   = phone,
             service = service,
-            message = message,
-            date    = date or None,   # save as its own field
+            message = full_message,   # includes date prefix if provided
+            date    = date or None,
             status  = 'pending',
         )
         db.session.add(booking)
         db.session.commit()
 
-        # ── Send email notification (non-blocking — failure won't break form) ─
         try:
             send_booking_notification({
                 'name'   : name,
@@ -192,14 +194,16 @@ def api_booking():
 
 
 # ── API: Contact form ─────────────────────────────────────────────────────────
+# Route first, then csrf.exempt, then limiter — this order is required.
 @public_bp.route('/api/contact', methods=['POST'])
+@csrf.exempt
 @limiter.limit("5 per minute; 20 per hour")
 def api_contact():
-    print("HEADERS:", request.headers)
-    print("JSON:", request.get_json(silent=True))
-    print("FORM:", request.form)
     try:
-        data = request.get_json(silent=True) or request.form
+        data = request.get_json()
+
+        if not data:
+            return jsonify({'error': 'Invalid or missing JSON body'}), 400
 
         name    = _clean(data.get('name'),    MAX_NAME_LEN)
         email   = _clean(data.get('email'),   MAX_EMAIL_LEN)
@@ -214,6 +218,8 @@ def api_contact():
             errors.append('Email is required.')
         elif not _valid_email(email):
             errors.append('Please enter a valid email address.')
+        if service and service not in ALLOWED_SERVICES:
+            errors.append('Invalid service selected.')
         if not content or len(content) < 10:
             errors.append('Please enter a message (at least 10 characters).')
 
@@ -235,7 +241,6 @@ def api_contact():
         db.session.add(msg)
         db.session.commit()
 
-        # ── Email notification ────────────────────────────────────────────────
         try:
             send_contact_notification({
                 'name'   : name,
@@ -252,21 +257,9 @@ def api_contact():
     except Exception as e:
         current_app.logger.error(f"Contact form error: {e}")
         return jsonify({'error': 'Failed to send message. Please try again later.'}), 500
-    
-# ── API: Google Reviews (example) ─────────────────────────────────────────this will be offline
-#@public_bp.route('/api/reviews')
-#def reviews():
-#    import requests, os
-#    r = requests.get(
-#        'https://maps.googleapis.com/maps/api/place/details/json',
-#        params={
-#           'place_id': 'YOUR_ChIJ_HERE',
-#            'key': os.getenv('GOOGLE_PLACES_KEY'),
-#           'fields': 'reviews,rating,user_ratings_total'
-#       }
-#   )
-#   return jsonify(r.json().get('result', {}))
 
+
+# ── API: Reviews ──────────────────────────────────────────────────────────────
 @public_bp.route('/api/reviews')
 def get_reviews():
     return send_from_directory('static/data', 'reviews.json')

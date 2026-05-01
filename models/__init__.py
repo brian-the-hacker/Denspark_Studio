@@ -20,9 +20,12 @@ class User(UserMixin, db.Model):
 
     id            = db.Column(db.Integer, primary_key=True)
     username      = db.Column(db.String(80), unique=True, nullable=False)
+    email         = db.Column(db.String(254), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
     role          = db.Column(db.String(20), default='admin')
+    is_admin      = db.Column(db.Boolean, default=False, nullable=False)
     avatar        = db.Column(db.String(200), nullable=True)
+    last_login    = db.Column(db.DateTime, nullable=True)
     created_at    = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
     def __repr__(self):
