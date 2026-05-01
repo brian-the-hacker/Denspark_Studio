@@ -498,9 +498,9 @@ def bookings():
                            bookings=bookings,
                            stats=stats,
                            total_bookings=stats['total'])
-
-
-# ── Create booking (called by modal form via AJAX) ──────────────
+ 
+ 
+# ── Create booking (AJAX) ───────────────────────────────────────
 @admin_bp.route('/bookings/create', methods=['POST'])
 @login_required
 def create_booking():
@@ -519,7 +519,6 @@ def create_booking():
     )
     db.session.add(booking)
     db.session.commit()
-    # Return JSON so the JS can inject the new row without a page reload
     return jsonify({
         'success': True,
         'booking': {
@@ -536,15 +535,15 @@ def create_booking():
             'status':   booking.status,
         }
     })
-
-
-# ── Full inline-edit save (all fields) ─────────────────────────
+ 
+ 
+# ── Full inline-edit save ───────────────────────────────────────
 @admin_bp.route('/bookings/<int:booking_id>/update', methods=['POST'])
 @login_required
 def update_booking(booking_id):
     booking = Booking.query.get_or_404(booking_id)
     f = request.form
-
+ 
     booking.name     = f.get('name',     booking.name)
     booking.email    = f.get('email',    booking.email)
     booking.phone    = f.get('phone',    booking.phone)
@@ -554,14 +553,14 @@ def update_booking(booking_id):
     booking.location = f.get('location', booking.location)
     booking.notes    = f.get('notes',    booking.notes)
     booking.status   = f.get('status',   booking.status)
-
+ 
     raw_amount = f.get('amount', '')
     booking.amount = float(raw_amount) if raw_amount else None
-
+ 
     db.session.commit()
     return jsonify({'success': True})
-
-
+ 
+ 
 # ── Confirm a pending booking ───────────────────────────────────
 @admin_bp.route('/bookings/<int:booking_id>/confirm', methods=['POST'])
 @login_required
@@ -570,8 +569,8 @@ def confirm_booking(booking_id):
     booking.status = 'confirmed'
     db.session.commit()
     return jsonify({'success': True, 'status': 'confirmed'})
-
-
+ 
+ 
 # ── Cancel a booking ────────────────────────────────────────────
 @admin_bp.route('/bookings/<int:booking_id>/cancel', methods=['POST'])
 @login_required
@@ -580,8 +579,8 @@ def cancel_booking(booking_id):
     booking.status = 'cancelled'
     db.session.commit()
     return jsonify({'success': True, 'status': 'cancelled'})
-
-
+ 
+ 
 # ── Delete a booking ────────────────────────────────────────────
 @admin_bp.route('/bookings/<int:booking_id>/delete', methods=['POST'])
 @login_required
