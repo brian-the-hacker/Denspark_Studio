@@ -500,15 +500,7 @@ def bookings():
                            total_bookings=stats['total'])
 
 
-@admin_bp.route('/bookings/update', methods=['POST'])
-@login_required
-def update_booking():
-    data    = request.get_json(silent=True) or {}
-    booking = Booking.query.get_or_404(data.get('id'))
-    booking.status = data.get('status', booking.status)
-    db.session.commit()
-    return jsonify({'success': True})
-
+# ── Create booking (called by modal form via AJAX) ──────────────
 @admin_bp.route('/bookings/create', methods=['POST'])
 @login_required
 def create_booking():
@@ -527,7 +519,77 @@ def create_booking():
     )
     db.session.add(booking)
     db.session.commit()
-    return redirect(url_for('admin.bookings'))
+    # Return JSON so the JS can inject the new row without a page reload
+    return jsonify({
+        'success': True,
+        'booking': {
+            'id':       booking.id,
+            'name':     booking.name,
+            'email':    booking.email,
+            'phone':    booking.phone or '',
+            'service':  booking.service,
+            'date':     booking.date or '',
+            'time':     booking.time or '',
+            'location': booking.location or '',
+            'amount':   float(booking.amount) if booking.amount else None,
+            'notes':    booking.notes or '',
+            'status':   booking.status,
+        }
+    })
+
+
+# ── Full inline-edit save (all fields) ─────────────────────────
+@admin_bp.route('/bookings/<int:booking_id>/update', methods=['POST'])
+@login_required
+def update_booking(booking_id):
+    booking = Booking.query.get_or_404(booking_id)
+    f = request.form
+
+    booking.name     = f.get('name',     booking.name)
+    booking.email    = f.get('email',    booking.email)
+    booking.phone    = f.get('phone',    booking.phone)
+    booking.service  = f.get('service',  booking.service)
+    booking.date     = f.get('date',     booking.date)
+    booking.time     = f.get('time',     booking.time)
+    booking.location = f.get('location', booking.location)
+    booking.notes    = f.get('notes',    booking.notes)
+    booking.status   = f.get('status',   booking.status)
+
+    raw_amount = f.get('amount', '')
+    booking.amount = float(raw_amount) if raw_amount else None
+
+    db.session.commit()
+    return jsonify({'success': True})
+
+
+# ── Confirm a pending booking ───────────────────────────────────
+@admin_bp.route('/bookings/<int:booking_id>/confirm', methods=['POST'])
+@login_required
+def confirm_booking(booking_id):
+    booking = Booking.query.get_or_404(booking_id)
+    booking.status = 'confirmed'
+    db.session.commit()
+    return jsonify({'success': True, 'status': 'confirmed'})
+
+
+# ── Cancel a booking ────────────────────────────────────────────
+@admin_bp.route('/bookings/<int:booking_id>/cancel', methods=['POST'])
+@login_required
+def cancel_booking(booking_id):
+    booking = Booking.query.get_or_404(booking_id)
+    booking.status = 'cancelled'
+    db.session.commit()
+    return jsonify({'success': True, 'status': 'cancelled'})
+
+
+# ── Delete a booking ────────────────────────────────────────────
+@admin_bp.route('/bookings/<int:booking_id>/delete', methods=['POST'])
+@login_required
+def delete_booking(booking_id):
+    booking = Booking.query.get_or_404(booking_id)
+    db.session.delete(booking)
+    db.session.commit()
+    return jsonify({'success': True})
 # ─────────────────────────────────────────────────────────────────────────────
 # ADMIN — MESSAGES
 # ─────────────────────────────────────────────────────────────────────────────
