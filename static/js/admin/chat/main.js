@@ -1,247 +1,219 @@
-// ========================================
-// ADMIN MESSAGES DASHBOARD - JAVASCRIPT
-// ========================================
+/* messages.js — Denspark Admin */
+(function () {
+  'use strict';
 
-document.addEventListener('DOMContentLoaded', function () {
-    initializeChat();
-});
+  let currentId   = null;
+  let currentName = null;
 
-// ========================================
-// INITIALIZATION
-// ========================================
+  /* ── DOM refs ── */
+  const list          = document.getElementById('msList');
+  const detailEmpty   = document.getElementById('msDetailEmpty');
+  const detailContent = document.getElementById('msDetailContent');
+  const searchInput   = document.getElementById('msSearch');
+  const confirmOverlay = document.getElementById('msConfirmOverlay');
 
-function initializeChat() {
-    setupEventListeners();
-    autoScrollMessages();
-}
+  /* ── Click a message item ── */
+  list.addEventListener('click', function (e) {
+    const item = e.target.closest('.ms-item');
+    if (!item) return;
 
-// ========================================
-// EVENT LISTENERS
-// ========================================
+    /* Active state */
+    document.querySelectorAll('.ms-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
 
-function setupEventListeners() {
-    const sendBtn = document.getElementById('sendMessageBtn');
-    const messageInput = document.getElementById('messageInput');
-    const conversationItems = document.querySelectorAll('.conversation-item');
-    const searchInput = document.getElementById('conversationSearch');
+    const id      = item.dataset.id;
+    const name    = item.dataset.name;
+    const email   = item.dataset.email;
+    const phone   = item.dataset.phone;
+    const service = item.dataset.service;
+    const content = item.dataset.content;
+    const time    = item.dataset.time;
+    const isRead  = item.dataset.read === 'true';
 
-    // Send message on button click
-    if (sendBtn) {
-        sendBtn.addEventListener('click', sendMessage);
+    currentId   = id;
+    currentName = name;
+
+    /* Show detail */
+    detailEmpty.style.display = 'none';
+    detailContent.classList.add('visible');
+
+    /* Populate header */
+    document.getElementById('dAvatar').textContent = name[0].toUpperCase();
+    document.getElementById('dName').textContent   = name;
+    document.getElementById('dSub').textContent    = email;
+
+    /* Meta strip */
+    document.getElementById('dFrom').textContent  = name;
+    const emailLink = document.getElementById('dEmail');
+    emailLink.textContent = email;
+    emailLink.href        = 'mailto:' + email;
+
+    const phoneWrap = document.getElementById('dPhoneWrap');
+    if (phone) {
+      phoneWrap.style.display = '';
+      document.getElementById('dPhone').textContent = phone;
+    } else {
+      phoneWrap.style.display = 'none';
     }
 
-    // Send message on Enter key
-    if (messageInput) {
-        messageInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
-        // Auto-resize textarea
-        messageInput.addEventListener('input', function () {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-        });
+    const serviceWrap = document.getElementById('dServiceWrap');
+    if (service) {
+      serviceWrap.style.display = '';
+      document.getElementById('dService').textContent = service;
+    } else {
+      serviceWrap.style.display = 'none';
     }
 
-    // Conversation selection
-    conversationItems.forEach((item) => {
-        item.addEventListener('click', function () {
-            selectConversation(this);
-        });
+    document.getElementById('dTime').textContent = time || '—';
+
+    /* Message text */
+    document.getElementById('dMessage').textContent = content;
+
+    /* Badge */
+    const badge = document.getElementById('dBadge');
+    if (isRead) {
+      badge.textContent = 'Read';
+      badge.className   = 'ms-status-badge read';
+      document.getElementById('dMarkRead').style.display = 'none';
+    } else {
+      badge.textContent = 'Unread';
+      badge.className   = 'ms-status-badge unread';
+      document.getElementById('dMarkRead').style.display = '';
+    }
+
+    /* WhatsApp link */
+    const waBtn = document.getElementById('dWhatsApp');
+    if (phone) {
+      let wa = phone.replace(/[\s\-()]/g, '');
+      if (wa.startsWith('0')) wa = '254' + wa.slice(1);
+      if (wa.startsWith('+')) wa = wa.slice(1);
+      waBtn.href  = 'https://wa.me/' + wa;
+      waBtn.style.display = '';
+    } else {
+      waBtn.style.display = 'none';
+    }
+
+    /* Email reply link */
+    document.getElementById('dEmailBtn').href =
+      'mailto:' + email + '?subject=Re%3A%20Your%20Denspark%20Studio%20Enquiry';
+
+    /* Create booking button */
+    document.getElementById('dCreateBooking').onclick = function () {
+      /* Could open new booking modal pre-filled, or navigate */
+      alert('Opening new booking for ' + name + '…\n(Wire this to your booking modal or route)');
+    };
+
+    /* Auto-mark as read after 1.8s */
+    if (!isRead) {
+      setTimeout(() => markRead(), 1800);
+    }
+  });
+
+  /* ── Mark as read ── */
+  document.getElementById('dMarkRead').addEventListener('click', markRead);
+
+  function markRead() {
+    if (!currentId) return;
+
+    fetch('/admin/messages/' + currentId + '/read', { method: 'POST' })
+      .then(r => r.json())
+      .catch(() => {}) /* silent fail in demo */
+      .finally(() => {
+        const item = document.querySelector('.ms-item[data-id="' + currentId + '"]');
+        if (item) {
+          item.classList.remove('unread');
+          item.dataset.read = 'true';
+          const dot = item.querySelector('.ms-unread-dot');
+          if (dot) dot.remove();
+          const av = item.querySelector('.ms-item-avatar');
+          if (av) av.classList.add('dim');
+          /* Update unread pill count */
+          updateUnreadPill();
+        }
+        const badge = document.getElementById('dBadge');
+        badge.textContent = 'Read';
+        badge.className   = 'ms-status-badge read';
+        document.getElementById('dMarkRead').style.display = 'none';
+      });
+  }
+
+  /* ── Delete ── */
+  document.getElementById('dDelete').addEventListener('click', function () {
+    if (!currentId) return;
+    document.getElementById('confirmDeleteName').textContent = currentName || 'this sender';
+    confirmOverlay.classList.add('open');
+  });
+
+  document.getElementById('confirmNo').addEventListener('click', function () {
+    confirmOverlay.classList.remove('open');
+  });
+
+  confirmOverlay.addEventListener('click', function (e) {
+    if (e.target === confirmOverlay) confirmOverlay.classList.remove('open');
+  });
+
+  document.getElementById('confirmYes').addEventListener('click', function () {
+    confirmOverlay.classList.remove('open');
+
+    fetch('/admin/messages/' + currentId + '/delete', { method: 'DELETE' })
+      .then(r => r.json())
+      .catch(() => {})
+      .finally(() => {
+        const item = document.querySelector('.ms-item[data-id="' + currentId + '"]');
+        if (item) item.remove();
+
+        /* Show empty state */
+        detailContent.classList.remove('visible');
+        detailEmpty.style.display = '';
+        currentId = null;
+        updateUnreadPill();
+      });
+  });
+
+  /* ── Search ── */
+  searchInput.addEventListener('input', function () {
+    const q = this.value.toLowerCase().trim();
+    document.querySelectorAll('.ms-item').forEach(function (item) {
+      const text = item.textContent.toLowerCase();
+      item.style.display = text.includes(q) ? '' : 'none';
     });
+  });
 
-    // Search conversations
-    if (searchInput) {
-        searchInput.addEventListener('input', function () {
-            searchConversations(this.value);
-        });
-    }
-}
-
-// ========================================
-// MESSAGE HANDLING
-// ========================================
-
-function sendMessage() {
-    const messageInput = document.getElementById('messageInput');
-    const message = messageInput.value.trim();
-
-    if (message === '') return;
-
-    // Create message element
-    const messagesContainer = document.getElementById('chatMessages');
-    const messageDiv = createMessageElement(message, 'sent');
-
-    messagesContainer.appendChild(messageDiv);
-
-    // Clear input
-    messageInput.value = '';
-    messageInput.style.height = 'auto';
-
-    // Auto-scroll to bottom
-    autoScrollMessages();
-
-    // Here you would send to Flask backend
-    // Example: sendMessageToBackend(message);
-}
-
-function createMessageElement(text, type) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type}`;
-
-    const now = new Date();
-    const time = now.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-    });
-
-    messageDiv.innerHTML = `
-        <div class="message-content">
-            <p>${escapeHtml(text)}</p>
-            <span class="message-time">${time}</span>
-        </div>
-    `;
-
-    return messageDiv;
-}
-
-function autoScrollMessages() {
-    const messagesContainer = document.getElementById('chatMessages');
-    if (messagesContainer) {
-        setTimeout(() => {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }, 0);
-    }
-}
-
-// ========================================
-// CONVERSATION MANAGEMENT
-// ========================================
-
-function selectConversation(element) {
-    // Remove active class from all items
-    document.querySelectorAll('.conversation-item').forEach((item) => {
-        item.classList.remove('active');
-    });
-
-    // Add active class to clicked item
-    element.classList.add('active');
-
-    // Remove unread badge
-    const badge = element.querySelector('.unread-badge');
-    if (badge) {
-        badge.remove();
-    }
-
-    // Remove unread class
-    element.classList.remove('unread');
-
-    // Update chat header with selected contact info
-    const name = element.querySelector('.conversation-name').textContent;
-    const chatName = document.querySelector('.chat-name');
-    const profileName = document.querySelector('.user-profile h3');
-    const avatar = element.querySelector('.conversation-avatar').textContent;
-
-    if (chatName) chatName.textContent = name;
-    if (profileName) profileName.textContent = name;
-
-    // Update avatars
-    updateAvatars(avatar);
-
-    // Scroll conversation into view
-    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function updateAvatars(initial) {
-    const chatAvatar = document.querySelector('.chat-avatar');
-    const profileAvatar = document.querySelector('.profile-avatar');
-
-    if (chatAvatar) chatAvatar.textContent = initial;
-    if (profileAvatar) profileAvatar.textContent = initial;
-}
-
-function searchConversations(query) {
-    const items = document.querySelectorAll('.conversation-item');
-    query = query.toLowerCase();
-
-    items.forEach((item) => {
-        const name = item
-            .querySelector('.conversation-name')
-            .textContent.toLowerCase();
-        const preview = item
-            .querySelector('.conversation-preview')
-            .textContent.toLowerCase();
-
-        if (name.includes(query) || preview.includes(query)) {
-            item.style.display = '';
+  /* ── Tab filter ── */
+  document.querySelectorAll('.ms-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.ms-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.dataset.filter;
+      document.querySelectorAll('.ms-item').forEach(function (item) {
+        if (filter === 'all') {
+          item.style.display = '';
+        } else if (filter === 'unread') {
+          item.style.display = item.dataset.read === 'false' ? '' : 'none';
         } else {
-            item.style.display = 'none';
+          item.style.display = item.dataset.read === 'true'  ? '' : 'none';
         }
+      });
     });
-}
+  });
 
-// ========================================
-// UTILITY FUNCTIONS
-// ========================================
-
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-// Flask Backend Integration Example
-// Uncomment and modify based on your Flask endpoints
-
-/*
-async function sendMessageToBackend(message) {
-    try {
-        const conversationId = document.querySelector('.conversation-item.active')?.dataset.id;
-        
-        const response = await fetch('/api/messages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                conversation_id: conversationId,
-                message: message,
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to send message');
-        }
-
-        const data = await response.json();
-        console.log('Message sent:', data);
-    } catch (error) {
-        console.error('Error:', error);
-        // Show error notification to user
+  /* ── Update unread count pill ── */
+  function updateUnreadPill() {
+    const count = document.querySelectorAll('.ms-item.unread').length;
+    const pill  = document.querySelector('.ms-unread-pill');
+    if (pill) {
+      if (count > 0) {
+        pill.textContent = count + ' new';
+        pill.style.display = '';
+      } else {
+        pill.style.display = 'none';
+      }
     }
-}
+  }
 
-async function loadConversations() {
-    try {
-        const response = await fetch('/api/conversations');
-        const conversations = await response.json();
-        // Update UI with conversations
-    } catch (error) {
-        console.error('Error loading conversations:', error);
-    }
-}
+  /* ── Keyboard: Escape closes confirm ── */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') confirmOverlay.classList.remove('open');
+  });
 
-async function loadMessages(conversationId) {
-    try {
-        const response = await fetch(`/api/conversations/${conversationId}/messages`);
-        const messages = await response.json();
-        // Update UI with messages
-    } catch (error) {
-        console.error('Error loading messages:', error);
-    }
-}
-*/
+})();
