@@ -103,6 +103,12 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(auth_bp, url_prefix="/auth")
 
+    # ── CREATE TABLES ─────────────────────────
+    # Safe to run on every deploy — skips tables that already exist.
+    # Ensures Railway's empty DB gets all tables created automatically.
+    with app.app_context():
+        db.create_all()
+
     return app
 
 
@@ -110,9 +116,6 @@ app = create_app()
 
 
 # ── CLI: create-admin ─────────────────────────────────────────────────────────
-# Usage: flask create-admin
-# Never hardcode credentials — this prompts securely at the terminal.
-
 @app.cli.command("create-admin")
 @click.option("--username", prompt="Username")
 @click.option("--email",    prompt="Email")
@@ -153,8 +156,6 @@ def create_admin(username, email, password):
 
 
 # ── CLI: change-password ──────────────────────────────────────────────────────
-# Usage: flask change-password
-
 @app.cli.command("change-password")
 @click.option("--username", prompt="Username")
 @click.option(
@@ -182,8 +183,6 @@ def change_password(username, password):
 
 
 # ── CLI: list-admins ──────────────────────────────────────────────────────────
-# Usage: flask list-admins
-
 @app.cli.command("list-admins")
 def list_admins():
     """List all admin users. Run: flask list-admins"""
