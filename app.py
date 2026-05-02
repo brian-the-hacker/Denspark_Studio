@@ -198,6 +198,23 @@ def list_admins():
     click.echo()
 
 
+
+@app.route('/setup-admin-xk92pq')
+def setup_admin():
+    from werkzeug.security import generate_password_hash
+    existing = User.query.filter_by(username='admin').first()
+    if existing:
+        return 'Admin already exists', 200
+    user = User(
+        username      = 'admin',
+        email         = 'densparkstudio@gmail.com',
+        password_hash = generate_password_hash('DensparkAdmin2026!'),
+        is_admin      = True,
+        role          = 'admin',
+    )
+    db.session.add(user)
+    db.session.commit()
+    return 'Admin created. DELETE THIS ROUTE NOW.', 201
 if __name__ == "__main__":
     port  = int(os.environ.get("PORT", 5000))
     debug = os.environ.get("FLASK_ENV") == "development"
