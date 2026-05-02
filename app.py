@@ -197,8 +197,6 @@ def list_admins():
         click.echo(f"{u.id:<6} {u.username:<20} {u.email:<30} {u.role:<10} {last}")
     click.echo()
 
-
-
 @app.route('/setup-admin-xk92pq')
 def setup_admin():
     from werkzeug.security import generate_password_hash
@@ -215,6 +213,7 @@ def setup_admin():
     db.session.add(user)
     db.session.commit()
     return 'Admin created. DELETE THIS ROUTE NOW.', 201
+
 if __name__ == "__main__":
     port  = int(os.environ.get("PORT", 5000))
     debug = os.environ.get("FLASK_ENV") == "development"
