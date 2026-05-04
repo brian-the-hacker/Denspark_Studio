@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ══ CSRF TOKEN — required by all POST/DELETE fetch calls ══ -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>{% block title %}Admin | Denspark Studio{% endblock %}</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -101,9 +105,10 @@
                             <span class="badge">{{ unread_messages }}</span>
                             {% endif %}
                         </a>
+                    </li><!-- ← was missing closing </li> in original -->
                     <li>
                         <a href="{{ url_for('admin.videos') }}"
-                        class="{% if request.endpoint == 'admin.videos' %}active{% endif %}">
+                           class="{% if request.endpoint == 'admin.videos' %}active{% endif %}">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polygon points="23 7 16 12 23 17 23 7"/>
                                 <rect x="1" y="5" width="15" height="14" rx="2"/>
