@@ -1,12 +1,33 @@
 /* =============================================
    DENSPARK ADMIN — Video Manager JS
-   Save to: /static/js/admin/videos/main.js
    ============================================= */
 (function () {
   'use strict';
 
+  /* ── CSRF token (required by Flask-WTF on all POST/DELETE/PUT requests) ── */
+  const CSRF = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+  /* ── Safe fetch — always sends CSRF, always returns parsed JSON ── */
+  async function apiFetch(url, options = {}) {
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        'X-CSRFToken': CSRF,
+        'Accept': 'application/json',
+        ...options.headers,
+      },
+    });
+    const text = await res.text();
+    try {
+      return { ok: res.ok, status: res.status, data: JSON.parse(text) };
+    } catch {
+      console.error('Non-JSON response from server:', text.slice(0, 400));
+      throw new Error('Server returned an error page — check console for details');
+    }
+  }
+
   /* ── Helpers ── */
-  function qs(sel, ctx) { return (ctx || document).querySelector(sel); }
+  function qs(sel, ctx)  { return (ctx || document).querySelector(sel); }
   function qsa(sel, ctx) { return [...(ctx || document).querySelectorAll(sel)]; }
 
   function toast(msg, type = 'default') {
@@ -42,11 +63,11 @@
   function filterCards() {
     let visible = 0;
     qsa('.av-card').forEach((card) => {
-      const cat   = card.dataset.cat   || '';
-      const title = card.dataset.title || '';
-      const matchCat    = activeFilter === 'all' || cat === activeFilter;
-      const matchSearch = !searchTerm || title.includes(searchTerm);
-      const show = matchCat && matchSearch;
+      const cat        = card.dataset.cat   || '';
+      const title      = card.dataset.title || '';
+      const matchCat   = activeFilter === 'all' || cat === activeFilter;
+      const matchSearch= !searchTerm || title.includes(searchTerm);
+      const show       = matchCat && matchSearch;
       card.style.display = show ? '' : 'none';
       if (show) visible++;
     });
@@ -54,7 +75,6 @@
     if (noRes) noRes.style.display = visible === 0 ? 'block' : 'none';
   }
 
-  /* Filter buttons */
   qsa('.av-filter').forEach((btn) => {
     btn.addEventListener('click', () => {
       qsa('.av-filter').forEach((b) => b.classList.remove('active'));
@@ -64,7 +84,6 @@
     });
   });
 
-  /* Search */
   const searchEl = qs('#avSearch');
   if (searchEl) {
     searchEl.addEventListener('input', () => {
@@ -81,21 +100,18 @@
   function closeModal(id) {
     const el = qs('#' + id);
     if (el) el.classList.remove('open');
-    // Stop any playing iframe
     if (id === 'previewModal') {
       const iframe = qs('#previewIframe');
       if (iframe) iframe.src = '';
     }
   }
 
-  /* Close on overlay click */
   qsa('.av-modal-overlay').forEach((overlay) => {
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) closeModal(overlay.id);
     });
   });
 
-  /* Close buttons */
   [
     ['closeAddModal',     'addModal'],
     ['cancelAdd',         'addModal'],
@@ -110,14 +126,8 @@
   });
 
   /* ── Add Modal ── */
-  qs('#openAddModal')?.addEventListener('click', () => {
-    resetAddForm();
-    openModal('addModal');
-  });
-  qs('#emptyAddBtn')?.addEventListener('click', () => {
-    resetAddForm();
-    openModal('addModal');
-  });
+  qs('#openAddModal')?.addEventListener('click', () => { resetAddForm(); openModal('addModal'); });
+  qs('#emptyAddBtn')?.addEventListener('click',  () => { resetAddForm(); openModal('addModal'); });
 
   function resetAddForm() {
     const form = qs('#addForm');
@@ -127,27 +137,27 @@
     if (qs('#addDescCount')) qs('#addDescCount').textContent = '0';
   }
 
-  /* Live YouTube URL preview on Add form */
+  /* Live YouTube URL preview */
   const addUrlInput = qs('#addUrl');
   if (addUrlInput) {
     addUrlInput.addEventListener('input', () => {
-      const ytId = extractYouTubeId(addUrlInput.value.trim());
+      const ytId     = extractYouTubeId(addUrlInput.value.trim());
       const preview  = qs('#addThumbPreview');
       const errEl    = qs('#addUrlError');
       const thumbImg = qs('#addThumbImg');
       const thumbIdEl= qs('#addThumbId');
 
       if (ytId) {
-        thumbImg.src           = thumbUrl(ytId);
+        thumbImg.src          = thumbUrl(ytId);
         if (thumbIdEl) thumbIdEl.textContent = `ID: ${ytId}`;
-        preview.style.display  = 'flex';
-        errEl.style.display    = 'none';
+        preview.style.display = 'flex';
+        errEl.style.display   = 'none';
       } else if (addUrlInput.value.length > 10) {
-        preview.style.display  = 'none';
-        errEl.style.display    = 'block';
+        preview.style.display = 'none';
+        errEl.style.display   = 'block';
       } else {
-        preview.style.display  = 'none';
-        errEl.style.display    = 'none';
+        preview.style.display = 'none';
+        errEl.style.display   = 'none';
       }
     });
   }
@@ -168,12 +178,9 @@
       e.preventDefault();
       const submitBtn = qs('#addSubmit');
 
-      const url   = qs('#addUrl').value.trim();
-      const ytId  = extractYouTubeId(url);
-      if (!ytId) {
-        toast('Invalid YouTube URL — please check and try again.', 'error');
-        return;
-      }
+      const url  = qs('#addUrl').value.trim();
+      const ytId = extractYouTubeId(url);
+      if (!ytId) { toast('Invalid YouTube URL — please check and try again.', 'error'); return; }
 
       const payload = {
         url,
@@ -189,13 +196,13 @@
       submitBtn.textContent = 'Saving…';
 
       try {
-        const res = await fetch('/admin/videos/add', {
+        const { ok, data } = await apiFetch('/admin/videos/add', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify(payload),
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to save');
+
+        if (!ok) throw new Error(data?.error || 'Failed to save');
 
         closeModal('addModal');
         toast('Video added successfully!', 'success');
@@ -204,35 +211,32 @@
       } catch (err) {
         toast(err.message, 'error');
       } finally {
-        submitBtn.disabled    = false;
-        submitBtn.innerHTML   = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Video';
+        submitBtn.disabled  = false;
+        submitBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Video';
       }
     });
   }
 
-  /* ── Inject new card into grid (no page reload) ── */
+  /* ── Inject new card into grid ── */
   function injectCard(video) {
     const grid  = qs('#avGrid');
     const empty = qs('#avEmpty');
     if (empty) empty.style.display = 'none';
-
     const card = buildCardEl(video);
     grid.insertAdjacentElement('afterbegin', card);
-    bindCardEvents(card);
     filterCards();
   }
 
   function buildCardEl(video) {
     const div = document.createElement('div');
-    div.className        = 'av-card';
-    div.dataset.id       = video.id;
-    div.dataset.cat      = video.category;
-    div.dataset.title    = (video.title || '').toLowerCase();
+    div.className     = 'av-card';
+    div.dataset.id    = video.id;
+    div.dataset.cat   = video.category;
+    div.dataset.title = (video.title || '').toLowerCase();
 
-    const desc    = video.description ? video.description.substring(0, 80) + (video.description.length > 80 ? '…' : '') : '';
+    const desc      = video.description ? video.description.substring(0, 80) + (video.description.length > 80 ? '…' : '') : '';
     const featBadge = video.featured ? '<span class="av-featured-badge">Featured</span>' : '';
     const durBadge  = video.duration  ? `<span class="av-duration">${video.duration}</span>` : '';
-    const catClass  = `av-cat-${video.category}`;
     const ytId      = video.youtube_id || extractYouTubeId(video.url) || '';
     const thumb     = `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
     const today     = new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
@@ -269,7 +273,7 @@
         ${durBadge}
       </div>
       <div class="av-card-body">
-        <span class="av-cat-tag ${catClass}">${capitalize(video.category)}</span>
+        <span class="av-cat-tag av-cat-${video.category}">${capitalize(video.category)}</span>
         <h3 class="av-card-title">${esc(video.title)}</h3>
         ${desc ? `<p class="av-card-desc">${esc(desc)}</p>` : ''}
         <div class="av-card-meta">
@@ -295,11 +299,11 @@
     currentEditId = editBtn.dataset.id;
     const ytId    = extractYouTubeId(editBtn.dataset.url) || '';
 
-    qs('#editId').value       = currentEditId;
-    qs('#editUrl').value      = editBtn.dataset.url || '';
-    qs('#editTitle').value    = editBtn.dataset.title || '';
-    qs('#editDesc').value     = editBtn.dataset.desc || '';
-    qs('#editDuration').value = editBtn.dataset.duration || '';
+    qs('#editId').value         = currentEditId;
+    qs('#editUrl').value        = editBtn.dataset.url      || '';
+    qs('#editTitle').value      = editBtn.dataset.title    || '';
+    qs('#editDesc').value       = editBtn.dataset.desc     || '';
+    qs('#editDuration').value   = editBtn.dataset.duration || '';
     qs('#editFeatured').checked = editBtn.dataset.featured === 'true';
 
     const sel = qs('#editCategory');
@@ -307,14 +311,13 @@
 
     const thumb = qs('#editThumbImg');
     if (thumb && ytId) {
-      thumb.src = `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
+      thumb.src     = `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
       thumb.onerror = () => { thumb.src = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`; };
     }
 
     openModal('editModal');
   });
 
-  /* Edit form submit */
   const editForm = qs('#editForm');
   if (editForm) {
     editForm.addEventListener('submit', async (e) => {
@@ -335,22 +338,21 @@
       };
 
       try {
-        const res = await fetch(`/admin/videos/edit/${currentEditId}`, {
+        const { ok, data } = await apiFetch(`/admin/videos/edit/${currentEditId}`, {
           method:  'PUT',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify(payload),
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to update');
+
+        if (!ok) throw new Error(data?.error || 'Failed to update');
 
         closeModal('editModal');
         toast('Video updated!', 'success');
-        // Refresh the card in the grid
+
         const card = qs(`.av-card[data-id="${currentEditId}"]`);
         if (card) {
-          const newCard = buildCardEl({ ...payload, id: currentEditId });
+          const newCard = buildCardEl({ ...data, id: currentEditId });
           card.replaceWith(newCard);
-          bindCardEvents(newCard);
         }
         filterCards();
       } catch (err) {
@@ -366,7 +368,7 @@
     const delBtn = e.target.closest('.av-delete-btn');
     if (!delBtn) return;
     currentDeleteId = delBtn.dataset.id;
-    const titleEl = qs('#deleteVideoTitle');
+    const titleEl   = qs('#deleteVideoTitle');
     if (titleEl) titleEl.textContent = delBtn.dataset.title || 'this video';
     openModal('deleteModal');
   });
@@ -375,8 +377,11 @@
     if (!currentDeleteId) return;
 
     try {
-      const res = await fetch(`/admin/videos/delete/${currentDeleteId}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Delete failed');
+      const { ok } = await apiFetch(`/admin/videos/delete/${currentDeleteId}`, {
+        method: 'DELETE',
+      });
+
+      if (!ok) throw new Error('Delete failed');
 
       closeModal('deleteModal');
       toast('Video deleted.', 'success');
@@ -389,7 +394,6 @@
         setTimeout(() => {
           card.remove();
           updateCount(-1);
-          // Show empty state if no cards left
           if (!qs('.av-card')) {
             const empty = qs('#avEmpty');
             if (empty) empty.style.display = 'block';
@@ -402,35 +406,23 @@
     currentDeleteId = null;
   });
 
-  /* ── Preview Modal (watch video inside admin) ── */
+  /* ── Preview Modal ── */
   document.addEventListener('click', (e) => {
     const thumb = e.target.closest('.av-card-thumb');
     if (!thumb) return;
-    // Don't open preview if clicking action buttons
     if (e.target.closest('.av-card-actions')) return;
 
-    const card  = thumb.closest('.av-card');
-    if (!card)  return;
-
-    // Get YouTube URL from edit button data
+    const card    = thumb.closest('.av-card');
+    if (!card)    return;
     const editBtn = card.querySelector('.av-edit-btn');
     if (!editBtn) return;
-    const ytId = extractYouTubeId(editBtn.dataset.url || '');
-    if (!ytId)  return;
+    const ytId    = extractYouTubeId(editBtn.dataset.url || '');
+    if (!ytId)    return;
 
-    const title = editBtn.dataset.title || 'Video Preview';
-    qs('#previewTitle').textContent = title;
+    qs('#previewTitle').textContent = editBtn.dataset.title || 'Video Preview';
     qs('#previewIframe').src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;
     openModal('previewModal');
   });
-
-  /* ── Bind events to dynamically injected cards ── */
-  function bindCardEvents(card) {
-    // Events are all delegated via document.addEventListener — nothing extra needed
-  }
-
-  /* Bind initial cards */
-  qsa('.av-card').forEach(bindCardEvents);
 
   /* ── Count update ── */
   function updateCount(delta) {
@@ -444,11 +436,11 @@
   function capitalize(str) { return String(str).charAt(0).toUpperCase() + String(str).slice(1); }
   function esc(str) {
     return String(str)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  /* ── Keyboard: close modals on Escape ── */
+  /* ── Keyboard: Escape closes modals ── */
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       qsa('.av-modal-overlay.open').forEach((m) => {
