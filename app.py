@@ -1,10 +1,16 @@
+# =============================================================================
+#  DENSPARK STUDIO — Flask Application Entry Point
+#  densparkstudio.com
+# =============================================================================
+
 from dotenv import load_dotenv
 load_dotenv()
 
 import os
 import click
+import requests
 from datetime import datetime
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template_string, Response
 from flask_cors import CORS
 from flask_migrate import Migrate
 import cloudinary
@@ -13,120 +19,252 @@ from models import User
 from extensions import db, login_manager, csrf, limiter
 
 
+# =============================================================================
+#  SEO CONSTANTS
+# =============================================================================
+
+SITE_URL     = "https://densparkstudio.com"
+INDEXNOW_KEY = os.environ.get("INDEXNOW_KEY", "your_key_here")  # set in Railway env vars
+
+
+# =============================================================================
+#  APPLICATION FACTORY
+# =============================================================================
+
 def create_app():
     app = Flask(__name__)
 
-    # ── SECURITY ─────────────────────────────
+    # ── SECURITY ──────────────────────────────────────────────────────────────
     secret = os.environ.get("SECRET_KEY")
     if not secret:
-        raise RuntimeError("SECRET_KEY missing")
+        raise RuntimeError("SECRET_KEY missing — set it in your environment variables")
 
     app.config["SECRET_KEY"] = secret
 
-    # ── DATABASE ─────────────────────────────
+    # ── DATABASE ──────────────────────────────────────────────────────────────
     db_url = os.environ.get("DATABASE_URL")
     if not db_url:
-        raise RuntimeError("DATABASE_URL missing")
+        raise RuntimeError("DATABASE_URL missing — set it in your environment variables")
 
+    # Railway provides mysql:// but SQLAlchemy needs mysql+pymysql://
     if db_url.startswith("mysql://"):
         db_url = db_url.replace("mysql://", "mysql+pymysql://", 1)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+    app.config["SQLALCHEMY_DATABASE_URI"]        = db_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-        "pool_pre_ping": True,
-        "pool_recycle": 280,
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"]      = {
+        "pool_pre_ping": True,   # drops stale connections automatically
+        "pool_recycle":  280,    # recycle before Railway's 5-min timeout
     }
 
-    # ── FILE UPLOADS ─────────────────────────
-    app.config["UPLOAD_FOLDER"] = "/tmp"
-    app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
+    # ── FILE UPLOADS ──────────────────────────────────────────────────────────
+    app.config["UPLOAD_FOLDER"]       = "/tmp"
+    app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB max upload
 
-    # ── COOKIE SECURITY ──────────────────────
+    # ── COOKIE SECURITY ───────────────────────────────────────────────────────
     is_dev = os.environ.get("FLASK_ENV") == "development"
 
     app.config.update(
-        SESSION_COOKIE_HTTPONLY=True,
-        SESSION_COOKIE_SAMESITE="Lax",
-        SESSION_COOKIE_SECURE=not is_dev,
-        REMEMBER_COOKIE_HTTPONLY=True,
-        REMEMBER_COOKIE_SECURE=not is_dev,
+        SESSION_COOKIE_HTTPONLY  = True,
+        SESSION_COOKIE_SAMESITE  = "Lax",
+        SESSION_COOKIE_SECURE    = not is_dev,   # HTTPS only in production
+        REMEMBER_COOKIE_HTTPONLY = True,
+        REMEMBER_COOKIE_SECURE   = not is_dev,
     )
 
-    # ── CLOUDINARY ───────────────────────────
+    # ── CLOUDINARY ────────────────────────────────────────────────────────────
     cloudinary.config(
-        cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
-        api_key=os.environ.get("CLOUDINARY_API_KEY"),
-        api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
-        secure=True,
+        cloud_name = os.environ.get("CLOUDINARY_CLOUD_NAME"),
+        api_key    = os.environ.get("CLOUDINARY_API_KEY"),
+        api_secret = os.environ.get("CLOUDINARY_API_SECRET"),
+        secure     = True,
     )
 
-    # ── INIT EXTENSIONS ──────────────────────
+    # ── EXTENSIONS ────────────────────────────────────────────────────────────
     db.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
     limiter.init_app(app)
     Migrate(app, db)
 
-    # ── LOGIN MANAGER ────────────────────────
+    # ── LOGIN MANAGER ─────────────────────────────────────────────────────────
     login_manager.login_view = "auth.login"
 
     @login_manager.user_loader
     def load_user(user_id):
-        return db.session.get(User, int(user_id))  # SA 2.x compatible
+        return db.session.get(User, int(user_id))  # SQLAlchemy 2.x compatible
 
-    # ── CORS ─────────────────────────────────
-    allowed_origin = os.environ.get("ALLOWED_ORIGIN", "https://denspark.studio")
+    # ── CORS ──────────────────────────────────────────────────────────────────
+    allowed_origin = os.environ.get("ALLOWED_ORIGIN", "https://densparkstudio.com")
 
     CORS(app, resources={
-        r"/api/*": {"origins": allowed_origin},
+        r"/api/*":       {"origins": allowed_origin},
         r"/admin/api/*": {"origins": allowed_origin},
     })
 
-    # ── ERROR HANDLERS ───────────────────────
+    # ── ERROR HANDLERS ────────────────────────────────────────────────────────
     @app.errorhandler(429)
     def rate_limit(e):
-        return jsonify(error="Too many requests"), 429
+        return jsonify(error="Too many requests — please slow down"), 429
 
     @app.errorhandler(500)
     def server_error(e):
         app.logger.error(str(e))
-        return jsonify(error="Server error"), 500
+        return jsonify(error="Internal server error"), 500
 
-    # ── BLUEPRINTS ────────────────────────────
+    # ── BLUEPRINTS ────────────────────────────────────────────────────────────
     from routes.public import public_bp
-    from routes.admin import admin_bp
-    from routes.auth import auth_bp
+    from routes.admin  import admin_bp
+    from routes.auth   import auth_bp
 
     app.register_blueprint(public_bp)
     app.register_blueprint(admin_bp, url_prefix="/admin")
-    app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(auth_bp,  url_prefix="/auth")
 
-    # ── CREATE TABLES ─────────────────────────
+    # ── DATABASE TABLES ───────────────────────────────────────────────────────
     # Safe to run on every deploy — skips tables that already exist.
-    # Ensures Railway's empty DB gets all tables created automatically.
+    # Ensures Railway's empty DB gets all tables on first boot.
     with app.app_context():
         db.create_all()
 
     return app
 
 
+# =============================================================================
+#  APP INSTANCE
+# =============================================================================
+
 app = create_app()
 
 
-# ── CLI: create-admin ─────────────────────────────────────────────────────────
+# =============================================================================
+#  SEO — SITEMAP
+#  Accessible at: https://densparkstudio.com/sitemap.xml
+#  Submit this URL to Google Search Console and Bing Webmaster Tools
+# =============================================================================
+
+@app.route('/sitemap.xml')
+def sitemap():
+    pages = [
+        {"loc": f"{SITE_URL}/",                 "priority": "1.0"},
+        {"loc": f"{SITE_URL}/about",            "priority": "0.8"},
+        {"loc": f"{SITE_URL}/portfolio",        "priority": "0.8"},
+        {"loc": f"{SITE_URL}/services",         "priority": "0.8"},
+        {"loc": f"{SITE_URL}/packages",         "priority": "0.8"},
+        {"loc": f"{SITE_URL}/video-production", "priority": "0.8"},
+        {"loc": f"{SITE_URL}/contact",          "priority": "0.7"},
+    ]
+    xml = render_template_string(
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        '{% for page in pages %}'
+        '<url>'
+        '<loc>{{ page.loc }}</loc>'
+        '<lastmod>{{ today }}</lastmod>'
+        '<priority>{{ page.priority }}</priority>'
+        '</url>'
+        '{% endfor %}'
+        '</urlset>',
+        pages=pages,
+        today=datetime.today().strftime('%Y-%m-%d')
+    )
+    return Response(xml, mimetype='application/xml')
+
+
+# =============================================================================
+#  SEO — ROBOTS.TXT
+#  Tells search engine crawlers what they can/cannot access
+#  Accessible at: https://densparkstudio.com/robots.txt
+# =============================================================================
+
+@app.route('/robots.txt')
+def robots():
+    content = f"""User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /auth/
+
+Sitemap: {SITE_URL}/sitemap.xml"""
+    return Response(content, mimetype='text/plain')
+
+
+# =============================================================================
+#  SEO — INDEXNOW KEY FILE
+#  Bing/Yandex verify ownership by fetching this file
+#  Accessible at: https://densparkstudio.com/<your-key>.txt
+#  Get your key from: https://www.bing.com/webmasters → IndexNow
+# =============================================================================
+
+@app.route('/<key>.txt')
+def indexnow_key_file(key):
+    if key == INDEXNOW_KEY:
+        return Response(INDEXNOW_KEY, mimetype='text/plain')
+    return "Not found", 404
+
+
+# =============================================================================
+#  SEO — INDEXNOW PING HELPER
+#  Call this function whenever you publish or update a page
+#  to instantly notify Bing, Yandex and other IndexNow engines
+#
+#  Usage example:
+#      ping_indexnow(f"{SITE_URL}/portfolio")
+# =============================================================================
+
+def ping_indexnow(url):
+    try:
+        response = requests.get(
+            "https://api.indexnow.org/indexnow",
+            params={
+                "url":         url,
+                "key":         INDEXNOW_KEY,
+                "keyLocation": f"{SITE_URL}/{INDEXNOW_KEY}.txt",
+            },
+            timeout=5
+        )
+        app.logger.info(f"IndexNow ping → {url} [{response.status_code}]")
+    except Exception as e:
+        app.logger.warning(f"IndexNow ping failed for {url}: {e}")
+
+
+# =============================================================================
+#  SEO — WEB MANIFEST
+#  Enables "Add to Home Screen" on Android and PWA support
+#  Accessible at: https://densparkstudio.com/static/site.webmanifest
+# =============================================================================
+
+@app.route('/static/site.webmanifest')
+def webmanifest():
+    manifest = """{
+  "name": "Denspark Studio",
+  "short_name": "Denspark",
+  "description": "Photography & Creative Media — Machakos, Kenya",
+  "icons": [
+    { "src": "/static/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/static/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/"
+}"""
+    return Response(manifest, mimetype='application/manifest+json')
+
+
+# =============================================================================
+#  CLI COMMANDS
+#  Run these from your terminal:
+#    flask create-admin
+#    flask change-password
+#    flask list-admins
+# =============================================================================
+
 @app.cli.command("create-admin")
 @click.option("--username", prompt="Username")
 @click.option("--email",    prompt="Email")
-@click.option(
-    "--password",
-    prompt="Password",
-    hide_input=True,
-    confirmation_prompt=True,
-)
+@click.option("--password", prompt="Password", hide_input=True, confirmation_prompt=True)
 def create_admin(username, email, password):
-    """Create a new admin user. Run: flask create-admin"""
+    """Create a new admin user."""
     from werkzeug.security import generate_password_hash
 
     if len(password) < 10:
@@ -155,17 +293,11 @@ def create_admin(username, email, password):
     click.echo(f"    Login at: /auth/login")
 
 
-# ── CLI: change-password ──────────────────────────────────────────────────────
 @app.cli.command("change-password")
 @click.option("--username", prompt="Username")
-@click.option(
-    "--password",
-    prompt="New password",
-    hide_input=True,
-    confirmation_prompt=True,
-)
+@click.option("--password", prompt="New password", hide_input=True, confirmation_prompt=True)
 def change_password(username, password):
-    """Change an admin user's password. Run: flask change-password"""
+    """Change an admin user's password."""
     from werkzeug.security import generate_password_hash
 
     if len(password) < 10:
@@ -182,14 +314,14 @@ def change_password(username, password):
     click.echo(f"[✓] Password updated for '{username}'.")
 
 
-# ── CLI: list-admins ──────────────────────────────────────────────────────────
 @app.cli.command("list-admins")
 def list_admins():
-    """List all admin users. Run: flask list-admins"""
+    """List all admin users."""
     users = User.query.all()
     if not users:
         click.echo("No users found.")
         return
+
     click.echo(f"\n{'ID':<6} {'Username':<20} {'Email':<30} {'Role':<10} {'Last Login'}")
     click.echo("-" * 80)
     for u in users:
@@ -198,6 +330,10 @@ def list_admins():
     click.echo()
 
 
+# =============================================================================
+#  ENTRY POINT (local development only)
+#  On Railway, gunicorn runs the app directly — this block is ignored
+# =============================================================================
 
 if __name__ == "__main__":
     port  = int(os.environ.get("PORT", 5000))

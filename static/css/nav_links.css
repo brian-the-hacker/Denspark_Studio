@@ -1,0 +1,84 @@
+/* ── FLOATING SOCIAL SIDEBAR ─────────────────────────────── */
+.floating-social {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: #ffffff;
+  border: 1px solid rgba(26, 86, 219, 0.13);
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  padding: 12px 8px;
+  box-shadow: 3px 0 14px rgba(26, 86, 219, 0.07);
+}
+
+/* top and bottom accent lines */
+.fs-line {
+  display: block;
+  width: 2px;
+  height: 16px;
+  background: #1A56DB;
+  border-radius: 2px;
+  opacity: 0.35;
+  margin: 4px 0;
+}
+
+/* divider between icons */
+.fs-divider {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: rgba(26, 86, 219, 0.12);
+  margin: 2px 0;
+}
+
+.floating-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  color: #1A56DB;
+  background: transparent;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  text-decoration: none;
+}
+
+.floating-social a:hover {
+  background: #1A56DB;
+  color: #ffffff;
+  transform: translateX(3px);
+}
+
+.floating-social a:active {
+  background: #1240A8;
+  color: #ffffff;
+}
+
+.floating-social svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ── MOBILE ───────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .floating-social {
+    padding: 10px 6px;
+  }
+
+  .floating-social a {
+    width: 30px;
+    height: 30px;
+  }
+
+  .floating-social svg {
+    width: 13px;
+    height: 13px;
+  }
+}
