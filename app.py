@@ -3,10 +3,15 @@
 #  densparkstudio.com
 # =============================================================================
 
-from dotenv import load_dotenv
-load_dotenv()
-
 import os
+
+# ── Load .env ONLY in local development ──────────────────────────────────────
+# On HostPinnacle, environment variables are set directly in cPanel
+# Setup Python App → Environment Variables — no .env file needed on server
+if os.environ.get("FLASK_ENV") == "development":
+    from dotenv import load_dotenv
+    load_dotenv()
+
 import click
 import requests
 from datetime import datetime
@@ -17,6 +22,7 @@ import cloudinary
 
 from models import User
 from extensions import db, login_manager, csrf, limiter
+from config import Config
 
 
 # =============================================================================
@@ -24,7 +30,7 @@ from extensions import db, login_manager, csrf, limiter
 # =============================================================================
 
 SITE_URL     = "https://densparkstudio.com"
-INDEXNOW_KEY = os.environ.get("INDEXNOW_KEY", "your_key_here")  # set in Railway env vars
+INDEXNOW_KEY = os.environ.get("INDEXNOW_KEY", "")
 
 
 # =============================================================================
@@ -34,49 +40,15 @@ INDEXNOW_KEY = os.environ.get("INDEXNOW_KEY", "your_key_here")  # set in Railway
 def create_app():
     app = Flask(__name__)
 
-    # ── SECURITY ──────────────────────────────────────────────────────────────
-    secret = os.environ.get("SECRET_KEY")
-    if not secret:
-        raise RuntimeError("SECRET_KEY missing — set it in your environment variables")
-
-    app.config["SECRET_KEY"] = secret
-
-    # ── DATABASE ──────────────────────────────────────────────────────────────
-    db_url = os.environ.get("DATABASE_URL")
-    if not db_url:
-        raise RuntimeError("DATABASE_URL missing — set it in your environment variables")
-
-    # Railway provides mysql:// but SQLAlchemy needs mysql+pymysql://
-    if db_url.startswith("mysql://"):
-        db_url = db_url.replace("mysql://", "mysql+pymysql://", 1)
-
-    app.config["SQLALCHEMY_DATABASE_URI"]        = db_url
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SQLALCHEMY_ENGINE_OPTIONS"]      = {
-        "pool_pre_ping": True,   # drops stale connections automatically
-        "pool_recycle":  280,    # recycle before Railway's 5-min timeout
-    }
-
-    # ── FILE UPLOADS ──────────────────────────────────────────────────────────
-    app.config["UPLOAD_FOLDER"]       = "/tmp"
-    app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB max upload
-
-    # ── COOKIE SECURITY ───────────────────────────────────────────────────────
-    is_dev = os.environ.get("FLASK_ENV") == "development"
-
-    app.config.update(
-        SESSION_COOKIE_HTTPONLY  = True,
-        SESSION_COOKIE_SAMESITE  = "Lax",
-        SESSION_COOKIE_SECURE    = not is_dev,   # HTTPS only in production
-        REMEMBER_COOKIE_HTTPONLY = True,
-        REMEMBER_COOKIE_SECURE   = not is_dev,
-    )
+    # ── LOAD CONFIG ───────────────────────────────────────────────────────────
+    # All settings (DB, security, uploads, cloudinary etc.) come from config.py
+    app.config.from_object(Config)
 
     # ── CLOUDINARY ────────────────────────────────────────────────────────────
     cloudinary.config(
-        cloud_name = os.environ.get("CLOUDINARY_CLOUD_NAME"),
-        api_key    = os.environ.get("CLOUDINARY_API_KEY"),
-        api_secret = os.environ.get("CLOUDINARY_API_SECRET"),
+        cloud_name = app.config.get("CLOUDINARY_CLOUD_NAME"),
+        api_key    = app.config.get("CLOUDINARY_API_KEY"),
+        api_secret = app.config.get("CLOUDINARY_API_SECRET"),
         secure     = True,
     )
 
@@ -92,10 +64,10 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        return db.session.get(User, int(user_id))  # SQLAlchemy 2.x compatible
+        return db.session.get(User, int(user_id))
 
     # ── CORS ──────────────────────────────────────────────────────────────────
-    allowed_origin = os.environ.get("ALLOWED_ORIGIN", "https://densparkstudio.com")
+    allowed_origin = app.config.get("ALLOWED_ORIGIN", "https://densparkstudio.com")
 
     CORS(app, resources={
         r"/api/*":       {"origins": allowed_origin},
@@ -103,6 +75,18 @@ def create_app():
     })
 
     # ── ERROR HANDLERS ────────────────────────────────────────────────────────
+    @app.errorhandler(400)
+    def bad_request(e):
+        return jsonify(error="Bad request"), 400
+
+    @app.errorhandler(403)
+    def forbidden(e):
+        return jsonify(error="Forbidden"), 403
+
+    @app.errorhandler(404)
+    def not_found(e):
+        return jsonify(error="Not found"), 404
+
     @app.errorhandler(429)
     def rate_limit(e):
         return jsonify(error="Too many requests — please slow down"), 429
@@ -122,8 +106,6 @@ def create_app():
     app.register_blueprint(auth_bp,  url_prefix="/auth")
 
     # ── DATABASE TABLES ───────────────────────────────────────────────────────
-    # Safe to run on every deploy — skips tables that already exist.
-    # Ensures Railway's empty DB gets all tables on first boot.
     with app.app_context():
         db.create_all()
 
@@ -139,8 +121,6 @@ app = create_app()
 
 # =============================================================================
 #  SEO — SITEMAP
-#  Accessible at: https://densparkstudio.com/sitemap.xml
-#  Submit this URL to Google Search Console and Bing Webmaster Tools
 # =============================================================================
 
 @app.route('/sitemap.xml')
@@ -173,8 +153,6 @@ def sitemap():
 
 # =============================================================================
 #  SEO — ROBOTS.TXT
-#  Tells search engine crawlers what they can/cannot access
-#  Accessible at: https://densparkstudio.com/robots.txt
 # =============================================================================
 
 @app.route('/robots.txt')
@@ -190,28 +168,22 @@ Sitemap: {SITE_URL}/sitemap.xml"""
 
 # =============================================================================
 #  SEO — INDEXNOW KEY FILE
-#  Bing/Yandex verify ownership by fetching this file
-#  Accessible at: https://densparkstudio.com/<your-key>.txt
-#  Get your key from: https://www.bing.com/webmasters → IndexNow
 # =============================================================================
 
 @app.route('/<key>.txt')
 def indexnow_key_file(key):
-    if key == INDEXNOW_KEY:
+    if INDEXNOW_KEY and key == INDEXNOW_KEY:
         return Response(INDEXNOW_KEY, mimetype='text/plain')
     return "Not found", 404
 
 
 # =============================================================================
 #  SEO — INDEXNOW PING HELPER
-#  Call this function whenever you publish or update a page
-#  to instantly notify Bing, Yandex and other IndexNow engines
-#
-#  Usage example:
-#      ping_indexnow(f"{SITE_URL}/portfolio")
 # =============================================================================
 
 def ping_indexnow(url):
+    if not INDEXNOW_KEY:
+        return
     try:
         response = requests.get(
             "https://api.indexnow.org/indexnow",
@@ -222,15 +194,13 @@ def ping_indexnow(url):
             },
             timeout=5
         )
-        app.logger.info(f"IndexNow ping → {url} [{response.status_code}]")
+        app.logger.info(f"IndexNow ping to {url} returned {response.status_code}")
     except Exception as e:
         app.logger.warning(f"IndexNow ping failed for {url}: {e}")
 
 
 # =============================================================================
 #  SEO — WEB MANIFEST
-#  Enables "Add to Home Screen" on Android and PWA support
-#  Accessible at: https://densparkstudio.com/static/site.webmanifest
 # =============================================================================
 
 @app.route('/static/site.webmanifest')
@@ -253,10 +223,9 @@ def webmanifest():
 
 # =============================================================================
 #  CLI COMMANDS
-#  Run these from your terminal:
-#    flask create-admin
-#    flask change-password
-#    flask list-admins
+#  flask create-admin
+#  flask change-password
+#  flask list-admins
 # =============================================================================
 
 @app.cli.command("create-admin")
@@ -270,11 +239,9 @@ def create_admin(username, email, password):
     if len(password) < 10:
         click.echo("[!] Password must be at least 10 characters.")
         return
-
     if User.query.filter_by(username=username).first():
         click.echo(f"[!] Username '{username}' already exists.")
         return
-
     if User.query.filter_by(email=email).first():
         click.echo(f"[!] Email '{email}' is already registered.")
         return
@@ -288,7 +255,6 @@ def create_admin(username, email, password):
     )
     db.session.add(user)
     db.session.commit()
-
     click.echo(f"[✓] Admin '{username}' created successfully.")
     click.echo(f"    Login at: /auth/login")
 
@@ -303,12 +269,10 @@ def change_password(username, password):
     if len(password) < 10:
         click.echo("[!] Password must be at least 10 characters.")
         return
-
     user = User.query.filter_by(username=username).first()
     if not user:
         click.echo(f"[!] User '{username}' not found.")
         return
-
     user.password_hash = generate_password_hash(password)
     db.session.commit()
     click.echo(f"[✓] Password updated for '{username}'.")
@@ -321,7 +285,6 @@ def list_admins():
     if not users:
         click.echo("No users found.")
         return
-
     click.echo(f"\n{'ID':<6} {'Username':<20} {'Email':<30} {'Role':<10} {'Last Login'}")
     click.echo("-" * 80)
     for u in users:
@@ -331,8 +294,8 @@ def list_admins():
 
 
 # =============================================================================
-#  ENTRY POINT (local development only)
-#  On Railway, gunicorn runs the app directly — this block is ignored
+#  ENTRY POINT — local development only
+#  On HostPinnacle, Passenger runs the app via passenger_wsgi.py
 # =============================================================================
 
 if __name__ == "__main__":

@@ -23,7 +23,7 @@ from flask import current_app
 def _get_config():
     return {
         'api_key':    os.environ.get('RESEND_API_KEY', ''),
-        'admin_email': os.environ.get('ADMIN_EMAIL', 'brianshiru563@gmail.com'),
+        'admin_email': os.environ.get('ADMIN_EMAIL', 'brianmasila24@gmail.com'),
         # Use onboarding@resend.dev until your domain is verified on Resend
         'from_email': os.environ.get('RESEND_FROM', 'onboarding@resend.dev'),
     }

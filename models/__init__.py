@@ -7,10 +7,8 @@ Run after any column changes:
 """
 
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from extensions import db
-
 
 
 # ── User (admin login) ────────────────────────────────────────────────────────
@@ -19,12 +17,14 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id            = db.Column(db.Integer, primary_key=True)
-    username      = db.Column(db.String(80), unique=True, nullable=False)
-    email         = db.Column(db.String(254), unique=True, nullable=False)
-    password_hash = db.Column(db.String(200), nullable=False)
-    role          = db.Column(db.String(20), default='admin')
-    is_admin      = db.Column(db.Boolean, default=False, nullable=False)
+    username      = db.Column(db.String(80),  unique=True, nullable=False, index=True)
+    email         = db.Column(db.String(254), unique=True, nullable=True,  index=True)
+    password_hash = db.Column(db.String(256), nullable=False)
+    # is_admin — checked on every admin route via @admin_required
+    is_admin      = db.Column(db.Boolean, default=True,  nullable=False)
+    role          = db.Column(db.String(20),  default='admin')
     avatar        = db.Column(db.String(200), nullable=True)
+    # last_login — updated on every successful login in auth.py
     last_login    = db.Column(db.DateTime, nullable=True)
     created_at    = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
@@ -72,8 +72,7 @@ class Booking(db.Model):
     date       = db.Column(db.String(20))
     time       = db.Column(db.String(20))
     location   = db.Column(db.String(200))
-    # FIX: was Integer — silently truncated decimals (e.g. 1500.50 → 1500)
-    # Numeric(10, 2) stores exact decimal values, safe for KES amounts
+    # Numeric(10,2) — exact decimal, safe for KES amounts
     amount     = db.Column(db.Numeric(10, 2), nullable=True)
     notes      = db.Column(db.Text)
 
@@ -151,8 +150,7 @@ class Payment(db.Model):
 
     id             = db.Column(db.Integer, primary_key=True)
     booking_id     = db.Column(db.Integer, db.ForeignKey('bookings.id'), nullable=True)
-    # FIX: was Float — floats are imprecise for money (e.g. 1500.1 + 1500.2 ≠ 3000.3)
-    # Numeric(10, 2) is exact
+    # Numeric(10,2) — exact decimal, avoids float imprecision for money
     amount         = db.Column(db.Numeric(10, 2), nullable=False)
     currency       = db.Column(db.String(10), default='KES')
     payment_method = db.Column(db.String(50))
@@ -173,12 +171,12 @@ class Video(db.Model):
     id          = db.Column(db.Integer, primary_key=True)
     title       = db.Column(db.String(255), nullable=False)
     url         = db.Column(db.String(500), nullable=False)
-    youtube_id  = db.Column(db.String(20), nullable=False)
+    youtube_id  = db.Column(db.String(20),  nullable=False)
     # index=True — public video page filters by category
-    category    = db.Column(db.String(50), nullable=False, index=True)
+    category    = db.Column(db.String(50),  nullable=False, index=True)
     description = db.Column(db.Text, default='')
-    duration    = db.Column(db.String(20), default='')
-    # index=True — featured videos are ordered/filtered on every page load
+    duration    = db.Column(db.String(20),  default='')
+    # index=True — featured videos ordered/filtered on every page load
     featured    = db.Column(db.Boolean, default=False, index=True)
     created_at  = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
