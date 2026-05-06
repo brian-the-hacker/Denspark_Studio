@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/denspark/denspark/
-    - /bin/cp -af $HOME/repositories/Denspark_Studio/. $DEPLOYPATH
+    - /bin/cp -R . $DEPLOYPATH
