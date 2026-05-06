@@ -7,11 +7,8 @@ deployment:
     - /bin/cp -R static $DEPLOYPATH
     - /bin/cp -R templates $DEPLOYPATH
     - /bin/cp -R utils $DEPLOYPATH
-    - /bin/cp -R migrations $DEPLOYPATH
     - /bin/cp app.py $DEPLOYPATH
-    - /bin/cp app_filters.py $DEPLOYPATH
     - /bin/cp config.py $DEPLOYPATH
     - /bin/cp extensions.py $DEPLOYPATH
-    - /bin/cp requirements.txt $DEPLOYPATH
     - /bin/cp passenger_wsgi.py $DEPLOYPATH
-    - /bin/cp gunicorn.conf.py $DEPLOYPATH
+    - /bin/cp requirements.txt $DEPLOYPATH
