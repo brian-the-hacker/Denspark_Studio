@@ -149,56 +149,6 @@ a    { text-decoration: none; color: inherit; }
 ul   { list-style: none; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
 
-/* ── Floating social sidebar ───────────────────────────── */
-/*
-  FIX #2 — .floating-social was in the HTML but CSS was missing entirely.
-  Added full definition here.
-*/
-.floating-social {
-  position: fixed;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 800;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.fs-line {
-  display: block;
-  width: 1px;
-  height: 48px;
-  background: rgba(255,255,255,.25);
-}
-.fs-divider {
-  display: block;
-  width: 1px;
-  height: 6px;
-  background: transparent;
-}
-.floating-social a {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: rgba(255,255,255,.1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,.18);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,.75);
-  transition: background var(--t), color var(--t), transform var(--t);
-}
-.floating-social a svg { width: 15px; height: 15px; }
-.floating-social a:hover {
-  background: var(--blue);
-  border-color: var(--blue);
-  color: #fff;
-  transform: scale(1.12);
-}
-@media (max-width: 768px) { .floating-social { display: none; } }
 
 /* ── Navbar ────────────────────────────────────────────── */
 .navbar {
