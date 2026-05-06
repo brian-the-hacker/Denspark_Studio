@@ -1,15 +1,19 @@
 import os
-from dotenv import load_dotenv
 
-# Load .env file if it exists (works both locally and on server)
-load_dotenv()
+# ── DO NOT use load_dotenv() in production ────────────────────────────────────
+# On HostPinnacle, set environment variables directly in cPanel
+# Setup Python App → Environment Variables section
+# Only load .env in local development
+if os.environ.get('FLASK_ENV') == 'development':
+    from dotenv import load_dotenv
+    load_dotenv()
 
 
 class Config:
     # ── Core Security ─────────────────────────────────────────────
     SECRET_KEY = os.environ['SECRET_KEY']
 
-    # ── Database ──────────────────────────────────────────────────
+    # ── Database (PostgreSQL for HostPinnacle) ────────────────────
     _db_url = os.environ['DATABASE_URL']
 
     # Fix URL prefix — both formats accepted
@@ -22,9 +26,9 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_pre_ping':  True,
-        'pool_recycle':   1800,
-        'pool_size':      5,
-        'max_overflow':   2,
+        'pool_recycle':   1800,  # 30 min — better for shared hosting
+        'pool_size':      5,     # shared hosting has connection limits
+        'max_overflow':   2,     # keep low on shared hosting
         'pool_timeout':   30,
     }
 
@@ -42,6 +46,7 @@ class Config:
     PERMANENT_SESSION_LIFETIME = 60 * 60 * 8  # 8 hours
 
     # ── Rate Limiting ─────────────────────────────────────────────
+    # memory:// is fine for single-process shared hosting
     REDIS_URL = os.environ.get('REDIS_URL', 'memory://')
 
     # ── Cloudinary ────────────────────────────────────────────────
