@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/denspark/denspark/
+    - /bin/cp -r * $DEPLOYPATH
+    - /bin/cp -r .env $DEPLOYPATH 2>/dev/null || true
