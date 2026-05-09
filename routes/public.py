@@ -130,7 +130,24 @@ def index():
 
 @public_bp.route('/portfolio')
 def portfolio():
-    return render_template('public/portfolio.html')
+    all_items = Portfolio.query.order_by(Portfolio.created_at.desc()).all()
+
+    # Group by category so multiple "Kids" photos = 1 album
+    grouped = {}
+    for item in all_items:
+        cat = item.category
+        if cat not in grouped:
+            grouped[cat] = {
+                'category': cat,
+                'category_label': CATEGORY_LABELS.get(cat, cat.replace('-', ' ').title()),
+                'items': [],
+                'cover_image': item.cloudinary_url or f'/static/uploads/{item.file_path}',
+                'count': 0
+            }
+        grouped[cat]['items'].append(item)
+        grouped[cat]['count'] += 1
+
+    return render_template('public/portfolio.html', albums=grouped.values())
 
 @public_bp.route('/services')
 def services():
