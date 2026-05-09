@@ -189,15 +189,13 @@
     if (progressWrap) progressWrap.style.display = 'block';
 
     let successCount = 0;
+    let completedCount = 0;
 
-    for (let i = 0; i < filesToUpload.length; i++) {
-      const file = filesToUpload[i];
-      if (progressFill) progressFill.style.width = Math.round((i / filesToUpload.length) * 100) + '%';
-      if (progressText) progressText.textContent = `Uploading ${i + 1} of ${filesToUpload.length}…`;
-
+    /* ── Create all upload promises at once (PARALLEL uploads) ── */
+    const uploadPromises = filesToUpload.map(async (file, i) => {
       const fd = new FormData();
       fd.append('file',        file);
-      fd.append('title',       title + (filesToUpload.length > 1 ? ` (${i + 1})` : ''));
+      fd.append('title', title);
       fd.append('category',    category);
       fd.append('description', desc);
       fd.append('featured',    featured ? '1' : '0');
@@ -210,15 +208,30 @@
           /* headers intentionally omitted for Content-Type — apiFetch adds only CSRF+Accept */
         });
 
+        completedCount++;
+        
+        /* ── Update progress based on completed uploads ── */
+        if (progressFill) progressFill.style.width = Math.round((completedCount / filesToUpload.length) * 100) + '%';
+        if (progressText) progressText.textContent = `Uploading ${completedCount} of ${filesToUpload.length}…`;
+
         if (ok && data.success) {
           successCount++;
+          return true;
         } else {
           showToast(`Failed: ${data?.error || 'Unknown error'}`, 'error');
+          return false;
         }
       } catch (err) {
+        completedCount++;
+        if (progressFill) progressFill.style.width = Math.round((completedCount / filesToUpload.length) * 100) + '%';
+        if (progressText) progressText.textContent = `Uploading ${completedCount} of ${filesToUpload.length}…`;
         showToast(err.message, 'error');
+        return false;
       }
-    }
+    });
+
+    /* ── Wait for all uploads to complete ── */
+    await Promise.all(uploadPromises);
 
     if (progressFill) progressFill.style.width = '100%';
     if (progressText) progressText.textContent  = 'Done!';
