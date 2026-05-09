@@ -12,7 +12,11 @@
       <span class="ap-count" id="apCount">{{ items|length }} items</span>
     </div>
     <button class="ap-btn-upload" id="openUploadModal">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <!-- FIX: viewBox was "0 0 24" (3 values) — needs 4 values "0 0 24 24" -->
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
       Add Photos
     </button>
   </div>
@@ -21,35 +25,40 @@
   <div class="ap-controls">
     <div class="ap-filters" id="apFilters">
       <button class="ap-filter active" data-cat="all">All</button>
-      <button class="ap-filter" data-cat="portraits">Portraits</button>
-      <button class="ap-filter" data-cat="weddings">Weddings</button>
-      <button class="ap-filter" data-cat="events">Events</button>
+      <button class="ap-filter" data-cat="studio-portrait">Studio Portrait</button>
+      <button class="ap-filter" data-cat="wedding">Weddings</button>
+      <button class="ap-filter" data-cat="event">Events</button>
       <button class="ap-filter" data-cat="commercial">Commercial</button>
-      <button class="ap-filter" data-cat="fashion">Fashion</button>
+      <button class="ap-filter" data-cat="video">Video</button>
     </div>
     <div class="ap-search-wrap">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <!-- FIX: viewBox was "0 0 24" — fixed to "0 0 24 24" -->
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.35-4.35"/>
+      </svg>
       <input type="text" id="apSearch" placeholder="Search by title…" autocomplete="off">
     </div>
   </div>
 
   <!-- Grid -->
+  {% if items %}
   <div class="ap-grid" id="apGrid">
     {% for item in items %}
-    <div class="ap-card" 
-         data-id="{{ item.id }}" 
+    <div class="ap-card"
+         data-id="{{ item.id }}"
          data-cat="{{ item.category }}"
-         data-title="{{ item.title|lower }}">
+         data-title="{{ item.title|lower|e }}">
 
       <div class="ap-card-img">
         {% if item.cloudinary_url %}
-          <img src="{{ item.cloudinary_url }}" 
-               alt="{{ item.title }}" 
+          <img src="{{ item.cloudinary_url }}"
+               alt="{{ item.title|e }}"
                loading="lazy"
                onerror="this.src='/static/img/placeholder.jpg'">
         {% else %}
-          <img src="/static/uploads/{{ item.file_path }}" 
-               alt="{{ item.title }}" 
+          <img src="/static/uploads/{{ item.file_path }}"
+               alt="{{ item.title|e }}"
                loading="lazy"
                onerror="this.src='/static/img/placeholder.jpg'">
         {% endif %}
@@ -59,42 +68,62 @@
         {% endif %}
 
         <div class="ap-card-actions">
-          <button class="ap-action-btn ap-edit-btn" 
+          <button class="ap-action-btn ap-edit-btn"
                   data-id="{{ item.id }}"
-                  data-title="{{ item.title }}"
-                  data-desc="{{ item.description or '' }}"
+                  data-title="{{ item.title|e }}"
+                  data-desc="{{ (item.description or '')|e }}"
                   data-cat="{{ item.category }}"
-                  data-featured="{{ item.featured|lower }}"
+                  data-featured="{{ 'true' if item.featured else 'false' }}"
                   data-img="{% if item.cloudinary_url %}{{ item.cloudinary_url }}{% else %}/static/uploads/{{ item.file_path }}{% endif %}"
                   title="Edit">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <!-- FIX 1: viewBox "0 0 24" → "0 0 24 24"
+                 FIX 2: pencil path was malformed ("l-4 9.5-9.5z" is invalid)
+                        replaced with correct pencil/edit icon path -->
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
           </button>
-          <button class="ap-action-btn ap-delete-btn" 
+          <button class="ap-action-btn ap-delete-btn"
                   data-id="{{ item.id }}"
-                  data-title="{{ item.title }}"
+                  data-title="{{ item.title|e }}"
                   title="Delete">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            <!-- FIX: viewBox "0 0 24" → "0 0 24 24" -->
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6l-1 14H6L5 6"/>
+              <path d="M10 11v6M14 11v6"/>
+              <path d="M9 6V4h6v2"/>
+            </svg>
           </button>
         </div>
       </div>
 
       <div class="ap-card-body">
-        <span class="ap-cat-tag ap-cat-{{ item.category }}">{{ item.category|capitalize }}</span>
+        <span class="ap-cat-tag ap-cat-{{ item.category }}">{{ item.category|replace('-', ' ')|title }}</span>
         <h3 class="ap-card-title">{{ item.title }}</h3>
         {% if item.description %}
         <p class="ap-card-desc">{{ item.description[:60] }}{% if item.description|length > 60 %}…{% endif %}</p>
         {% endif %}
-        <span class="ap-card-date">{{ item.created_at.strftime('%b %d, %Y') }}</span>
+        <span class="ap-card-date">
+          {% if item.created_at %}{{ item.created_at.strftime('%b %d, %Y') }}{% endif %}
+        </span>
       </div>
-    </div>
-    {% else %}
-    <div class="ap-empty" id="apEmpty">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      <p>No portfolio items yet.</p>
-      <button class="ap-btn-upload" id="emptyUploadBtn">Upload your first photo</button>
     </div>
     {% endfor %}
   </div>
+  {% else %}
+  <div class="ap-empty" id="apEmpty">
+    <!-- FIX: viewBox "0 0 24" → "0 0 24 24" -->
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+      <rect x="3" y="3" width="18" height="18" rx="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+    <p>No portfolio items yet.</p>
+    <button class="ap-btn-upload" id="emptyUploadBtn">Upload your first photo</button>
+  </div>
+  {% endif %}
 
   <!-- No results -->
   <div class="ap-no-results" id="apNoResults" style="display:none">
@@ -109,7 +138,10 @@
     <div class="ap-modal-header">
       <h2>Add Portfolio Photos</h2>
       <button class="ap-modal-close" id="closeUploadModal">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
       </button>
     </div>
 
@@ -117,7 +149,12 @@
       <!-- Drop zone -->
       <div class="ap-dropzone" id="apDropzone">
         <div class="ap-dropzone-inner" id="dropzoneInner">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <!-- FIX: viewBox "0 0 24" → "0 0 24 24" -->
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
           <p>Drag & drop photos here</p>
           <span>or <label for="fileInput" class="ap-file-label">browse files</label></span>
           <small>JPG, PNG, WEBP · Max 10MB each · Multiple allowed</small>
@@ -135,12 +172,31 @@
         <div class="ap-field">
           <label for="uploadCategory">Category <span class="req">*</span></label>
           <select id="uploadCategory" name="category" required>
-            <option value="">Select category</option>
-            <option value="portraits">Portraits</option>
-            <option value="weddings">Weddings</option>
-            <option value="events">Events</option>
-            <option value="commercial">Commercial</option>
-            <option value="fashion">Fashion</option>
+            <optgroup label="Photography">
+              <option value="studio-portrait">Studio Portrait</option>
+              <option value="wedding">Wedding Coverage</option>
+              <option value="event">Event Photography</option>
+              <option value="commercial">Commercial Photography</option>
+            </optgroup>
+            <optgroup label="Special Shoots">
+              <option value="birthday">Birthday Photoshoot</option>
+              <option value="maternity">Maternity Photoshoot</option>
+              <option value="graduation">Graduation Photoshoot</option>
+              <option value="kids">Kids' Photoshoot</option>
+              <option value="family">Family Photoshoot</option>
+              <option value="passport">Passport Photos</option>
+            </optgroup>
+            <optgroup label="Video">
+              <option value="video">Video Production</option>
+              <option value="drone">Drone Services</option>
+              <option value="livestream">Live Streaming</option>
+            </optgroup>
+            <optgroup label="Creative">
+              <option value="graphic-design">Graphic Design</option>
+              <option value="branding">Branding</option>
+              <option value="printing">Printing</option>
+              <option value="social-media">Social Media</option>
+            </optgroup>
           </select>
         </div>
         <div class="ap-field ap-field-full">
@@ -167,7 +223,12 @@
       <div class="ap-modal-footer">
         <button type="button" class="ap-btn-cancel" id="cancelUpload">Cancel</button>
         <button type="submit" class="ap-btn-submit" id="uploadSubmit">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <!-- FIX: "a2 0 0 1-2 2" was missing radius value → "a2 2 0 0 1-2 2" -->
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
           Upload
         </button>
       </div>
@@ -181,7 +242,10 @@
     <div class="ap-modal-header">
       <h2>Edit Item</h2>
       <button class="ap-modal-close" id="closeEditModal">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
       </button>
     </div>
     <form id="editForm">
@@ -197,11 +261,31 @@
         <div class="ap-field">
           <label for="editCategory">Category <span class="req">*</span></label>
           <select id="editCategory" name="category" required>
-            <option value="portraits">Portraits</option>
-            <option value="weddings">Weddings</option>
-            <option value="events">Events</option>
-            <option value="commercial">Commercial</option>
-            <option value="fashion">Fashion</option>
+            <optgroup label="Photography">
+              <option value="studio-portrait">Studio Portrait</option>
+              <option value="wedding">Wedding Coverage</option>
+              <option value="event">Event Photography</option>
+              <option value="commercial">Commercial Photography</option>
+            </optgroup>
+            <optgroup label="Special Shoots">
+              <option value="birthday">Birthday Photoshoot</option>
+              <option value="maternity">Maternity Photoshoot</option>
+              <option value="graduation">Graduation Photoshoot</option>
+              <option value="kids">Kids' Photoshoot</option>
+              <option value="family">Family Photoshoot</option>
+              <option value="passport">Passport Photos</option>
+            </optgroup>
+            <optgroup label="Video">
+              <option value="video">Video Production</option>
+              <option value="drone">Drone Services</option>
+              <option value="livestream">Live Streaming</option>
+            </optgroup>
+            <optgroup label="Creative">
+              <option value="graphic-design">Graphic Design</option>
+              <option value="branding">Branding</option>
+              <option value="printing">Printing</option>
+              <option value="social-media">Social Media</option>
+            </optgroup>
           </select>
         </div>
         <div class="ap-field ap-field-full">
@@ -230,12 +314,21 @@
     <div class="ap-modal-header">
       <h2>Delete Item</h2>
       <button class="ap-modal-close" id="closeDeleteModal">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
       </button>
     </div>
     <div class="ap-delete-body">
       <div class="ap-delete-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <!-- FIX 1: viewBox "0 0 24" → "0 0 24 24"
+             FIX 2: arc "0 0 1.71 3" was missing a space → "0 0 1 1.71 3" -->
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
       </div>
       <p>Delete <strong id="deleteItemTitle"></strong>?</p>
       <span>This cannot be undone.</span>

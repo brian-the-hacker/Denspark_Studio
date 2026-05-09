@@ -299,8 +299,11 @@ body.cursor-hover .cursor-follower { width: 48px; height: 48px; border-color: rg
 .mobile-menu {
   display: none;
   background: #0a1628;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid rgba(255,255,255,.08);
   padding: 0 20px 24px;
+  max-height: calc(100vh - 64px); /* never taller than the viewport */
+  overflow-y: auto;               /* scroll if content overflows    */
+  -webkit-overflow-scrolling: touch;
 }
 .mobile-menu.open { display: block; }
 
@@ -343,7 +346,7 @@ body.cursor-hover .cursor-follower { width: 48px; height: 48px; border-color: rg
   transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
 }
 .mobile-services-item.open .mobile-mega {
-  max-height: 900px;
+  max-height: 1200px;           /* enough room for all links        */
   opacity: 1;
   padding: 8px 0 4px 12px;
 }
@@ -372,6 +375,129 @@ body.cursor-hover .cursor-follower { width: 48px; height: 48px; border-color: rg
   border-top: 1px solid rgba(255,255,255,0.07);
 }
 .mobile-info span { font-size: 11px; color: #3d6a9c; }
+
+/* ═══ WHAT WE DO DROPDOWN — matches Services mega-menu style ═══ */
+.nav-dropdown { position: relative; }
+
+.nav-drop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .875rem;
+  font-weight: 400;
+  letter-spacing: .04em;
+  color: rgba(255,255,255,.85);
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  transition: color var(--t) var(--ease);
+  white-space: nowrap;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  position: relative;
+}
+.nav-drop-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 4px; left: 14px; right: 14px;
+  height: 1.5px;
+  background: var(--blue-light);
+  transform: scaleX(0);
+  transition: transform var(--t);
+  border-radius: 2px;
+}
+.nav-drop-btn:hover,
+.nav-drop-btn[aria-expanded="true"] { color: var(--white); }
+.nav-drop-btn:hover::after,
+.nav-drop-btn[aria-expanded="true"]::after { transform: scaleX(1); }
+
+.nav-drop-chevron {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-right: 1.5px solid #7fa3d4;
+  border-bottom: 1.5px solid #7fa3d4;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform .25s ease;
+  flex-shrink: 0;
+}
+.nav-drop-btn[aria-expanded="true"] .nav-drop-chevron {
+  transform: rotate(-135deg) translateY(2px);
+}
+
+.nav-drop-panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  min-width: 660px;
+  background: #0e1f3d;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px;
+  padding: 22px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease, visibility .25s;
+  box-shadow: 0 24px 64px rgba(0,0,0,.55);
+  z-index: 1001;
+}
+.nav-drop-panel::before {
+  content: '';
+  position: absolute;
+  top: -7px; left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 13px; height: 13px;
+  background: #0e1f3d;
+  border-left: 1px solid rgba(255,255,255,.1);
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+.nav-drop-panel.open,
+.nav-dropdown:hover .nav-drop-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.nav-drop-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+.nav-drop-col h5 {
+  font-size: 10px;
+  font-weight: 600;
+  color: #4a90d9;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(74,144,217,.2);
+}
+.nav-drop-col a {
+  display: block;
+  color: #a8c2e0;
+  font-size: 12.5px;
+  padding: 4px 0;
+  text-decoration: none;
+  transition: color .15s, padding-left .15s;
+  line-height: 1.5;
+}
+.nav-drop-col a:hover { color: #ffffff; padding-left: 6px; }
+.nav-drop-footer {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.07);
+  font-size: 10px;
+  color: #3d6a9c;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+}
+@media (max-width: 900px) {
+      .nav-dropdown { display: none; }
+      .mobile-whatwedo-item { display: list-item; }
+    }
 
 /* ── Responsive breakpoint ───────────────────────────────── */
 @media (max-width: 900px) {

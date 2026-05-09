@@ -71,7 +71,7 @@
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
       <a href="/" class="logo">
-        <img src="/static/imagies/denspark-logo.webp" alt="Denspark Studio Logo" class="logo-img">
+        <img src="/static/imagies/denspark-logo.webp" alt="Denspark Studio Logo" class="logo-img" width="40" height="40">
         <div class="logo-text-wrap">
           <span class="logo-text">DENSPARK PHOTO</span>
           <span class="logo-sub">STUDIO</span>
@@ -82,14 +82,13 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link">Home</a></li>
         <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
-
         <li class="has-mega" id="desktopServicesMenu">
           <a href="/services" class="nav-link" id="desktopServicesToggle">
             Services
-            <span class="services-chevron"></span>
+            <span class="services-chevron" aria-hidden="true"></span>
           </a>
-          <div class="mega-menu">
-            <div class="mega-arrow"></div>
+          <div class="mega-menu" role="menu">
+            <div class="mega-arrow" aria-hidden="true"></div>
             <div class="mega-grid">
               <div class="mega-column">
                 <h4>Photography</h4>
@@ -124,11 +123,51 @@
             <div class="mega-footer">Premium Studio Services &bull; Machakos, Kenya</div>
           </div>
         </li>
-
         <li><a href="/about" class="nav-link">About</a></li>
         <li><a href="/contact" class="nav-link">Contact</a></li>
         <li><a href="/packages" class="nav-link">Packages</a></li>
         <li><a href="/videos" class="nav-link">Video Production</a></li>
+        <!-- FIX: removed duplicate "What We Do" text, single span chevron only -->
+        <li class="nav-dropdown" id="navDropdown">
+          <button class="nav-drop-btn" aria-haspopup="true" aria-expanded="false">
+            What We Do
+            <span class="nav-drop-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="nav-drop-panel" role="menu">
+            <div class="nav-drop-grid">
+              <div class="nav-drop-col">
+                <h5>Photography</h5>
+                <a href="/what_we_do#studio-portrait" role="menuitem">Studio Portrait</a>
+                <a href="/what_we_do#wedding-coverage" role="menuitem">Wedding Coverage</a>
+                <a href="/what_we_do#event-photography" role="menuitem">Event Photography</a>
+                <a href="/what_we_do#commercial-photography" role="menuitem">Commercial Photography</a>
+              </div>
+              <div class="nav-drop-col">
+                <h5>Special Shoots</h5>
+                <a href="/what_we_do#birthday-photoshoot" role="menuitem">Birthday Photoshoot</a>
+                <a href="/what_we_do#maternity-photoshoot" role="menuitem">Maternity Photoshoot</a>
+                <a href="/what_we_do#graduation-photoshoot" role="menuitem">Graduation Photoshoot</a>
+                <a href="/what_we_do#kids-photoshoot" role="menuitem">Kids' Photoshoot</a>
+                <a href="/what_we_do#family-photoshoot" role="menuitem">Family Photoshoot</a>
+                <a href="/what_we_do#passport-photos" role="menuitem">Passport Photos</a>
+              </div>
+              <div class="nav-drop-col">
+                <h5>Video</h5>
+                <a href="/what_we_do#video-production" role="menuitem">Video Production</a>
+                <a href="/what_we_do#drone-services" role="menuitem">Drone Services</a>
+                <a href="/what_we_do#live-streaming" role="menuitem">Live Streaming</a>
+              </div>
+              <div class="nav-drop-col">
+                <h5>Creative</h5>
+                <a href="/what_we_do#graphic-design" role="menuitem">Graphic Design</a>
+                <a href="/what_we_do#branding" role="menuitem">Branding</a>
+                <a href="/what_we_do#printing" role="menuitem">Printing</a>
+                <a href="/what_we_do#social-media" role="menuitem">Social Media</a>
+              </div>
+            </div>
+            <div class="nav-drop-footer">Premium Studio Services &bull; Machakos, Kenya</div>
+          </div>
+        </li>
       </ul>
 
       <div class="nav-right">
@@ -139,17 +178,19 @@
       </div>
     </div>
 
+    <!-- Mobile Menu — FIX: "What We Do" li removed entirely; desktop-only dropdown -->
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
       <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
-
+ 
+        <!-- Services accordion (unchanged) -->
         <li class="mobile-services-item" id="mobileServicesItem">
-          <div class="mobile-services-toggle" id="mobileServicesToggle" role="button" aria-expanded="false">
+          <button class="mobile-services-toggle" id="mobileServicesToggle" aria-expanded="false">
             Services
-            <span class="mobile-services-chevron"></span>
-          </div>
+            <span class="mobile-services-chevron" aria-hidden="true"></span>
+          </button>
           <div class="mobile-mega" id="mobileMega">
             <div class="mega-grid">
               <div class="mega-column">
@@ -184,10 +225,53 @@
             </div>
           </div>
         </li>
-
+ 
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
         <li><a href="/packages">Packages</a></li>
+        <li><a href="/videos">Video Production</a></li>
+ 
+        <!-- What We Do accordion — NEW, mirrors Services accordion exactly -->
+        <li class="mobile-services-item" id="mobileWhatWeDoItem">
+          <button class="mobile-services-toggle" id="mobileWhatWeDoToggle" aria-expanded="false">
+            What We Do
+            <span class="mobile-services-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="mobile-mega" id="mobileWhatWeDo">
+            <div class="mega-grid">
+              <div class="mega-column">
+                <h4>Photography</h4>
+                <a href="/what_we_do#studio-portrait">Studio Portrait</a>
+                <a href="/what_we_do#wedding-coverage">Wedding Coverage</a>
+                <a href="/what_we_do#event-photography">Event Photography</a>
+                <a href="/what_we_do#commercial-photography">Commercial Photography</a>
+              </div>
+              <div class="mega-column">
+                <h4>Special Shoots</h4>
+                <a href="/what_we_do#birthday-photoshoot">Birthday Photoshoot</a>
+                <a href="/what_we_do#maternity-photoshoot">Maternity Photoshoot</a>
+                <a href="/what_we_do#graduation-photoshoot">Graduation Photoshoot</a>
+                <a href="/what_we_do#kids-photoshoot">Kids' Photoshoot</a>
+                <a href="/what_we_do#family-photoshoot">Family Photoshoot</a>
+                <a href="/what_we_do#passport-photos">Passport Photos</a>
+              </div>
+              <div class="mega-column">
+                <h4>Video</h4>
+                <a href="/what_we_do#video-production">Video Production</a>
+                <a href="/what_we_do#drone-services">Drone Services</a>
+                <a href="/what_we_do#live-streaming">Live Streaming</a>
+              </div>
+              <div class="mega-column">
+                <h4>Creative</h4>
+                <a href="/what_we_do#graphic-design">Graphic Design</a>
+                <a href="/what_we_do#branding">Branding</a>
+                <a href="/what_we_do#printing">Printing</a>
+                <a href="/what_we_do#social-media">Social Media</a>
+              </div>
+            </div>
+          </div>
+        </li>
+ 
       </ul>
       <a href="/contact" class="btn-book-mobile">Book a Session</a>
       <div class="mobile-info">
@@ -845,5 +929,6 @@
 
   <script src="static/js/public/services.js"></script>
   <script src="static/js/public/services-carousel.js"></script>
+  <script src="static/js/public/nav_bar.js"></script>
 </body>
 </html>

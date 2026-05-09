@@ -349,8 +349,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .mobile-menu {
   display: none;
   background: #0a1628;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid rgba(255,255,255,.08);
   padding: 0 20px 24px;
+  max-height: calc(100vh - 64px); /* never taller than the viewport */
+  overflow-y: auto;               /* scroll if content overflows    */
+  -webkit-overflow-scrolling: touch;
 }
 .mobile-menu.open { display: block; }
 
@@ -393,7 +396,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
 }
 .mobile-services-item.open .mobile-mega {
-  max-height: 900px;
+  max-height: 1200px;           /* enough room for all links        */
   opacity: 1;
   padding: 8px 0 4px 12px;
 }
