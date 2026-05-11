@@ -2374,7 +2374,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
         portfolioGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF;font-size:.9rem">Loading…</div>';
       }
       var url = category && category !== 'all'
-        ? '/api/portfolio?per_page=24&page=1&category=' + encodeURIComponent(category)
+        ? '/api/portfolio?per_page=5&page=1&category=' + encodeURIComponent(category)
         : '/api/portfolio?per_page=12&page=1';
 
       fetch(url)
