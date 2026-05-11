@@ -60,13 +60,13 @@
       try {
         var saved = localStorage.getItem('pf-view');
         // Store it so the body script can read it without hitting localStorage again
-        window.__savedView = (saved && VIEW_MAP[saved]) ? saved : 'viewGrid';
+        window.__savedView = (saved && VIEW_MAP[saved]) ? saved : 'viewMasonry';
       } catch (e) {
-        window.__savedView = 'viewGrid';
+        window.__savedView = 'viewMasonry';
       }
       // Inject the class string into the page as a data attribute so CSS
       // can use it immediately — the grid div reads this on DOMContentLoaded
-      document.documentElement.dataset.pfView = VIEW_MAP[window.__savedView] || 'pf-grid--grid';
+      document.documentElement.dataset.pfView = VIEW_MAP[window.__savedView] || 'pf-grid--masonry';
     })();
   </script>
 
@@ -763,7 +763,7 @@
     }
 
     // Apply saved view right now — no flash, no waiting for images
-    setView(window.__savedView || 'viewGrid', false);
+    setView(window.__savedView || 'viewMasonry', false);
 
     // Wire up view toggle buttons
     Object.keys(VIEW_MAP).forEach((id) => {
