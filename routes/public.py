@@ -41,6 +41,7 @@ CATEGORY_LABELS = {
     'maternity'       : 'Maternity Photoshoot',
     'graduation'      : 'Graduation Photoshoot',
     'kids'            : "Kids' Photoshoot",
+    'wraps & gowns': 'Wraps & Gowns',
     'family'          : 'Family Photoshoot',
     'passport'        : 'Passport Photos',
     # Video
