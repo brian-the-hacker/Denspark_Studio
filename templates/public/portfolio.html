@@ -10,12 +10,12 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://densparkstudio.com/portfolio">
 
-  <!-- FAVICON — correct version -->
+  <!-- FAVICON -->
   <link rel="icon" type="image/png" href="/static/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
   <link rel="shortcut icon" href="/static/favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="MyWebSite" />
+  <meta name="apple-mobile-web-app-title" content="Denspark Studio" />
   <link rel="manifest" href="/static/site.webmanifest" />
 
   <!-- OPEN GRAPH -->
@@ -44,8 +44,33 @@
   <link rel="stylesheet" href="/static/css/public/portfolio.css">
   <link rel="stylesheet" href="/static/css/nav_links.css">
 
+  <!--
+    FIX 1 — View restore before paint (no layout flash on reload)
+    Read localStorage SYNCHRONOUSLY here in <head>, before any HTML
+    renders, so the correct grid class is set from the very first frame.
+    Default is pf-grid--grid (not masonry) so images are constrained.
+  -->
+  <script>
+    (function () {
+      var VIEW_MAP = {
+        viewGrid:    'pf-grid--grid',
+        viewMasonry: 'pf-grid--masonry',
+        viewList:    'pf-grid--list',
+      };
+      try {
+        var saved = localStorage.getItem('pf-view');
+        // Store it so the body script can read it without hitting localStorage again
+        window.__savedView = (saved && VIEW_MAP[saved]) ? saved : 'viewGrid';
+      } catch (e) {
+        window.__savedView = 'viewGrid';
+      }
+      // Inject the class string into the page as a data attribute so CSS
+      // can use it immediately — the grid div reads this on DOMContentLoaded
+      document.documentElement.dataset.pfView = VIEW_MAP[window.__savedView] || 'pf-grid--grid';
+    })();
+  </script>
+
   <style>
-    /* ── CRITICAL FIX: Missing @keyframes fadeUp for hero animation ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -67,8 +92,8 @@
     .pf-skeleton-item:nth-child(3n+2) .pf-skeleton-img { aspect-ratio: 4/5; }
     .pf-skeleton-item:nth-child(5n+4) .pf-skeleton-img { aspect-ratio: 16/9; }
     .pf-skeleton-info { padding: 14px 16px 18px; display: flex; flex-direction: column; gap: 8px; }
-    .pf-skeleton-tag  { width: 64px; height: 10px; border-radius: 4px; background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
-    .pf-skeleton-title{ width: 75%; height: 14px; border-radius: 4px; background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite 0.1s; }
+    .pf-skeleton-tag   { width: 64px; height: 10px; border-radius: 4px; background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+    .pf-skeleton-title { width: 75%; height: 14px; border-radius: 4px; background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite 0.1s; }
     @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
     /* ── Error state ── */
@@ -85,207 +110,121 @@
     .pf-error-retry:hover { background: #1240A8; }
     .pf-filter-count { min-width: 20px; }
 
-    /* ── Hero intro block ── */
+    /* ── Hero intro bar ── */
     .hero-intro-bar {
-      display: flex;
-      align-items: center;
-      gap: 2.5rem;
-      margin-top: 2rem;
-      padding-top: 2rem;
+      display: flex; align-items: center; gap: 2.5rem;
+      margin-top: 2rem; padding-top: 2rem;
       border-top: 1px solid rgba(255,255,255,0.15);
-      flex-wrap: wrap; /* FIX: prevent overflow on small screens */
+      flex-wrap: wrap;
     }
-    .hero-intro-stat {
-      display: flex;
-      flex-direction: column;
-      gap: 0.1rem;
-    }
+    .hero-intro-stat { display: flex; flex-direction: column; gap: 0.1rem; }
     .hero-intro-stat strong {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: #fff;
-      line-height: 1;
+      font-size: 1.8rem; font-weight: 600; color: #fff; line-height: 1;
     }
     .hero-intro-stat span {
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
     }
-    .hero-intro-divider {
-      width: 1px;
-      height: 40px;
-      background: rgba(255,255,255,0.2);
-      flex-shrink: 0;
-    }
+    .hero-intro-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.2); flex-shrink: 0; }
     @media (max-width: 480px) {
       .hero-intro-bar { gap: 1.25rem; }
       .hero-intro-stat strong { font-size: 1.4rem; }
-      /* Hide dividers when wrapping on very small screens */
       .hero-intro-divider { display: none; }
     }
 
-    /* ── Section intro styles ── */
-    .section-intro {
-      padding: 60px 0 20px;
-      max-width: 640px;
-    }
+    /* ── Section intro ── */
+    .section-intro { padding: 60px 0 20px; max-width: 640px; }
     .section-intro-title {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      font-weight: 400;
-      color: #0A0A0A;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.75rem;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 400;
+      color: #0A0A0A; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 0.75rem;
     }
-    .section-intro-title em {
-      font-style: italic;
-      color: #1A56DB;
-    }
+    .section-intro-title em { font-style: italic; color: #1A56DB; }
     .section-intro-text .section-eyebrow {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #1A56DB;
-      margin-bottom: 0.75rem;
+      display: inline-block; font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase; color: #1A56DB; margin-bottom: 0.75rem;
     }
-    .section-intro-text p {
-      font-size: 0.95rem;
-      color: #4B5563;
-      line-height: 1.75;
-      max-width: 520px;
-    }
+    .section-intro-text p { font-size: 0.95rem; color: #4B5563; line-height: 1.75; max-width: 520px; }
 
-    /* ═══ WHAT WE DO DROPDOWN — matches Services mega-menu style ═══ */
+    /* ── What We Do dropdown ── */
     .nav-dropdown { position: relative; }
-
     .nav-drop-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: .875rem;
-      font-weight: 400;
-      letter-spacing: .04em;
-      color: rgba(255,255,255,.85);
-      padding: 8px 14px;
-      border-radius: var(--radius);
-      transition: color var(--t) var(--ease);
-      white-space: nowrap;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-family: inherit;
-      position: relative;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: .875rem; font-weight: 400; letter-spacing: .04em;
+      color: rgba(255,255,255,.85); padding: 8px 14px; border-radius: var(--radius);
+      transition: color var(--t) var(--ease); white-space: nowrap;
+      border: none; background: none; cursor: pointer; font-family: inherit; position: relative;
     }
     .nav-drop-btn::after {
-      content: '';
-      position: absolute;
-      bottom: 4px; left: 14px; right: 14px;
-      height: 1.5px;
-      background: var(--blue-light);
-      transform: scaleX(0);
-      transition: transform var(--t);
-      border-radius: 2px;
+      content: ''; position: absolute; bottom: 4px; left: 14px; right: 14px;
+      height: 1.5px; background: var(--blue-light); transform: scaleX(0);
+      transition: transform var(--t); border-radius: 2px;
     }
-    .nav-drop-btn:hover,
-    .nav-drop-btn[aria-expanded="true"] { color: var(--white); }
-    .nav-drop-btn:hover::after,
-    .nav-drop-btn[aria-expanded="true"]::after { transform: scaleX(1); }
-
+    .nav-drop-btn:hover, .nav-drop-btn[aria-expanded="true"] { color: var(--white); }
+    .nav-drop-btn:hover::after, .nav-drop-btn[aria-expanded="true"]::after { transform: scaleX(1); }
     .nav-drop-chevron {
-      display: inline-block;
-      width: 6px; height: 6px;
-      border-right: 1.5px solid #7fa3d4;
-      border-bottom: 1.5px solid #7fa3d4;
-      transform: rotate(45deg) translateY(-2px);
-      transition: transform .25s ease;
-      flex-shrink: 0;
+      display: inline-block; width: 6px; height: 6px;
+      border-right: 1.5px solid #7fa3d4; border-bottom: 1.5px solid #7fa3d4;
+      transform: rotate(45deg) translateY(-2px); transition: transform .25s ease; flex-shrink: 0;
     }
-    .nav-drop-btn[aria-expanded="true"] .nav-drop-chevron {
-      transform: rotate(-135deg) translateY(2px);
-    }
-
+    .nav-drop-btn[aria-expanded="true"] .nav-drop-chevron { transform: rotate(-135deg) translateY(2px); }
     .nav-drop-panel {
-      position: absolute;
-      top: calc(100% + 14px);
-      left: 50%;
-      transform: translateX(-50%) translateY(-10px);
-      min-width: 660px;
-      background: #0e1f3d;
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 14px;
-      padding: 22px;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: opacity .25s ease, transform .25s ease, visibility .25s;
-      box-shadow: 0 24px 64px rgba(0,0,0,.55);
-      z-index: 1001;
+      position: absolute; top: calc(100% + 14px); left: 50%;
+      transform: translateX(-50%) translateY(-10px); min-width: 660px;
+      background: #0e1f3d; border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px; padding: 22px; opacity: 0; visibility: hidden;
+      pointer-events: none; transition: opacity .25s ease, transform .25s ease, visibility .25s;
+      box-shadow: 0 24px 64px rgba(0,0,0,.55); z-index: 1001;
     }
     .nav-drop-panel::before {
-      content: '';
-      position: absolute;
-      top: -7px; left: 50%;
-      transform: translateX(-50%) rotate(45deg);
-      width: 13px; height: 13px;
-      background: #0e1f3d;
-      border-left: 1px solid rgba(255,255,255,.1);
-      border-top: 1px solid rgba(255,255,255,.1);
+      content: ''; position: absolute; top: -7px; left: 50%;
+      transform: translateX(-50%) rotate(45deg); width: 13px; height: 13px;
+      background: #0e1f3d; border-left: 1px solid rgba(255,255,255,.1); border-top: 1px solid rgba(255,255,255,.1);
     }
-    .nav-drop-panel.open,
-    .nav-dropdown:hover .nav-drop-panel {
-      opacity: 1;
-      visibility: visible;
-      transform: translateX(-50%) translateY(0);
-      pointer-events: auto;
+    .nav-drop-panel.open {
+      opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); pointer-events: auto;
     }
-    .nav-drop-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 22px;
-    }
+    .nav-drop-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
     .nav-drop-col h5 {
-      font-size: 10px;
-      font-weight: 600;
-      color: #4a90d9;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin: 0 0 10px;
-      padding-bottom: 7px;
+      font-size: 10px; font-weight: 600; color: #4a90d9; letter-spacing: 1.5px;
+      text-transform: uppercase; margin: 0 0 10px; padding-bottom: 7px;
       border-bottom: 1px solid rgba(74,144,217,.2);
     }
     .nav-drop-col a {
-      display: block;
-      color: #a8c2e0;
-      font-size: 12.5px;
-      padding: 4px 0;
-      text-decoration: none;
-      transition: color .15s, padding-left .15s;
-      line-height: 1.5;
+      display: block; color: #a8c2e0; font-size: 12.5px; padding: 4px 0;
+      text-decoration: none; transition: color .15s, padding-left .15s; line-height: 1.5;
     }
     .nav-drop-col a:hover { color: #ffffff; padding-left: 6px; }
     .nav-drop-footer {
-      margin-top: 18px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255,255,255,.07);
-      font-size: 10px;
-      color: #3d6a9c;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      text-align: center;
+      margin-top: 18px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.07);
+      font-size: 10px; color: #3d6a9c; letter-spacing: 1px; text-transform: uppercase; text-align: center;
     }
-    @media (max-width: 900px) {
-          .nav-dropdown { display: none; }
-          .mobile-whatwedo-item { display: list-item; }
-        }
+    @media (max-width: 900px) { .nav-dropdown { display: none; } }
 
-    /* ── FIX: pf-item transform conflict — GPU hint via isolation instead ── */
+    /* ── FIX 2: Grid image size constraints ──
+       Without these, masonry/grid items can stretch to full viewport width
+       on first paint before JS applies the layout class. */
     .pf-item { isolation: isolate; }
+    .pf-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+    /* Grid view: fixed aspect ratio so images never balloon */
+    .pf-grid--grid .pf-item .pf-img-wrap { aspect-ratio: 4/3; overflow: hidden; }
+    .pf-grid--grid .pf-item.pf-tall .pf-img-wrap { aspect-ratio: 3/4; }
+    .pf-grid--grid .pf-item.pf-wide .pf-img-wrap { aspect-ratio: 16/9; }
+    .pf-grid--grid .pf-item .pf-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Masonry: cap column width so nothing stretches full-page on reload */
+    .pf-grid--masonry .pf-item { break-inside: avoid; max-width: 100%; }
+    .pf-grid--masonry .pf-item img { width: 100%; height: auto; }
+
+    /* List view: fixed image size */
+    .pf-grid--list .pf-item .pf-img-wrap { width: 180px; flex-shrink: 0; aspect-ratio: 4/3; overflow: hidden; }
+    .pf-grid--list .pf-item .pf-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
   </style>
 </head>
 <body>
@@ -294,7 +233,7 @@
   <div class="cursor" id="cursor"></div>
   <div class="cursor-follower" id="cursorFollower"></div>
 
-
+  <!-- Floating Social -->
   <div class="floating-social">
     <span class="fs-line"></span>
     <a href="https://www.facebook.com/share/1BK8dk8VsJ/" aria-label="Facebook" target="_blank" rel="noopener">
@@ -314,7 +253,9 @@
     </a>
     <span class="fs-line"></span>
   </div>
+
   <!-- Navigation -->
+  <!-- FIX 3: nav id="navbar" — matches scroll JS in nav_bar.js -->
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
       <a href="/" class="logo">
@@ -328,7 +269,7 @@
       <!-- Desktop nav -->
       <ul class="nav-links" id="navLinks">
         <li><a href="/" class="nav-link">Home</a></li>
-        <li><a href="/portfolio" class="nav-link">Portfolio</a></li>
+        <li><a href="/portfolio" class="nav-link active">Portfolio</a></li>
         <li class="has-mega" id="desktopServicesMenu">
           <a href="/services" class="nav-link" id="desktopServicesToggle">
             Services
@@ -374,42 +315,42 @@
         <li><a href="/contact" class="nav-link">Contact</a></li>
         <li><a href="/packages" class="nav-link">Packages</a></li>
         <li><a href="/videos" class="nav-link">Video Production</a></li>
-        <!-- FIX: removed duplicate "What We Do" text, single span chevron only -->
+        <!-- FIX 4: added id="navDropBtn" and id="navDropPanel" so JS can find them -->
         <li class="nav-dropdown" id="navDropdown">
-          <button class="nav-drop-btn" aria-haspopup="true" aria-expanded="false">
+          <button class="nav-drop-btn" id="navDropBtn" aria-haspopup="true" aria-expanded="false">
             What We Do
             <span class="nav-drop-chevron" aria-hidden="true"></span>
           </button>
-          <div class="nav-drop-panel" role="menu">
+          <div class="nav-drop-panel" id="navDropPanel" role="menu">
             <div class="nav-drop-grid">
               <div class="nav-drop-col">
                 <h5>Photography</h5>
-                <a href="/what_we_do#studio-portrait" role="menuitem">Studio Portrait</a>
-                <a href="/what_we_do#wedding-coverage" role="menuitem">Wedding Coverage</a>
-                <a href="/what_we_do#event-photography" role="menuitem">Event Photography</a>
-                <a href="/what_we_do#commercial-photography" role="menuitem">Commercial Photography</a>
+                <a href="/what-we-do#studio-portrait" role="menuitem">Studio Portrait</a>
+                <a href="/what-we-do#wedding-coverage" role="menuitem">Wedding Coverage</a>
+                <a href="/what-we-do#event-photography" role="menuitem">Event Photography</a>
+                <a href="/what-we-do#commercial-photography" role="menuitem">Commercial Photography</a>
               </div>
               <div class="nav-drop-col">
                 <h5>Special Shoots</h5>
-                <a href="/what_we_do#birthday-photoshoot" role="menuitem">Birthday Photoshoot</a>
-                <a href="/what_we_do#maternity-photoshoot" role="menuitem">Maternity Photoshoot</a>
-                <a href="/what_we_do#graduation-photoshoot" role="menuitem">Graduation Photoshoot</a>
-                <a href="/what_we_do#kids-photoshoot" role="menuitem">Kids' Photoshoot</a>
-                <a href="/what_we_do#family-photoshoot" role="menuitem">Family Photoshoot</a>
-                <a href="/what_we_do#passport-photos" role="menuitem">Passport Photos</a>
+                <a href="/what-we-do#birthday-photoshoot" role="menuitem">Birthday Photoshoot</a>
+                <a href="/what-we-do#maternity-photoshoot" role="menuitem">Maternity Photoshoot</a>
+                <a href="/what-we-do#graduation-photoshoot" role="menuitem">Graduation Photoshoot</a>
+                <a href="/what-we-do#kids-photoshoot" role="menuitem">Kids' Photoshoot</a>
+                <a href="/what-we-do#family-photoshoot" role="menuitem">Family Photoshoot</a>
+                <a href="/what-we-do#passport-photos" role="menuitem">Passport Photos</a>
               </div>
               <div class="nav-drop-col">
                 <h5>Video</h5>
-                <a href="/what_we_do#video-production" role="menuitem">Video Production</a>
-                <a href="/what_we_do#drone-services" role="menuitem">Drone Services</a>
-                <a href="/what_we_do#live-streaming" role="menuitem">Live Streaming</a>
+                <a href="/what-we-do#video-production" role="menuitem">Video Production</a>
+                <a href="/what-we-do#drone-services" role="menuitem">Drone Services</a>
+                <a href="/what-we-do#live-streaming" role="menuitem">Live Streaming</a>
               </div>
               <div class="nav-drop-col">
                 <h5>Creative</h5>
-                <a href="/what_we_do#graphic-design" role="menuitem">Graphic Design</a>
-                <a href="/what_we_do#branding" role="menuitem">Branding</a>
-                <a href="/what_we_do#printing" role="menuitem">Printing</a>
-                <a href="/what_we_do#social-media" role="menuitem">Social Media</a>
+                <a href="/what-we-do#graphic-design" role="menuitem">Graphic Design</a>
+                <a href="/what-we-do#branding" role="menuitem">Branding</a>
+                <a href="/what-we-do#printing" role="menuitem">Printing</a>
+                <a href="/what-we-do#social-media" role="menuitem">Social Media</a>
               </div>
             </div>
             <div class="nav-drop-footer">Premium Studio Services &bull; Machakos, Kenya</div>
@@ -425,14 +366,13 @@
       </div>
     </div>
 
-    <!-- Mobile Menu — FIX: "What We Do" li removed entirely; desktop-only dropdown -->
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
       <ul class="mobile-nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/portfolio">Portfolio</a></li>
- 
-        <!-- Services accordion (unchanged) -->
+
+        <!-- Services accordion -->
         <li class="mobile-services-item" id="mobileServicesItem">
           <button class="mobile-services-toggle" id="mobileServicesToggle" aria-expanded="false">
             Services
@@ -472,13 +412,13 @@
             </div>
           </div>
         </li>
- 
+
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
         <li><a href="/packages">Packages</a></li>
         <li><a href="/videos">Video Production</a></li>
- 
-        <!-- What We Do accordion — NEW, mirrors Services accordion exactly -->
+
+        <!-- What We Do mobile accordion -->
         <li class="mobile-services-item" id="mobileWhatWeDoItem">
           <button class="mobile-services-toggle" id="mobileWhatWeDoToggle" aria-expanded="false">
             What We Do
@@ -488,37 +428,38 @@
             <div class="mega-grid">
               <div class="mega-column">
                 <h4>Photography</h4>
-                <a href="/what_we_do#studio-portrait">Studio Portrait</a>
-                <a href="/what_we_do#wedding-coverage">Wedding Coverage</a>
-                <a href="/what_we_do#event-photography">Event Photography</a>
-                <a href="/what_we_do#commercial-photography">Commercial Photography</a>
+                <!-- FIX 5: all What We Do links use /what-we-do (hyphen) not /what_we_do -->
+                <a href="/what-we-do#studio-portrait">Studio Portrait</a>
+                <a href="/what-we-do#wedding-coverage">Wedding Coverage</a>
+                <a href="/what-we-do#event-photography">Event Photography</a>
+                <a href="/what-we-do#commercial-photography">Commercial Photography</a>
               </div>
               <div class="mega-column">
                 <h4>Special Shoots</h4>
-                <a href="/what_we_do#birthday-photoshoot">Birthday Photoshoot</a>
-                <a href="/what_we_do#maternity-photoshoot">Maternity Photoshoot</a>
-                <a href="/what_we_do#graduation-photoshoot">Graduation Photoshoot</a>
-                <a href="/what_we_do#kids-photoshoot">Kids' Photoshoot</a>
-                <a href="/what_we_do#family-photoshoot">Family Photoshoot</a>
-                <a href="/what_we_do#passport-photos">Passport Photos</a>
+                <a href="/what-we-do#birthday-photoshoot">Birthday Photoshoot</a>
+                <a href="/what-we-do#maternity-photoshoot">Maternity Photoshoot</a>
+                <a href="/what-we-do#graduation-photoshoot">Graduation Photoshoot</a>
+                <a href="/what-we-do#kids-photoshoot">Kids' Photoshoot</a>
+                <a href="/what-we-do#family-photoshoot">Family Photoshoot</a>
+                <a href="/what-we-do#passport-photos">Passport Photos</a>
               </div>
               <div class="mega-column">
                 <h4>Video</h4>
-                <a href="/what_we_do#video-production">Video Production</a>
-                <a href="/what_we_do#drone-services">Drone Services</a>
-                <a href="/what_we_do#live-streaming">Live Streaming</a>
+                <a href="/what-we-do#video-production">Video Production</a>
+                <a href="/what-we-do#drone-services">Drone Services</a>
+                <a href="/what-we-do#live-streaming">Live Streaming</a>
               </div>
               <div class="mega-column">
                 <h4>Creative</h4>
-                <a href="/what_we_do#graphic-design">Graphic Design</a>
-                <a href="/what_we_do#branding">Branding</a>
-                <a href="/what_we_do#printing">Printing</a>
-                <a href="/what_we_do#social-media">Social Media</a>
+                <a href="/what-we-do#graphic-design">Graphic Design</a>
+                <a href="/what-we-do#branding">Branding</a>
+                <a href="/what-we-do#printing">Printing</a>
+                <a href="/what-we-do#social-media">Social Media</a>
               </div>
             </div>
           </div>
         </li>
- 
+
       </ul>
       <a href="/contact" class="btn-book-mobile">Book a Session</a>
       <div class="mobile-info">
@@ -529,8 +470,9 @@
   </nav>
 
   <!-- Page Hero -->
+  <!-- FIX 6: hero bg url was 'static/...' (relative) — changed to '/static/...' (absolute) -->
   <header class="page-hero">
-    <div class="page-hero-bg" style="background-image: url('static/imagies/portfolio.webp')"></div>
+    <div class="page-hero-bg" style="background-image: url('/static/imagies/portfolio.webp')"></div>
     <div class="page-hero-overlay"></div>
     <div class="page-hero-content">
       <div class="breadcrumb">
@@ -540,31 +482,17 @@
       </div>
       <h1 class="page-hero-title">Our <em>Work</em></h1>
       <p class="page-hero-sub">
-        Every frame tells a story. Explore over a decade of weddings, portraits, events, 
+        Every frame tells a story. Explore over a decade of weddings, portraits, events,
         and commercial work — captured right here in Machakos and across Kenya.
       </p>
-
-      <!-- Mini stats bar -->
       <div class="hero-intro-bar">
-        <div class="hero-intro-stat">
-          <strong>1,000+</strong>
-          <span>Projects</span>
-        </div>
+        <div class="hero-intro-stat"><strong>1,000+</strong><span>Projects</span></div>
         <div class="hero-intro-divider"></div>
-        <div class="hero-intro-stat">
-          <strong>200+</strong>
-          <span>Weddings</span>
-        </div>
+        <div class="hero-intro-stat"><strong>200+</strong><span>Weddings</span></div>
         <div class="hero-intro-divider"></div>
-        <div class="hero-intro-stat">
-          <strong>10+</strong>
-          <span>Years</span>
-        </div>
+        <div class="hero-intro-stat"><strong>10+</strong><span>Years</span></div>
         <div class="hero-intro-divider"></div>
-        <div class="hero-intro-stat">
-          <strong>1,200+</strong>
-          <span>Happy Clients</span>
-        </div>
+        <div class="hero-intro-stat"><strong>1,200+</strong><span>Happy Clients</span></div>
       </div>
     </div>
     <div class="page-hero-scroll">
@@ -577,13 +505,12 @@
   <section class="portfolio-page-section">
     <div class="container">
 
-      <!-- Section intro -->
       <div class="section-intro reveal">
         <div class="section-intro-text">
           <span class="section-eyebrow">Our Portfolio</span>
           <h2 class="section-intro-title">Moments Crafted <em>with Purpose</em></h2>
           <p>
-            From the quiet emotion of a first look to the energy of a packed dancefloor — 
+            From the quiet emotion of a first look to the energy of a packed dancefloor —
             we capture it all with intention. Browse by category or explore everything at once.
           </p>
         </div>
@@ -598,7 +525,7 @@
           </button>
         </div>
         <div class="pf-view-toggle">
-          <button class="pf-view-btn active" id="viewGrid" aria-label="Grid view">
+          <button class="pf-view-btn" id="viewGrid" aria-label="Grid view">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
           </button>
           <button class="pf-view-btn" id="viewMasonry" aria-label="Masonry view">
@@ -615,8 +542,13 @@
         <span id="pfResultText">Loading portfolio…</span>
       </div>
 
-      <!-- Grid — JS populates this -->
-      <div class="pf-grid pf-grid--masonry" id="pfGrid">
+      <!--
+        FIX 1 (HTML part): removed hardcoded pf-grid--masonry class.
+        The <head> script already set document.documentElement.dataset.pfView,
+        and the boot JS below reads window.__savedView and applies the right class
+        before any items render, eliminating the layout flash entirely.
+      -->
+      <div class="pf-grid" id="pfGrid">
         <div class="pf-skeleton-grid" id="pfSkeleton">
           <div class="pf-skeleton-item"><div class="pf-skeleton-img"></div><div class="pf-skeleton-info"><div class="pf-skeleton-tag"></div><div class="pf-skeleton-title"></div></div></div>
           <div class="pf-skeleton-item"><div class="pf-skeleton-img"></div><div class="pf-skeleton-info"><div class="pf-skeleton-tag"></div><div class="pf-skeleton-title"></div></div></div>
@@ -808,7 +740,37 @@
     let visibleItems = [];
     let activeFilter = 'all';
 
-    /* ── Scroll reveal ──────────────────────── */
+    /* ── View map ── */
+    const VIEW_MAP = {
+      viewGrid:    'pf-grid--grid',
+      viewMasonry: 'pf-grid--masonry',
+      viewList:    'pf-grid--list',
+    };
+
+    /* ── FIX 1 (JS part): apply saved view immediately, before load ──
+       window.__savedView was set by the <head> script synchronously,
+       so by the time we get here the correct class is already known.
+       We apply it now (before fetch) so skeleton shows in the right layout. */
+    function setView(id, save) {
+      if (!VIEW_MAP[id]) return;
+      document.querySelectorAll('.pf-view-btn').forEach((b) => b.classList.remove('active'));
+      document.getElementById(id)?.classList.add('active');
+      Object.values(VIEW_MAP).forEach((cls) => pfGrid.classList.remove(cls));
+      pfGrid.classList.add(VIEW_MAP[id]);
+      if (save) {
+        try { localStorage.setItem('pf-view', id); } catch {}
+      }
+    }
+
+    // Apply saved view right now — no flash, no waiting for images
+    setView(window.__savedView || 'viewGrid', false);
+
+    // Wire up view toggle buttons
+    Object.keys(VIEW_MAP).forEach((id) => {
+      document.getElementById(id)?.addEventListener('click', () => setView(id, true));
+    });
+
+    /* ── Scroll reveal ── */
     const revealObs = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -820,7 +782,7 @@
 
     document.querySelectorAll('.reveal').forEach((el) => revealObs.observe(el));
 
-    /* ── Item stagger reveal ─────────────────── */
+    /* ── Item stagger reveal ── */
     function observeItems() {
       const items = pfGrid.querySelectorAll('.pf-item');
       const itemObs = new IntersectionObserver((entries) => {
@@ -834,7 +796,7 @@
       items.forEach((item) => itemObs.observe(item));
     }
 
-    /* ── Fetch ───────────────────────────────── */
+    /* ── Fetch ── */
     async function loadPortfolio() {
       showSkeleton(); hideError();
       try {
@@ -853,7 +815,7 @@
       }
     }
 
-    /* ── Build filter buttons ────────────────── */
+    /* ── Build filter buttons ── */
     function buildFilters(items) {
       const counts = {};
       items.forEach((item) => {
@@ -883,9 +845,8 @@
         });
       });
     }
-    
-    
-    /* ── Filter ──────────────────────────────── */
+
+    /* ── Filter ── */
     function applyFilter() {
       const filtered = activeFilter === 'all'
         ? allItems
@@ -895,11 +856,10 @@
       if (pfEmpty) pfEmpty.style.display = filtered.length === 0 ? 'block' : 'none';
     }
 
-    /* ── Render items ────────────────────────── */
+    /* ── Render items ── */
     function renderItems(items) {
       pfGrid.querySelectorAll('.pf-item').forEach((el) => el.remove());
       visibleItems = items;
-      window.__visibleItems = items;
 
       items.forEach((item, index) => {
         const sizeClass = item.size === 'tall' ? ' pf-tall'
@@ -952,7 +912,7 @@
       observeItems();
     }
 
-    /* ── Result text ─────────────────────────── */
+    /* ── Result text ── */
     function updateText(count) {
       if (pfResultText) {
         const label = activeFilter !== 'all' ? ` · ${titleCase(activeFilter)}` : '';
@@ -960,7 +920,7 @@
       }
     }
 
-    /* ── Skeleton / error helpers ────────────── */
+    /* ── Skeleton / error helpers ── */
     function showSkeleton() { if (pfSkeleton) pfSkeleton.style.display = ''; }
     function hideSkeleton() { if (pfSkeleton) pfSkeleton.style.display = 'none'; }
     function showEmpty()    { if (pfEmpty) pfEmpty.style.display = 'block'; updateText(0); }
@@ -969,7 +929,7 @@
 
     pfRetry?.addEventListener('click', loadPortfolio);
 
-    /* ── Lightbox ─────────────────────────────── */
+    /* ── Lightbox ── */
     const lightbox   = document.getElementById('lightbox');
     const lbBackdrop = document.getElementById('lightboxBackdrop');
     const lbImg      = document.getElementById('lightboxImg');
@@ -985,7 +945,7 @@
       showSlide();
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
-      lbClose.focus(); // accessibility: move focus into dialog
+      lbClose.focus();
     }
     function closeLightbox() {
       lightbox.classList.remove('open');
@@ -1028,33 +988,7 @@
       if (Math.abs(diff) > 40) lbGo(diff > 0 ? 1 : -1);
     });
 
-    /* ── View toggle ──────────────────────────── */
-    // NOTE: portfolio.js also registers view toggle handlers.
-    // This block is the canonical one; the external file's handlers
-    // will fire first but both point to the same classes, so no conflict.
-    const VIEW_MAP = {
-      viewGrid:    'pf-grid--grid',
-      viewMasonry: 'pf-grid--masonry',
-      viewList:    'pf-grid--list',
-    };
-    function setView(id) {
-      document.querySelectorAll('.pf-view-btn').forEach((b) => b.classList.remove('active'));
-      document.getElementById(id)?.classList.add('active');
-      Object.values(VIEW_MAP).forEach((cls) => pfGrid.classList.remove(cls));
-      if (VIEW_MAP[id]) pfGrid.classList.add(VIEW_MAP[id]);
-      try { localStorage.setItem('pf-view', id); } catch {}
-    }
-
-    Object.keys(VIEW_MAP).forEach((id) => {
-      document.getElementById(id)?.addEventListener('click', () => setView(id));
-    });
-
-    try {
-      const saved = localStorage.getItem('pf-view');
-      if (saved && VIEW_MAP[saved]) setView(saved);
-    } catch {}
-
-    /* ── Utilities ────────────────────────────── */
+    /* ── Utilities ── */
     function titleCase(str) { return String(str).replace(/\b\w/g, (c) => c.toUpperCase()); }
     function esc(str) {
       return String(str)
@@ -1062,11 +996,13 @@
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    /* ── Boot ─────────────────────────────────── */
+    /* ── Boot ── */
     loadPortfolio();
 
   })();
   </script>
-  <script src="static/js/public/nav_bar.js"></script>
+
+  <!-- FIX 7: nav_bar.js path was relative 'static/...' — changed to absolute '/static/...' -->
+  <script src="/static/js/public/nav_bar.js"></script>
 </body>
 </html>
