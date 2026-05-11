@@ -70,6 +70,7 @@
 @media (max-width: 768px) {
   .floating-social {
     padding: 10px 6px;
+    display: none; /* hide on mobile */
   }
 
   .floating-social a {
