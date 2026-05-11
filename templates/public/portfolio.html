@@ -542,12 +542,7 @@
         <span id="pfResultText">Loading portfolio…</span>
       </div>
 
-      <!--
-        FIX 1 (HTML part): removed hardcoded pf-grid--masonry class.
-        The <head> script already set document.documentElement.dataset.pfView,
-        and the boot JS below reads window.__savedView and applies the right class
-        before any items render, eliminating the layout flash entirely.
-      -->
+      
       <div class="pf-grid" id="pfGrid">
         <div class="pf-skeleton-grid" id="pfSkeleton">
           <div class="pf-skeleton-item"><div class="pf-skeleton-img"></div><div class="pf-skeleton-info"><div class="pf-skeleton-tag"></div><div class="pf-skeleton-title"></div></div></div>

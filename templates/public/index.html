@@ -2369,24 +2369,40 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       });
     }
 
+    function fetchPortfolio(category) {
+      if (portfolioGrid) {
+        portfolioGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF;font-size:.9rem">Loading…</div>';
+      }
+      var url = category && category !== 'all'
+        ? '/api/portfolio?per_page=24&page=1&category=' + encodeURIComponent(category)
+        : '/api/portfolio?per_page=12&page=1';
+
+      fetch(url)
+        .then(function (res) { if (!res.ok) throw new Error('API ' + res.status); return res.json(); })
+        .then(function (data) {
+          var items = data.items || [];
+          if (category === 'all') allItems = items;
+          renderPortfolioGrid(items);
+        })
+        .catch(function () {
+          if (portfolioGrid) portfolioGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF">Could not load portfolio.</div>';
+        });
+    }
+
     fBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
-        fBtns.forEach(function (b) { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+        fBtns.forEach(function (b) {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         btn.classList.add('active');
         btn.setAttribute('aria-pressed', 'true');
-        var f = btn.dataset.filter;
-        renderPortfolioGrid(f === 'all' ? allItems : allItems.filter(function (it) {
-          return String(it.category || '').toLowerCase() === f;
-        }));
+        fetchPortfolio(btn.dataset.filter);
       });
     });
 
-    fetch('/api/portfolio?per_page=12&page=1')
-      .then(function (res) { if (!res.ok) throw new Error('API ' + res.status); return res.json(); })
-      .then(function (data) { allItems = data.items || []; renderPortfolioGrid(allItems); })
-      .catch(function () {
-        if (portfolioGrid) portfolioGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#9CA3AF">Could not load portfolio.</div>';
-      });
+    // Initial load
+    fetchPortfolio('all');
 
     /* ─────────────────────────────────────────────────────────
        LIGHTBOX
