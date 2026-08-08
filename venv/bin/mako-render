@@ -1,4 +1,4 @@
-#!/home/error/Desktop/Denspark_Studio/venv/bin/python3
+#!/home/error404/Denspark_Studio/venv/bin/python3
 import sys
 from mako.cmd import cmdline
 if __name__ == '__main__':

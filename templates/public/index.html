@@ -9,7 +9,11 @@
   <meta name="description" content="Denspark Studio is Machakos's premier photography and creative media studio. Professional wedding, portrait, event coverage, videography, drone & graphic design services.">
   <meta name="keywords" content="photography studio Machakos, wedding photography Kenya, portrait photographer Machakos, event photographer Kenya, videography Machakos, drone photography Kenya, Denspark Studio">
   <meta name="author" content="Denspark Studio">
-  <meta name="robots" content="index, follow">
+
+  <!-- AEO — full crawler directives (no snippet/preview length caps) -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+
   <link rel="canonical" href="https://densparkstudio.com/">
 
   <!-- FAVICON — correct version -->
@@ -17,7 +21,7 @@
   <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
   <link rel="shortcut icon" href="/static/favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="MyWebSite" />
+  <meta name="apple-mobile-web-app-title" content="Denspark Studio" />
   <link rel="manifest" href="/static/site.webmanifest" />
 
   <!-- OPEN GRAPH -->
@@ -42,43 +46,18 @@
   <meta name="google-site-verification" content="WexmzcN2yIaV6lXIy1CHRNqrCz92JMbca2n2LKYzDOg">
   <meta name="msvalidate.01" content="PASTE_YOUR_BING_CODE_HERE">
 
-  <!-- LOCAL BUSINESS SCHEMA -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Denspark Studio",
-    "description": "Professional photography, videography, drone services and graphic design in Machakos, Kenya.",
-    "url": "https://densparkstudio.com",
-    "telephone": "+254710468300",
-    "email": "densparkstudio@gmail.com",
-    "image": "https://densparkstudio.com/static/uploads/og-cover.webp",
-    "priceRange": "KSh",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Machakos",
-      "addressRegion": "Machakos County",
-      "addressCountry": "KE"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": -1.5177,
-      "longitude": 37.2634
-    },
-    "openingHoursSpecification": [
-      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday"], "opens": "08:30", "closes": "20:00" },
-      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "09:00", "closes": "20:00" },
-      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "08:30", "closes": "20:00" },
-      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "08:00", "closes": "20:00" }
-    ],
-    "sameAs": [
-      "https://www.facebook.com/share/1BK8dk8VsJ/",
-      "https://www.instagram.com/densparkstudio",
-      "https://youtube.com/@densparkfilmsmachakos6509",
-      "https://www.tiktok.com/@densparkstudio300"
-    ]
-  }
-  </script>
+  <!--
+    ========================================================================
+    AEO — ANSWER ENGINE OPTIMIZATION
+    Structured data (LocalBusiness, Organization, WebSite, FAQPage, etc.) is
+    injected dynamically by /static/js/public/aeo.js — do NOT add a static
+    <script type="application/ld+json"> schema block here. The original
+    hardcoded LocalBusiness schema that used to live in this <head> has been
+    removed: it had no @id, so it would sit alongside aeo.js's version as a
+    second, conflicting LocalBusiness entity on every page instead of being
+    recognized as the same business.
+    ========================================================================
+  -->
 
   <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,7 +68,6 @@
   <!-- Preload hero image -->
   <link rel="preload" as="image" href="/static/imagies/potostudio.webp" fetchpriority="high">
   <link rel="stylesheet" href="static/css/nav_links.css">
-
   <style>
 /* ═══════════════════════════════════════════════════════════
    DENSPARK STUDIO — Master Stylesheet (deep-fixed)
@@ -1924,6 +1902,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       <span class="chat-badge" id="chatBadge" aria-hidden="true">1</span>
     </button>
   </div>
+  <!-- AEO - Answer Engine Optimization -->
+  <script src="/static/js/public/aeo.js" defer></script>
+
 
   <!-- ═══════════════════════════════════════════════════════
        JAVASCRIPT — deep-fixed, single IIFE, no duplicates
