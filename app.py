@@ -32,6 +32,11 @@ from config import Config
 SITE_URL     = "https://densparkstudio.com"
 INDEXNOW_KEY = os.environ.get("INDEXNOW_KEY", "")
 
+# Fallback lastmod for pages we don't track real modification dates for.
+# Using the app's deploy/start date instead of "today on every request" —
+# a static date understates freshness slightly but doesn't lie to crawlers.
+APP_STARTED_AT = datetime.today().strftime('%Y-%m-%d')
+
 
 # =============================================================================
 #  APPLICATION FACTORY
@@ -106,8 +111,13 @@ def create_app():
     app.register_blueprint(auth_bp,  url_prefix="/auth")
 
     # ── DATABASE TABLES ───────────────────────────────────────────────────────
-    with app.app_context():
-        db.create_all()
+    # Only auto-create tables in local development. In production, schema
+    # changes should go through `flask db upgrade` (Alembic migrations) —
+    # letting create_all() run there too can mask missing migrations and
+    # let the live schema silently drift from what Alembic thinks it is.
+    if os.environ.get("FLASK_ENV") == "development":
+        with app.app_context():
+            db.create_all()
 
     return app
 
@@ -125,14 +135,19 @@ app = create_app()
 
 @app.route('/sitemap.xml')
 def sitemap():
+    # lastmod values below are placeholders (APP_STARTED_AT) until real
+    # per-page modification timestamps are tracked. Wire these up to actual
+    # `updated_at` fields once portfolio/services/packages are DB-driven —
+    # a static "unknown" date is honest; stamping every page with today's
+    # date on every request is not (it implies constant, false updates).
     pages = [
-        {"loc": f"{SITE_URL}/",                 "priority": "1.0"},
-        {"loc": f"{SITE_URL}/about",            "priority": "0.8"},
-        {"loc": f"{SITE_URL}/portfolio",        "priority": "0.8"},
-        {"loc": f"{SITE_URL}/services",         "priority": "0.8"},
-        {"loc": f"{SITE_URL}/packages",         "priority": "0.8"},
-        {"loc": f"{SITE_URL}/video-production", "priority": "0.8"},
-        {"loc": f"{SITE_URL}/contact",          "priority": "0.7"},
+        {"loc": f"{SITE_URL}/",                 "priority": "1.0", "lastmod": APP_STARTED_AT},
+        {"loc": f"{SITE_URL}/about",            "priority": "0.8", "lastmod": APP_STARTED_AT},
+        {"loc": f"{SITE_URL}/portfolio",        "priority": "0.8", "lastmod": APP_STARTED_AT},
+        {"loc": f"{SITE_URL}/services",         "priority": "0.8", "lastmod": APP_STARTED_AT},
+        {"loc": f"{SITE_URL}/packages",         "priority": "0.8", "lastmod": APP_STARTED_AT},
+        {"loc": f"{SITE_URL}/videos",           "priority": "0.8", "lastmod": APP_STARTED_AT},
+        {"loc": f"{SITE_URL}/contact",          "priority": "0.7", "lastmod": APP_STARTED_AT},
     ]
     xml = render_template_string(
         '<?xml version="1.0" encoding="UTF-8"?>'
@@ -140,13 +155,12 @@ def sitemap():
         '{% for page in pages %}'
         '<url>'
         '<loc>{{ page.loc }}</loc>'
-        '<lastmod>{{ today }}</lastmod>'
+        '<lastmod>{{ page.lastmod }}</lastmod>'
         '<priority>{{ page.priority }}</priority>'
         '</url>'
         '{% endfor %}'
         '</urlset>',
         pages=pages,
-        today=datetime.today().strftime('%Y-%m-%d')
     )
     return Response(xml, mimetype='application/xml')
 
@@ -179,6 +193,16 @@ def indexnow_key_file(key):
 
 # =============================================================================
 #  SEO — INDEXNOW PING HELPER
+#
+#  NOT currently called anywhere. This is meant to be imported and invoked
+#  from routes/admin.py whenever content is published or updated, e.g.:
+#
+#      from app import ping_indexnow
+#      ping_indexnow(f"{SITE_URL}/portfolio/{item.slug}")
+#
+#  Until it's wired into a publish/save handler, new or updated pages will
+#  NOT be pushed to IndexNow automatically — search engines will only pick
+#  them up via normal crawling or the sitemap.
 # =============================================================================
 
 def ping_indexnow(url):
