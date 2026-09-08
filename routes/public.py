@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, jsonify, send_from_directory, request, current_app
-from models import db, Portfolio, Booking, Message
+from models import db, Portfolio, Booking, Message, ShareLink
 from extensions import limiter, csrf
 from utils.email import send_booking_notification, send_contact_notification
 import re
+from datetime import datetime
 
 public_bp = Blueprint('public', __name__)
 
@@ -175,6 +176,21 @@ def videos():
 def what_we_do():
     return render_template('public/what_we_do.html')
 
+
+@public_bp.route('/gallery/<token>')
+def gallery(token):
+    link = ShareLink.query.filter_by(token=token).first()
+
+    if not link or not link.is_active:
+        return render_template('public/gallery_expired.html'), 410
+
+    items = Portfolio.query.filter_by(category=link.category)\
+                           .order_by(Portfolio.created_at.desc()).all()
+
+    return render_template('public/gallery.html',
+        images         = [_serialize_portfolio_item(i) for i in items],
+        category_label = CATEGORY_LABELS.get(link.category, link.category.replace('-', ' ').title()),
+    )
 
 # ── API: Portfolio ────────────────────────────────────────────────────────────
 @public_bp.route('/api/portfolio')

@@ -4,13 +4,16 @@ All admin routes are protected by both @login_required and @admin_required.
 Public API routes (/api/*) are unprotected by design.
 """
 
+from datetime import datetime, timedelta
+import secrets
+from routes.public import CATEGORY_LABELS
 from datetime import datetime
 from functools import wraps
 from flask import (Blueprint, render_template, request, jsonify,
                    current_app, redirect, url_for, abort)
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
-from models import db, Portfolio, Booking, Message, Payment, Video
+from models import db, Portfolio, Booking, Message, Payment, Video, ShareLink
 import os
 import uuid
 import re
@@ -96,6 +99,96 @@ def api_portfolio():
         ]
     })
 
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ADMIN — SHARE LINKS
+# ─────────────────────────────────────────────────────────────────────────────
+
+@admin_bp.route('/share-links')
+@login_required
+@admin_required
+def share_links():
+    # Only categories that currently have at least one photo — no point
+    # letting the admin generate a link to an empty category.
+    category_counts = (
+        db.session.query(Portfolio.category, db.func.count(Portfolio.id))
+        .group_by(Portfolio.category)
+        .order_by(Portfolio.category)
+        .all()
+    )
+    categories = [
+        {
+            'value': cat,
+            'label': CATEGORY_LABELS.get(cat, cat.replace('-', ' ').title()),
+            'count': count,
+        }
+        for cat, count in category_counts if cat
+    ]
+
+    links = ShareLink.query.order_by(ShareLink.created_at.desc()).all()
+
+    return render_template('admin/share_links.html',
+        categories   = categories,
+        links        = links,
+        current_user = current_user,
+    )
+
+
+@admin_bp.route('/share-links/create', methods=['POST'])
+@login_required
+@admin_required
+def create_share_link():
+    data     = request.get_json(silent=True) or request.form
+    category = (data.get('category') or '').strip()
+
+    if not category:
+        return jsonify({'success': False, 'error': 'Category is required'}), 400
+
+    # Guard against generating a link for a category with zero photos
+    # (e.g. stale dropdown, direct API call).
+    has_photos = Portfolio.query.filter_by(category=category).first()
+    if not has_photos:
+        return jsonify({'success': False, 'error': 'This category has no photos yet'}), 400
+
+    token = secrets.token_urlsafe(8)
+    while ShareLink.query.filter_by(token=token).first():
+        token = secrets.token_urlsafe(8)
+
+    expires_at = None
+    raw_days   = data.get('expires_in_days')
+    if raw_days:
+        try:
+            days = int(raw_days)
+            if days > 0:
+                expires_at = datetime.utcnow() + timedelta(days=days)
+        except (TypeError, ValueError):
+            pass
+
+    link = ShareLink(token=token, category=category, expires_at=expires_at)
+    db.session.add(link)
+    db.session.commit()
+
+    return jsonify({
+        'success':    True,
+        'id':         link.id,
+        'token':      token,
+        'url':        url_for('public.gallery', token=token, _external=True),
+        'category':   category,
+        'expires_at': expires_at.strftime('%Y-%m-%d') if expires_at else None,
+    }), 201
+
+
+@admin_bp.route('/share-links/<int:id>/revoke', methods=['POST'])
+@login_required
+@admin_required
+def revoke_share_link(id):
+    link = db.session.get(ShareLink, id)
+    if not link:
+        abort(404)
+    link.revoked = True
+    db.session.commit()
+    return jsonify({'success': True})
 
 @admin_bp.route('/api/videos')
 def api_videos():
