@@ -105,7 +105,7 @@ def api_portfolio():
 # ADMIN — SHARE LINKS
 # ─────────────────────────────────────────────────────────────────────────────
 
-@admin_bp.route('/share-links')
+@admin_bp.route('/share_links')
 @login_required
 @admin_required
 def share_links():
@@ -135,7 +135,7 @@ def share_links():
     )
 
 
-@admin_bp.route('/share-links/create', methods=['POST'])
+@admin_bp.route('/share_links/create', methods=['POST'])
 @login_required
 @admin_required
 def create_share_link():
@@ -179,7 +179,7 @@ def create_share_link():
     }), 201
 
 
-@admin_bp.route('/share-links/<int:id>/revoke', methods=['POST'])
+@admin_bp.route('/share_links/<int:id>/revoke', methods=['POST'])
 @login_required
 @admin_required
 def revoke_share_link(id):

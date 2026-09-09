@@ -182,3 +182,30 @@ class Video(db.Model):
 
     def __repr__(self):
         return f'<Video {self.id}: {self.title}>'
+
+
+# ── Share Link ────────────────────────────────────────────────────────────────
+
+class ShareLink(db.Model):
+    __tablename__ = 'share_links'
+
+    id         = db.Column(db.Integer, primary_key=True)
+    # index=True — looked up on every public /gallery/<token> request
+    token      = db.Column(db.String(32), unique=True, nullable=False, index=True)
+    # index=True — filtered when pulling Portfolio items for this category
+    category   = db.Column(db.String(50), nullable=False, index=True)
+    expires_at = db.Column(db.DateTime, nullable=True)
+    # index=True — admin share_links page filters active vs revoked
+    revoked    = db.Column(db.Boolean, default=False, nullable=False, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+
+    def __repr__(self):
+        return f'<ShareLink {self.id}: {self.category} — {self.token}>'
+
+    @property
+    def is_expired(self):
+        return bool(self.expires_at and self.expires_at < datetime.utcnow())
+
+    @property
+    def is_active(self):
+        return not self.revoked and not self.is_expired

@@ -1,0 +1,267 @@
+{% extends "admin/base.html" %}
+{% block title %}Share Links — Denspark Admin{% endblock %}
+{% block page_title %}Share Links{% endblock %}
+{% block page_sub %}Generate view-only links clients can open to see their photos{% endblock %}
+
+{% block styles %}
+<style>
+  .sl-wrap { display: flex; flex-direction: column; gap: 24px; }
+
+  .sl-panel {
+    background: #fff; border: 1px solid #e6e6e6; border-radius: 12px; padding: 20px 24px;
+  }
+  .sl-panel h2 { font-size: 16px; font-weight: 600; margin: 0 0 16px; color: #1a1a1a; }
+
+  .sl-form-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; }
+  .sl-field { display: flex; flex-direction: column; gap: 6px; min-width: 200px; }
+  .sl-field label { font-size: 12.5px; font-weight: 600; color: #555; }
+  .sl-field select, .sl-field input {
+    padding: 9px 12px; border: 1px solid #d8d8d8; border-radius: 8px; font-size: 14px; background: #fff;
+  }
+  .sl-btn {
+    padding: 10px 18px; border: none; border-radius: 8px; background: #1a1a1a; color: #fff;
+    font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
+  }
+  .sl-btn:hover { background: #333; }
+  .sl-btn:disabled { opacity: .5; cursor: not-allowed; }
+  .sl-empty-cats { color: #888; font-size: 14px; }
+
+  .sl-result {
+    display: none; margin-top: 16px; padding: 14px 16px; background: #f3faf7;
+    border: 1px solid #cdeee1; border-radius: 10px; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .sl-result.show { display: flex; }
+  .sl-result input {
+    flex: 1; min-width: 220px; padding: 8px 10px; border: 1px solid #cdeee1; border-radius: 6px;
+    font-size: 13px; background: #fff; color: #1a1a1a;
+  }
+  .sl-copy-btn {
+    padding: 8px 14px; border: none; border-radius: 6px; background: #1d6f56; color: #fff;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  .sl-copy-btn.copied { background: #14503d; }
+
+  table.sl-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .sl-table th {
+    text-align: left; padding: 10px 12px; border-bottom: 2px solid #eee; color: #666;
+    font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .03em;
+  }
+  .sl-table td { padding: 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+  .sl-table tr.revoked td, .sl-table tr.expired td { opacity: .55; }
+
+  .sl-badge {
+    display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600;
+  }
+  .sl-badge.active { background: #e3f7ec; color: #17825c; }
+  .sl-badge.expired { background: #fdeeea; color: #b3462c; }
+  .sl-badge.revoked { background: #f1f1f1; color: #777; }
+
+  .sl-link-cell { display: flex; align-items: center; gap: 8px; max-width: 260px; }
+  .sl-link-text {
+    font-family: monospace; font-size: 12px; color: #444; overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sl-mini-btn {
+    padding: 4px 9px; border: 1px solid #ddd; border-radius: 6px; background: #fff;
+    font-size: 11.5px; cursor: pointer; color: #444;
+  }
+  .sl-mini-btn:hover { background: #f7f7f7; }
+  .sl-mini-btn.danger { color: #b3462c; border-color: #f2d3c9; }
+  .sl-mini-btn.danger:hover { background: #fdf1ed; }
+
+  .sl-no-links { text-align: center; padding: 40px 0; color: #999; font-size: 14px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="sl-wrap">
+
+  <div class="sl-panel">
+    <h2>Generate a new link</h2>
+
+    {% if categories %}
+    <form id="slCreateForm">
+      <div class="sl-form-row">
+        <div class="sl-field">
+          <label for="slCategory">Category</label>
+          <select id="slCategory" name="category" required>
+            {% for cat in categories %}
+            <option value="{{ cat.value }}">{{ cat.label }} ({{ cat.count }})</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="sl-field">
+          <label for="slExpiry">Expires</label>
+          <select id="slExpiry" name="expires_in_days">
+            <option value="">Never</option>
+            <option value="7">In 7 days</option>
+            <option value="14">In 14 days</option>
+            <option value="30">In 30 days</option>
+            <option value="90">In 90 days</option>
+          </select>
+        </div>
+        <button type="submit" class="sl-btn" id="slGenerateBtn">Generate link</button>
+      </div>
+    </form>
+    {% else %}
+    <p class="sl-empty-cats">No categories have photos yet — upload something to Portfolio first.</p>
+    {% endif %}
+
+    <div class="sl-result" id="slResult">
+      <input type="text" id="slResultUrl" readonly>
+      <button class="sl-copy-btn" id="slCopyBtn">Copy</button>
+    </div>
+  </div>
+
+  <div class="sl-panel">
+    <h2>All links</h2>
+
+    {% if links %}
+    <table class="sl-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Link</th>
+          <th>Created</th>
+          <th>Expires</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="slTableBody">
+        {% for link in links %}
+        <tr class="{% if link.revoked %}revoked{% elif link.is_expired %}expired{% endif %}" data-id="{{ link.id }}">
+          <td>{{ link.category|replace('-', ' ')|title }}</td>
+          <td>
+            <div class="sl-link-cell">
+              <span class="sl-link-text">{{ url_for('public.gallery', token=link.token, _external=True) }}</span>
+              <button class="sl-mini-btn sl-row-copy" data-url="{{ url_for('public.gallery', token=link.token, _external=True) }}">Copy</button>
+            </div>
+          </td>
+          <td>{{ link.created_at.strftime('%b %d, %Y') if link.created_at else '—' }}</td>
+          <td>{{ link.expires_at.strftime('%b %d, %Y') if link.expires_at else 'Never' }}</td>
+          <td>
+            {% if link.revoked %}
+              <span class="sl-badge revoked">Revoked</span>
+            {% elif link.is_expired %}
+              <span class="sl-badge expired">Expired</span>
+            {% else %}
+              <span class="sl-badge active">Active</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if not link.revoked %}
+            <button class="sl-mini-btn danger sl-revoke-btn" data-id="{{ link.id }}">Revoke</button>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="sl-no-links">No links generated yet.</div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  const form        = document.getElementById('slCreateForm');
+  const resultBox    = document.getElementById('slResult');
+  const resultUrl    = document.getElementById('slResultUrl');
+  const copyBtn       = document.getElementById('slCopyBtn');
+  const generateBtn   = document.getElementById('slGenerateBtn');
+
+  function copyToClipboard(text, btn, originalLabel) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = originalLabel;
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  }
+
+  if (form) {
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      generateBtn.disabled = true;
+      generateBtn.textContent = 'Generating…';
+
+      const category         = document.getElementById('slCategory').value;
+      const expires_in_days   = document.getElementById('slExpiry').value;
+
+      try {
+        const res = await fetch("{{ url_for('admin.create_share_link') }}", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+          },
+          body: JSON.stringify({ category, expires_in_days }),
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          alert(data.error || 'Failed to generate link.');
+          return;
+        }
+
+        resultUrl.value = data.url;
+        resultBox.classList.add('show');
+
+        // Refresh the page after a short pause so the new link shows in the table below
+        setTimeout(() => window.location.reload(), 2200);
+
+      } catch (err) {
+        alert('Something went wrong. Please try again.');
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = 'Generate link';
+      }
+    });
+  }
+
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => copyToClipboard(resultUrl.value, copyBtn, 'Copy'));
+  }
+
+  document.querySelectorAll('.sl-row-copy').forEach(btn => {
+    btn.addEventListener('click', () => copyToClipboard(btn.dataset.url, btn, 'Copy'));
+  });
+
+  document.querySelectorAll('.sl-revoke-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Revoke this link? Anyone using it will lose access immediately.')) return;
+
+      const id  = btn.dataset.id;
+      const row = document.querySelector(`tr[data-id="${id}"]`);
+
+      try {
+        const res = await fetch(`/admin/share_links/${id}/revoke`, {
+          method: 'POST',
+          headers: { 'X-CSRFToken': csrfToken },
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          row.classList.add('revoked');
+          row.querySelector('td:nth-child(5)').innerHTML = '<span class="sl-badge revoked">Revoked</span>';
+          btn.remove();
+        } else {
+          alert('Failed to revoke link.');
+        }
+      } catch (err) {
+        alert('Something went wrong.');
+      }
+    });
+  });
+})();
+</script>
+{% endblock %}

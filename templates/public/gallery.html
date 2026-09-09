@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{{ category_label }} — Denspark Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: 'Inter', sans-serif; background: #fafafa; color: #1a1a1a;
+    }
+
+    header {
+      display: flex; align-items: center; justify-content: center; flex-direction: column;
+      padding: 40px 20px 28px; text-align: center; background: #fff; border-bottom: 1px solid #eee;
+    }
+    .gal-logo { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+    .gal-logo .accent { color: #1d6f56; }
+    .gal-category { margin-top: 8px; font-size: 15px; color: #777; font-weight: 500; }
+    .gal-count { margin-top: 2px; font-size: 13px; color: #aaa; }
+
+    .gal-grid {
+      max-width: 1200px; margin: 0 auto; padding: 28px 20px 60px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;
+    }
+    .gal-item {
+      position: relative; border-radius: 10px; overflow: hidden; background: #eee; cursor: pointer;
+      aspect-ratio: 4 / 5;
+    }
+    .gal-item img {
+      width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease;
+    }
+    .gal-item:hover img { transform: scale(1.04); }
+
+    .gal-empty {
+      text-align: center; padding: 80px 20px; color: #999; font-size: 15px;
+    }
+
+    /* Lightbox */
+    .gal-lightbox {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 999;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .gal-lightbox.show { display: flex; }
+    .gal-lightbox img {
+      max-width: 100%; max-height: 92vh; border-radius: 6px; box-shadow: 0 10px 40px rgba(0,0,0,.4);
+    }
+    .gal-lightbox-close {
+      position: absolute; top: 20px; right: 24px; color: #fff; font-size: 30px; cursor: pointer;
+      line-height: 1; background: none; border: none;
+    }
+    .gal-lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.1);
+      border: none; color: #fff; width: 46px; height: 46px; border-radius: 50%; font-size: 22px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .gal-lightbox-nav:hover { background: rgba(255,255,255,.2); }
+    .gal-lightbox-prev { left: 20px; }
+    .gal-lightbox-next { right: 20px; }
+
+    footer {
+      text-align: center; padding: 24px 20px; color: #bbb; font-size: 12.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="gal-logo">Denspark<span class="accent">Studio</span></div>
+    <div class="gal-category">{{ category_label }}</div>
+    <div class="gal-count">{{ images|length }} photo{{ 's' if images|length != 1 else '' }}</div>
+  </header>
+
+  {% if images %}
+  <div class="gal-grid" id="galGrid">
+    {% for img in images %}
+    <div class="gal-item" data-full="{{ img.full_url }}" data-index="{{ loop.index0 }}">
+      <img src="{{ img.image_url }}" alt="{{ img.title|e }}" loading="lazy">
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="gal-empty">No photos in this gallery yet.</div>
+  {% endif %}
+
+  <footer>Shared privately by Denspark Studio</footer>
+
+  <div class="gal-lightbox" id="galLightbox">
+    <button class="gal-lightbox-close" id="galClose">&times;</button>
+    <button class="gal-lightbox-nav gal-lightbox-prev" id="galPrev">&#8249;</button>
+    <img id="galLightboxImg" src="" alt="">
+    <button class="gal-lightbox-nav gal-lightbox-next" id="galNext">&#8250;</button>
+  </div>
+
+  <script>
+    const items      = Array.from(document.querySelectorAll('.gal-item'));
+    const lightbox   = document.getElementById('galLightbox');
+    const lightImg    = document.getElementById('galLightboxImg');
+    let currentIndex  = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      lightImg.src = items[index].dataset.full;
+      lightbox.classList.add('show');
+    }
+    function closeLightbox() { lightbox.classList.remove('show'); }
+    function showNext(delta) {
+      currentIndex = (currentIndex + delta + items.length) % items.length;
+      lightImg.src = items[currentIndex].dataset.full;
+    }
+
+    items.forEach((item, i) => item.addEventListener('click', () => openLightbox(i)));
+    document.getElementById('galClose').addEventListener('click', closeLightbox);
+    document.getElementById('galPrev').addEventListener('click', () => showNext(-1));
+    document.getElementById('galNext').addEventListener('click', () => showNext(1));
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('show')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showNext(-1);
+      if (e.key === 'ArrowRight') showNext(1);
+    });
+  </script>
+
+</body>
+</html>

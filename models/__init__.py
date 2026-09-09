@@ -195,7 +195,7 @@ class ShareLink(db.Model):
     # index=True — filtered when pulling Portfolio items for this category
     category   = db.Column(db.String(50), nullable=False, index=True)
     expires_at = db.Column(db.DateTime, nullable=True)
-    # index=True — admin share-links page filters active vs revoked
+    # index=True — admin share_links page filters active vs revoked
     revoked    = db.Column(db.Boolean, default=False, nullable=False, index=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 

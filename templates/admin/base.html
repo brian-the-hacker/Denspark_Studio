@@ -64,6 +64,18 @@
                             <span>Portfolio</span>
                         </a>
                     </li>
+                    <!-- New Share Links item inserted here -->
+                    <li>
+                        <a href="{{ url_for('admin.share_links') }}"
+                           class="{% if request.endpoint == 'admin.share_links' %}active{% endif %}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                                <path d="M16 6l-4-4-4 4"/>
+                                <path d="M12 2v13"/>
+                            </svg>
+                            <span>Share Links</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="{{ url_for('admin.bookings') }}"
                            class="{% if request.endpoint == 'admin.bookings' %}active{% endif %}">
@@ -105,7 +117,7 @@
                             <span class="badge">{{ unread_messages }}</span>
                             {% endif %}
                         </a>
-                    </li><!-- ← was missing closing </li> in original -->
+                    </li>
                     <li>
                         <a href="{{ url_for('admin.videos') }}"
                            class="{% if request.endpoint == 'admin.videos' %}active{% endif %}">
