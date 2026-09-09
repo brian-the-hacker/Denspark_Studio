@@ -3,737 +3,126 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="csrf-token" content="TOKEN_HERE">
-  <title>Share Links — Denspark Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <title>{{ category_label }} — Denspark Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ---------- Design tokens ---------- */
-    :root {
-      --bg: #f6f7f9;
-      --surface: #ffffff;
-      --surface-2: #fafbfc;
-      --border: #e7e9ee;
-      --border-strong: #d4d8e0;
-      --text: #14181f;
-      --text-2: #525a66;
-      --text-3: #8a92a0;
-      --primary: #10151c;
-      --primary-hover: #2a323d;
-      --accent: #1a7f5a;
-      --accent-soft: #e6f4ee;
-      --accent-border: #c5e6d6;
-      --warning: #b8730f;
-      --warning-soft: #fdf2e2;
-      --danger: #c0392b;
-      --danger-soft: #fbeae7;
-      --danger-border: #f2cdc5;
-      --shadow-sm: 0 1px 2px rgba(16,24,32,.04), 0 1px 1px rgba(16,24,32,.03);
-      --shadow-md: 0 4px 14px rgba(16,24,32,.06), 0 2px 4px rgba(16,24,32,.04);
-      --shadow-lg: 0 12px 32px rgba(16,24,32,.08), 0 4px 8px rgba(16,24,32,.04);
-      --radius: 12px;
-      --radius-sm: 8px;
-      --radius-xs: 6px;
-      --space: 8px;
-      --ease: cubic-bezier(.22,.61,.36,1);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
+    * { box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-      min-height: 100vh;
+      margin: 0; font-family: 'Inter', sans-serif; background: #fafafa; color: #1a1a1a;
     }
 
-    .app {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 40px 24px 64px;
+    header {
+      display: flex; align-items: center; justify-content: center; flex-direction: column;
+      padding: 40px 20px 28px; text-align: center; background: #fff; border-bottom: 1px solid #eee;
+    }
+    .gal-logo { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+    .gal-logo .accent { color: #1d6f56; }
+    .gal-category { margin-top: 8px; font-size: 15px; color: #777; font-weight: 500; }
+    .gal-count { margin-top: 2px; font-size: 13px; color: #aaa; }
+
+    .gal-grid {
+      max-width: 1200px; margin: 0 auto; padding: 28px 20px 60px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;
+    }
+    .gal-item {
+      position: relative; border-radius: 10px; overflow: hidden; background: #eee; cursor: pointer;
+      aspect-ratio: 4 / 5;
+    }
+    .gal-item img {
+      width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease;
+    }
+    .gal-item:hover img { transform: scale(1.04); }
+
+    .gal-empty {
+      text-align: center; padding: 80px 20px; color: #999; font-size: 15px;
     }
 
-    /* ---------- Header ---------- */
-    .header { margin-bottom: 32px; }
-    .header h1 {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      color: var(--text);
+    /* Lightbox */
+    .gal-lightbox {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 999;
+      align-items: center; justify-content: center; padding: 20px;
     }
-    .header p {
-      font-size: 14px;
-      color: var(--text-3);
-      margin-top: 4px;
+    .gal-lightbox.show { display: flex; }
+    .gal-lightbox img {
+      max-width: 100%; max-height: 92vh; border-radius: 6px; box-shadow: 0 10px 40px rgba(0,0,0,.4);
     }
+    .gal-lightbox-close {
+      position: absolute; top: 20px; right: 24px; color: #fff; font-size: 30px; cursor: pointer;
+      line-height: 1; background: none; border: none;
+    }
+    .gal-lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.1);
+      border: none; color: #fff; width: 46px; height: 46px; border-radius: 50%; font-size: 22px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .gal-lightbox-nav:hover { background: rgba(255,255,255,.2); }
+    .gal-lightbox-prev { left: 20px; }
+    .gal-lightbox-next { right: 20px; }
 
-    /* ---------- Panel ---------- */
-    .panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      overflow: hidden;
-    }
-    .panel + .panel { margin-top: 24px; }
-    .panel-head {
-      padding: 18px 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .panel-head h2 {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-    }
-    .panel-head .dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--accent);
-    }
-    .panel-body { padding: 24px; }
-
-    /* ---------- Form ---------- */
-    .form-row {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      align-items: flex-end;
-    }
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      flex: 1 1 220px;
-    }
-    .field label {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text-2);
-      letter-spacing: .01em;
-    }
-    .field select,
-    .field input {
-      padding: 10px 13px;
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-family: inherit;
-      background: var(--surface);
-      color: var(--text);
-      transition: border-color .18s var(--ease), box-shadow .18s var(--ease);
-    }
-    .field select:hover,
-    .field input:hover { border-color: #b9c0cc; }
-    .field select:focus,
-    .field input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-soft);
-    }
-
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: var(--radius-sm);
-      background: var(--primary);
-      color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background .18s var(--ease), transform .12s var(--ease), opacity .18s var(--ease);
-    }
-    .btn:hover { background: var(--primary-hover); }
-    .btn:active { transform: translateY(1px); }
-    .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-
-    .empty-note {
-      color: var(--text-3);
-      font-size: 14px;
-      padding: 8px 0;
-    }
-
-    /* ---------- Result banner ---------- */
-    .result {
-      display: none;
-      margin-top: 20px;
-      padding: 14px 16px;
-      background: var(--accent-soft);
-      border: 1px solid var(--accent-border);
-      border-radius: var(--radius-sm);
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      animation: slideIn .32s var(--ease);
-    }
-    .result.show { display: flex; }
-    .result .check {
-      width: 20px; height: 20px; border-radius: 50%;
-      background: var(--accent); color: #fff;
-      display: grid; place-items: center;
-      font-size: 12px; font-weight: 700;
-      flex-shrink: 0;
-    }
-    .result input {
-      flex: 1;
-      min-width: 200px;
-      padding: 8px 11px;
-      border: 1px solid var(--accent-border);
-      border-radius: var(--radius-xs);
-      font-size: 13px;
-      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-      background: var(--surface);
-      color: var(--text);
-    }
-    .copy-btn {
-      padding: 8px 15px;
-      border: none;
-      border-radius: var(--radius-xs);
-      background: var(--accent);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background .18s var(--ease);
-    }
-    .copy-btn:hover { background: #155e44; }
-    .copy-btn.copied { background: #115339; }
-
-    /* ---------- Table ---------- */
-    .table-scroll { overflow-x: auto; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13.5px;
-    }
-    thead th {
-      text-align: left;
-      padding: 11px 16px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text-3);
-      font-weight: 600;
-      font-size: 11.5px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      background: var(--surface-2);
-    }
-    tbody td {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-      color: var(--text);
-    }
-    tbody tr:last-child td { border-bottom: none; }
-    tbody tr {
-      transition: background .14s var(--ease);
-    }
-    tbody tr:hover { background: var(--surface-2); }
-    tbody tr.revoked td,
-    tbody tr.expired td { opacity: .5; }
-    tbody tr.revoked:hover,
-    tbody tr.expired:hover { background: transparent; }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-size: 11.5px;
-      font-weight: 600;
-      letter-spacing: .01em;
-    }
-    .badge::before {
-      content: '';
-      width: 6px; height: 6px; border-radius: 50%;
-      background: currentColor;
-    }
-    .badge.active { background: var(--accent-soft); color: #17825c; }
-    .badge.expired { background: var(--warning-soft); color: var(--warning); }
-    .badge.revoked { background: #eef0f3; color: var(--text-3); }
-
-    .link-cell {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      max-width: 280px;
-    }
-    .link-text {
-      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-      font-size: 12px;
-      color: var(--text-2);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .mini-btn {
-      padding: 5px 11px;
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius-xs);
-      background: var(--surface);
-      font-size: 12px;
-      font-weight: 500;
-      font-family: inherit;
-      cursor: pointer;
-      color: var(--text-2);
-      transition: background .15s var(--ease), border-color .15s var(--ease), transform .1s var(--ease);
-    }
-    .mini-btn:hover { background: var(--surface-2); border-color: #b9c0cc; }
-    .mini-btn:active { transform: translateY(1px); }
-    .mini-btn.danger {
-      color: var(--danger);
-      border-color: var(--danger-border);
-    }
-    .mini-btn.danger:hover { background: var(--danger-soft); }
-
-    .no-links {
-      text-align: center;
-      padding: 56px 0;
-      color: var(--text-3);
-      font-size: 14px;
-    }
-    .no-links .icon {
-      display: block;
-      margin: 0 auto 12px;
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      position: relative;
-    }
-    .no-links .icon::after {
-      content: '';
-      position: absolute;
-      inset: 0; margin: auto;
-      width: 16px; height: 16px;
-      border: 2px solid var(--text-3);
-      border-radius: 50% 50% 0 0;
-      border-bottom: none;
-      transform: translateY(2px);
-    }
-
-    /* ---------- Toast ---------- */
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--text);
-      color: #fff;
-      padding: 11px 20px;
-      border-radius: 999px;
-      font-size: 13.5px;
-      font-weight: 500;
-      box-shadow: var(--shadow-lg);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .25s var(--ease), transform .25s var(--ease);
-      z-index: 1000;
-    }
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    /* ---------- Spinner ---------- */
-    .spinner {
-      display: inline-block;
-      width: 14px; height: 14px;
-      border: 2px solid rgba(255,255,255,.35);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .6s linear infinite;
-      vertical-align: -2px;
-      margin-right: 6px;
-    }
-
-    /* ---------- Animations ---------- */
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ---------- Responsive ---------- */
-    @media (max-width: 640px) {
-      .app { padding: 24px 16px 48px; }
-      .panel-body { padding: 18px; }
-      .field { flex: 1 1 100%; }
-      .form-row .btn { width: 100%; }
-      thead { display: none; }
-      tbody td { display: flex; justify-content: space-between; padding: 10px 16px; }
-      tbody td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        font-size: 11.5px;
-        text-transform: uppercase;
-        letter-spacing: .03em;
-        color: var(--text-3);
-      }
-      tbody tr { display: block; border-bottom: 1px solid var(--border); }
-      .link-cell { max-width: 180px; }
+    footer {
+      text-align: center; padding: 24px 20px; color: #bbb; font-size: 12.5px;
     }
   </style>
-  <meta property="og:image" content="https://bolt.new/static/og_default.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
 </head>
 <body>
-  <div class="app">
 
-    <div class="header">
-      <h1>Share Links</h1>
-      <p>Generate view-only links clients can open to see their photos.</p>
+  <header>
+    <div class="gal-logo">Denspark<span class="accent">Studio</span></div>
+    <div class="gal-category">{{ category_label }}</div>
+    <div class="gal-count">{{ images|length }} photo{{ 's' if images|length != 1 else '' }}</div>
+  </header>
+
+  {% if images %}
+  <div class="gal-grid" id="galGrid">
+    {% for img in images %}
+    <div class="gal-item" data-full="{{ img.full_url }}" data-index="{{ loop.index0 }}">
+      <img src="{{ img.image_url }}" alt="{{ img.title|e }}" loading="lazy">
     </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="gal-empty">No photos in this gallery yet.</div>
+  {% endif %}
 
-    <!-- Generate -->
-    <div class="panel">
-      <div class="panel-head">
-        <span class="dot"></span>
-        <h2>Generate a new link</h2>
-      </div>
-      <div class="panel-body">
+  <footer>Shared privately by Denspark Studio</footer>
 
-        <form id="createForm">
-          <div class="form-row">
-            <div class="field">
-              <label for="category">Category</label>
-              <select id="category" name="category" required>
-                <!-- options injected by backend / JS -->
-              </select>
-            </div>
-            <div class="field">
-              <label for="expiry">Expires</label>
-              <select id="expiry" name="expires_in_days">
-                <option value="">Never</option>
-                <option value="7">In 7 days</option>
-                <option value="14">In 14 days</option>
-                <option value="30">In 30 days</option>
-                <option value="90">In 90 days</option>
-              </select>
-            </div>
-            <button type="submit" class="btn" id="generateBtn">Generate link</button>
-          </div>
-        </form>
-
-        <div class="result" id="result">
-          <span class="check">&#10003;</span>
-          <input type="text" id="resultUrl" readonly>
-          <button class="copy-btn" id="copyBtn">Copy</button>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- All links -->
-    <div class="panel">
-      <div class="panel-head">
-        <span class="dot"></span>
-        <h2>All links</h2>
-      </div>
-      <div class="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th>Category</th>
-              <th>Link</th>
-              <th>Created</th>
-              <th>Expires</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-        <div class="no-links" id="noLinks" style="display:none">
-          <span class="icon"></span>
-          No links generated yet.
-        </div>
-      </div>
-    </div>
-
+  <div class="gal-lightbox" id="galLightbox">
+    <button class="gal-lightbox-close" id="galClose">&times;</button>
+    <button class="gal-lightbox-nav gal-lightbox-prev" id="galPrev">&#8249;</button>
+    <img id="galLightboxImg" src="" alt="">
+    <button class="gal-lightbox-nav gal-lightbox-next" id="galNext">&#8250;</button>
   </div>
 
-  <div class="toast" id="toast"></div>
-
   <script>
-  (function () {
-    "use strict";
+    const items      = Array.from(document.querySelectorAll('.gal-item'));
+    const lightbox   = document.getElementById('galLightbox');
+    const lightImg    = document.getElementById('galLightboxImg');
+    let currentIndex  = 0;
 
-    /* ============================================================
-       CONFIG  —  point these at your backend routes
-       ============================================================ */
-    const API = {
-      createLink:  "/admin/share-links/create",
-      revokeLink:  "/admin/share-links/revoke",
-      listLinks:   "/admin/share-links/list",
-      categories:  "/admin/share-links/categories",
-      galleryBase: "/gallery",   // token appended: galleryBase + "/" + token
-    };
-
-    function csrfToken() {
-      const meta = document.querySelector('meta[name="csrf-token"]');
-      return meta ? meta.getAttribute("content") : "";
+    function openLightbox(index) {
+      currentIndex = index;
+      lightImg.src = items[index].dataset.full;
+      lightbox.classList.add('show');
+    }
+    function closeLightbox() { lightbox.classList.remove('show'); }
+    function showNext(delta) {
+      currentIndex = (currentIndex + delta + items.length) % items.length;
+      lightImg.src = items[currentIndex].dataset.full;
     }
 
-    /* ============================================================
-       STATE
-       ============================================================ */
-    let links = [];
-    let categories = [];
-
-    /* ============================================================
-       HELPERS
-       ============================================================ */
-    const $  = (sel, ctx) => (ctx || document).querySelector(sel);
-    const $$ = (sel, ctx) => Array.prototype.slice.call((ctx || document).querySelectorAll(sel));
-
-    function showToast(msg) {
-      const t = $("#toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      clearTimeout(t._timer);
-      t._timer = setTimeout(() => t.classList.remove("show"), 2400);
-    }
-
-    function titleCase(s) {
-      return s.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-    }
-
-    function escapeHtml(str) {
-      const d = document.createElement("div");
-      d.textContent = str == null ? "" : String(str);
-      return d.innerHTML;
-    }
-
-    function formatDate(iso) {
-      if (!iso) return "—";
-      const d = new Date(iso);
-      if (isNaN(d)) return "—";
-      return d.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
-    }
-
-    function galleryUrl(token) {
-      return API.galleryBase + "/" + token;
-    }
-
-    function copyToClipboard(text, btn, originalLabel) {
-      navigator.clipboard.writeText(text).then(() => {
-        btn.textContent = "Copied!";
-        btn.classList.add("copied");
-        showToast("Link copied to clipboard");
-        setTimeout(() => {
-          btn.textContent = originalLabel;
-          btn.classList.remove("copied");
-        }, 1800);
-      }).catch(() => showToast("Couldn't copy — try manually"));
-    }
-
-    /* ============================================================
-       RENDER
-       ============================================================ */
-    function renderCategories() {
-      const sel = $("#category");
-      sel.innerHTML = "";
-      if (!categories.length) {
-        const form = $("#createForm");
-        form.style.display = "none";
-        const note = document.createElement("p");
-        note.className = "empty-note";
-        note.textContent = "No categories have photos yet — upload something to Portfolio first.";
-        form.parentNode.insertBefore(note, form);
-        return;
-      }
-      categories.forEach(cat => {
-        const opt = document.createElement("option");
-        opt.value = cat.value;
-        opt.textContent = cat.label + " (" + cat.count + ")";
-        sel.appendChild(opt);
-      });
-    }
-
-    function statusBadge(link) {
-      if (link.revoked)     return '<span class="badge revoked">Revoked</span>';
-      if (link.is_expired)  return '<span class="badge expired">Expired</span>';
-      return '<span class="badge active">Active</span>';
-    }
-
-    function renderLinks() {
-      const body = $("#tableBody");
-      const empty = $("#noLinks");
-      body.innerHTML = "";
-
-      if (!links.length) {
-        empty.style.display = "block";
-        return;
-      }
-      empty.style.display = "none";
-
-      links.forEach(link => {
-        const tr = document.createElement("tr");
-        if (link.revoked) tr.classList.add("revoked");
-        else if (link.is_expired) tr.classList.add("expired");
-        tr.dataset.id = link.id;
-
-        const url = galleryUrl(link.token);
-
-        tr.innerHTML =
-          '<td data-label="Category">' + escapeHtml(titleCase(link.category)) + '</td>' +
-          '<td data-label="Link">' +
-            '<div class="link-cell">' +
-              '<span class="link-text">' + escapeHtml(url) + '</span>' +
-              '<button class="mini-btn row-copy" data-url="' + escapeHtml(url) + '">Copy</button>' +
-            '</div>' +
-          '</td>' +
-          '<td data-label="Created">' + escapeHtml(formatDate(link.created_at)) + '</td>' +
-          '<td data-label="Expires">' + escapeHtml(formatDate(link.expires_at)) + '</td>' +
-          '<td data-label="Status">' + statusBadge(link) + '</td>' +
-          '<td data-label="">' +
-            (link.revoked ? "" :
-              '<button class="mini-btn danger revoke-btn" data-id="' + link.id + '">Revoke</button>') +
-          '</td>';
-
-        body.appendChild(tr);
-      });
-
-      bindRowEvents();
-    }
-
-    function bindRowEvents() {
-      $$(".row-copy").forEach(btn => {
-        btn.addEventListener("click", () => copyToClipboard(btn.dataset.url, btn, "Copy"));
-      });
-      $$(".revoke-btn").forEach(btn => {
-        btn.addEventListener("click", () => handleRevoke(btn));
-      });
-    }
-
-    /* ============================================================
-       ACTIONS
-       ============================================================ */
-    async function handleGenerate(e) {
-      e.preventDefault();
-      const btn = $("#generateBtn");
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span>Generating…';
-
-      const category = $("#category").value;
-      const expires_in_days = $("#expiry").value;
-
-      try {
-        const res = await fetch(API.createLink, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken(),
-          },
-          body: JSON.stringify({ category, expires_in_days }),
-        });
-        const data = await res.json();
-
-        if (!res.ok || !data.success) {
-          showToast(data.error || "Failed to generate link.");
-          return;
-        }
-
-        $("#resultUrl").value = data.url;
-        $("#result").classList.add("show");
-
-        if (data.link) {
-          links.unshift(data.link);
-          renderLinks();
-        }
-        showToast("Link generated");
-
-      } catch (err) {
-        showToast("Something went wrong. Please try again.");
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Generate link";
-      }
-    }
-
-    async function handleRevoke(btn) {
-      if (!confirm("Revoke this link? Anyone using it will lose access immediately.")) return;
-
-      const id = btn.dataset.id;
-
-      try {
-        const res = await fetch(API.revokeLink + "/" + id, {
-          method: "POST",
-          headers: { "X-CSRFToken": csrfToken() },
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          const row = $('tr[data-id="' + id + '"]');
-          if (row) {
-            row.classList.add("revoked");
-            const statusCell = row.querySelectorAll("td")[4];
-            if (statusCell) statusCell.innerHTML = '<span class="badge revoked">Revoked</span>';
-            btn.remove();
-          }
-          showToast("Link revoked");
-        } else {
-          showToast("Failed to revoke link.");
-        }
-      } catch (err) {
-        showToast("Something went wrong.");
-      }
-    }
-
-    /* ============================================================
-       LOAD
-       ============================================================ */
-    async function loadCategories() {
-      try {
-        const res = await fetch(API.categories);
-        if (!res.ok) return;
-        const data = await res.json();
-        categories = data.categories || data || [];
-        renderCategories();
-      } catch (e) { /* fall back to empty */ }
-    }
-
-    async function loadLinks() {
-      try {
-        const res = await fetch(API.listLinks);
-        if (!res.ok) return;
-        const data = await res.json();
-        links = data.links || data || [];
-        renderLinks();
-      } catch (e) { /* fall back to empty */ }
-    }
-
-    /* ============================================================
-       INIT
-       ============================================================ */
-    document.addEventListener("DOMContentLoaded", function () {
-      const form = $("#createForm");
-      if (form) form.addEventListener("submit", handleGenerate);
-
-      const copyBtn = $("#copyBtn");
-      if (copyBtn) copyBtn.addEventListener("click", () => copyToClipboard($("#resultUrl").value, copyBtn, "Copy"));
-
-      loadCategories();
-      loadLinks();
+    items.forEach((item, i) => item.addEventListener('click', () => openLightbox(i)));
+    document.getElementById('galClose').addEventListener('click', closeLightbox);
+    document.getElementById('galPrev').addEventListener('click', () => showNext(-1));
+    document.getElementById('galNext').addEventListener('click', () => showNext(1));
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('show')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showNext(-1);
+      if (e.key === 'ArrowRight') showNext(1);
     });
-
-    /* ============================================================
-       FALLBACK: if your backend renders data inline instead of
-       via an API, replace the two load* calls above with:
-         categories = window.__CATEGORIES__ || [];
-         links      = window.__LINKS__      || [];
-         renderCategories();
-         renderLinks();
-       ============================================================ */
-  })();
   </script>
+
 </body>
 </html>
