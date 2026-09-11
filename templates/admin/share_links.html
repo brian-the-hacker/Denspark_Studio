@@ -444,7 +444,7 @@
       const row = document.querySelector('tr[data-id="' + id + '"]');
 
       try {
-        const res = await fetch('/admin/share-links/' + id + '/revoke', {
+        const res = await fetch('/admin/share_links/' + id + '/revoke', {
           method: 'POST',
           headers: { 'X-CSRFToken': csrfToken },
         });
