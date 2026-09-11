@@ -17,18 +17,25 @@
   .sl-field label { font-size: 12.5px; font-weight: 600; color: #555; }
   .sl-field select, .sl-field input {
     padding: 9px 12px; border: 1px solid #d8d8d8; border-radius: 8px; font-size: 14px; background: #fff;
+    transition: border-color .18s ease, box-shadow .18s ease;
+  }
+  .sl-field select:focus, .sl-field input:focus {
+    outline: none; border-color: #1d6f56; box-shadow: 0 0 0 3px rgba(29,111,86,.12);
   }
   .sl-btn {
     padding: 10px 18px; border: none; border-radius: 8px; background: #1a1a1a; color: #fff;
     font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
+    transition: background .18s ease, transform .1s ease;
   }
   .sl-btn:hover { background: #333; }
+  .sl-btn:active { transform: translateY(1px); }
   .sl-btn:disabled { opacity: .5; cursor: not-allowed; }
   .sl-empty-cats { color: #888; font-size: 14px; }
 
   .sl-result {
     display: none; margin-top: 16px; padding: 14px 16px; background: #f3faf7;
     border: 1px solid #cdeee1; border-radius: 10px; align-items: center; gap: 10px; flex-wrap: wrap;
+    animation: slSlideIn .3s ease;
   }
   .sl-result.show { display: flex; }
   .sl-result input {
@@ -37,8 +44,9 @@
   }
   .sl-copy-btn {
     padding: 8px 14px; border: none; border-radius: 6px; background: #1d6f56; color: #fff;
-    font-size: 13px; font-weight: 600; cursor: pointer;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: background .18s ease;
   }
+  .sl-copy-btn:hover { background: #14503d; }
   .sl-copy-btn.copied { background: #14503d; }
 
   table.sl-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
@@ -48,6 +56,8 @@
   }
   .sl-table td { padding: 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
   .sl-table tr.revoked td, .sl-table tr.expired td { opacity: .55; }
+  .sl-table tr.removing { animation: slRowOut .3s ease forwards; }
+  .sl-table tr.revoked:hover, .sl-table tr.expired:hover { background: transparent; }
 
   .sl-badge {
     display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600;
@@ -63,13 +73,97 @@
   }
   .sl-mini-btn {
     padding: 4px 9px; border: 1px solid #ddd; border-radius: 6px; background: #fff;
-    font-size: 11.5px; cursor: pointer; color: #444;
+    font-size: 11.5px; cursor: pointer; color: #444; transition: background .15s ease, border-color .15s ease;
   }
-  .sl-mini-btn:hover { background: #f7f7f7; }
+  .sl-mini-btn:hover { background: #f7f7f7; border-color: #ccc; }
   .sl-mini-btn.danger { color: #b3462c; border-color: #f2d3c9; }
   .sl-mini-btn.danger:hover { background: #fdf1ed; }
+  .sl-mini-btn.delete { color: #b3462c; border-color: #f2d3c9; margin-left: 5px; }
+  .sl-mini-btn.delete:hover { background: #fdf1ed; }
+  .sl-action-cell { white-space: nowrap; }
 
   .sl-no-links { text-align: center; padding: 40px 0; color: #999; font-size: 14px; }
+
+  /* ---- Toast notifications ---- */
+  .sl-toast-wrap {
+    position: fixed; bottom: 28px; right: 28px; z-index: 10000;
+    display: flex; flex-direction: column; gap: 10px; pointer-events: none;
+  }
+  .sl-toast {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px; border-radius: 10px; font-size: 13.5px; font-weight: 500;
+    color: #fff; box-shadow: 0 8px 28px rgba(0,0,0,.18);
+    opacity: 0; transform: translateX(120%);
+    transition: opacity .28s ease, transform .28s cubic-bezier(.22,.61,.36,1);
+    pointer-events: auto; max-width: 380px; min-width: 240px;
+  }
+  .sl-toast.show { opacity: 1; transform: translateX(0); }
+  .sl-toast.hide { opacity: 0; transform: translateX(120%); }
+  .sl-toast .sl-toast-icon {
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+    display: grid; place-items: center; font-size: 12px; font-weight: 700;
+  }
+  .sl-toast.success { background: #17825c; }
+  .sl-toast.success .sl-toast-icon { background: rgba(255,255,255,.25); }
+  .sl-toast.error { background: #b3462c; }
+  .sl-toast.error .sl-toast-icon { background: rgba(255,255,255,.25); }
+  .sl-toast.info { background: #1a1a1a; }
+  .sl-toast.info .sl-toast-icon { background: rgba(255,255,255,.2); }
+  .sl-toast.warning { background: #b8730f; }
+  .sl-toast.warning .sl-toast-icon { background: rgba(255,255,255,.25); }
+
+  @keyframes slSlideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slRowOut {
+    to { opacity: 0; transform: translateX(30px); }
+  }
+
+  /* ---- Confirm modal ---- */
+  .sl-modal-overlay {
+    position: fixed; inset: 0; z-index: 10001;
+    background: rgba(0,0,0,.45);
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    opacity: 0; pointer-events: none; transition: opacity .25s ease;
+  }
+  .sl-modal-overlay.show { opacity: 1; pointer-events: auto; }
+  .sl-modal {
+    background: #fff; border-radius: 14px; padding: 28px 26px 22px;
+    max-width: 400px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    transform: scale(.92); opacity: 0;
+    transition: transform .25s cubic-bezier(.22,.61,.36,1), opacity .2s ease;
+  }
+  .sl-modal-overlay.show .sl-modal { transform: scale(1); opacity: 1; }
+  .sl-modal-icon {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: grid; place-items: center; margin: 0 auto 16px;
+    font-size: 24px; font-weight: 700;
+  }
+  .sl-modal-icon.warning { background: #fdf2e2; color: #b8730f; }
+  .sl-modal-icon.danger { background: #fbeae7; color: #b3462c; }
+  .sl-modal h3 { font-size: 17px; font-weight: 600; text-align: center; margin: 0 0 8px; color: #1a1a1a; }
+  .sl-modal p { font-size: 14px; text-align: center; color: #666; margin: 0 0 24px; line-height: 1.5; }
+  .sl-modal-btns { display: flex; gap: 12px; }
+  .sl-modal-btn {
+    flex: 1; padding: 11px 18px; border: none; border-radius: 9px;
+    font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+    transition: background .18s ease, transform .1s ease;
+  }
+  .sl-modal-btn:active { transform: translateY(1px); }
+  .sl-modal-btn.cancel { background: #f1f1f1; color: #555; }
+  .sl-modal-btn.cancel:hover { background: #e5e5e5; }
+  .sl-modal-btn.confirm { background: #b3462c; color: #fff; }
+  .sl-modal-btn.confirm:hover { background: #9a3b25; }
+  .sl-modal-btn.confirm.warning { background: #b8730f; }
+  .sl-modal-btn.confirm.warning:hover { background: #9c610d; }
+
+  @media (max-width: 640px) {
+    .sl-toast-wrap { left: 16px; right: 16px; bottom: 16px; }
+    .sl-toast { max-width: none; min-width: 0; }
+    .sl-panel { padding: 16px 16px; }
+    .sl-field { min-width: 100%; }
+  }
 </style>
 {% endblock %}
 
@@ -125,7 +219,7 @@
           <th>Created</th>
           <th>Expires</th>
           <th>Status</th>
-          <th></th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody id="slTableBody">
@@ -149,10 +243,11 @@
               <span class="sl-badge active">Active</span>
             {% endif %}
           </td>
-          <td>
+          <td class="sl-action-cell">
             {% if not link.revoked %}
             <button class="sl-mini-btn danger sl-revoke-btn" data-id="{{ link.id }}">Revoke</button>
             {% endif %}
+            <button class="sl-mini-btn delete sl-delete-btn" data-id="{{ link.id }}">Delete</button>
           </td>
         </tr>
         {% endfor %}
@@ -164,6 +259,20 @@
   </div>
 
 </div>
+
+<div class="sl-toast-wrap" id="slToastWrap"></div>
+
+<div class="sl-modal-overlay" id="slConfirmOverlay">
+  <div class="sl-modal">
+    <div class="sl-modal-icon" id="slConfirmIcon"></div>
+    <h3 id="slConfirmTitle"></h3>
+    <p id="slConfirmMessage"></p>
+    <div class="sl-modal-btns">
+      <button class="sl-modal-btn cancel" id="slConfirmCancel">Cancel</button>
+      <button class="sl-modal-btn confirm" id="slConfirmOk"></button>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -171,31 +280,116 @@
 (function () {
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-  const form        = document.getElementById('slCreateForm');
+  const form         = document.getElementById('slCreateForm');
   const resultBox    = document.getElementById('slResult');
   const resultUrl    = document.getElementById('slResultUrl');
-  const copyBtn       = document.getElementById('slCopyBtn');
-  const generateBtn   = document.getElementById('slGenerateBtn');
+  const copyBtn      = document.getElementById('slCopyBtn');
+  const generateBtn  = document.getElementById('slGenerateBtn');
+  const toastWrap    = document.getElementById('slToastWrap');
 
-  function copyToClipboard(text, btn, originalLabel) {
-    navigator.clipboard.writeText(text).then(() => {
-      btn.textContent = 'Copied!';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = originalLabel;
-        btn.classList.remove('copied');
-      }, 1800);
+  /* ---- Toast system ---- */
+  const ICONS = { success: '\u2713', error: '\u2715', info: '\u2139', warning: '\u26a0' };
+
+  function toast(message, type) {
+    type = type || 'info';
+    const el = document.createElement('div');
+    el.className = 'sl-toast ' + type;
+    el.innerHTML = '<span class="sl-toast-icon">' + (ICONS[type] || '') + '</span><span>' + message + '</span>';
+    toastWrap.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('show'));
+    setTimeout(() => {
+      el.classList.remove('show');
+      el.classList.add('hide');
+      setTimeout(() => el.remove(), 300);
+    }, 3000);
+  }
+
+  /* ---- Custom confirm modal (replaces native confirm()) ---- */
+  const confirmOverlay = document.getElementById('slConfirmOverlay');
+  const confirmIcon    = document.getElementById('slConfirmIcon');
+  const confirmTitle   = document.getElementById('slConfirmTitle');
+  const confirmMsg     = document.getElementById('slConfirmMessage');
+  const confirmOk      = document.getElementById('slConfirmOk');
+  const confirmCancel  = document.getElementById('slConfirmCancel');
+
+  function customConfirm(options) {
+    return new Promise(function (resolve) {
+      confirmTitle.textContent = options.title || 'Are you sure?';
+      confirmMsg.textContent = options.message || '';
+      confirmOk.textContent = options.confirmText || 'Confirm';
+
+      var styleType = options.type || 'warning';
+      confirmIcon.className = 'sl-modal-icon ' + styleType;
+      confirmOk.className = 'sl-modal-btn confirm' + (styleType === 'warning' ? ' warning' : '');
+      confirmIcon.textContent = styleType === 'danger' ? '\u2715' : '\u26a0';
+
+      confirmOverlay.classList.add('show');
+
+      function cleanup() {
+        confirmOverlay.classList.remove('show');
+        confirmOk.removeEventListener('click', onOk);
+        confirmCancel.removeEventListener('click', onCancel);
+        confirmOverlay.removeEventListener('click', onOverlay);
+        document.removeEventListener('keydown', onKey);
+      }
+      function onOk() { cleanup(); resolve(true); }
+      function onCancel() { cleanup(); resolve(false); }
+      function onOverlay(e) { if (e.target === confirmOverlay) onCancel(); }
+      function onKey(e) { if (e.key === 'Escape') onCancel(); }
+
+      confirmOk.addEventListener('click', onOk);
+      confirmCancel.addEventListener('click', onCancel);
+      confirmOverlay.addEventListener('click', onOverlay);
+      document.addEventListener('keydown', onKey);
     });
   }
 
+  /* ---- Copy ---- */
+  function legacyCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  function copyToClipboard(text, btn, originalLabel) {
+    function onSuccess() {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      toast('Link copied to clipboard', 'success');
+      setTimeout(function () {
+        btn.textContent = originalLabel;
+        btn.classList.remove('copied');
+      }, 1800);
+    }
+    function onFail() {
+      if (legacyCopy(text)) { onSuccess(); }
+      else { toast('Could not copy — try selecting the text manually', 'error'); }
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(onSuccess).catch(onFail);
+    } else {
+      onFail();
+    }
+  }
+
+  /* ---- Generate ---- */
   if (form) {
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       generateBtn.disabled = true;
-      generateBtn.textContent = 'Generating…';
+      generateBtn.textContent = 'Generating\u2026';
 
-      const category         = document.getElementById('slCategory').value;
-      const expires_in_days   = document.getElementById('slExpiry').value;
+      const category        = document.getElementById('slCategory').value;
+      const expires_in_days = document.getElementById('slExpiry').value;
 
       try {
         const res = await fetch("{{ url_for('admin.create_share_link') }}", {
@@ -209,18 +403,18 @@
         const data = await res.json();
 
         if (!res.ok || !data.success) {
-          alert(data.error || 'Failed to generate link.');
+          toast(data.error || 'Failed to generate link', 'error');
           return;
         }
 
         resultUrl.value = data.url;
         resultBox.classList.add('show');
+        toast('Link generated successfully', 'success');
 
-        // Refresh the page after a short pause so the new link shows in the table below
-        setTimeout(() => window.location.reload(), 2200);
+        setTimeout(() => window.location.reload(), 1800);
 
       } catch (err) {
-        alert('Something went wrong. Please try again.');
+        toast('Something went wrong. Please try again.', 'error');
       } finally {
         generateBtn.disabled = false;
         generateBtn.textContent = 'Generate link';
@@ -236,15 +430,21 @@
     btn.addEventListener('click', () => copyToClipboard(btn.dataset.url, btn, 'Copy'));
   });
 
+  /* ---- Revoke ---- */
   document.querySelectorAll('.sl-revoke-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      if (!confirm('Revoke this link? Anyone using it will lose access immediately.')) return;
+      if (!await customConfirm({
+        title: 'Revoke this link?',
+        message: 'Anyone using it will lose access immediately.',
+        confirmText: 'Revoke',
+        type: 'warning'
+      })) return;
 
       const id  = btn.dataset.id;
-      const row = document.querySelector(`tr[data-id="${id}"]`);
+      const row = document.querySelector('tr[data-id="' + id + '"]');
 
       try {
-        const res = await fetch(`/admin/share_links/${id}/revoke`, {
+        const res = await fetch('/admin/share-links/' + id + '/revoke', {
           method: 'POST',
           headers: { 'X-CSRFToken': csrfToken },
         });
@@ -254,11 +454,52 @@
           row.classList.add('revoked');
           row.querySelector('td:nth-child(5)').innerHTML = '<span class="sl-badge revoked">Revoked</span>';
           btn.remove();
+          toast('Link revoked — access removed', 'warning');
         } else {
-          alert('Failed to revoke link.');
+          toast(data.error || 'Failed to revoke link', 'error');
         }
       } catch (err) {
-        alert('Something went wrong.');
+        toast('Something went wrong', 'error');
+      }
+    });
+  });
+
+  /* ---- Delete ---- */
+  document.querySelectorAll('.sl-delete-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!await customConfirm({
+        title: 'Delete this link?',
+        message: 'This will permanently remove the link and cannot be undone.',
+        confirmText: 'Delete',
+        type: 'danger'
+      })) return;
+
+      const id  = btn.dataset.id;
+      const row = document.querySelector('tr[data-id="' + id + '"]');
+
+      try {
+        const res = await fetch('/admin/share-links/' + id + '/delete', {
+          method: 'POST',
+          headers: { 'X-CSRFToken': csrfToken },
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          row.classList.add('removing');
+          setTimeout(() => {
+            row.remove();
+            const tbody = document.getElementById('slTableBody');
+            if (tbody && tbody.children.length === 0) {
+              const panel = tbody.closest('.sl-panel');
+              if (panel) panel.innerHTML = '<h2>All links</h2><div class="sl-no-links">No links generated yet.</div>';
+            }
+          }, 300);
+          toast('Link deleted permanently', 'success');
+        } else {
+          toast(data.error || 'Failed to delete link', 'error');
+        }
+      } catch (err) {
+        toast('Something went wrong', 'error');
       }
     });
   });

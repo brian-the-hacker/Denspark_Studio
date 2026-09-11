@@ -179,6 +179,18 @@ def create_share_link():
     }), 201
 
 
+
+@admin_bp.route('/share-links/<int:id>/delete', methods=['DELETE', 'POST'])
+@login_required
+@admin_required
+def delete_share_link(id):
+    link = db.session.get(ShareLink, id)
+    if not link:
+        abort(404)
+    db.session.delete(link)
+    db.session.commit()
+    return jsonify({'success': True})
+
 @admin_bp.route('/share_links/<int:id>/revoke', methods=['POST'])
 @login_required
 @admin_required
